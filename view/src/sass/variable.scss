@@ -5,6 +5,32 @@ $device-md-width: 768px;
 $device-sm-width: 576px;
 
 
+//햄버거 메뉴
+//햄버거 메뉴
+//햄버거 메뉴
+//햄버거 메뉴
+@mixin menu-icon ($menu-width) {
+    $menu-height: $menu-width * 1.14;
+    $menu-line-height: ($menu-height - ($menu-height / 2)) / 3;
+
+    display: block;
+    width: #{$menu-width}px;
+    height: #{$menu-height}px;
+    // background-color: red;
+
+    div {
+        width: 100%;
+        height: #{$menu-line-height}px;
+        margin-top: #{$menu-height / 4}px;
+        background: #000;
+        border-radius: #{$menu-line-height}px;
+
+        &:nth-child(1) {margin-top:0;}
+    }
+}
+
+
+
 
 @mixin small-pc {
     @media (min-width: $device-lg-width) and (max-width: #{$device-xl-width - 1px}) {
