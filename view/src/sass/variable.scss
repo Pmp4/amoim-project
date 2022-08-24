@@ -45,7 +45,7 @@ $device-sm-width: 576px;
 }
 
 @mixin mobile {
-    @media (max-width: #{$device-md-width}) {
+    @media (max-width: #{$device-md-width - 1px}) {
         @content;
     }
 }
