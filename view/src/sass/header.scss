@@ -1,0 +1,47 @@
+@import './variable.scss';
+
+#header-wrap {
+    position: relative;
+
+    .logo{
+        text-align: center;
+        height: 100px;
+        @include small-pc {
+
+        }
+        @include table {
+
+        }
+        @include mobile {
+
+        }
+        width: 140px;
+        margin: 0 auto;
+
+        a {
+            display: block;
+            height: 100%;
+            img {
+                display: block;
+                height: 100%;
+                line-height: 100px;
+            }
+            background: #000;
+        }
+    }
+
+
+
+
+    .menu {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        
+        .menu-btn {
+            cursor: pointer;
+        }
+    }
+}
+
