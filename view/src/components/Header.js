@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Logo from '../logo.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faBars} from '@fortawesome/free-solid-svg-icons';
+import {faUser} from '@fortawesome/free-solid-svg-icons';
 
 const Header = () => {
     return (
@@ -10,8 +10,12 @@ const Header = () => {
             <div id='header-wrap'>
                 <div className='menu'>
                     <p className='menu-btn'>
-                        <FontAwesomeIcon icon={faBars} />
-                        MENU
+                        <div className='menu-btn-icon'>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                        <span>MENU</span>
                     </p>
                 </div>
                 <h1 className='logo'>
@@ -20,6 +24,9 @@ const Header = () => {
                         {/* <img src={Logo} alt='logo'/> */}
                     </Link>
                 </h1>
+                <div className='account'>
+                    <FontAwesomeIcon icon={faUser}/>
+                </div>
             </div>
         </header>
     );

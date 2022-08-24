@@ -31,16 +31,41 @@
     }
 
 
-
-
-    .menu {
+    .menu, .account {
         position: absolute;
         top: 50%;
-        left: 0;
         transform: translateY(-50%);
-        
+    }
+
+    .menu {
+        left: 0;
+
         .menu-btn {
+            display: flex;
             cursor: pointer;
+            font-size: 1.7em;
+            align-items: center;
+            .menu-btn-icon {
+                @include menu-icon(20);
+            }
+
+            span {
+                margin-left: 10px;
+                color: rgba(0, 0, 0, 0.7);
+                transform: scale(70%);
+                display: block;
+            }
+        }
+    }
+
+
+    .account {
+        right: 0;
+        width: 20px;
+        svg {
+            font-size: calc(20px * 1.14);
+            display: block;
+    
         }
     }
 }
