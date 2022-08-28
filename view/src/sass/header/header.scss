@@ -1,11 +1,15 @@
-@import './variable.scss';
+@import '../variable.scss';
 
 #header-wrap {
+    margin: 0 auto;
+    width: $device-xl-width;
+    height: 100px;
     position: relative;
-
+    display: flex;
+    align-items: center;
     .logo{
         text-align: center;
-        height: 100px;
+        
         @include small-pc {
 
         }
@@ -15,18 +19,17 @@
         @include mobile {
 
         }
-        width: 140px;
+        width: 70px;
         margin: 0 auto;
 
         a {
             display: block;
-            height: 100%;
+            height: 80%;
             img {
                 display: block;
                 height: 100%;
                 line-height: 100px;
             }
-            background: #000;
         }
     }
 
@@ -61,11 +64,18 @@
 
     .account {
         right: 0;
-        width: 20px;
+        font-size: 1.7em;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
         svg {
             font-size: calc(20px * 1.14);
             display: block;
-    
+        }
+        span {
+            transform: scale(70%);
+            margin-right:10px;
+            color: rgba(0, 0, 0, 0.7);
         }
     }
 }

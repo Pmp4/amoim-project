@@ -54,15 +54,64 @@ a {
 @import './variable.scss';
 
 
+
+
+@keyframes fadeIn{
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+@keyframes fadeOut{
+	from {
+		opacity: 1;
+	}
+
+	to {
+		opacity: 0;
+	}
+}
+
+
+
 @at-root body {
     font-family: 'Noto Sans KR', sans-serif;
 }
 
+
+.mt_xl {margin-top: 40px;}
+.mt_lg {margin-top: 34px;}
+.mt_md {margin-top: 26px;}
+.mt_sm {margin-top: 18px;}
+
+
+
 header {
-    margin: 0 auto;
-    width: $device-xl-width;
     @include small-pc {
         width: $device-lg-width;
     }
-    @import url(./header.scss);
+    @import url(./header/header.scss);
+}
+
+.modal-wrap {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+    height: 100%;
+    z-index: 999;
+	animation: fadeIn .3s forwards;
+    background-color: rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    &.fade-out {
+        opacity: 0;
+        animation: fadeOut .3s forwards;
+    }
+
+	@import url(./modal/modal.scss);
 }
