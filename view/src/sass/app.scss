@@ -81,6 +81,15 @@ a {
     font-family: 'Noto Sans KR', sans-serif;
 }
 
+.clearfix:before, .clearfix:after {
+    display: block;
+    content: '';
+    line-height: 0;
+}
+
+.clearfix:after {
+    clear:both;
+}
 
 .mt_xl {margin-top: 40px;}
 .mt_lg {margin-top: 34px;}
