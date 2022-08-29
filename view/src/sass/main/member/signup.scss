@@ -3,13 +3,107 @@
     justify-content: space-between;
 
     .title-box {
-        width: 40%;
-        height: 2000px;
+        width: 30%;
         background-color: antiquewhite;
     }
 
     .signup-box {
-        width: 55%;
+        width: 60%;
+        padding-top: 20px;
+        .title {
+            font-size: 2.4em;
+            font-weight: 600;
+            color: rgb(68, 68, 68);
+        }
+
+        .input-box {
+            display: flex;
+            flex-wrap: wrap;
+            label {
+                display: block;
+                width: 48%;
+                margin-left: 2%;
+                margin-top: 30px;
+                &:nth-child(2n+1) {margin-left: 0;}
+                &[for='userId'] {
+                    .id-check {
+                        display: flex;
+                        justify-content: space-between;
+                        input:nth-child(1) {width: 68%;}
+                        input:nth-child(2) {
+                            width: 30%;
+                            background: rgb(227, 227, 227);
+                            color: rgb(86, 86, 86);
+                            &:focus{background-color: rgb(227, 227, 227);}
+                            &:active{background-color: rgb(200, 200, 200);}
+                        }
+                    }
+                }
+
+                p {
+                    font-size: 1.2em;
+                    margin-bottom: 10px;
+                }
+                input {
+                    display: block;
+                    width: 100%;
+                    border: 0;
+                    background-color: rgb(245, 245, 245);
+                    border-radius: 8px;
+                    line-height: 30px;
+                    font-size: 1em;
+                    padding: 5px 10px;
+                    box-sizing: border-box;
+                    -webkit-appearance : none;
+                    -moz-appearance:none;
+                    appearance:none;
+    
+                    &:focus {
+                        border: 0;
+                        background-color: rgb(240, 240, 240);
+                        outline: none;
+                    }
+                    &[name='passwordChk'] {
+                        margin-top: 6px;
+                    }
+                }
+ 
+                select {
+                    -webkit-appearance : none;
+                    -moz-appearance:none;
+                    appearance:none;
+                    display: block;
+                    width: 100%;
+                    border: 0;
+                    border-radius: 8px;
+                    line-height: 30px;
+                    font-size: 1em;
+                    padding: 5px 10px;
+                    background: rgb(245, 245, 245) url("../../../images/caret-down-solid.svg") no-repeat 97% 50%;
+                    background-size: 2%;
+
+                    &:focus {
+                        border: 0;
+                        background-color: rgb(240, 240, 240);
+                        outline: none;
+                    }
+                }
+            }
+
+
+            #phoneNumber {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                #phoneNumber1, #phoneNumber2, #phoneNumber3 {
+                    width: 30%;
+                }
+                #phoneNumber1 {
+                    background-size: 10%;
+                    background-position: 90% 50%;
+                }
+            }
+        }
         
     }
 }
