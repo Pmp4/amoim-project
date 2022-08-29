@@ -8,7 +8,7 @@ const Modal = ({type, loginPopup}) => {
     const modalType = () => {
         switch(type) {
             case "login" : 
-                return (<Login />);
+                return (<Login modalClose={modalClose}/>);
 
             default : return(<Error/>);
         }

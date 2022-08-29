@@ -59,6 +59,53 @@
             }
         }
     }
+
+    .login-sub {
+        label {
+            display: flex;
+            font-size: .7em;
+            align-items: center;
+            float: left;
+
+            input[type="checkbox"] {
+                display: block;
+                margin: 0;
+            }
+            p {
+                margin-left: 5px;
+            }
+        }
+
+        .account{
+            float: right;
+            font-size: .7em;
+        }
+    }
+
+    .login-btn {
+        display: flex;
+        justify-content: space-between;
+        button{
+            background: inherit; 
+            border:none; 
+            box-shadow:none; 
+            border-radius:0; 
+            padding:0; 
+            overflow:visible; 
+            cursor:pointer;
+            width: 49%;
+            font-size: 1.2em;
+            line-height: 30px;
+
+            &:nth-child(1) {
+                background: #000;
+                color: #fff;
+            }
+            &:nth-child(2) {
+                background-color: rgb(238, 238, 238);
+            }
+        }
+    }
 }
 
 .error {
@@ -66,16 +113,16 @@
 }
 
 .popup {
-    width: 500px;
+    width: 400px;
     background: #fff;
     box-shadow:  39px 39px 78px #d9d9d9,
                 -39px -39px 78px #ffffff;
-    opacity: .7;
+    // opacity: .7;
     z-index: 1;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    border-radius: 10px;
+    border-radius: 20px;
     padding: 20px;
 }
