@@ -85,7 +85,7 @@
     .login-btn {
         display: flex;
         justify-content: space-between;
-        button{
+        button, a{
             background: inherit; 
             border:none; 
             box-shadow:none; 
@@ -96,14 +96,16 @@
             width: 49%;
             font-size: 1.2em;
             line-height: 30px;
-
-            &:nth-child(1) {
-                background: #000;
-                color: #fff;
-            }
-            &:nth-child(2) {
-                background-color: rgb(238, 238, 238);
-            }
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        button {
+            background: #000;
+            color: #fff;
+        }
+        a {
+            background-color: rgb(238, 238, 238);
         }
     }
 }

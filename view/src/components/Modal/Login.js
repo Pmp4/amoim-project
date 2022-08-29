@@ -109,7 +109,7 @@ const Login = ({modalClose}) => {
             </div>
             <div className='login-btn mt_md'>
                 <button onClick={loginInfoCheck}>로그인</button>
-                <button onClick={signupBtn}>회원가입</button>
+                <Link to="/member/signup" onClick={signupBtn}>회원가입</Link>
             </div>
         </div>
     );

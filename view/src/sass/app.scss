@@ -96,6 +96,11 @@ a {
 .mt_md {margin-top: 26px;}
 .mt_sm {margin-top: 18px;}
 
+.page-wrap {
+	width: $device-xl-width;
+	margin: 0 auto;
+}
+
 
 
 header {
@@ -123,4 +128,9 @@ header {
     }
 
 	@import url(./modal/modal.scss);
+}
+
+
+.signup-page {
+	@import url("./main/member/signup.scss");
 }
