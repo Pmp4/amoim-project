@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -21,5 +22,12 @@ public class UserController {
     @GetMapping("/select")
     public List<UserVO> selectAll() {
         return userService.selectAll();
-    }달
+    }
+
+    @GetMapping("/check")
+    public String selectUserIdCount(@RequestParam String userId) {
+        logger.info("API 아이디 중복체크 userId={}", userId);
+
+        return "dd";
+    }
 }
