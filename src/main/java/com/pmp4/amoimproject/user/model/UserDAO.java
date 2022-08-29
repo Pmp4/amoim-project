@@ -7,4 +7,5 @@ import java.util.List;
 @Mapper
 public interface UserDAO {
     List<UserVO> selectAll();
+    int selectUserIdCount(String userId);
 }

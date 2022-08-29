@@ -1,15 +1,21 @@
 .page-wrap {
     display: flex;
     justify-content: space-between;
-
+    padding-top: 20px;
+    
     .title-box {
         width: 30%;
-        background-color: antiquewhite;
+        background: rgb(216,235,252);
+        background: linear-gradient(21deg, rgba(216,235,252,1) 0%, rgba(227,214,252,1) 50%, rgba(187,209,233,1) 100%);
+        border-radius: 20px;
+        // box-shadow:  20px 20px 60px #a5b2c9,
+        //         -20px -20px 60px #dff0ff;
+        box-shadow:  20px 20px 60px #d9d9d9,
+                -20px -20px 60px #ffffff;
     }
 
     .signup-box {
         width: 60%;
-        padding-top: 20px;
         .title {
             font-size: 2.4em;
             font-weight: 600;
@@ -38,11 +44,28 @@
                             &:active{background-color: rgb(200, 200, 200);}
                         }
                     }
+                    .res-msg {
+                        display: block;
+                        margin-top: 5px;
+                        font-size: 0.8em;
+                        &.success {color:#84DC05;}
+                        &.fail {color: #EC2424;}
+                    }
                 }
 
                 p {
                     font-size: 1.2em;
                     margin-bottom: 10px;
+                    span {
+                        font-size: .7em;
+                        display: block;
+                        margin: {
+                            top: 5px;
+                            left: 1px;
+                        };
+                        color: rgb(100, 100, 100);
+                        line-height: 1.4;
+                    }
                 }
                 input {
                     display: block;

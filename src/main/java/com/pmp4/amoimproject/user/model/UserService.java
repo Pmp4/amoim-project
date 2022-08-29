@@ -4,4 +4,5 @@ import java.util.List;
 
 public interface UserService {
     List<UserVO> selectAll();
+    int selectUserIdCount(String userId);
 }

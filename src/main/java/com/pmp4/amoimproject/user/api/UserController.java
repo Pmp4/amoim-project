@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -25,9 +27,16 @@ public class UserController {
     }
 
     @GetMapping("/check")
-    public String selectUserIdCount(@RequestParam String userId) {
+    public Map<String, Object> selectUserIdCount(@RequestParam String userId) {
         logger.info("API 아이디 중복체크 userId={}", userId);
 
-        return "dd";
+        int cnt = userService.selectUserIdCount(userId);
+        logger.info("중복체크 결과 cnt={}", cnt);
+
+        Map<String, Object> res = new HashMap<>();
+        res.put("SUCCESS", true);
+        if(cnt == 0) res.put("CHECK", true);
+
+        return res;
     }
 }
