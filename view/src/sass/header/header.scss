@@ -19,8 +19,10 @@
         @include mobile {
 
         }
-        width: 70px;
+        height: 100%;
         margin: 0 auto;
+        display: flex;
+        align-items: center;
 
         a {
             display: block;

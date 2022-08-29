@@ -1,0 +1,15 @@
+.page-wrap {
+    display: flex;
+    justify-content: space-between;
+
+    .title-box {
+        width: 40%;
+        height: 2000px;
+        background-color: antiquewhite;
+    }
+
+    .signup-box {
+        width: 55%;
+        
+    }
+}
