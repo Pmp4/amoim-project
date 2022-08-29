@@ -4,4 +4,9 @@
     <select id="selectAll" resultType="userVo">
         select * from USERS;
     </select>
+
+    <select id="selectUserIdCount" parameterType="String" resultType="int">
+        select count(*) from USERS
+        where USER_ID like #{userId};
+    </select>
 </mapper>
