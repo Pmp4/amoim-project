@@ -1,7 +1,7 @@
 .page-wrap {
     display: flex;
     justify-content: space-between;
-    padding-top: 20px;
+    padding-top: 40px;
     
     .title-box {
         width: 30%;
@@ -31,8 +31,8 @@
                 margin-left: 2%;
                 margin-top: 30px;
                 &:nth-child(2n+1) {margin-left: 0;}
-                &[for='userId'] {
-                    .id-check {
+                &[for='userId'], &[for='email'] {
+                    .button-input-box {
                         display: flex;
                         justify-content: space-between;
                         input:nth-child(1) {width: 68%;}

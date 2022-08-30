@@ -14,8 +14,10 @@ $big-title: 2em;
 //햄버거 메뉴
 //햄버거 메뉴
 @mixin menu-icon ($menu-width) {
+    // $menu-height: $menu-width * 1.14;
+    // $menu-line-height: ($menu-height - ($menu-height / 2)) / 3;
     $menu-height: $menu-width * 1.14;
-    $menu-line-height: ($menu-height - ($menu-height / 2)) / 3;
+    $menu-line-height: 1.5;
 
     display: block;
     width: #{$menu-width}px;
@@ -25,7 +27,7 @@ $big-title: 2em;
     div {
         width: 100%;
         height: #{$menu-line-height}px;
-        margin-top: #{$menu-height / 4}px;
+        margin-top: #{($menu-height - ($menu-line-height * 3)) / 2}px;
         background: #000;
         border-radius: #{$menu-line-height}px;
 

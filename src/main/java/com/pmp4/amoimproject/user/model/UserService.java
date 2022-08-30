@@ -1,8 +1,9 @@
 package com.pmp4.amoimproject.user.model;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
     List<UserVO> selectAll();
-    int selectUserIdCount(String userId);
+    int selectValueCount(Map<String, Object> obj);
 }

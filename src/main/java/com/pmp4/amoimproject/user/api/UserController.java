@@ -27,11 +27,15 @@ public class UserController {
     }
 
     @GetMapping("/check")
-    public Map<String, Object> selectUserIdCount(@RequestParam String userId) {
-        logger.info("API 아이디 중복체크 userId={}", userId);
+    public Map<String, Object> selectUserIdCount(@RequestParam String value, @RequestParam(defaultValue = "0") int type) {
+        logger.info("API 중복체크 value={}, type={}", value, type);
 
-        int cnt = userService.selectUserIdCount(userId);
-        logger.info("중복체크 결과 cnt={}", cnt);
+        Map<String, Object> objMap = new HashMap<>();
+        objMap.put("value", value);
+        objMap.put("type", type == 1 ? "userId" : type == 2 ? "email" : "");
+
+        int cnt = userService.selectValueCount(objMap);
+        logger.info("중복체크 결과, 개수 cnt={}", cnt);
 
         Map<String, Object> res = new HashMap<>();
         res.put("SUCCESS", true);
