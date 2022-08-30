@@ -5,8 +5,8 @@
         select * from USERS;
     </select>
 
-    <select id="selectUserIdCount" parameterType="String" resultType="int">
+    <select id="selectValueCount" parameterType="map" resultType="int">
         select count(*) from USERS
-        where USER_ID like #{userId};
+        where ${type} like #{value};
     </select>
 </mapper>

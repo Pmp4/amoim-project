@@ -10,4 +10,10 @@ const is_password = (asValue) => {
 }
 //영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요. 특수문자(!@#$%^&*)도 사용
 
-export {is_nickname, is_password};
+
+const is_email = (asValue) => {
+    var regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+    return regEmail.test(asValue);
+}
+
+export {is_nickname, is_password, is_email};

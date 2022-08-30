@@ -4,8 +4,8 @@ const memberAllSelect = () => {
     return httpCommon.get(`/user/select`);
 }
 
-const selectUserIdCount = (userId) => {
-    return httpCommon.get(`/user/check?userId=${userId}`);
+const selectUserIdCount = (text, type) => {
+    return httpCommon.get(`/user/check?value=${text}&type=${type}`);
 }
 
 export default {memberAllSelect, selectUserIdCount}; 

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -16,7 +17,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public int selectUserIdCount(String userId) {
-        return userDAO.selectUserIdCount(userId);
+    public int selectValueCount(Map<String, Object> obj) {
+        return userDAO.selectValueCount(obj);
     }
+
 }
