@@ -32,7 +32,7 @@ public class UserController {
 
         Map<String, Object> objMap = new HashMap<>();
         objMap.put("value", value);
-        objMap.put("type", type == 1 ? "userId" : type == 2 ? "email" : "");
+        objMap.put("type", type == 1 ? "USER_ID" : type == 2 ? "EMAIL" : "");
 
         int cnt = userService.selectValueCount(objMap);
         logger.info("중복체크 결과, 개수 cnt={}", cnt);
