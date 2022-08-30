@@ -229,7 +229,7 @@ const Signup = () => {
                                 <p>생년월일</p>
                                 <input 
                                     id='birthDay'
-                                    type='text'
+                                    type='date'
                                     name='birthDay' 
                                     onChange={(event) => inputChange(event)}
                                     defaultValue={birthDay}/>
@@ -249,6 +249,7 @@ const Signup = () => {
                                         onClick={() => duplicationCheck(2)}
                                         defaultValue='중복확인'/>
                                 </div>
+                                {emailInnerTextStatus && innerCheckText(2)}
                             </label>
                             <label htmlFor='phoneNumber1'>
                                 <p>핸드폰 번호</p>
