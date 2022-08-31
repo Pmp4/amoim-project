@@ -88,12 +88,15 @@ const Signup = () => {
         }
         
         if(name === 'passwordChk' || name === 'password') {
-            let checkResult = false;
-            if(password === passwordChk) checkResult = true;
+            let checkResult = false, checkText = "비밀번호 불일치";
+            if(password === passwordChk) {
+                checkResult = true;
+                checkText = "비밀번호 일치"
+            }
             console.log(checkResult);
             setPasswordCheck({
                 ...passwordCheck,
-                passwordStatus: checkResult, passwordCheckText: checkResult ? "비밀번호 일치" : "비밀번호 불일치"
+                passwordStatus: checkResult, passwordCheckText: checkText
             });
         }
     }
