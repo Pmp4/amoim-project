@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react';
 import MemberService from '../../../api/member/MemberService';
-import {is_nickname, is_password, is_email} from '../../../method/regularExpression';
+import {is_nickname, is_password, is_email, is_birthDay} from '../../../method/regularExpression';
 
 
 const initialValue = {
     name: "",
-    gender: "",
+    gender: "M",
     birthDay: "",
     userId: "",
     password: "",
@@ -15,6 +15,19 @@ const initialValue = {
     phoneNumber3: "",
     email: "",
 };
+
+const valueName = {
+    name: "이름",
+    gender: "성별",
+    birthDay: "생년월일",
+    userId: "아이디",
+    password: "비밀번호",
+    passwordChk: "비밀번호 체크",
+    phoneNumber1: "휴대폰 첫 번째 자리",
+    phoneNumber2: "휴대폰 두 번째 자리",
+    phoneNumber3: "휴대폰 세 번째 자리",
+    email: "이메일",
+}
 
 
 
@@ -29,6 +42,10 @@ const Signup = () => {
         emailCheckText: "",
         emailStatus: false,
         emailInnerTextStatus: false
+    });
+    const [passwordCheck, setPasswordCheck] = useState({
+        passwordCheckText: "",
+        passwordStatus: false
     });
 
     const inputRef = useRef({});
@@ -48,6 +65,7 @@ const Signup = () => {
 
     const {userIdCheckText, userIdStatus, userIdInnerTextStatus} = userIdCheckStatus;
     const {emailCheckText, emailStatus, emailInnerTextStatus} = emailCheckStatus;
+    const {passwordCheckText, passwordStatus} = passwordCheck;
 
 
     const inputChange = (event) => {
@@ -61,11 +79,21 @@ const Signup = () => {
                 userIdCheckText: "", userIdStatus: false, userIdInnerTextStatus: false
             });
         }
-
+        
         if(name === 'email') {
             setEmailCheckStatus({
                 ...emailCheckStatus, 
                 emailCheckText: "", emailStatus: false, emailInnerTextStatus: false
+            });
+        }
+        
+        if(name === 'passwordChk' || name === 'password') {
+            let checkResult = false;
+            if(password === passwordChk) checkResult = true;
+            console.log(checkResult);
+            setPasswordCheck({
+                ...passwordCheck,
+                passwordStatus: checkResult, passwordCheckText: checkResult ? "비밀번호 일치" : "비밀번호 불일치"
             });
         }
     }
@@ -80,6 +108,7 @@ const Signup = () => {
      * @param {*} type 
      * 1 : userId,
      * 2 : email
+     * 3 : password
      * 
      * 아이디, 이메일 중복체크 관련 메세지
      */
@@ -115,12 +144,14 @@ const Signup = () => {
             apiType = userId;
             if(userId === "" || !is_nickname(userId)) {
                 alert("아이디는 2-10자의 영문과 숫자와 일부 특수문자(._-)만 입력 가능합니다.");
+                inputRef.userId.focus();
                 return;
             }
         }else if(type === 2) {
             apiType = email;
             if(email === "" || !is_email(email)) {
                 alert("이메일 형식에 맞지 않습니다.");
+                inputRef.email.focus();
                 return;
             }
         }
@@ -169,6 +200,55 @@ const Signup = () => {
     const joinBtnAction = (event) => {
         event.preventDefault();
 
+        //유효성 검사
+        //유효성 검사
+        //유효성 검사
+        for(let key of Object.keys(inputValue)) {
+            console.log(`key : ${key}, value : ${inputValue[key]}`);
+
+            if(inputValue[key] === '') {
+                alert(`${valueName[key]}를(을) 입력해주세요.`);
+                inputRef[key].focus();
+                return;
+            } 
+        }
+
+        let refName, chkIf, alertText;
+        if(!userIdStatus) {
+            chkIf = true;
+            refName = "userId";
+            alertText = "아이디 중복확인을 해주세요.";
+        }else if(!is_password(password)) {
+            chkIf = true;
+            refName = "password";
+            alertText = "영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요. 특수문자(!@#$%^&*)도 사용";
+        }else if(!emailStatus) {
+            chkIf = true;
+            refName = "userId";
+            alertText = "이메일 중복확인을 해주세요.";
+        }else if(isNaN(birthDay) || !is_birthDay(birthDay)) {
+            chkIf = true;
+            refName = "birthDay";
+            alertText = "생년월일 양식에 맞지 않습니다.";
+        }else if(isNaN(phoneNumber2)) {
+            chkIf = true;
+            refName = "phoneNumber2";
+            alertText = "휴대폰 번호는 숫자로 입력해주세요.";
+        }else if(isNaN(phoneNumber3)) {
+            chkIf = true;
+            refName = "phoneNumber3";
+            alertText = "휴대폰 번호는 숫자로 입력해주세요.";
+        }
+
+        if(chkIf) {
+            alert(alertText);
+            inputRef[refName].focus();
+        }
+
+
+
+
+
         MemberService.memberSignup(inputValue)
             .then(response => {
                 console.log(response);
@@ -202,8 +282,12 @@ const Signup = () => {
                                 {userIdInnerTextStatus && innerCheckText(1)}
                             </label>
                             <label htmlFor='password'>
-                                <p>비밀번호<span>영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요. 특수문자(!@#$%^&*)도 사용</span></p>
+                                <p>비밀번호
+                                    <span>영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요. 특수문자(!@#$%^&*)도 사용</span>
+                                    
+                                </p>
                                 <input 
+                                    ref={element => inputRef.password = element}
                                     id='password'
                                     placeholder='비밀번호'
                                     type='password' 
@@ -220,6 +304,8 @@ const Signup = () => {
                             <label htmlFor='name'>
                                 <p>이름</p>
                                 <input 
+                                    maxLength='10'
+                                    ref={element => inputRef.name = element}
                                     id='name'
                                     placeholder='이름'
                                     type='name'
@@ -230,6 +316,7 @@ const Signup = () => {
                             <label htmlFor='gender'>
                                 <p>성별</p>
                                 <select 
+                                    ref={element => inputRef.gender = element}
                                     id='gender'
                                     name='gender' 
                                     onChange={(event) => inputChange(event)}>
@@ -245,6 +332,7 @@ const Signup = () => {
                             <label htmlFor='birthDay'>
                                 <p>생년월일</p>
                                 <input 
+                                    ref={element => inputRef.birthDay = element}
                                     placeholder='8자리를 입력해주세요.'
                                     maxLength='8'
                                     id='birthDay'
@@ -257,6 +345,7 @@ const Signup = () => {
                                 <p>이메일</p>
                                 <div className='button-input-box'>
                                     <input 
+                                        ref={element => inputRef.email = element}
                                         id='email'
                                         placeholder='이메일'
                                         type='email'
@@ -274,6 +363,7 @@ const Signup = () => {
                                 <p>핸드폰 번호</p>
                                 <div id='phoneNumber'>
                                     <select 
+                                        ref={element => inputRef.phoneNumber1 = element}
                                         name='phoneNumber1'
                                         id='phoneNumber1'
                                         onChange={(event) => inputChange(event)}>
@@ -285,6 +375,7 @@ const Signup = () => {
                                     </select>
                                     -
                                     <input 
+                                        ref={element => inputRef.phoneNumber2 = element}
                                         id='phoneNumber2'
                                         maxLength='4'
                                         type='tel'
@@ -293,6 +384,7 @@ const Signup = () => {
                                         defaultValue={phoneNumber2}/>
                                     -
                                     <input 
+                                        ref={element => inputRef.phoneNumber3 = element}
                                         id='phoneNumber3'
                                         maxLength='4'
                                         type='tel'

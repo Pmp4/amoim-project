@@ -19,4 +19,4 @@ const memberSignup = (rest) => {
 }
 
 
-export default {memberAllSelect, selectTypeCount, memberSignup}; 
+export default {memberAllSelect, selectTypeCount, memberSignup};
