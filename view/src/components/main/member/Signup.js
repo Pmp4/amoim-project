@@ -80,6 +80,8 @@ const Signup = () => {
      * @param {*} type 
      * 1 : userId,
      * 2 : email
+     * 
+     * 아이디, 이메일 중복체크 관련 메세지
      */
     const innerCheckText = (type) => {
         let state, checkText;
@@ -104,6 +106,8 @@ const Signup = () => {
      * @param {*} type 
      * 1 : userId,
      * 2 : email
+     * 
+     * 아이디, 이메일 중복체크 함수
      */
     const duplicationCheck = (type) => {
         let apiType;
@@ -121,7 +125,7 @@ const Signup = () => {
             }
         }
 
-        MemberService.selectUserIdCount(apiType, type)
+        MemberService.selectTypeCount(apiType, type)
             .then((response) => {
                 console.log(response);
                 if(response.data.SUCCESS) {
@@ -158,13 +162,26 @@ const Signup = () => {
     }
 
 
+    /**
+     * 회원가입 REST API
+     */
+
+    const joinBtnAction = (event) => {
+        event.preventDefault();
+
+        MemberService.memberSignup(inputValue)
+            .then(response => {
+                console.log(response);
+            })
+    }
+
     return (
         <div className='signup-page'>
             <div className='page-wrap'>
                 <div className='title-box'></div>
                 <div className='signup-box'>
                     <h2 className='title'>회원가입</h2>
-                    <form>
+                    <form method='post'>
                         <div className='input-box'>
                             <label htmlFor='userId'>
                                 <p>아이디 <span>2-10자의 영문과 숫자와 일부 특수문자(._-)만 입력 가능</span></p>
@@ -228,8 +245,10 @@ const Signup = () => {
                             <label htmlFor='birthDay'>
                                 <p>생년월일</p>
                                 <input 
+                                    placeholder='8자리를 입력해주세요.'
+                                    maxLength='8'
                                     id='birthDay'
-                                    type='date'
+                                    type='text'
                                     name='birthDay' 
                                     onChange={(event) => inputChange(event)}
                                     defaultValue={birthDay}/>
@@ -283,6 +302,7 @@ const Signup = () => {
                                 </div>
                             </label>
                         </div>
+                        <input onClick={(event) => joinBtnAction(event)} className='mt_xl' type='submit' value='회원가입'/>
                     </form>
                 </div>
             </div>

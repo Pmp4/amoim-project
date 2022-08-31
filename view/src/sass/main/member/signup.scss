@@ -16,6 +16,28 @@
 
     .signup-box {
         width: 60%;
+
+
+        input[type=submit] {
+            width: 100%;
+            display: block;
+            
+            -webkit-appearance : none;
+            -moz-appearance:none;
+            appearance:none;
+            border: none;
+
+            line-height: 30px;
+            padding: 5px 10px;
+            border-radius: 10px;
+
+            background-color: #000;
+            color: #fff;
+            font-size: 1em;
+
+            &:active {background-color: rgb(60, 60, 60);}
+        }
+
         .title {
             font-size: 2.4em;
             font-weight: 600;

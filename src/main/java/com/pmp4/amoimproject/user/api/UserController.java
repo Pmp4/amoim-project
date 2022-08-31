@@ -26,6 +26,10 @@ public class UserController {
         return userService.selectAll();
     }
 
+
+    //아이디, 이메일 중복체크
+    //아이디, 이메일 중복체크
+    //아이디, 이메일 중복체크
     @GetMapping("/check")
     public Map<String, Object> selectUserIdCount(@RequestParam String value, @RequestParam(defaultValue = "0") int type) {
         logger.info("API 중복체크 value={}, type={}", value, type);
