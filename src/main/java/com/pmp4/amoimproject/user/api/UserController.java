@@ -62,6 +62,10 @@ public class UserController {
 
         Map<String, Object> resJson = new HashMap<>();
         resJson.put("SUCCESS", true);
+        if(cnt == 0) {
+            resJson.put("SUCCESS", false);
+        }
+
         return resJson;
     }
 }
