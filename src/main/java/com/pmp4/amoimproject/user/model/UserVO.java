@@ -18,4 +18,5 @@ public class UserVO {
     private Timestamp startDate;
     private Timestamp outDate;
     private String email;
+    private String salt;
 }
