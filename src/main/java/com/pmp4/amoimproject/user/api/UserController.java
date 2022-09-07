@@ -56,14 +56,9 @@ public class UserController {
 
         jsonData.setSalt(encrypt.getSalt());
         jsonData.setPassword(encrypt.getEncrypt(jsonData.getPassword(), jsonData.getSalt()));
-        logger.info("test={}", jsonData.getPassword());
 
-        /*int cnt = userService.insertUser(jsonData);
-
-        logger.info("INSERT 결과 cnt={}, jsonData={}", cnt, jsonData);*/
-
-//        logger.info("확인 : " + encrypt.getSalt());
-
+        int cnt = userService.insertUser(jsonData);
+        logger.info("INSERT 결과 cnt={}, jsonData={}", cnt, jsonData);
 
         Map<String, Object> resJson = new HashMap<>();
         resJson.put("SUCCESS", true);
