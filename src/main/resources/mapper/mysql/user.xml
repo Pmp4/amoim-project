@@ -9,4 +9,13 @@
         select count(*) from USERS
         where ${type} like #{value};
     </select>
+
+    <insert id="insertUser" parameterType="userVo">
+        insert into USERS(user_id, password, name, phone_number, birth_day, gender, email)
+        values (#{userId}, #{password}, #{name}, #{phoneNumber}, #{birthDay}, #{gender}, #{email});
+
+        <selectKey resultType="Long" keyProperty="userNo" keyColumn="user_no" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
 </mapper>

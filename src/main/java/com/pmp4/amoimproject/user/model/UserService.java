@@ -6,4 +6,5 @@ import java.util.Map;
 public interface UserService {
     List<UserVO> selectAll();
     int selectValueCount(Map<String, Object> obj);
+    int insertUser(UserVO userVO);
 }
