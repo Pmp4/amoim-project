@@ -9,4 +9,5 @@ import java.util.Map;
 public interface UserDAO {
     List<UserVO> selectAll();
     int selectValueCount(Map<String, Object> obj);
+    int insertUser(UserVO userVO);
 }

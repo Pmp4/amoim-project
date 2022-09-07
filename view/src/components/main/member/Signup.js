@@ -246,13 +246,17 @@ const Signup = () => {
         if(chkIf) {
             alert(alertText);
             inputRef[refName].focus();
+            return;
         }
 
 
 
+        const apiData = {
+            ...inputValue, 
+            phoneNumber: phoneNumber1+phoneNumber2+phoneNumber3,
+        }
 
-
-        MemberService.memberSignup(inputValue)
+        MemberService.memberSignup(apiData)
             .then(response => {
                 console.log(response);
             })

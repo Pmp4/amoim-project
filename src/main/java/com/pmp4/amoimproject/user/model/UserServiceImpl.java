@@ -21,4 +21,9 @@ public class UserServiceImpl implements UserService{
         return userDAO.selectValueCount(obj);
     }
 
+    @Override
+    public int insertUser(UserVO userVO) {
+        return userDAO.insertUser(userVO);
+    }
+
 }

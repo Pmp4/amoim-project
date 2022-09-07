@@ -48,9 +48,17 @@ public class UserController {
 
 
     @PostMapping("/signup")
-    public String memberSignup(@RequestBody Map<String, Object> jsonData) {
+    public Map<String, Object> memberSignup(@RequestBody UserVO jsonData) {
         logger.info("API 회원가입 jsonData={}", jsonData);
 
-        return "good";
+        int cnt = userService.insertUser(jsonData);
+
+        logger.info("INSERT 결과 cnt={}, jsonData={}", cnt, jsonData);
+
+
+
+        Map<String, Object> resJson = new HashMap<>();
+        resJson.put("SUCCESS", true);
+        return resJson;
     }
 }
