@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import MemberService from '../../../api/member/MemberService';
 import {is_nickname, is_password, is_email, is_birthDay} from '../../../method/regularExpression';
+import {Link, useNavigate} from 'react-router-dom';
 
 
 const initialValue = {
@@ -32,6 +33,8 @@ const valueName = {
 
 
 const Signup = () => {
+    const navigator = useNavigate();
+
     const [inputValue, setInputValue] = useState(initialValue); 
     const [userIdCheckStatus, setUserIdCheckStatus] = useState({
         userIdCheckText: "",
@@ -258,7 +261,14 @@ const Signup = () => {
 
         MemberService.memberSignup(apiData)
             .then(response => {
-                console.log(response);
+                const {SUCCESS} = response.data
+                if(!SUCCESS) {
+                    console.log('error : DB처리');
+                    return;
+                }
+
+                alert("회원가입에 성공하셨습니다.");
+                navigator("/");
             })
     }
 
