@@ -1,5 +1,6 @@
 package com.pmp4.amoimproject.user.api;
 
+import com.pmp4.amoimproject.common.Encrypt;
 import com.pmp4.amoimproject.user.model.UserService;
 import com.pmp4.amoimproject.user.model.UserVO;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Encrypt encrypt = new Encrypt();
+
     private final UserService userService;
 
     @GetMapping("/select")
@@ -51,10 +54,15 @@ public class UserController {
     public Map<String, Object> memberSignup(@RequestBody UserVO jsonData) {
         logger.info("API 회원가입 jsonData={}", jsonData);
 
-        int cnt = userService.insertUser(jsonData);
+        jsonData.setSalt(encrypt.getSalt());
+        jsonData.setPassword(encrypt.getEncrypt(jsonData.getPassword(), jsonData.getSalt()));
+        logger.info("test={}", jsonData.getPassword());
 
-        logger.info("INSERT 결과 cnt={}, jsonData={}", cnt, jsonData);
+        /*int cnt = userService.insertUser(jsonData);
 
+        logger.info("INSERT 결과 cnt={}, jsonData={}", cnt, jsonData);*/
+
+//        logger.info("확인 : " + encrypt.getSalt());
 
 
         Map<String, Object> resJson = new HashMap<>();
