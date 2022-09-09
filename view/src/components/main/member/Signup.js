@@ -37,27 +37,6 @@ const Signup = () => {
     const navigator = useNavigate();
     const [inputValue, setInputValue] = useState(initialValue); 
 
-    //설계 미스 //귀찮아서..수정안할래
-    const [userIdCheckStatus, setUserIdCheckStatus] = useState({
-        userIdCheckText: "",
-        userIdStatus: false,
-        userIdInnerTextStatus: false
-    });
-    const [emailCheckStatus, setEmailCheckStatus] = useState({
-        emailCheckText: "",
-        emailStatus: false,
-        emailInnerTextStatus: false
-    });
-    const [passwordCheck, setPasswordCheck] = useState({
-        passwordCheckText: "",
-        passwordStatus: false
-    });
-
-
-    const {userIdCheckText, userIdStatus, userIdInnerTextStatus} = userIdCheckStatus;
-    const {emailCheckText, emailStatus, emailInnerTextStatus} = emailCheckStatus;
-    const {passwordCheckText, passwordStatus} = passwordCheck;
-
     const {
         name, 
         gender, 
@@ -71,139 +50,171 @@ const Signup = () => {
         email,
     } = inputValue;
 
+
+    const [checkInputStatus, setCheckInputStatus] = useState({
+        userIdCheckStatus: {
+            userIdCheckText: "",
+            userIdStatus: false,
+            userIdInnerTextStatus: false
+        },
+        emailCheckStatus: {
+            emailCheckText: "",
+            emailStatus: false,
+            emailInnerTextStatus: false
+        },
+        passwordCheckStatus: {
+            passwordCheckText: "",
+            passwordStatus: false
+        }
+    });
+
+    const {
+        userIdCheckStatus: {
+            userIdCheckText,
+            userIdStatus,
+            userIdInnerTextStatus,
+        },
+        emailCheckStatus: {
+            emailCheckText,
+            emailStatus,
+            emailInnerTextStatus,
+        },
+        passwordCheckStatus: {
+            passwordCheckText,
+            passwordStatus
+        }
+    } = checkInputStatus;
+
     const inputRef = useRef({});
-    // const [userIdCheckStatus, setUserIdCheckStatus] = useState({
-    //     userIdCheckText: "",
-    //     userIdStatus: false,
-    //     userIdInnerTextStatus: false
-    // });
-    // const [emailCheckStatus, setEmailCheckStatus] = useState({
-    //     emailCheckText: "",
-    //     emailStatus: false,
-    //     emailInnerTextStatus: false
-    // });
-    // const [passwordCheck, setPasswordCheck] = useState({
-    //     passwordCheckText: "",
-    //     passwordStatus: false
-    // });
-
-    // const inputRef = useRef({});
-
-    // const {
-    //     name, 
-    //     gender, 
-    //     birthDay, 
-    //     userId, 
-    //     password, 
-    //     passwordChk, 
-    //     phoneNumber1,
-    //     phoneNumber2,
-    //     phoneNumber3,
-    //     email,
-    // } = inputValue;
-
-    // const {userIdCheckText, userIdStatus, userIdInnerTextStatus} = userIdCheckStatus;
-    // const {emailCheckText, emailStatus, emailInnerTextStatus} = emailCheckStatus;
-    // const {passwordCheckText, passwordStatus} = passwordCheck;
 
 
 
-    // const innerUserIdCheckText = 
-    //     <span className={
-    //         userIdStatus ? 
-    //             'res-msg success' : 'res-msg fail'}>{userIdCheckText}</span>;
+    const inputChange = (event) => {
+        const {value, name} = event.target;
+        console.log(`name=${name}, value=${value}`);
+        setInputValue({...inputValue, [name] : value});
+
+        if(name === 'userId') {
+            setCheckInputStatus({
+                ...checkInputStatus, 
+                userIdCheckStatus : {
+                    userIdCheckText: "",
+                    userIdStatus: false,
+                    userIdInnerTextStatus: false
+                }
+            });
 
 
-    // /**
-    //  * @param {*} type 
-    //  * 1 : userId,
-    //  * 2 : email
-    //  * 3 : password
-    //  * 
-    //  * 아이디, 이메일 중복체크 관련 메세지
-    //  */
-    // const innerCheckText = (type) => {
-    //     let state, checkText;
-    //     if(type === 1) {
-    //         state = userIdStatus;
-    //         checkText = userIdCheckText;
-    //     }else if(type === 2) {
-    //         state = emailStatus;
-    //         checkText = emailCheckText;
-    //     }else if(type === 3) {
-    //         state = passwordStatus;
-    //         checkText = passwordCheckText;
-    //     }
+            // setUserIdCheckStatus({
+            //     ...userIdCheckStatus, 
+            //     userIdCheckText: "", userIdStatus: false, userIdInnerTextStatus: false
+            // });
+        }
+        
+        if(name === 'email') {
+            setCheckInputStatus({
+                ...checkInputStatus, 
+                emailCheckStatus : {
+                    emailCheckText: "", 
+                    emailStatus: false, 
+                    emailInnerTextStatus: false
+                }
+            });
+            // setEmailCheckStatus({
+            //     ...emailCheckStatus, 
+            //     emailCheckText: "", emailStatus: false, emailInnerTextStatus: false
+            // });
+        }
+        
+        if(name === 'passwordChk' || name === 'password') {
+            let checkResult = false, checkText = "비밀번호 불일치";
+            const pwdChkValue = name === 'passwordChk' ? password : passwordChk;
 
-    //     return(
-    //         <span className={
-    //             state ? 
-    //                 'res-msg success' : 'res-msg fail'}>{checkText}</span>
-    //     );
-    // };
+            if(value === pwdChkValue) {
+                checkResult = true;
+                checkText = "비밀번호 일치";
+            }
+            console.log(checkResult);
+            setCheckInputStatus({
+                ...checkInputStatus, 
+                passwordCheckStatus : {
+                    passwordStatus: checkResult, 
+                    passwordCheckText: checkText
+                }
+            });
+        }
+    }
 
 
+    /**
+     * @param {*} type 
+     * 1 : userId,
+     * 2 : email
+     * 
+     * 아이디, 이메일 중복체크 함수
+     */
+    const duplicationCheck = (type) => {
+        let apiType;
+        if(type === 1) {
+            apiType = userId;
+            if(userId === "" || !is_nickname(userId)) {
+                alert("아이디는 2-10자의 영문과 숫자와 일부 특수문자(._-)만 입력 가능합니다.");
+                inputRef.userId.focus();
+                return;
+            }
+        }else if(type === 2) {
+            apiType = email;
+            if(email === "" || !is_email(email)) {
+                alert("이메일 형식에 맞지 않습니다.");
+                inputRef.email.focus();
+                return;
+            }
+        }
 
-    // /**
-    //  * @param {*} type 
-    //  * 1 : userId,
-    //  * 2 : email
-    //  * 
-    //  * 아이디, 이메일 중복체크 함수
-    //  */
-    // const duplicationCheck = (type) => {
-    //     let apiType;
-    //     if(type === 1) {
-    //         apiType = userId;
-    //         if(userId === "" || !is_nickname(userId)) {
-    //             alert("아이디는 2-10자의 영문과 숫자와 일부 특수문자(._-)만 입력 가능합니다.");
-    //             inputRef.userId.focus();
-    //             return;
-    //         }
-    //     }else if(type === 2) {
-    //         apiType = email;
-    //         if(email === "" || !is_email(email)) {
-    //             alert("이메일 형식에 맞지 않습니다.");
-    //             inputRef.email.focus();
-    //             return;
-    //         }
-    //     }
+        MemberService.selectTypeCount(apiType, type)
+            .then((response) => {
+                console.log(response);
+                if(response.data.SUCCESS) {
+                    let msg = "", chk = false;
+                    if(type === 1) {
+                        if(response.data.CHECK) {
+                            msg = "사용 가능한 아이디입니다.";
+                            chk = true;
+                        }else {
+                            msg = "가입되어 있는 아이디입니다.";
+                        }
 
-    //     MemberService.selectTypeCount(apiType, type)
-    //         .then((response) => {
-    //             console.log(response);
-    //             if(response.data.SUCCESS) {
-    //                 let msg = "", chk = false;
-    //                 if(type === 1) {
-    //                     if(response.data.CHECK) {
-    //                         msg = "사용 가능한 아이디입니다.";
-    //                         chk = true;
-    //                     }else {
-    //                         msg = "가입되어 있는 아이디입니다.";
-    //                     }
-    
-    //                     setUserIdCheckStatus({
-    //                         ...userIdCheckStatus, 
-    //                         userIdCheckText: msg, userIdStatus: chk, userIdInnerTextStatus: true
-    //                     });
-    //                 }else if(type === 2) {
-    //                     if(response.data.CHECK) {
-    //                         msg = "사용 가능한 이메일입니다.";
-    //                         chk = true;
-    //                     }else {
-    //                         msg = "가입되어 있는 이메일입니다.";
-    //                     }
-    
-    //                     setEmailCheckStatus({
-    //                         ...emailCheckStatus, 
-    //                         emailCheckText: msg, emailStatus: chk, emailInnerTextStatus: true
-    //                     });
-    //                 }
-    //             }else {
-    //                 console.log("API 응답 실패");
-    //             }
-    //         });
-    // }
+                        setCheckInputStatus({
+                            ...checkInputStatus, 
+                            userIdCheckStatus : {
+                                userIdCheckText: msg, 
+                                userIdStatus: chk, 
+                                userIdInnerTextStatus: true
+                            }
+                        });
+
+                    }else if(type === 2) {
+                        if(response.data.CHECK) {
+                            msg = "사용 가능한 이메일입니다.";
+                            chk = true;
+                        }else {
+                            msg = "가입되어 있는 이메일입니다.";
+                        }
+                        setCheckInputStatus({
+                            ...checkInputStatus, 
+                            emailCheckStatus : {
+                                emailCheckText: msg, 
+                                emailStatus: chk, 
+                                emailInnerTextStatus: true
+                            }
+                        });
+                    }
+                }else {
+                    console.log("API 응답 실패");
+                }
+            });
+    }
+
 
 
     /**
@@ -288,7 +299,12 @@ const Signup = () => {
                 <div className='title-box'></div>
                 <div className='signup-box'>
                     <h2 className='title'>회원가입</h2>
-                    <Join inputValue={inputValue} setInputValue={setInputValue}/>
+                    <Join 
+                        inputValue={inputValue} 
+                        inputChange={inputChange} 
+                        inputRef={inputRef} 
+                        checkInputStatus={checkInputStatus}
+                        duplicationCheck={duplicationCheck}/>
                     <input
                         onClick={(event) => joinBtnAction(event)}
                         className="mt_xl"
