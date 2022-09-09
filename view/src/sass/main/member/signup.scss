@@ -17,25 +17,39 @@
     .signup-box {
         width: 60%;
 
-
         input[type=submit] {
-            width: 100%;
+            position: relative;
             display: block;
-            
             -webkit-appearance : none;
             -moz-appearance:none;
             appearance:none;
             border: none;
-
             line-height: 30px;
             padding: 5px 10px;
             border-radius: 10px;
-
-            background-color: #000;
-            color: #fff;
+            background-color: #fff;
+            color: #000;
             font-size: 1em;
+            cursor: pointer;
+            box-shadow:  5px 5px 18px #f0f0f0,
+                -5px -5px 18px #ffffff;
+            top:0;
+            transition: 0.2s;
 
-            &:active {background-color: rgb(60, 60, 60);}
+            @keyframes hoverUp {
+                0% {top:0}
+                100% {top:-1%}
+            }
+            &.step-1 {
+                width: 48%;
+            }
+            &.step-2 {
+                width: 100%;
+            }
+
+            &:hover {
+                top: -.5%;
+            }
         }
 
         .title {
