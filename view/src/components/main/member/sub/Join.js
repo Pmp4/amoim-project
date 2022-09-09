@@ -1,6 +1,4 @@
 import React, { useRef, useState } from 'react';
-import MemberService from '../../../../api/member/MemberService';
-import { is_email, is_nickname,  } from '../../../../method/regularExpression';
 
 const Join = ({inputValue, inputChange, inputRef, checkInputStatus, duplicationCheck}) => {
     const {

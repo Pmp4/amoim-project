@@ -5,7 +5,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import Join from './sub/Join';
 
 
-const initialValue = {
+const initialInputValue = {
     name: "",
     gender: "M",
     birthDay: "",
@@ -17,7 +17,22 @@ const initialValue = {
     phoneNumber3: "",
     email: "",
 };
-
+const initialStatusValue = {
+    userIdCheckStatus: {
+        userIdCheckText: "",
+        userIdStatus: false,
+        userIdInnerTextStatus: false
+    },
+    emailCheckStatus: {
+        emailCheckText: "",
+        emailStatus: false,
+        emailInnerTextStatus: false
+    },
+    passwordCheckStatus: {
+        passwordCheckText: "",
+        passwordStatus: false
+    }
+}
 const valueName = {
     name: "이름",
     gender: "성별",
@@ -33,9 +48,20 @@ const valueName = {
 
 
 
+
+
+
+
 const Signup = () => {
     const navigator = useNavigate();
-    const [inputValue, setInputValue] = useState(initialValue); 
+    const [inputValue, setInputValue] = useState(initialInputValue); 
+    const [checkInputStatus, setCheckInputStatus] = useState(initialStatusValue);
+    const [submitBtn, setSubmitBtn] = useState({
+        submitText: "다음",
+        submitStep: 1
+    });
+    const inputRef = useRef({});
+    console.log("test!");
 
     const {
         name, 
@@ -49,24 +75,6 @@ const Signup = () => {
         phoneNumber3,
         email,
     } = inputValue;
-
-
-    const [checkInputStatus, setCheckInputStatus] = useState({
-        userIdCheckStatus: {
-            userIdCheckText: "",
-            userIdStatus: false,
-            userIdInnerTextStatus: false
-        },
-        emailCheckStatus: {
-            emailCheckText: "",
-            emailStatus: false,
-            emailInnerTextStatus: false
-        },
-        passwordCheckStatus: {
-            passwordCheckText: "",
-            passwordStatus: false
-        }
-    });
 
     const {
         userIdCheckStatus: {
@@ -85,7 +93,18 @@ const Signup = () => {
         }
     } = checkInputStatus;
 
-    const inputRef = useRef({});
+    const {submitText, submitStep} = submitBtn;
+
+    const submitBtnClassName = () => {
+        let resText = "mt_xl";
+        if(submitStep === 1) {
+            resText += " step-1"
+        }else if(submitStep === 2) {
+            resText += " step-2"
+        }
+
+        return resText;
+    }
 
 
 
@@ -103,12 +122,6 @@ const Signup = () => {
                     userIdInnerTextStatus: false
                 }
             });
-
-
-            // setUserIdCheckStatus({
-            //     ...userIdCheckStatus, 
-            //     userIdCheckText: "", userIdStatus: false, userIdInnerTextStatus: false
-            // });
         }
         
         if(name === 'email') {
@@ -120,10 +133,6 @@ const Signup = () => {
                     emailInnerTextStatus: false
                 }
             });
-            // setEmailCheckStatus({
-            //     ...emailCheckStatus, 
-            //     emailCheckText: "", emailStatus: false, emailInnerTextStatus: false
-            // });
         }
         
         if(name === 'passwordChk' || name === 'password') {
@@ -223,9 +232,41 @@ const Signup = () => {
     const joinBtnAction = (event) => {
         event.preventDefault();
 
-        //유효성 검사
-        //유효성 검사
-        //유효성 검사
+        if(submitStep === 1) {
+            //유효성 검사
+            //유효성 검사
+            //유효성 검사
+            const nextCheck = inputValidation();
+            console.log(nextCheck);
+            if(nextCheck) setSubmitBtn({...submitBtn, submitText: "회원가입", submitStep: 2});
+        }else if(submitStep === 2) {
+            
+        }
+
+
+        //POST로 전송할 data set
+        // const apiData = {
+        //     ...inputValue, 
+        //     phoneNumber: phoneNumber1+phoneNumber2+phoneNumber3,
+        // }
+
+        // MemberService.memberSignup(apiData)
+        //     .then(response => {
+        //         const {SUCCESS} = response.data
+        //         if(!SUCCESS) {
+        //             console.log('error : DB처리');
+        //             return;
+        //         }
+
+        //         alert("회원가입에 성공하셨습니다.");
+        //         navigator("/");
+        //     })
+    }
+
+    /**
+     * 회원정보 입력 유효성검사
+     */
+    const inputValidation = () => {
         for(let key of Object.keys(inputValue)) {
             console.log(`key : ${key}, value : ${inputValue[key]}`);
 
@@ -270,28 +311,13 @@ const Signup = () => {
         if(chkIf) {
             alert(alertText);
             inputRef[refName].focus();
-            return;
+            return false;
         }
 
-
-
-        const apiData = {
-            ...inputValue, 
-            phoneNumber: phoneNumber1+phoneNumber2+phoneNumber3,
-        }
-
-        MemberService.memberSignup(apiData)
-            .then(response => {
-                const {SUCCESS} = response.data
-                if(!SUCCESS) {
-                    console.log('error : DB처리');
-                    return;
-                }
-
-                alert("회원가입에 성공하셨습니다.");
-                navigator("/");
-            })
+        return true;
     }
+
+    
 
     return (
         <div className='signup-page'>
@@ -307,9 +333,9 @@ const Signup = () => {
                         duplicationCheck={duplicationCheck}/>
                     <input
                         onClick={(event) => joinBtnAction(event)}
-                        className="mt_xl"
+                        className={submitBtnClassName()}
                         type="submit"
-                        value="회원가입"
+                        value={submitText}
                     />
                 </div>
             </div>
