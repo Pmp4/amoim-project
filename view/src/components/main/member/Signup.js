@@ -3,6 +3,7 @@ import MemberService from '../../../api/member/MemberService';
 import {is_nickname, is_password, is_email, is_birthDay} from '../../../method/regularExpression';
 import {Link, useNavigate} from 'react-router-dom';
 import Join from './sub/Join';
+import Interest from './sub/Interest';
 
 
 const initialInputValue = {
@@ -324,13 +325,16 @@ const Signup = () => {
             <div className='page-wrap'>
                 <div className='title-box'></div>
                 <div className='signup-box'>
-                    <h2 className='title'>회원가입</h2>
-                    <Join 
-                        inputValue={inputValue} 
-                        inputChange={inputChange} 
-                        inputRef={inputRef} 
-                        checkInputStatus={checkInputStatus}
-                        duplicationCheck={duplicationCheck}/>
+                    <h2 className='title'>{submitStep === 1 ? '회원정보' : "관심사"}</h2>
+                    {/* {submitStep === 1 ? 
+                        <Join 
+                            inputValue={inputValue} 
+                            inputChange={inputChange} 
+                            inputRef={inputRef} 
+                            checkInputStatus={checkInputStatus}
+                            duplicationCheck={duplicationCheck}/> : 
+                        <Interest/>} */}
+                        <Interest/>
                     <input
                         onClick={(event) => joinBtnAction(event)}
                         className={submitBtnClassName()}
