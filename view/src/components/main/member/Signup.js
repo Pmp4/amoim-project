@@ -325,7 +325,7 @@ const Signup = () => {
             <div className='page-wrap'>
                 <div className='title-box'></div>
                 <div className='signup-box'>
-                    <h2 className='title'>{submitStep === 1 ? '회원정보' : "관심사"}</h2>
+                    <h2 className='title'>{submitStep === 1 ? '관심사' : "관심사"}</h2>
                     {/* {submitStep === 1 ? 
                         <Join 
                             inputValue={inputValue} 
