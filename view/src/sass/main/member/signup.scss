@@ -2,6 +2,7 @@
     display: flex;
     justify-content: space-between;
     padding-top: 40px;
+    transition: .4s;
     
     .title-box {
         width: 30%;
@@ -12,6 +13,7 @@
         //         -20px -20px 60px #dff0ff;
         box-shadow:  20px 20px 60px #d9d9d9,
                 -20px -20px 60px #ffffff;
+        transition: .4s;
     }
 
     .signup-box {
