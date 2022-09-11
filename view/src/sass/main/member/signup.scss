@@ -58,6 +58,10 @@
             font-size: 2.4em;
             font-weight: 600;
             color: rgb(68, 68, 68);
+            .sub-title {
+                font-size: .7em;
+                margin-left: 10px;
+            }
         }
 
         .input-box {
@@ -299,6 +303,10 @@
                 .title {
                     margin-top: 40px;
                     font-size: 1.4em;
+                    .sub-title {
+                        font-size: .7em;
+                        margin-left: 7px;
+                    }
                 }
                 .keyword-part{ 
                     margin-top: 20px;
@@ -314,6 +322,9 @@
                         border-radius: 5px;
                         cursor: pointer;
 
+                        &.on {
+                            background: #cecece;
+                        }
                         // &:nth-child(1) {
                         //     margin-left:0;
                         // }

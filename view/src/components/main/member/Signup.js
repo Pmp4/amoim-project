@@ -4,6 +4,7 @@ import {is_nickname, is_password, is_email, is_birthDay} from '../../../method/r
 import {useNavigate} from 'react-router-dom';
 import Join from './sub/Join';
 import Interest from './sub/Interest';
+import { useState } from 'react';
 
 
 const initialInputValue = {
@@ -50,6 +51,14 @@ const valueName = {
 
 
 
+const [checkStatus, setCheckStatus] = useState({
+    checkItem: [],
+    checkKeywords: [],
+});
+
+
+
+
 
 
 
@@ -59,7 +68,7 @@ const Signup = () => {
     const [checkInputStatus, setCheckInputStatus] = useState(initialStatusValue);
     const [submitBtn, setSubmitBtn] = useState({
         submitText: "다음",
-        submitStep: 1
+        submitStep: 2
     });
     const inputRef = useRef({});
     // console.log("test!");
@@ -325,7 +334,16 @@ const Signup = () => {
             <div className='page-wrap'>
                 <div className='title-box'></div>
                 <div className='signup-box'>
-                    <h2 className='title'>{submitStep === 1 ? '관심사' : "관심사"}</h2>
+                    <h2 className='title'>
+                        {submitStep === 1 ? '회원정보' : 
+                            "관심사" 
+                        }
+                        {submitStep === 1 ? "" : 
+                            <span className='sub-title'>
+                                선택된 항목&nbsp;
+                                <string>0개</string>
+                            </span>}
+                    </h2>
                     {/* {submitStep === 1 ? 
                         <Join 
                             inputValue={inputValue} 
@@ -334,7 +352,7 @@ const Signup = () => {
                             checkInputStatus={checkInputStatus}
                             duplicationCheck={duplicationCheck}/> : 
                         <Interest/>} */}
-                        <Interest/>
+                        <Interest checkStatus={checkStatus}/>
                     <input
                         onClick={(event) => joinBtnAction(event)}
                         className={submitBtnClassName()}
