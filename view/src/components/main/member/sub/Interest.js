@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import InterestService from "../../../../api/interest/InterestService";
 import Slider from "react-slick";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faCheck} from '@fortawesome/free-solid-svg-icons';
 
 const initialInterests = [
     {
@@ -19,6 +21,7 @@ const Interest = () => {
     const [interests, setInterests] = useState(initialInterests);
     const [moved, setMoved] = useState(false);
     const [checkItem, setCheckItem] = useState([]);
+    const [currentCode, setCurrentCode] = useState(0);
     const divRef = useRef([]);
 
     const settings = {
@@ -46,13 +49,33 @@ const Interest = () => {
         categoryApi("");
     }, []);
 
-    const clickCategory = (idx) => {
-        if(checkItem.indexOf(idx) !== -1) {
+
+    //요소 클릭 시, 체크 여부를 확인함
+    //요소 클릭 시, 체크 여부를 확인함
+    //요소 클릭 시, 체크 여부를 확인함
+    const clickCategory = (code, idx) => {
+        // console.log(idx);
+        if(checkItem.indexOf(code) !== -1) {    //클릭한 요소일 때, 삭제
             // console.log("hello");
-            const tempCheckItem = checkItem.filter(item => item !== idx);
-            setCheckItem(tempCheckItem);
-        }else {
-            setCheckItem(checkItem.concat(idx));
+            if(currentCode === code) {  //현재 보고있는 카테고리일 경우만 삭제
+                const tempArray = [...interests];
+                tempArray[idx].check = false;
+                const tempCheckItem = checkItem.filter(item => item !== code);
+
+                setInterests(tempArray);
+                setCheckItem(tempCheckItem);
+                return;
+            }
+
+            setCurrentCode(code);
+        }else { //클릭한 요소가 아닐 때, 추가
+            const tempArray = [...interests];
+            tempArray[idx].check = true;
+            // console.log(tempArray);
+
+            setInterests(tempArray);
+            setCheckItem(checkItem.concat(code));
+            setCurrentCode(code);
         }
     }
 
@@ -85,13 +108,13 @@ const Interest = () => {
         setMoved(true);
     }
 
-    const upListener = (idx) => {
+    const upListener = (code, idx) => {
         // console.log(idx);
         if (moved) {
             console.log('moved')
         } else {
             console.log('not moved');
-            clickCategory(idx);
+            clickCategory(code, idx);
         }
     }
 
@@ -129,17 +152,26 @@ const Interest = () => {
     // }
 
 
+    // 메인요소 설정
+    // 메인요소 설정
+    // 메인요소 설정
+    // 메인요소 설정
     const setCategoryObj = interests.map((item, idx) => (
         <div
             ref={element => divRef.current[idx] = element}
-            key={item.interestNo}
+            key={idx}
             >
             <div 
-                className={checkItem.indexOf(idx) !== -1 ? 'item on' : 'item'} 
-                onMouseUp={() => upListener(parseInt(item.categoryCode))}
+                className={item.check ? 'item on' : 'item'} 
+                onMouseUp={() => upListener(parseInt(item.categoryCode), idx)}
                 onMouseMove={moveListener}
                 onMouseDown={downListener}>
-                <div className="title-img"></div>
+                <div className="title-img">
+                    <div className='click-part'>
+                        <FontAwesomeIcon icon={faCheck} />
+                    </div>
+                    <img src={`../../../../upload/images/${item.imageName}`} alt={item.name}/>
+                </div>
                 <span className="cat-title">{item.name}</span>
             </div>
         </div>
