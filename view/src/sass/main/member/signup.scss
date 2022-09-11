@@ -200,7 +200,7 @@
                                         top: 0;
                                         left: 0;
                                         svg {
-                                            color: #000;
+                                            color: #fff;
                                             opacity: 0.6;
                                             position: absolute;
                                             right: 10px;
@@ -226,7 +226,7 @@
                                         box-shadow:  5px 5px 7px #ebebeb,
                                             -5px -5px 7px #ebebeb;
                                         .click-part{
-                                            svg{color:#fff;}
+                                            svg{color:#000;}
                                         }
 
                                         img{
@@ -237,7 +237,7 @@
                                 &.on {
                                     .title-img {
                                         .click-part{
-                                            svg{color:#fff;}
+                                            svg{color:#000;}
                                         }
                                         img{
                                             opacity: .85;

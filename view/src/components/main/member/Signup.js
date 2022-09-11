@@ -1,10 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import MemberService from '../../../api/member/MemberService';
 import {is_nickname, is_password, is_email, is_birthDay} from '../../../method/regularExpression';
 import {useNavigate} from 'react-router-dom';
 import Join from './sub/Join';
 import Interest from './sub/Interest';
-import { useState } from 'react';
 
 
 const initialInputValue = {
@@ -51,14 +50,6 @@ const valueName = {
 
 
 
-const [checkStatus, setCheckStatus] = useState({
-    checkItem: [],
-    checkKeywords: [],
-});
-
-
-
-
 
 
 
@@ -71,7 +62,14 @@ const Signup = () => {
         submitStep: 2
     });
     const inputRef = useRef({});
-    // console.log("test!");
+
+
+    const [checkStatus, setCheckStatus] = useState({
+        checkItem: [],
+        checkKeywords: [],
+    });
+
+    const {checkItem} = checkStatus;
 
     const {
         name, 
@@ -115,6 +113,12 @@ const Signup = () => {
 
         return resText;
     }
+
+
+
+    const checkStatusAction = useCallback((name, data) => {
+        setCheckStatus({...checkStatus, [name]: data});
+    }, [checkStatus]);
 
 
 
@@ -341,7 +345,7 @@ const Signup = () => {
                         {submitStep === 1 ? "" : 
                             <span className='sub-title'>
                                 선택된 항목&nbsp;
-                                <string>0개</string>
+                                <strong>{checkItem.length}개</strong>
                             </span>}
                     </h2>
                     {/* {submitStep === 1 ? 
@@ -352,7 +356,7 @@ const Signup = () => {
                             checkInputStatus={checkInputStatus}
                             duplicationCheck={duplicationCheck}/> : 
                         <Interest/>} */}
-                        <Interest checkStatus={checkStatus}/>
+                        <Interest checkStatus={checkStatus} checkStatusAction={checkStatusAction}/>
                     <input
                         onClick={(event) => joinBtnAction(event)}
                         className={submitBtnClassName()}

@@ -17,14 +17,19 @@ const initialInterests = [
     },
 ];
 
-const Interest = ({checkStatus}) => {
+const Interest = ({checkStatus, checkStatusAction}) => {
     const [interests, setInterests] = useState(initialInterests);
     const [keywords, setKeywords] = useState(initialInterests);
     const [moved, setMoved] = useState(false);
-    const [checkItem, setCheckItem] = useState([]);
+    // const [checkItem, setCheckItem] = useState([]);
     const [currentCode, setCurrentCode] = useState(0);
-    const [checkKeywords, setCheckKeywords] = useState([]);
+    // const [checkKeywords, setCheckKeywords] = useState([]);
     const divRef = useRef([]);
+
+    const {
+        checkItem,
+        checkKeywords
+    } = checkStatus;
 
     const settings = {
         dots: true,
@@ -61,7 +66,6 @@ const Interest = ({checkStatus}) => {
     //요소 클릭 시, 체크 여부를 확인함
     //이미 클릭 했던 요소면? 현재 current 비교 후, 삭제
     const clickCategory = (code, idx) => {
-        // console.log(idx);
         if(checkItem.indexOf(code) !== -1) {    //이미 클릭한 요소일 때
             // console.log("hello");
             if(currentCode === code) {  //현재 보고있는 카테고리일 경우만 삭제
@@ -70,7 +74,8 @@ const Interest = ({checkStatus}) => {
                 const tempCheckItem = checkItem.filter(item => item !== code);
 
                 setInterests(tempArray);
-                setCheckItem(tempCheckItem);
+                // setCheckItem(tempCheckItem);
+                checkStatusAction('checkItem', tempCheckItem);
 
                 if(tempCheckItem.length !== 0) {    //선택한 요소가 있을 경우
                     const tempCode = tempCheckItem[tempCheckItem.length - 1];
@@ -86,12 +91,21 @@ const Interest = ({checkStatus}) => {
             categoryApi(code);
             setCurrentCode(code);
         }else { //클릭한 요소가 아닐 때, 추가
+            if(checkItem.length === 4) {
+                alert("관심사는 최대 4개까지 선택 가능합니다.");
+                return;
+            }
+
+
+
             const tempArray = [...interests];
             tempArray[idx].check = true;
             // console.log(tempArray);
 
             setInterests(tempArray);
-            setCheckItem(checkItem.concat(code));
+            // setCheckItem(checkItem.concat(code));
+
+            checkStatusAction('checkItem', checkItem.concat(code));
             setCurrentCode(code);
             categoryApi(code);
         }
@@ -102,9 +116,14 @@ const Interest = ({checkStatus}) => {
     const clickKeywordAction = (code) => {
         console.log(code);
         if(checkKeywords.indexOf(code) === -1) {
-            setCheckKeywords(checkKeywords.concat(code));
+            if(checkKeywords.length === 5) {
+                alert("키워드는 최대 5개까지 선택 가능합니다.");
+                return;
+            }
+            
+            checkStatusAction('checkKeywords', checkKeywords.concat(code));
         }else {
-            setCheckKeywords(checkKeywords.filter((e) => e !== code));
+            checkStatusAction('checkKeywords', checkKeywords.filter((e) => e !== code));
         }
     }
 
@@ -156,11 +175,23 @@ const Interest = ({checkStatus}) => {
     //마우스 클릭 or 드래그 감지
     //마우스 클릭 or 드래그 감지
     const downListener = () => {
+        clearTimeout(moveSet());
+        moveCount--;
         setMoved(false);
     }
 
+    let moveCount = 0;
     const moveListener = () => {
-        setMoved(true);
+        if(moveCount === 0) {
+            moveSet();
+            moveCount++;
+        }
+    }
+
+    const moveSet = () => {
+        setTimeout(() => {
+            setMoved(true);
+        }, 100);
     }
 
     const upListener = (code, idx) => {
@@ -254,7 +285,7 @@ const Interest = ({checkStatus}) => {
                 <div className="title">키워드
                     <span className='sub-title'>
                         선택된 항목&nbsp;
-                        <string>{checkKeywords.length}개</string>
+                        <strong>{checkKeywords.length}개</strong>
                     </span>
                 </div>
                 <div className="keyword-part">
