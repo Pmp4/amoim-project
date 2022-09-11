@@ -156,6 +156,7 @@ const Interest = () => {
     // 메인요소 설정
     // 메인요소 설정
     // 메인요소 설정
+    
     const setCategoryObj = interests.map((item, idx) => (
         <div
             ref={element => divRef.current[idx] = element}
@@ -170,7 +171,9 @@ const Interest = () => {
                     <div className='click-part'>
                         <FontAwesomeIcon icon={faCheck} />
                     </div>
-                    <img src={`../../../../upload/images/${item.imageName}`} alt={item.name}/>
+                    <img 
+                        src={item.imageName != null ? `/upload/images/${item.imageName}` : "/default_image.png"} 
+                        alt={item.name}/>
                 </div>
                 <span className="cat-title">{item.name}</span>
             </div>
