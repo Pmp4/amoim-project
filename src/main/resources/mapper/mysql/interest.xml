@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pmp4.amoimproject.interest.model.InterestDAO">
+    <select id="categorySelect" parameterType="String" resultType="interestVo">
+        select * from INTERESTS
+        <if test="categoryParent == null or categoryParent == ''">
+            where CATEGORY_PARENT IS NULL
+        </if>
+        <if test="categoryParent != null and categoryParent != ''">
+            where CATEGORY_PARENT = #{categoryParent}
+        </if>
+        order by INTEREST_NO
+    </select>
+</mapper>

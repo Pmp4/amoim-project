@@ -167,6 +167,46 @@
         }
         
         .interest-part {
+            .slick-slider {
+                width: calc(100% + 20px);
+                margin-left: -10px;
+
+                .slick-list {
+                    margin-top: 20px;
+                    .slick-track {
+                        .slick-slide {
+                            // &:nth-child(3n+1) .item{
+                            //     padding-left: 0;
+                            // }
+    
+                            .item {
+                                padding: 0 10px;
+                                .title-img {
+                                    // width: 100%;
+                                    height: 300px;
+                                    border-radius: 20px;
+                                    background-color: #d9d9d9;
+                                    // padding: 20px 40px;
+                                    
+                                }
+                                .cat-title {
+                                    margin-top: 10px;
+                                    display: block;
+                                    text-align: center;
+                                    font-size: 1.2em;
+                                    // padding: 20px 40px;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .slick-prev:before, .slick-next:before {
+                    color: #000;
+                }
+            }
+            
+
             .main-slide-wrap {
                 width: 100%;
                 margin-top: 30px;
