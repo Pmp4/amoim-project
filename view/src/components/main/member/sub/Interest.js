@@ -49,6 +49,9 @@ const Interest = () => {
         categoryApi("");
     }, []);
 
+    useEffect(() => {
+    })
+
 
 
 
@@ -57,7 +60,7 @@ const Interest = () => {
     //요소 클릭 시, 체크 여부를 확인함
     const clickCategory = (code, idx) => {
         // console.log(idx);
-        if(checkItem.indexOf(code) !== -1) {    //이미 클릭한 요소일 때, 삭제
+        if(checkItem.indexOf(code) !== -1) {    //이미 클릭한 요소일 때
             // console.log("hello");
             if(currentCode === code) {  //현재 보고있는 카테고리일 경우만 삭제
                 const tempArray = [...interests];
@@ -66,12 +69,19 @@ const Interest = () => {
 
                 setInterests(tempArray);
                 setCheckItem(tempCheckItem);
-                setKeywords(initialInterests);
+
+                if(tempCheckItem.length !== 0) {    //선택한 요소가 있을 경우
+                    const tempCode = tempCheckItem[tempCheckItem.length - 1];
+
+                    categoryApi(tempCode);
+                    setCurrentCode(tempCode);
+                }else {
+                    setKeywords(initialInterests);
+                }
                 return;
-            }else {
-                categoryApi(code);
             }
 
+            categoryApi(code);
             setCurrentCode(code);
         }else { //클릭한 요소가 아닐 때, 추가
             const tempArray = [...interests];
@@ -109,7 +119,7 @@ const Interest = () => {
     };
 
 
-    //키워드 카테고리 리스트 api
+    //키워드 카테고리 리스트
     const setKeywordObj = keywords.map((item, idx) => {
         if(keywords.length === 1) {
             return ("");
@@ -182,14 +192,14 @@ const Interest = () => {
     // 메인요소 설정
     // 메인요소 설정
     // 메인요소 설정
-    
     const setCategoryObj = interests.map((item, idx) => (
         <div
             ref={element => divRef.current[idx] = element}
             key={idx}
             >
             <div 
-                className={item.check ? 'item on' : 'item'} 
+                className={!item.check ? 'item' : 
+                    (parseInt(item.categoryCode) === currentCode) ? "item current" : "item on"} 
                 onMouseUp={() => upListener(parseInt(item.categoryCode), idx)}
                 onMouseMove={moveListener}
                 onMouseDown={downListener}>
