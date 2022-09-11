@@ -35,6 +35,9 @@ public class InterestController {
         if(list.size() > 0) {
             res.put("SUCCESS", true);
             res.put("list", list);
+            if(type.equals("")) {
+                res.put("type", true);
+            }
         }
 
         return res;

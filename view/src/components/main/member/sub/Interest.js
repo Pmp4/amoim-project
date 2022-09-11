@@ -19,6 +19,7 @@ const initialInterests = [
 
 const Interest = () => {
     const [interests, setInterests] = useState(initialInterests);
+    const [keywords, setKeywords] = useState(initialInterests);
     const [moved, setMoved] = useState(false);
     const [checkItem, setCheckItem] = useState([]);
     const [currentCode, setCurrentCode] = useState(0);
@@ -44,10 +45,11 @@ const Interest = () => {
     //     )[0].style.width = `${slideWidth}px`;
     // };
 
-
     useEffect(() => {
         categoryApi("");
     }, []);
+
+
 
 
     //요소 클릭 시, 체크 여부를 확인함
@@ -55,7 +57,7 @@ const Interest = () => {
     //요소 클릭 시, 체크 여부를 확인함
     const clickCategory = (code, idx) => {
         // console.log(idx);
-        if(checkItem.indexOf(code) !== -1) {    //클릭한 요소일 때, 삭제
+        if(checkItem.indexOf(code) !== -1) {    //이미 클릭한 요소일 때, 삭제
             // console.log("hello");
             if(currentCode === code) {  //현재 보고있는 카테고리일 경우만 삭제
                 const tempArray = [...interests];
@@ -64,7 +66,10 @@ const Interest = () => {
 
                 setInterests(tempArray);
                 setCheckItem(tempCheckItem);
+                setKeywords(initialInterests);
                 return;
+            }else {
+                categoryApi(code);
             }
 
             setCurrentCode(code);
@@ -76,6 +81,7 @@ const Interest = () => {
             setInterests(tempArray);
             setCheckItem(checkItem.concat(code));
             setCurrentCode(code);
+            categoryApi(code);
         }
     }
 
@@ -88,13 +94,33 @@ const Interest = () => {
         InterestService.selectCategory(type).then((response) => {
             console.log(response);
             if (response.data.SUCCESS) {
-                for(let i = 0; i < response.data.list.length; i++)
-                    response.data.list[i].check = false;
-                
-                setInterests(response.data.list);
+                if(response.data.type) {
+                    for(let i = 0; i < response.data.list.length; i++)
+                        response.data.list[i].check = false;
+                    
+                    setInterests(response.data.list);
+                }else {
+                    for(let i = 0; i < response.data.list.length; i++)
+                        response.data.list[i].check = false;
+                    setKeywords(response.data.list);
+                }
             }
         });
     };
+
+
+    //키워드 카테고리 리스트 api
+    const setKeywordObj = keywords.map((item, idx) => {
+        if(keywords.length === 1) {
+            return ("");
+        }
+
+        return (
+            <span className="item" key={idx}>{item.name}</span>
+        )
+    });
+
+
 
 
     //마우스 클릭 or 드래그 감지
@@ -198,9 +224,8 @@ const Interest = () => {
             <div className="sub-cat">
                 <div className="title">키워드</div>
                 <div className="keyword-part">
-                    <span className="item">test1</span>
-                    <span className="item">test2</span>
-                    <span className="item">test3test3test3</span>
+                    {setKeywordObj}
+                    {/* <span className="item">test1</span> */}
                 </div>
             </div>
         </div>
