@@ -17,12 +17,13 @@ const initialInterests = [
     },
 ];
 
-const Interest = () => {
+const Interest = ({checkStatus}) => {
     const [interests, setInterests] = useState(initialInterests);
     const [keywords, setKeywords] = useState(initialInterests);
     const [moved, setMoved] = useState(false);
     const [checkItem, setCheckItem] = useState([]);
     const [currentCode, setCurrentCode] = useState(0);
+    const [checkKeywords, setCheckKeywords] = useState([]);
     const divRef = useRef([]);
 
     const settings = {
@@ -58,6 +59,7 @@ const Interest = () => {
     //요소 클릭 시, 체크 여부를 확인함
     //요소 클릭 시, 체크 여부를 확인함
     //요소 클릭 시, 체크 여부를 확인함
+    //이미 클릭 했던 요소면? 현재 current 비교 후, 삭제
     const clickCategory = (code, idx) => {
         // console.log(idx);
         if(checkItem.indexOf(code) !== -1) {    //이미 클릭한 요소일 때
@@ -96,6 +98,17 @@ const Interest = () => {
     }
 
 
+    //키워드 클릭 시
+    const clickKeywordAction = (code) => {
+        console.log(code);
+        if(checkKeywords.indexOf(code) === -1) {
+            setCheckKeywords(checkKeywords.concat(code));
+        }else {
+            setCheckKeywords(checkKeywords.filter((e) => e !== code));
+        }
+    }
+
+
     //메인 카테고리 리스트 api
     //메인 카테고리 리스트 api
     //메인 카테고리 리스트 api
@@ -121,12 +134,18 @@ const Interest = () => {
 
     //키워드 카테고리 리스트
     const setKeywordObj = keywords.map((item, idx) => {
+        const code = parseInt(item.categoryCode);
         if(keywords.length === 1) {
             return ("");
         }
 
         return (
-            <span className="item" key={idx}>{item.name}</span>
+            <span 
+                onClick={() => clickKeywordAction(code)}
+                className={checkKeywords.indexOf(code) !== -1 ? 'item on' : "item"} 
+                key={idx}>
+                {item.name}
+            </span>
         )
     });
 
@@ -232,7 +251,12 @@ const Interest = () => {
             </div> */}
 
             <div className="sub-cat">
-                <div className="title">키워드</div>
+                <div className="title">키워드
+                    <span className='sub-title'>
+                        선택된 항목&nbsp;
+                        <string>{checkKeywords.length}개</string>
+                    </span>
+                </div>
                 <div className="keyword-part">
                     {setKeywordObj}
                     {/* <span className="item">test1</span> */}
