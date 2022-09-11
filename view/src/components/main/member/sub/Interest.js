@@ -45,7 +45,14 @@ const Interest = () => {
                 </div>
             </div>
             
-            <div className="sub-cat"></div>
+            <div className="sub-cat">
+                <div className='title'>키워드</div>
+                <div className='keyword-part'>
+                    <span className='item'>test1</span>
+                    <span className='item'>test2</span>
+                    <span className='item'>test3test3test3</span>
+                </div>
+            </div>
         </div>
     );
 };

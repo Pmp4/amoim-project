@@ -171,6 +171,7 @@
                 width: 100%;
                 margin-top: 30px;
                 overflow-x:auto;
+                overflow-y: hidden;
                 .main-cat {
                     .item {
                         width: 200px;
@@ -185,12 +186,38 @@
                             height: 300px;
                             border-radius: 20px;
                             background-color: #d9d9d9;
+                            
                         }
                         .cat-title {
                             margin-top: 10px;
                             display: block;
                             text-align: center;
                             font-size: 1.2em;
+                        }
+                    }
+                }
+            }
+
+            .sub-cat {
+                .title {
+                    margin-top: 40px;
+                    font-size: 1.4em;
+                }
+                .keyword-part{ 
+                    margin-top: 20px;
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    .item{
+                        display: block;
+                        padding: 3px 6px;
+                        margin: 3px 6px;
+                        background: #d9d9d9;
+                        border-radius: 5px;
+                        cursor: pointer;
+
+                        &:nth-child(1) {
+                            margin-left:0;
                         }
                     }
                 }

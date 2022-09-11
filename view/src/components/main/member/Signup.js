@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import MemberService from '../../../api/member/MemberService';
 import {is_nickname, is_password, is_email, is_birthDay} from '../../../method/regularExpression';
-import {Link, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import Join from './sub/Join';
 import Interest from './sub/Interest';
 
