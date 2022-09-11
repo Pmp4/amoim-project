@@ -62,7 +62,7 @@ const Signup = () => {
         submitStep: 1
     });
     const inputRef = useRef({});
-    console.log("test!");
+    // console.log("test!");
 
     const {
         name, 
