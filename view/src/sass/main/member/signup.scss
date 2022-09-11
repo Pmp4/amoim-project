@@ -173,6 +173,8 @@
 
                 .slick-list {
                     margin-top: 20px;
+                    overflow: inherit;
+                    overflow-x: hidden;
                     .slick-track {
                         .slick-slide {
                             // &:nth-child(3n+1) .item{
@@ -183,11 +185,11 @@
                                 padding: 0 10px;
                                 .title-img {
                                     // width: 100%;
-                                    height: 300px;
+                                    height: 240px;
                                     border-radius: 20px;
                                     background-color: #d9d9d9;
                                     // padding: 20px 40px;
-                                    
+                                    cursor: pointer;
                                 }
                                 .cat-title {
                                     margin-top: 10px;
@@ -204,39 +206,44 @@
                 .slick-prev:before, .slick-next:before {
                     color: #000;
                 }
+
+                .slick-dots {
+                    position:static;
+                    margin-top: 10px;
+                }
             }
             
 
-            .main-slide-wrap {
-                width: 100%;
-                margin-top: 30px;
-                overflow-x:auto;
-                overflow-y: hidden;
-                .main-cat {
-                    .item {
-                        width: 200px;
-                        float: left;
-                        padding-left: 30px;
+            // .main-slide-wrap {
+            //     width: 100%;
+            //     margin-top: 30px;
+            //     overflow-x:auto;
+            //     overflow-y: hidden;
+            //     .main-cat {
+            //         .item {
+            //             width: 200px;
+            //             float: left;
+            //             padding-left: 30px;
     
-                        &:nth-child(1) {
-                            padding-left: 0;
-                        }
-                        .title-img {
-                            width: 100%;
-                            height: 300px;
-                            border-radius: 20px;
-                            background-color: #d9d9d9;
+            //             &:nth-child(1) {
+            //                 padding-left: 0;
+            //             }
+            //             .title-img {
+            //                 width: 100%;
+            //                 height: 300px;
+            //                 border-radius: 20px;
+            //                 background-color: #d9d9d9;
                             
-                        }
-                        .cat-title {
-                            margin-top: 10px;
-                            display: block;
-                            text-align: center;
-                            font-size: 1.2em;
-                        }
-                    }
-                }
-            }
+            //             }
+            //             .cat-title {
+            //                 margin-top: 10px;
+            //                 display: block;
+            //                 text-align: center;
+            //                 font-size: 1.2em;
+            //             }
+            //         }
+            //     }
+            // }
 
             .sub-cat {
                 .title {
