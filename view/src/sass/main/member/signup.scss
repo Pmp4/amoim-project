@@ -199,9 +199,29 @@
                                             position: absolute;
                                             right: 10px;
                                             top: 10px;
+                                            font-size: 1.4em;
+                                        }
+                                        
+                                        z-index: 2;
+                                    }
+                                    overflow: hidden;
+                                    img{ 
+                                        position: absolute;
+                                        height: 120%;
+                                        transform: translateX(-50%);
+                                        left: 50%;
+                                        z-index: 1;
+                                    }
+                                }
+                                &.on {
+                                    .title-img {
+                                        .click-part{
+                                            background-color: rgba(0, 0, 0, 0.342);
+                                            svg{color:#fff;}
                                         }
                                     }
                                 }
+
                                 .cat-title {
                                     margin-top: 10px;
                                     display: block;
