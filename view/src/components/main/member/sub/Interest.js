@@ -18,7 +18,7 @@ const initialInterests = [
 const Interest = () => {
     const [interests, setInterests] = useState(initialInterests);
     const [moved, setMoved] = useState(false);
-    const [checkState, setCheckState] = useState()
+    const [checkItem, setCheckItem] = useState([]);
     const divRef = useRef([]);
 
     const settings = {
@@ -28,12 +28,6 @@ const Interest = () => {
         slidesToShow: 4,
         slidesToScroll: 4
     };
-
-    const mainCatClickAction = (event) => {
-        // console.log(event.nativeEvent);
-        // console.log(event.offsetX);
-        
-    }
 
     // const slideWidthSet = () => {
     //     const items = document.querySelectorAll(".item");
@@ -47,14 +41,33 @@ const Interest = () => {
     //     )[0].style.width = `${slideWidth}px`;
     // };
 
+
     useEffect(() => {
         categoryApi("");
     }, []);
 
+    const clickCategory = (idx) => {
+        if(checkItem.indexOf(idx) !== -1) {
+            // console.log("hello");
+            const tempCheckItem = checkItem.filter(item => item !== idx);
+            setCheckItem(tempCheckItem);
+        }else {
+            setCheckItem(checkItem.concat(idx));
+        }
+    }
+
+
+    //메인 카테고리 리스트 api
+    //메인 카테고리 리스트 api
+    //메인 카테고리 리스트 api
+    //메인 카테고리 리스트 api
     const categoryApi = (type) => {
         InterestService.selectCategory(type).then((response) => {
             console.log(response);
             if (response.data.SUCCESS) {
+                for(let i = 0; i < response.data.list.length; i++)
+                    response.data.list[i].check = false;
+                
                 setInterests(response.data.list);
             }
         });
@@ -72,11 +85,13 @@ const Interest = () => {
         setMoved(true);
     }
 
-    const upListener = () => {
+    const upListener = (idx) => {
+        // console.log(idx);
         if (moved) {
             console.log('moved')
         } else {
-            console.log('not moved')
+            console.log('not moved');
+            clickCategory(idx);
         }
     }
 
@@ -115,16 +130,16 @@ const Interest = () => {
 
 
     const setCategoryObj = interests.map((item, idx) => (
-        <div className="main-slide-wrap"
+        <div
             ref={element => divRef.current[idx] = element}
             key={item.interestNo}
             >
             <div 
-                className="item" 
-                onMouseUp={upListener}
+                className={checkItem.indexOf(idx) !== -1 ? 'item on' : 'item'} 
+                onMouseUp={() => upListener(parseInt(item.categoryCode))}
                 onMouseMove={moveListener}
                 onMouseDown={downListener}>
-                <div className="title-img" onClick={mainCatClickAction}></div>
+                <div className="title-img"></div>
                 <span className="cat-title">{item.name}</span>
             </div>
         </div>
