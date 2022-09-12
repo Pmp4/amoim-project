@@ -19,40 +19,51 @@
     .signup-box {
         width: 60%;
 
-        input[type=submit] {
-            position: relative;
-            display: block;
-            -webkit-appearance : none;
-            -moz-appearance:none;
-            appearance:none;
-            border: none;
-            line-height: 30px;
-            padding: 5px 10px;
-            border-radius: 10px;
-            background-color: #fff;
-            color: #000;
-            font-size: 1em;
-            cursor: pointer;
-            box-shadow:  5px 5px 18px #f0f0f0,
-                -5px -5px 18px #ffffff;
-            top:0;
-            transition: 0.2s;
-
-            @keyframes hoverUp {
-                0% {top:0}
-                100% {top:-1%}
-            }
-            &.step-1 {
-                width: 48%;
-            }
-            &.step-2 {
-                width: 100%;
-            }
-
-            &:hover {
-                top: -.5%;
+        .button-part {
+            display: flex;
+            justify-content: space-between;
+            input {
+                position: relative;
+                display: block;
+                -webkit-appearance : none;
+                -moz-appearance:none;
+                appearance:none;
+                border: none;
+                line-height: 30px;
+                padding: 5px 10px;
+                border-radius: 10px;
+                background-color: #fff;
+                color: #000;
+                font-size: 1em;
+                cursor: pointer;
+                box-shadow:  5px 5px 18px #f0f0f0,
+                    -5px -5px 18px #ffffff;
+                top:0;
+                transition: 0.2s;
+    
+                @keyframes hoverUp {
+                    0% {top:0}
+                    100% {top:-1%}
+                }
+                &.step-1 {
+                    width: 48%;
+                }
+                &.step-2 {
+                    width: 68%;
+                }
+                &.prev {
+                    width: 30%;
+                    background-color: rgb(225, 225, 225);
+                    color: #000;
+                    transition: .2s;
+                }
+    
+                &:hover {
+                    top: -.5%;
+                }
             }
         }
+        
 
         .title {
             font-size: 2.4em;
