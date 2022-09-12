@@ -17,14 +17,16 @@ const initialInterests = [
     },
 ];
 
-const Interest = ({checkStatus, checkStatusAction}) => {
-    const [interests, setInterests] = useState(initialInterests);
+const Interest = ({checkStatus, checkStatusAction, interestsValue}) => {
+    // const [interests, setInterests] = useState(initialInterests);
     const [keywords, setKeywords] = useState(initialInterests);
     const [moved, setMoved] = useState(false);
     // const [checkItem, setCheckItem] = useState([]);
     const [currentCode, setCurrentCode] = useState(0);
     // const [checkKeywords, setCheckKeywords] = useState([]);
     const divRef = useRef([]);
+
+    const {interests, setInterests} = interestsValue;
 
     const {
         checkItem,
@@ -52,7 +54,7 @@ const Interest = ({checkStatus, checkStatusAction}) => {
     // };
 
     useEffect(() => {
-        categoryApi("");
+        // categoryApi("");
     }, []);
 
     useEffect(() => {

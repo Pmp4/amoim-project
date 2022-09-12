@@ -46,16 +46,21 @@
                     100% {top:-1%}
                 }
                 &.step-1 {
-                    width: 48%;
+                    width: 70%;
                 }
                 &.step-2 {
                     width: 68%;
                 }
                 &.prev {
-                    width: 30%;
+                    transition: .2s;
+                    width: 0;
                     background-color: rgb(225, 225, 225);
                     color: #000;
-                    transition: .2s;
+                    padding: 0;
+                    &.on {
+                        width: 30%;
+                        padding: 5px 10px;
+                    }
                 }
     
                 &:hover {

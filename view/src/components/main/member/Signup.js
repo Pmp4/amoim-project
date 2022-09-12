@@ -4,6 +4,8 @@ import {is_nickname, is_password, is_email, is_birthDay} from '../../../method/r
 import {useNavigate} from 'react-router-dom';
 import Join from './sub/Join';
 import Interest from './sub/Interest';
+import InterestService from 'api/interest/InterestService';
+import { useEffect } from 'react';
 
 
 const initialInputValue = {
@@ -48,6 +50,19 @@ const valueName = {
 }
 
 
+const initialInterests = [
+    {
+        interestNo: "",
+        categoryCode: "",
+        categoryParent: "",
+        name: "",
+        imageSize: "",
+        originalImageName: "",
+        imageName: "",
+        colorCode: "",
+    },
+];
+
 
 
 
@@ -64,6 +79,7 @@ const Signup = () => {
     const inputRef = useRef({});
 
 
+    const [interests, setInterests] = useState(initialInterests);
     const [checkStatus, setCheckStatus] = useState({
         checkItem: [],
         checkKeywords: [],
@@ -104,7 +120,7 @@ const Signup = () => {
     const {submitText, submitStep} = submitBtn;
 
     const submitBtnClassName = () => {
-        let resText = "mt_xl";
+        let resText = "";
         if(submitStep === 1) {
             resText += " step-1"
         }else if(submitStep === 2) {
@@ -119,6 +135,10 @@ const Signup = () => {
     const checkStatusAction = useCallback((name, data) => {
         setCheckStatus({...checkStatus, [name]: data});
     }, [checkStatus]);
+
+    useEffect(() => {
+        categoryApi("");
+    }, []);
 
 
 
@@ -337,6 +357,27 @@ const Signup = () => {
             submitStep: 1
         })
     }
+
+
+
+
+    //메인 카테고리 리스트 api
+    //메인 카테고리 리스트 api
+    //메인 카테고리 리스트 api
+    //메인 카테고리 리스트 api
+    const categoryApi = (type) => {
+        InterestService.selectCategory(type).then((response) => {
+            console.log(response);
+            if (response.data.SUCCESS) {
+                if(response.data.type) {
+                    for(let i = 0; i < response.data.list.length; i++)
+                        response.data.list[i].check = false;
+                    
+                    setInterests(response.data.list);
+                }
+            }
+        });
+    };
     
 
     return (
@@ -361,15 +402,17 @@ const Signup = () => {
                             inputRef={inputRef} 
                             checkInputStatus={checkInputStatus}
                             duplicationCheck={duplicationCheck}/> : 
-                        <Interest checkStatus={checkStatus} checkStatusAction={checkStatusAction}/>
+                        <Interest 
+                            checkStatus={checkStatus} 
+                            checkStatusAction={checkStatusAction}
+                            interestsValue={{interests, setInterests}}/>
                     }
-                    <div className='button-part'>
-                        {submitStep === 2 && 
-                            <input 
-                                onClick={prevClickAction}
-                                className='mt_xl prev' 
-                                type="submit" 
-                                value='이전'/>}
+                    <div className='button-part mt_xl'>
+                        <input 
+                            onClick={prevClickAction}
+                            className={submitStep === 1 ? 'prev' : 'prev on'}
+                            type="submit" 
+                            value='이전'/>
                         <input
                             onClick={(event) => joinBtnAction(event)}
                             className={submitBtnClassName()}
