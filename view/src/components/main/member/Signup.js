@@ -59,7 +59,7 @@ const Signup = () => {
     const [checkInputStatus, setCheckInputStatus] = useState(initialStatusValue);
     const [submitBtn, setSubmitBtn] = useState({
         submitText: "다음",
-        submitStep: 2
+        submitStep: 1
     });
     const inputRef = useRef({});
 
@@ -331,6 +331,12 @@ const Signup = () => {
         return true;
     }
 
+    const prevClickAction = () => {
+        setSubmitBtn({
+            submitText: "다음",
+            submitStep: 1
+        })
+    }
     
 
     return (
@@ -348,21 +354,29 @@ const Signup = () => {
                                 <strong>{checkItem.length}개</strong>
                             </span>}
                     </h2>
-                    {/* {submitStep === 1 ? 
+                    {submitStep === 1 ? 
                         <Join 
                             inputValue={inputValue} 
                             inputChange={inputChange} 
                             inputRef={inputRef} 
                             checkInputStatus={checkInputStatus}
                             duplicationCheck={duplicationCheck}/> : 
-                        <Interest/>} */}
                         <Interest checkStatus={checkStatus} checkStatusAction={checkStatusAction}/>
-                    <input
-                        onClick={(event) => joinBtnAction(event)}
-                        className={submitBtnClassName()}
-                        type="submit"
-                        value={submitText}
-                    />
+                    }
+                    <div className='button-part'>
+                        {submitStep === 2 && 
+                            <input 
+                                onClick={prevClickAction}
+                                className='mt_xl prev' 
+                                type="submit" 
+                                value='이전'/>}
+                        <input
+                            onClick={(event) => joinBtnAction(event)}
+                            className={submitBtnClassName()}
+                            type="submit"
+                            value={submitText}
+                        />
+                    </div>
                 </div>
             </div>
             <div style={{height: "2000px", width: "100%"}}></div>

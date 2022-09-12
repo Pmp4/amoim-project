@@ -120,7 +120,7 @@ const Interest = ({checkStatus, checkStatusAction}) => {
                 alert("키워드는 최대 5개까지 선택 가능합니다.");
                 return;
             }
-            
+
             checkStatusAction('checkKeywords', checkKeywords.concat(code));
         }else {
             checkStatusAction('checkKeywords', checkKeywords.filter((e) => e !== code));
@@ -242,29 +242,33 @@ const Interest = ({checkStatus, checkStatusAction}) => {
     // 메인요소 설정
     // 메인요소 설정
     // 메인요소 설정
-    const setCategoryObj = interests.map((item, idx) => (
-        <div
-            ref={element => divRef.current[idx] = element}
-            key={idx}
-            >
-            <div 
-                className={!item.check ? 'item' : 
-                    (parseInt(item.categoryCode) === currentCode) ? "item current" : "item on"} 
-                onMouseUp={() => upListener(parseInt(item.categoryCode), idx)}
-                onMouseMove={moveListener}
-                onMouseDown={downListener}>
-                <div className="title-img">
-                    <div className='click-part'>
-                        <FontAwesomeIcon icon={faCheck} />
+    const setCategoryObj = interests.map((item, idx) => {
+        if(interests.length === 1) return "";
+        
+        return(
+            <div
+                ref={element => divRef.current[idx] = element}
+                key={idx}
+                >
+                <div 
+                    className={!item.check ? 'item' : 
+                        (parseInt(item.categoryCode) === currentCode) ? "item current" : "item on"} 
+                    onMouseUp={() => upListener(parseInt(item.categoryCode), idx)}
+                    onMouseMove={moveListener}
+                    onMouseDown={downListener}>
+                    <div className="title-img">
+                        <div className='click-part'>
+                            <FontAwesomeIcon icon={faCheck} />
+                        </div>
+                        <img 
+                            src={item.imageName != null ? `/upload/images/${item.imageName}` : "/default_image.png"} 
+                            alt={item.name}/>
                     </div>
-                    <img 
-                        src={item.imageName != null ? `/upload/images/${item.imageName}` : "/default_image.png"} 
-                        alt={item.name}/>
+                    <span className="cat-title">{item.name}</span>
                 </div>
-                <span className="cat-title">{item.name}</span>
             </div>
-        </div>
-    ));
+        )
+    });
 
     return (
         <div className="interest-part">
