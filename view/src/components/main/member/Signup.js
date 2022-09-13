@@ -267,18 +267,16 @@ const Signup = () => {
     const joinBtnAction = (event) => {
         event.preventDefault();
 
-        // if(submitStep === 1) {
-        //     //유효성 검사
-        //     //유효성 검사
-        //     //유효성 검사
-        //     const nextCheck = inputValidation();
-        //     console.log(nextCheck);
-        //     if(nextCheck) setSubmitBtn({...submitBtn, submitText: "회원가입", submitStep: 2});
-        // }else if(submitStep === 2) {
+        if(submitStep === 1) {
+            //유효성 검사
+            //유효성 검사
+            //유효성 검사
+            const nextCheck = inputValidation();
+            console.log(nextCheck);
+            if(nextCheck) setSubmitBtn({...submitBtn, submitText: "회원가입", submitStep: 2});
+        }else if(submitStep === 2) {
             
-        // }
-
-        setSubmitBtn({...submitBtn, submitText: "회원가입", submitStep: 2});
+        }
 
 
         //POST로 전송할 data set
