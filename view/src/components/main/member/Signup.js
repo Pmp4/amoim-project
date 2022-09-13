@@ -6,6 +6,9 @@ import Join from './sub/Join';
 import Interest from './sub/Interest';
 import InterestService from 'api/interest/InterestService';
 import { useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faCheck} from '@fortawesome/free-solid-svg-icons';
+
 
 
 const initialInputValue = {
@@ -84,8 +87,6 @@ const Signup = () => {
         checkItem: [],
         checkKeywords: [],
     });
-
-    const {checkItem} = checkStatus;
 
     const {
         name, 
@@ -380,6 +381,174 @@ const Signup = () => {
             }
         });
     };
+
+
+
+    // 메인 카테고리 요소 설정
+    // 메인 카테고리 요소 설정
+    // 메인 카테고리 요소 설정
+    // 메인 카테고리 요소 설정
+    const divRef = useRef([]);
+    const [keywords, setKeywords] = useState(initialInterests);
+    const [currentCode, setCurrentCode] = useState(0);
+    const [moved, setMoved] = useState(false);
+    const {
+        checkItem,
+        checkKeywords
+    } = checkStatus;
+
+
+
+    //마우스 클릭 or 드래그 감지
+    //마우스 클릭 or 드래그 감지
+    //마우스 클릭 or 드래그 감지
+    let moveCount = 0;
+    const downListener = () => {
+        clearTimeout(moveSet());
+        moveCount--;
+        setMoved(false);
+    }
+    
+    const moveListener = () => {
+        if(moveCount === 0) {
+            moveSet();
+            moveCount++;
+        }
+    }
+
+    const moveSet = () => {
+        setTimeout(() => {
+            setMoved(true);
+        }, 100);
+    }
+
+    const upListener = (code, idx) => {
+        // console.log(idx);
+        if (moved) {
+            console.log('moved')
+        } else {
+            console.log('not moved');
+            clickCategory(code, idx);
+        }
+    }
+
+
+    const setCategoryObj = interests.map((item, idx) => {
+        if(interests.length === 1) return "";
+        
+        return(
+            <div
+                ref={element => divRef.current[idx] = element}
+                key={idx}
+                >
+                <div 
+                    className={!item.check ? 'item' : 
+                        (parseInt(item.categoryCode) === currentCode) ? "item current" : "item on"} 
+                    onMouseUp={() => upListener(parseInt(item.categoryCode), idx)}
+                    onMouseMove={moveListener}
+                    onMouseDown={downListener}>
+                    <div className="title-img">
+                        <div className='click-part'>
+                            <FontAwesomeIcon icon={faCheck} />
+                        </div>
+                        <img 
+                            src={item.imageName != null ? `/upload/images/${item.imageName}` : "/default_image.png"} 
+                            alt={item.name}/>
+                    </div>
+                    <span className="cat-title">{item.name}</span>
+                </div>
+            </div>
+        )
+    });
+
+
+
+    //요소 클릭 시, 체크 여부를 확인함
+    //요소 클릭 시, 체크 여부를 확인함
+    //요소 클릭 시, 체크 여부를 확인함
+    //이미 클릭 했던 요소면? 현재 current 비교 후, 삭제
+    const clickCategory = (code, idx) => {
+        if(checkItem.indexOf(code) !== -1) {    //이미 클릭한 요소일 때
+            // console.log("hello");
+            if(currentCode === code) {  //현재 보고있는 카테고리일 경우만 삭제
+                const tempArray = [...interests];
+                tempArray[idx].check = false;
+                const tempCheckItem = checkItem.filter(item => item !== code);
+
+                setInterests(tempArray);
+                // setCheckItem(tempCheckItem);
+                checkStatusAction('checkItem', tempCheckItem);
+
+                if(tempCheckItem.length !== 0) {    //선택한 요소가 있을 경우
+                    const tempCode = tempCheckItem[tempCheckItem.length - 1];
+
+                    categoryApi(tempCode);
+                    setCurrentCode(tempCode);
+                }else {
+                    setKeywords(initialInterests);
+                }
+                return;
+            }
+
+            categoryApi(code);
+            setCurrentCode(code);
+        }else { //클릭한 요소가 아닐 때, 추가
+            if(checkItem.length === 4) {
+                alert("관심사는 최대 4개까지 선택 가능합니다.");
+                return;
+            }
+
+
+
+            const tempArray = [...interests];
+            tempArray[idx].check = true;
+            // console.log(tempArray);
+
+            setInterests(tempArray);
+            // setCheckItem(checkItem.concat(code));
+
+            checkStatusAction('checkItem', checkItem.concat(code));
+            setCurrentCode(code);
+            categoryApi(code);
+        }
+    }
+
+
+
+
+
+
+    //키워드 카테고리 리스트
+    const setKeywordObj = keywords.map((item, idx) => {
+        const code = parseInt(item.categoryCode);
+        if(keywords.length === 1) {
+            return ("");
+        }
+
+        return (
+            <span 
+                onClick={() => clickKeywordAction(code)}
+                className={checkKeywords.indexOf(code) !== -1 ? 'item on' : "item"} 
+                key={idx}>
+                {item.name}
+            </span>
+        )
+    });
+
+    //키워드 클릭 시
+    const clickKeywordAction = (code) => {
+        console.log(code);
+        if(checkKeywords.indexOf(code) === -1) {
+            if(checkKeywords.length === 5) {
+                alert("키워드는 최대 5개까지 선택 가능합니다.");
+                return;
+            }
+
+            checkStatusAction('checkKeywords', checkKeywords.concat(code));
+        }else {
+            checkStatusAction('checkKeywords', checkKeywords.filter((e) => e !== code));
+        }
+    }
     
 
     return (
@@ -407,7 +576,9 @@ const Signup = () => {
                         <Interest 
                             checkStatus={checkStatus} 
                             checkStatusAction={checkStatusAction}
-                            interestsValue={{interests, setInterests}}/>
+                            interestsValue={{interests, setInterests}}
+                            setKeywordObj={setKeywordObj}
+                            setCategoryObj={setCategoryObj}/>
                     }
                     <div className='button-part mt_xl'>
                         <input 
