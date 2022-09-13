@@ -21,7 +21,7 @@
 
         .button-part {
             display: flex;
-            justify-content: flex-start;
+            justify-content: space-between;
             input {
                 position: relative;
                 display: block;
@@ -40,8 +40,7 @@
                     -5px -5px 18px #ffffff;
                 top:0;
                 transition: 0.2s;
-                box-sizing: border-box;
-
+    
                 @keyframes hoverUp {
                     0% {top:0}
                     100% {top:-1%}
@@ -58,10 +57,8 @@
                     background-color: rgb(225, 225, 225);
                     color: #000;
                     padding: 0;
-
                     &.on {
-                        width: calc(30% - 20px);
-                        margin-right: 2%;
+                        width: 30%;
                         padding: 5px 10px;
                     }
                 }
