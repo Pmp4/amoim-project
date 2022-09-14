@@ -46,16 +46,18 @@
                     100% {top:-1%}
                 }
                 &.step-1 {
-                    width: 70%;
+                    width: 100%;
                 }
                 &.step-2 {
                     width: 68%;
+                    background-color: #F1736A;
+                    color: #fff;
                 }
                 &.prev {
                     transition: .2s;
                     width: 0;
-                    background-color: rgb(225, 225, 225);
-                    color: #000;
+                    background-color: #E8872F;
+                    color: #fff;
                     padding: 0;
                     &.on {
                         width: 30%;
@@ -189,7 +191,7 @@
         .interest-part {
             .slick-slider {
                 width: calc(100% + 20px);
-                // height: 270px;
+                height: 304px;
                 margin-left: -10px;
                 // overflow: hidden;
 
@@ -235,6 +237,7 @@
                                         top: 50%;
                                         z-index: 1;
                                         opacity: .5;
+                                        text-align: center;
                                     }
                                 }
                                 &.current {

@@ -79,7 +79,7 @@ const Signup = () => {
     const inputRef = useRef({});
 
 
-    const [interests, setInterests] = useState(initialInterests);
+    const [interests, setInterests] = useState(initialInterests);   //관심사에 대한 데이터
     const [checkStatus, setCheckStatus] = useState({
         checkItem: [],
         checkKeywords: [],
@@ -137,7 +137,7 @@ const Signup = () => {
     }, [checkStatus]);
 
     useEffect(() => {
-        categoryApi("");
+        // categoryApi("");
     }, []);
 
 
@@ -367,19 +367,19 @@ const Signup = () => {
     //메인 카테고리 리스트 api
     //메인 카테고리 리스트 api
     //메인 카테고리 리스트 api
-    const categoryApi = (type) => {
-        InterestService.selectCategory(type).then((response) => {
-            console.log(response);
-            if (response.data.SUCCESS) {
-                if(response.data.type) {
-                    for(let i = 0; i < response.data.list.length; i++)
-                        response.data.list[i].check = false;
+    // const categoryApi = (type) => {
+    //     InterestService.selectCategory(type).then((response) => {
+    //         console.log(response);
+    //         if (response.data.SUCCESS) {
+    //             if(response.data.type) {
+    //                 for(let i = 0; i < response.data.list.length; i++)
+    //                     response.data.list[i].check = false;
                     
-                    setInterests(response.data.list);
-                }
-            }
-        });
-    };
+    //                 setInterests(response.data.list);
+    //             }
+    //         }
+    //     });
+    // };
     
 
     return (
