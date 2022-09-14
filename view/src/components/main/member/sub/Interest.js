@@ -1,8 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, lazy, Suspense } from "react";
 import InterestService from "../../../../api/interest/InterestService";
 import Slider from "react-slick";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faCheck} from '@fortawesome/free-solid-svg-icons';
+
+
+// const ImageSet = lazy(() => import ('../../../ImageSet'));
 
 const initialInterests = [
     {
@@ -25,6 +28,8 @@ const Interest = ({checkStatus, checkStatusAction, interestsValue}) => {
     const [currentCode, setCurrentCode] = useState(0);
     // const [checkKeywords, setCheckKeywords] = useState([]);
     const divRef = useRef([]);
+    const imgRef = useRef([]);
+    const [imgState, setImgState] = useState(false);
 
     const {interests, setInterests} = interestsValue;
 
@@ -54,13 +59,17 @@ const Interest = ({checkStatus, checkStatusAction, interestsValue}) => {
     // };
 
     useEffect(() => {
-        // categoryApi("");
+        categoryApi("");
     }, []);
 
     useEffect(() => {
-    })
-
-
+        // for(let i = 0; i < interests.length; i++) {
+        //     imgRef.current[i].attributes[0].nodeValue.src = `/upload/images/${interests[i].imageName}`
+        // }
+        imgRef.current.forEach((item, idx) => {
+            item.src = `/upload/images/${interests[idx].imageName}`;
+        })
+    }, [interests]);
 
 
     //요소 클릭 시, 체크 여부를 확인함
@@ -262,8 +271,19 @@ const Interest = ({checkStatus, checkStatusAction, interestsValue}) => {
                         <div className='click-part'>
                             <FontAwesomeIcon icon={faCheck} />
                         </div>
-                        <img 
+                        {/* <Suspense fallback={<img src="/default_image.png" alt={item.name} />}>
+                            {item.imageName != null ? 
+                                <ImageSet imgSrc={`/upload/images/${item.imageName}`} imgAlt={item.name}/> : 
+                                <img src="/default_image.png" alt={item.name} />}
+                        </Suspense> */}
+                        {/* <img 
+                            ref={element => imgRef.current[idx] = element}
                             src={item.imageName != null ? `/upload/images/${item.imageName}` : "/default_image.png"} 
+                            alt={item.name}/> */}
+                        <img 
+                            loading="lazy"
+                            ref={element => imgRef.current[idx] = element}
+                            src=""
                             alt={item.name}/>
                     </div>
                     <span className="cat-title">{item.name}</span>
@@ -271,6 +291,8 @@ const Interest = ({checkStatus, checkStatusAction, interestsValue}) => {
             </div>
         )
     });
+
+    
 
     return (
         <div className="interest-part">
