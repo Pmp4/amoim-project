@@ -230,6 +230,15 @@
                                         z-index: 2;
                                     }
                                     overflow: hidden;
+                                    @keyframes imageView {
+                                        from {
+                                            visibility:hidden;
+                                        }
+                                        to {
+                                            visibility:visible;
+                                        }
+                                    }
+
                                     img{ 
                                         position: absolute;
                                         height: 120%;
@@ -239,6 +248,9 @@
                                         z-index: 1;
                                         opacity: .5;
                                         text-align: center;
+                                        visibility:hidden;
+                                        animation: imageView .3s forwards;
+                                        animation-delay: .5s;
                                     }
                                 }
                                 &.current {

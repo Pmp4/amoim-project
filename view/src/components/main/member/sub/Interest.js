@@ -335,7 +335,7 @@ const Interest = ({checkStatus, checkStatusAction}) => {
             
             setInterests(tempInterests);
         }  
-        console.log("test");
+        // console.log("test");
     }, [setCategoryObj]);
 
     return (
