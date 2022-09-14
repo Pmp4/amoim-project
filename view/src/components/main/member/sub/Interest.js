@@ -3,9 +3,14 @@ import InterestService from "../../../../api/interest/InterestService";
 import Slider from "react-slick";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faCheck} from '@fortawesome/free-solid-svg-icons';
+import InterestSlider from './InterestSlider';
 
 
 // const ImageSet = lazy(() => import ('../../../ImageSet'));
+
+
+
+const ImageSet = lazy(() => import ('../../../ImageSet'));
 
 const initialInterests = [
     {
@@ -46,56 +51,9 @@ const Interest = ({checkStatus, checkStatusAction}) => {
         slidesToScroll: 4
     };
 
-    // const slideWidthSet = () => {
-    //     const items = document.querySelectorAll(".item");
-    //     let slideWidth = 0;
-    //     items.forEach((element) => {
-    //         slideWidth += element.offsetWidth;
-    //     });
-
-    //     document.getElementsByClassName(
-    //         "main-cat"
-    //     )[0].style.width = `${slideWidth}px`;
-    // };
-
     useEffect(() => {
         categoryApi("");
     }, []);
-
-    useEffect(() => {
-        // for(let i = 0; i < interests.length; i++) {
-        //     imgRef.current[i].attributes[0].nodeValue.src = `/upload/images/${interests[i].imageName}`
-        // }
-        // imgRef.current.forEach((item, idx) => {
-        //     item.src = `/upload/images/${interests[idx].imageName}`;
-        // })
-        // setImgState(!imgState);
-
-        // const type = "";
-        // if(imgState) {
-        //     timeSet(type);
-        // }
-    }, [interests]);
-
-
-    const imgTimeSet = (type) => {
-        setTimeout(() => {
-            InterestService.selectCategory(type).then((response) => {
-                console.log(response);
-                if (response.data.SUCCESS) {
-                    if(response.data.type) {
-                        for(let i = 0; i < response.data.list.length; i++){
-                            response.data.list[i].check = false;
-                            
-                        }
-                        
-                            
-                        setInterests(response.data.list);
-                    }
-                }
-            });
-        }, 3000);
-    }
 
 
     //요소 클릭 시, 체크 여부를 확인함
@@ -127,6 +85,7 @@ const Interest = ({checkStatus, checkStatusAction}) => {
 
             categoryApi(code);
             setCurrentCode(code);
+            
         }else { //클릭한 요소가 아닐 때, 추가
             if(checkItem.length === 4) {
                 alert("관심사는 최대 4개까지 선택 가능합니다.");
@@ -174,18 +133,9 @@ const Interest = ({checkStatus, checkStatusAction}) => {
             console.log(response);
             if (response.data.SUCCESS) {
                 if(response.data.type) {
-                    let dataImgSrc = [];
-                    for(let i = 0; i < response.data.list.length; i++){
-                        dataImgSrc[i] = response.data.list[i].imageName;
-                        // console.log(dataImgSrc);
-                        
+                    for(let i = 0; i < response.data.list.length; i++)
                         response.data.list[i].check = false;
-                        response.data.list[i].imageName = null;
                         
-                    }
-                    
-                    
-                    setImgSrc(imgSrc.concat(dataImgSrc));
                     setInterests(response.data.list);
                 }else {
                     for(let i = 0; i < response.data.list.length; i++)
@@ -250,39 +200,6 @@ const Interest = ({checkStatus, checkStatusAction}) => {
         }
     }
 
-    // const clickOrDragDetection = () => {
-    //     const items = document.querySelectorAll('.slick-slider .item');
-
-    //     let moved
-    //     let downListener = () => {
-    //         moved = false
-    //     }
-
-    //     let moveListener = () => {
-    //         moved = true
-    //     }
-    //     let upListener = () => {
-    //         if (moved) {
-    //             console.log('moved')
-    //         } else {
-    //             console.log('not moved')
-    //         }
-    //     }
-    //     for(const item of items) {
-    //         item.addEventListener('mousedown', downListener);
-    //         item.addEventListener('mousemove', moveListener)
-    //         item.addEventListener('mouseup', upListener);
-    //     }
-
-
-    //     return () => {
-    //         for(const item of items) 
-    //             item.removeEventListener('mousedown', downListener)
-    //                 .removeEventListener('mousemove', moveListener)
-    //                 .removeEventListener('mouseup', upListener);
-    //     }
-    // }
-
 
     // 메인요소 설정
     // 메인요소 설정
@@ -306,19 +223,11 @@ const Interest = ({checkStatus, checkStatusAction}) => {
                         <div className='click-part'>
                             <FontAwesomeIcon icon={faCheck} />
                         </div>
-                        {/* <Suspense fallback={<img src="/default_image.png" alt={item.name} />}>
-                            {item.imageName != null ? 
-                                <ImageSet imgSrc={`/upload/images/${item.imageName}`} imgAlt={item.name}/> : 
-                                <img src="/default_image.png" alt={item.name} />}
-                        </Suspense> */}
-                        <img 
-                            ref={element => imgRef.current[idx] = element}
-                            src={item.imageName != null ? `/upload/images/${item.imageName}` : "/default_image.png"} 
-                            alt={item.name}/>
+                        <Suspense fallback={<img src="/default_image.png" alt={item.name}/>}>
+                            <ImageSet imgSrc={item.imageName} imgAlt={item.name}/>
+                        </Suspense>
                         {/* <img 
-                            loading="lazy"
-                            ref={element => imgRef.current[idx] = element}
-                            src=""
+                            src={item.imageName != null ? `/upload/images/${item.imageName}` : "/default_image.png"} 
                             alt={item.name}/> */}
                     </div>
                     <span className="cat-title">{item.name}</span>
@@ -327,16 +236,6 @@ const Interest = ({checkStatus, checkStatusAction}) => {
         )
     });
 
-    useEffect(() => {
-        if(interests.length > 1 && interests[0].imageName === null) {
-            const tempInterests = [...interests];
-            for(let i = 0; i < tempInterests.length; i++) 
-                tempInterests[i].imageName = imgSrc[i];
-            
-            setInterests(tempInterests);
-        }  
-        // console.log("test");
-    }, [setCategoryObj]);
 
     return (
         <div className="interest-part">
