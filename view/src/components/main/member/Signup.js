@@ -76,15 +76,16 @@ const Signup = () => {
         submitText: "다음",
         submitStep: 1
     });
-    const inputRef = useRef({});
-
-
+    const [buttonIdx, setButtonIdx] = useState(0);
+    
+    
     const [interests, setInterests] = useState(initialInterests);   //관심사에 대한 데이터
     const [checkStatus, setCheckStatus] = useState({
         checkItem: [],
         checkKeywords: [],
     });
-
+    
+    const inputRef = useRef({});
     const {checkItem} = checkStatus;
 
     const {
@@ -411,11 +412,14 @@ const Signup = () => {
                     }
                     <div className='button-part mt_xl'>
                         <input 
+                            key={1}
                             onClick={prevClickAction}
                             className={submitStep === 1 ? 'prev' : 'prev on'}
                             type="submit" 
                             value='이전'/>
                         <input
+                            key={2}
+                            
                             onClick={(event) => joinBtnAction(event)}
                             className={submitBtnClassName()}
                             type="submit"

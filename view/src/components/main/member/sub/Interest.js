@@ -20,8 +20,8 @@ const initialInterests = [
     },
 ];
 
-const Interest = ({checkStatus, checkStatusAction, interestsValue}) => {
-    // const [interests, setInterests] = useState(initialInterests);
+const Interest = ({checkStatus, checkStatusAction}) => {
+    const [interests, setInterests] = useState(initialInterests);
     const [keywords, setKeywords] = useState(initialInterests);
     const [moved, setMoved] = useState(false);
     // const [checkItem, setCheckItem] = useState([]);
@@ -29,9 +29,9 @@ const Interest = ({checkStatus, checkStatusAction, interestsValue}) => {
     // const [checkKeywords, setCheckKeywords] = useState([]);
     const divRef = useRef([]);
     const imgRef = useRef([]);
-    const [imgState, setImgState] = useState(false);
+    const [imgSrc, setImgSrc] = useState([]);
 
-    const {interests, setInterests} = interestsValue;
+    // const {interests, setInterests} = interestsValue;
 
     const {
         checkItem,
@@ -66,10 +66,36 @@ const Interest = ({checkStatus, checkStatusAction, interestsValue}) => {
         // for(let i = 0; i < interests.length; i++) {
         //     imgRef.current[i].attributes[0].nodeValue.src = `/upload/images/${interests[i].imageName}`
         // }
-        imgRef.current.forEach((item, idx) => {
-            item.src = `/upload/images/${interests[idx].imageName}`;
-        })
+        // imgRef.current.forEach((item, idx) => {
+        //     item.src = `/upload/images/${interests[idx].imageName}`;
+        // })
+        // setImgState(!imgState);
+
+        // const type = "";
+        // if(imgState) {
+        //     timeSet(type);
+        // }
     }, [interests]);
+
+
+    const imgTimeSet = (type) => {
+        setTimeout(() => {
+            InterestService.selectCategory(type).then((response) => {
+                console.log(response);
+                if (response.data.SUCCESS) {
+                    if(response.data.type) {
+                        for(let i = 0; i < response.data.list.length; i++){
+                            response.data.list[i].check = false;
+                            
+                        }
+                        
+                            
+                        setInterests(response.data.list);
+                    }
+                }
+            });
+        }, 3000);
+    }
 
 
     //요소 클릭 시, 체크 여부를 확인함
@@ -148,9 +174,18 @@ const Interest = ({checkStatus, checkStatusAction, interestsValue}) => {
             console.log(response);
             if (response.data.SUCCESS) {
                 if(response.data.type) {
-                    for(let i = 0; i < response.data.list.length; i++)
+                    let dataImgSrc = [];
+                    for(let i = 0; i < response.data.list.length; i++){
+                        dataImgSrc[i] = response.data.list[i].imageName;
+                        // console.log(dataImgSrc);
+                        
                         response.data.list[i].check = false;
+                        response.data.list[i].imageName = null;
+                        
+                    }
                     
+                    
+                    setImgSrc(imgSrc.concat(dataImgSrc));
                     setInterests(response.data.list);
                 }else {
                     for(let i = 0; i < response.data.list.length; i++)
@@ -276,15 +311,15 @@ const Interest = ({checkStatus, checkStatusAction, interestsValue}) => {
                                 <ImageSet imgSrc={`/upload/images/${item.imageName}`} imgAlt={item.name}/> : 
                                 <img src="/default_image.png" alt={item.name} />}
                         </Suspense> */}
-                        {/* <img 
+                        <img 
                             ref={element => imgRef.current[idx] = element}
                             src={item.imageName != null ? `/upload/images/${item.imageName}` : "/default_image.png"} 
-                            alt={item.name}/> */}
-                        <img 
+                            alt={item.name}/>
+                        {/* <img 
                             loading="lazy"
                             ref={element => imgRef.current[idx] = element}
                             src=""
-                            alt={item.name}/>
+                            alt={item.name}/> */}
                     </div>
                     <span className="cat-title">{item.name}</span>
                 </div>
@@ -292,7 +327,16 @@ const Interest = ({checkStatus, checkStatusAction, interestsValue}) => {
         )
     });
 
-    
+    useEffect(() => {
+        if(interests.length > 1 && interests[0].imageName === null) {
+            const tempInterests = [...interests];
+            for(let i = 0; i < tempInterests.length; i++) 
+                tempInterests[i].imageName = imgSrc[i];
+            
+            setInterests(tempInterests);
+        }  
+        console.log("test");
+    }, [setCategoryObj]);
 
     return (
         <div className="interest-part">
