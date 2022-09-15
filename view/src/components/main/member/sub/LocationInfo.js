@@ -2,7 +2,7 @@ import { faLocationCrosshairs } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import useGeolocation from "react-hook-geolocation";
-import { KakaoMapSet, searchAddress, panTo } from "../../../api/KakaoMapScript";
+import { KakaoMapSet, searchAddress, panTo, test } from "../../../api/KakaoMapScript";
 
 
 const LocationInfo = () => {
@@ -13,6 +13,7 @@ const LocationInfo = () => {
     useEffect(() => {
         KakaoMapSet();
         zipcodeApi();
+        test();
     }, []);
 
     const zipcodeApi = () => {
@@ -26,20 +27,22 @@ const LocationInfo = () => {
 
 
     const geolocBtnClickAction = () => {
+        console.log(geolocation.loaded);
         console.log(geolocation);
         if(geolocation.timestamp === null) {
             alert("위치정보 권한을 허용해 주세요.");
             return
         }
-        panTo(geolocation.latitude, geolocation.longitude);
+        const resData = panTo(geolocation.latitude, geolocation.longitude);
+        console.log(resData);
     };
 
     const locInfoBtnClickAction = () => {
         const {daum} = window;
         new daum.Postcode({
             oncomplete: (data) => {
-                console.log(data);
-                searchAddress(data.address);
+                const resData = searchAddress(data.address);
+                console.log(resData);
             }
         }).open();
     }
