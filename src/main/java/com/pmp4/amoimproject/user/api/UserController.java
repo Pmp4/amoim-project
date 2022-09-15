@@ -63,6 +63,8 @@ public class UserController {
 //        logger.info("INSERT 결과 cnt={}, jsonData={}", cnt, jsonData);
         UserVO userVO = objectMapper.convertValue(jsonData.get("userInfo"), UserVO.class);
         logger.info("json 추출 결과 userVO={}", userVO);
+        userVO.setSalt(encrypt.getSalt());
+        userVO.setPassword(encrypt.getEncrypt(userVO.getPassword(), userVO.getSalt()));
 
         Map<String, Object> resJson = new HashMap<>();
         resJson.put("SUCCESS", true);

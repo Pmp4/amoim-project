@@ -46,7 +46,12 @@ const Interest = ({checkStatus, checkStatusAction, deleteCheckStatusAction, curr
     }, []);
 
     useEffect(() => {
-        categoryApi(currentCode);
+        console.log(isNaN(currentCode));
+        if(isNaN(currentCode)) {
+            setKeywords(initialInterests);
+        }else {
+            categoryApi(currentCode);
+        }
     }, [current]);
 
 
@@ -77,7 +82,7 @@ const Interest = ({checkStatus, checkStatusAction, deleteCheckStatusAction, curr
                     categoryApi(tempCode);
                     setCurrentCode(parseInt(tempCode));
                 }else {
-                    setKeywords(initialInterests);
+                    setCurrentCode(NaN);
                 }
 
                 deleteCheckStatusAction(tempCheckItem);

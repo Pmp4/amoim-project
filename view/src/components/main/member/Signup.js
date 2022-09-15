@@ -4,8 +4,8 @@ import {is_nickname, is_password, is_email, is_birthDay} from '../../../method/r
 import {useNavigate} from 'react-router-dom';
 import Join from './sub/Join';
 import Interest from './sub/Interest';
-import InterestService from 'api/interest/InterestService';
 import { useEffect } from 'react';
+import LocationInfo from './sub/LocationInfo';
 
 
 const initialInputValue = {
@@ -123,6 +123,8 @@ const Signup = () => {
             resText += " step-1"
         }else if(submitStep === 2) {
             resText += " step-2"
+        }else if(submitStep === 3) {
+            resText += " step-3"
         }
 
         return resText;
@@ -272,25 +274,30 @@ const Signup = () => {
             //유효성 검사
             //유효성 검사
             //유효성 검사
-            const nextCheck = inputValidation();
-            // console.log(nextCheck);
-            if(nextCheck) 
-                setSubmitBtn({...submitBtn, submitText: "회원가입", submitStep: 2});
-            
+            // const nextCheck = inputValidation();
+            // if(nextCheck) 
+            //     setSubmitBtn({...submitBtn, submitStep: 2});
+                
+            setSubmitBtn({...submitBtn, submitStep: 2});
             return;
         }else if(submitStep === 2) {
-            if(Object.keys(checkStatus).length < 2) {
-                alert("관심사는 2개 이상 선택하셔야 합니다.");
-                return;
-            }
+            // if(Object.keys(checkStatus).length < 2) {
+            //     alert("관심사는 2개 이상 선택하셔야 합니다.");
+            //     return;
+            // }
 
-            for(let key in checkStatus) {
-                if(checkStatus[key].length === 0) {
-                    alert("관심사 별 키워드는 1개 이상 선택하셔야 합니다.");
-                    setCurrentCode(parseInt(key));
-                    return;
-                }
-            }
+            // for(let key in checkStatus) {
+            //     if(checkStatus[key].length === 0) {
+            //         alert("관심사 별 키워드는 1개 이상 선택하셔야 합니다.");
+            //         setCurrentCode(parseInt(key));
+            //         return;
+            //     }
+            // }
+
+            setSubmitBtn({...submitBtn, submitStep: 3, submitText: "회원가입"});
+            return;
+        }else if(submitStep === 3) {
+
         }
 
 
@@ -373,10 +380,11 @@ const Signup = () => {
     }
 
     const prevClickAction = () => {
-        setSubmitBtn({
-            submitText: "다음",
-            submitStep: 1
-        })
+        if(submitStep === 2) {
+            setSubmitBtn({...submitBtn, submitStep: 1});
+        }else if(submitStep === 3) {
+            setSubmitBtn({...submitBtn, submitStep: 2, submitText: "다음"});
+        }
     }
 
 
@@ -408,14 +416,16 @@ const Signup = () => {
                 <div className='signup-box'>
                     <h2 className='title'>
                         {submitStep === 1 ? '회원정보' : 
-                            "관심사" 
+                            submitStep === 2 ? "관심사" :
+                            submitStep === 3 ? "지역정보" : ""
                         }
                         {submitStep === 1 ? "" : 
+                            submitStep === 2 ? 
                             <span className='sub-title'>
                                 선택된 항목&nbsp;
                                 {/* <strong>{checkItem.length}개</strong> */}
                                 <strong>{Object.keys(checkStatus).length}개</strong>
-                            </span>}
+                            </span> : ""}
                     </h2>
                     {submitStep === 1 ? 
                         <Join 
@@ -424,12 +434,14 @@ const Signup = () => {
                             inputRef={inputRef} 
                             checkInputStatus={checkInputStatus}
                             duplicationCheck={duplicationCheck}/> : 
+                        submitStep === 2 ?
                         <Interest 
                             checkStatus={checkStatus} 
                             deleteCheckStatusAction={deleteCheckStatusAction}
                             checkStatusAction={checkStatusAction}
-                            current={{currentCode, setCurrentCode}}/>
-                    }
+                            current={{currentCode, setCurrentCode}}/> : 
+                        submitStep === 3 ? 
+                        <LocationInfo/> : ""}
                     <div className='button-part mt_xl'>
                         <input 
                             onClick={prevClickAction}
