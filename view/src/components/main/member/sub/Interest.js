@@ -64,27 +64,30 @@ const Interest = ({checkStatus, checkStatusAction, deleteCheckStatusAction}) => 
                 const tempArray = [...interests];
                 tempArray[idx].check = false;
                 // const tempCheckItem = checkItem.filter(item => item !== code);
-                const {code, ...tempCheckItem} = checkStatus;
+                const tempCheckItem = {...checkStatus}
+                delete tempCheckItem[code];
 
                 setInterests(tempArray);
                 // setCheckItem(tempCheckItem);
                 // checkStatusAction(tempCheckItem);
                 console.log(tempCheckItem);
-                deleteCheckStatusAction(tempCheckItem);
 
-                if(tempCheckItem.length !== 0) {    //선택한 요소가 있을 경우
-                    const tempCode = tempCheckItem[tempCheckItem.length - 1];
+                if(Object.keys(tempCheckItem).length !== 0) {    //선택한 요소가 있을 경우
+                    let tempCode = Object.keys(tempCheckItem);
+                    tempCode = tempCode[tempCode.length - 1];
 
                     categoryApi(tempCode);
-                    setCurrentCode(tempCode);
+                    setCurrentCode(parseInt(tempCode));
                 }else {
                     setKeywords(initialInterests);
                 }
+
+                deleteCheckStatusAction(tempCheckItem);
                 return;
             }
 
             categoryApi(code);
-            setCurrentCode(code);
+            setCurrentCode(parseInt(code));
             
         }else { //클릭한 요소가 아닐 때, 추가
             // if(checkItem.length === 4) {
@@ -125,6 +128,9 @@ const Interest = ({checkStatus, checkStatusAction, deleteCheckStatusAction}) => 
             // checkStatusAction('checkKeywords', checkKeywords.concat(code));
             const tempArray = checkStatus[parentCode].concat(code);
             checkStatusAction(parentCode, tempArray);
+            /**
+             * 객체에서 'parentCode'의 키값을 찾고, 그 배열에 concat() 한다.
+             */
         }else {
             checkStatusAction(parentCode, checkStatus[parentCode].filter((e) => e !== code));
         }
@@ -145,8 +151,6 @@ const Interest = ({checkStatus, checkStatusAction, deleteCheckStatusAction}) => 
                         
                     setInterests(response.data.list);
                 }else {
-                    for(let i = 0; i < response.data.list.length; i++)
-                        response.data.list[i].check = false;
                     setKeywords(response.data.list);
                 }
             }
@@ -166,7 +170,11 @@ const Interest = ({checkStatus, checkStatusAction, deleteCheckStatusAction}) => 
             <span 
                 onClick={() => clickKeywordAction(code, parentCode)}
                 // className={checkKeywords.indexOf(code) !== -1 ? 'item on' : "item"} 
-                className={checkStatus[parentCode].indexOf(code) !== -1 ? 'item on' : "item"} 
+                className={
+                    Object.keys(checkStatus).indexOf(String(parentCode)) !== -1 ?
+                        checkStatus[parentCode].indexOf(code) !== -1 ? 'item on' : "item " 
+                    : "item"
+                } 
                 key={idx}>
                 {item.name}
             </span>
@@ -272,7 +280,9 @@ const Interest = ({checkStatus, checkStatusAction, deleteCheckStatusAction}) => 
                 <div className="title">키워드
                     <span className='sub-title'>
                         선택된 항목&nbsp;
-                        {/* <strong>{checkKeywords.length}개</strong> */}
+                        {Object.keys(checkStatus).indexOf(String(currentCode)) !== -1 ?
+                            <strong>{checkStatus[currentCode].length}개</strong> : ""
+                        }
                     </span>
                 </div>
                 <div className="keyword-part">
