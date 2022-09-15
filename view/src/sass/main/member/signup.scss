@@ -49,7 +49,7 @@
                 &.step-1 {
                     width: 100%;
                 }
-                &.step-2 {
+                &.step-2, &.step-3 {
                     width: 68%;
                     background-color: #F1736A;
                     color: #fff;
@@ -81,6 +81,7 @@
                 font-size: .7em;
                 margin-left: 10px;
             }
+            margin-bottom: 20px;
         }
 
         .input-box {
@@ -197,7 +198,6 @@
                 // overflow: hidden;
 
                 .slick-list {
-                    margin-top: 20px;
                     overflow-y: initial;
                     overflow-x: clip;
                     .slick-track {
@@ -362,6 +362,12 @@
                         // }
                     }
                 }
+            }
+        }
+
+        .location-info{
+            .myMap {
+                width: 100%;
             }
         }
     }
