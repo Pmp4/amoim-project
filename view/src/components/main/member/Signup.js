@@ -79,13 +79,16 @@ const Signup = () => {
     
     
     const [interests, setInterests] = useState(initialInterests);   //관심사에 대한 데이터
-    const [checkStatus, setCheckStatus] = useState({
-        checkItem: [],
-        checkKeywords: [],
-    });
+    // const [checkStatus, setCheckStatus] = useState({
+    //     checkItem: [],
+    //     checkKeywords: {},
+    // });
+
+    const [checkStatus, setCheckStatus] = useState({});
+    
     
     const inputRef = useRef({});
-    const {checkItem} = checkStatus;
+    // const {checkItem} = checkStatus;
 
     const {
         name, 
@@ -132,8 +135,12 @@ const Signup = () => {
 
 
 
-    const checkStatusAction = useCallback((name, data) => {
-        setCheckStatus({...checkStatus, [name]: data});
+    const checkStatusAction = useCallback((parentCode, code) => {
+        setCheckStatus({...checkStatus, [parentCode]: code});
+    }, [checkStatus]);
+
+    const deleteCheckStatusAction = useCallback((tempCheckItem) => {
+        setCheckStatus(tempCheckItem);
     }, [checkStatus]);
 
     useEffect(() => {
@@ -394,7 +401,8 @@ const Signup = () => {
                         {submitStep === 1 ? "" : 
                             <span className='sub-title'>
                                 선택된 항목&nbsp;
-                                <strong>{checkItem.length}개</strong>
+                                {/* <strong>{checkItem.length}개</strong> */}
+                                <strong>{Object.keys(checkStatus).length}개</strong>
                             </span>}
                     </h2>
                     {submitStep === 1 ? 
@@ -406,6 +414,7 @@ const Signup = () => {
                             duplicationCheck={duplicationCheck}/> : 
                         <Interest 
                             checkStatus={checkStatus} 
+                            deleteCheckStatusAction={deleteCheckStatusAction}
                             checkStatusAction={checkStatusAction}
                             interestsValue={{interests, setInterests}}/>
                     }
