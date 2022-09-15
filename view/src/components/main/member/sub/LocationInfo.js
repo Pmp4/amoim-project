@@ -1,5 +1,6 @@
+import { faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect } from "react";
-import ReactDOM from 'react-dom/client';
 import useGeolocation from "react-hook-geolocation";
 import KakaoMapScript from '../../../api/KakaoMapScript';
 
@@ -13,8 +14,12 @@ const LocationInfo = () => {
     }, []);
 
     return (
-        <div className="location-info">
-            <div id="myMap" style={{height: "400px" }}></div>
+        <div className="location-part">
+            <div id="myMap"></div>
+            <div className='info-button'>
+                <button className='geoloc-btn'><FontAwesomeIcon icon={faLocationCrosshairs}></FontAwesomeIcon></button>
+                <input type='button' className='location-info' defaultValue='지역을 설정해 주세요.'/>
+            </div>
         </div>
     );
 };

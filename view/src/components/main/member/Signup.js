@@ -74,7 +74,7 @@ const Signup = () => {
     const [checkInputStatus, setCheckInputStatus] = useState(initialStatusValue);
     const [submitBtn, setSubmitBtn] = useState({
         submitText: "다음",
-        submitStep: 1
+        submitStep: 3
     });
     
     
