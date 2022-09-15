@@ -31,19 +31,33 @@ $big-title: 2em;
         background: #000;
         border-radius: #{$menu-line-height}px;
 
-        &:nth-child(1) {margin-top:0;}
+        &:nth-child(1) {
+            margin-top: 0;
+        }
     }
 }
 
 
 @mixin initial-btn {
-    background: inherit ; 
-    border:none; 
-    box-shadow:none; 
-    border-radius:0; 
-    padding:0; 
-    overflow:visible; 
-    cursor:pointer;
+    background: inherit;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+    overflow: visible;
+    cursor: pointer;
+}
+
+@mixin initial-input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+@mixin initial-select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 
@@ -57,7 +71,7 @@ $big-title: 2em;
 }
 
 @mixin table {
-    @media (min-width: $device-md-width) and (max-width: #{$device-lg-width - 1px}){
+    @media (min-width: $device-md-width) and (max-width: #{$device-lg-width - 1px}) {
         @content;
     }
 }
