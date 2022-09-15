@@ -51,20 +51,20 @@ public class UserController {
 
 
     @PostMapping("/signup")
-    public Map<String, Object> memberSignup(@RequestBody UserVO jsonData) {
+    public Map<String, Object> memberSignup(@RequestBody Map<String, Object> jsonData) {
         logger.info("API 회원가입 jsonData={}", jsonData);
 
-        jsonData.setSalt(encrypt.getSalt());
-        jsonData.setPassword(encrypt.getEncrypt(jsonData.getPassword(), jsonData.getSalt()));
+//        jsonData.setSalt(encrypt.getSalt());
+//        jsonData.setPassword(encrypt.getEncrypt(jsonData.getPassword(), jsonData.getSalt()));
 
-        int cnt = userService.insertUser(jsonData);
-        logger.info("INSERT 결과 cnt={}, jsonData={}", cnt, jsonData);
+//        int cnt = userService.insertUser(jsonData);
+//        logger.info("INSERT 결과 cnt={}, jsonData={}", cnt, jsonData);
 
         Map<String, Object> resJson = new HashMap<>();
         resJson.put("SUCCESS", true);
-        if(cnt == 0) {
-            resJson.put("SUCCESS", false);
-        }
+//        if(cnt == 0) {
+//            resJson.put("SUCCESS", false);
+//        }
 
         return resJson;
     }
