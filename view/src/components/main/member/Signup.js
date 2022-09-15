@@ -74,7 +74,7 @@ const Signup = () => {
     const [checkInputStatus, setCheckInputStatus] = useState(initialStatusValue);
     const [submitBtn, setSubmitBtn] = useState({
         submitText: "다음",
-        submitStep: 2
+        submitStep: 1
     });
     
     
@@ -276,7 +276,8 @@ const Signup = () => {
             // console.log(nextCheck);
             if(nextCheck) 
                 setSubmitBtn({...submitBtn, submitText: "회원가입", submitStep: 2});
-
+            
+            return;
         }else if(submitStep === 2) {
             if(Object.keys(checkStatus).length < 2) {
                 alert("관심사는 2개 이상 선택하셔야 합니다.");
@@ -294,22 +295,27 @@ const Signup = () => {
 
 
         //POST로 전송할 data set
-        // const apiData = {
-        //     ...inputValue, 
-        //     phoneNumber: phoneNumber1+phoneNumber2+phoneNumber3,
-        // }
+        const apiData = {
+            userInfo: {
+                ...inputValue, 
+                phoneNumber: phoneNumber1+phoneNumber2+phoneNumber3,
+            },
+            interests: {
+                ...checkStatus
+            }
+        }
 
-        // MemberService.memberSignup(apiData)
-        //     .then(response => {
-        //         const {SUCCESS} = response.data
-        //         if(!SUCCESS) {
-        //             console.log('error : DB처리');
-        //             return;
-        //         }
+        MemberService.memberSignup(apiData)
+            .then(response => {
+                const {SUCCESS} = response.data
+                if(!SUCCESS) {
+                    console.log('error : DB처리');
+                    return;
+                }
 
-        //         alert("회원가입에 성공하셨습니다.");
-        //         navigator("/");
-        //     })
+                alert("회원가입에 성공하셨습니다.");
+                navigator("/");
+            })
     }
 
     /**
