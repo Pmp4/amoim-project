@@ -1,3 +1,5 @@
+@import '../../variable.scss';
+
 .page-wrap {
     display: flex;
     justify-content: space-between;
@@ -365,9 +367,27 @@
             }
         }
 
-        .location-info{
-            .myMap {
-                width: 100%;
+        .location-part{
+            display: flex;
+            #myMap {
+                width: 49.5%;
+                height: 400px;
+            }
+            .info-button {
+                width: 49.5%;
+                display: flex;
+                button {
+                    @include initial-btn;
+                    background: rgb(234, 234, 234);
+                    border-radius: 20px;
+                    height: 30px;
+                    &.geoloc-btn {
+                        
+                    }
+                    &.location-info {
+                        width: 60%;
+                    }
+                }
             }
         }
     }
