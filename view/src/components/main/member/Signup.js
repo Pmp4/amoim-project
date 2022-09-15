@@ -74,21 +74,16 @@ const Signup = () => {
     const [checkInputStatus, setCheckInputStatus] = useState(initialStatusValue);
     const [submitBtn, setSubmitBtn] = useState({
         submitText: "다음",
-        submitStep: 1
+        submitStep: 2
     });
     
     
-    const [interests, setInterests] = useState(initialInterests);   //관심사에 대한 데이터
-    // const [checkStatus, setCheckStatus] = useState({
-    //     checkItem: [],
-    //     checkKeywords: {},
-    // });
 
-    const [checkStatus, setCheckStatus] = useState({});
+    const [checkStatus, setCheckStatus] = useState({}); //관심사에 대한 데이터
+    const [currentCode, setCurrentCode] = useState(0);
     
     
     const inputRef = useRef({});
-    // const {checkItem} = checkStatus;
 
     const {
         name, 
@@ -273,18 +268,29 @@ const Signup = () => {
     const joinBtnAction = (event) => {
         event.preventDefault();
 
-        // if(submitStep === 1) {
-        //     //유효성 검사
-        //     //유효성 검사
-        //     //유효성 검사
-        //     const nextCheck = inputValidation();
-        //     console.log(nextCheck);
-        //     if(nextCheck) setSubmitBtn({...submitBtn, submitText: "회원가입", submitStep: 2});
-        // }else if(submitStep === 2) {
-            
-        // }
+        if(submitStep === 1) {
+            //유효성 검사
+            //유효성 검사
+            //유효성 검사
+            const nextCheck = inputValidation();
+            // console.log(nextCheck);
+            if(nextCheck) 
+                setSubmitBtn({...submitBtn, submitText: "회원가입", submitStep: 2});
 
-        setSubmitBtn({...submitBtn, submitText: "회원가입", submitStep: 2});
+        }else if(submitStep === 2) {
+            if(Object.keys(checkStatus).length < 2) {
+                alert("관심사는 2개 이상 선택하셔야 합니다.");
+                return;
+            }
+
+            for(let key in checkStatus) {
+                if(checkStatus[key].length === 0) {
+                    alert("관심사 별 키워드는 1개 이상 선택하셔야 합니다.");
+                    setCurrentCode(parseInt(key));
+                    return;
+                }
+            }
+        }
 
 
         //POST로 전송할 data set
@@ -416,7 +422,7 @@ const Signup = () => {
                             checkStatus={checkStatus} 
                             deleteCheckStatusAction={deleteCheckStatusAction}
                             checkStatusAction={checkStatusAction}
-                            interestsValue={{interests, setInterests}}/>
+                            current={{currentCode, setCurrentCode}}/>
                     }
                     <div className='button-part mt_xl'>
                         <input 

@@ -24,19 +24,13 @@ const initialInterests = [
     },
 ];
 
-const Interest = ({checkStatus, checkStatusAction, deleteCheckStatusAction}) => {
+const Interest = ({checkStatus, checkStatusAction, deleteCheckStatusAction, current}) => {
     const [interests, setInterests] = useState(initialInterests);
     const [keywords, setKeywords] = useState(initialInterests);
     const [moved, setMoved] = useState(false);
-    const [currentCode, setCurrentCode] = useState(0);
     const divRef = useRef([]);
 
-    // const {interests, setInterests} = interestsValue;
-
-    // const {
-    //     checkItem,
-    //     checkKeywords
-    // } = checkStatus;
+    const {currentCode, setCurrentCode} = current;
 
     const settings = {
         dots: true,
@@ -50,6 +44,10 @@ const Interest = ({checkStatus, checkStatusAction, deleteCheckStatusAction}) => 
     useEffect(() => {
         categoryApi("");
     }, []);
+
+    useEffect(() => {
+        categoryApi(currentCode);
+    }, [current]);
 
 
     //요소 클릭 시, 체크 여부를 확인함
@@ -85,10 +83,9 @@ const Interest = ({checkStatus, checkStatusAction, deleteCheckStatusAction}) => 
                 deleteCheckStatusAction(tempCheckItem);
                 return;
             }
-
-            categoryApi(code);
+            // categoryApi(code);
             setCurrentCode(parseInt(code));
-            
+
         }else { //클릭한 요소가 아닐 때, 추가
             // if(checkItem.length === 4) {
             if(Object.keys(checkStatus).length === 4) {
@@ -108,7 +105,7 @@ const Interest = ({checkStatus, checkStatusAction, deleteCheckStatusAction}) => 
             // checkStatusAction('checkItem', checkItem.concat(code));
             checkStatusAction(parseInt(code), []);
             setCurrentCode(parseInt(code));
-            categoryApi(code);
+            // categoryApi(code);
         }
     }
 
