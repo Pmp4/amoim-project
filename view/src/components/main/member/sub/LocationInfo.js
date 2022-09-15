@@ -2,19 +2,32 @@ import { faLocationCrosshairs } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import useGeolocation from "react-hook-geolocation";
-import { KakaoMapSet, searchAddress, panTo } from "../../../api/KakaoMapScript";
+import { kakao, KakaoMapSet, searchAddress, panTo, searchDetailAddrFromCoords } from "../../../api/KakaoMapScript";
 
 
 const LocationInfo = () => {
     const [address, setAddress] = useState({});
+    const [tempAddress, setTempAddress] = useState("");
 
     const geolocation = useGeolocation();
 
     useEffect(() => {
         KakaoMapSet();
         zipcodeApi();
-        test();
     }, []);
+
+    useEffect(() => {
+        if(tempAddress !== "") {
+            const {daum} = window;
+            new daum.Postcode({
+                oncomplete: (data) => {
+                    console.log(data);
+                }
+            }).open({
+                q: tempAddress
+            });
+        }
+    }, [tempAddress]);
 
     const zipcodeApi = () => {
         const script = document.createElement("script");
@@ -34,7 +47,23 @@ const LocationInfo = () => {
             return
         }
         const resData = panTo(geolocation.latitude, geolocation.longitude);
-        console.log(resData);
+        searchDetailAddrFromCoords({
+            lat: geolocation.latitude, 
+            lng: geolocation.longitude
+        }, (result, status) => {
+            if (status === kakao.maps.services.Status.OK) {
+                setTempAddress(result[0].address.address_name);
+            }
+        })
+
+        // const {daum} = window;
+        // new daum.Postcode({
+        //     oncomplete: (data) => {
+        //         console.log(data);
+        //     }
+        // }).open({
+        //     q: resData[0].address.address_name
+        // });
     };
 
     const locInfoBtnClickAction = () => {

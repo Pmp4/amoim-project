@@ -31,18 +31,11 @@ const panTo = (lat, lng) => {
     // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
     map.panTo(moveLatLon);
 
-    const coords = {
-        lng,
-        lat
-    }
-    console.log(coords);
-
-    searchDetailAddrFromCoords(coords, (result, status) => {
-        if (status === kakao.maps.services.Status.OK) {
-            console.log(result);
-            return result;
-        }
-    });
+    // searchDetailAddrFromCoords(coords, (result, status) => {
+    //     if (status === kakao.maps.services.Status.OK) {
+    //         console.log(result);
+    //     }
+    // });
 };
 
 const geocoder = new kakao.maps.services.Geocoder();
@@ -75,4 +68,4 @@ const searchAddress = (address) => {
 };
 
 
-export { KakaoMapSet, panTo, searchAddress};
+export { KakaoMapSet, panTo, searchAddress, searchDetailAddrFromCoords, kakao};
