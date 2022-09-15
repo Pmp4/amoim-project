@@ -2,7 +2,7 @@ import { faLocationCrosshairs } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import useGeolocation from "react-hook-geolocation";
-import { KakaoMapSet, searchAddress, panTo, test } from "../../../api/KakaoMapScript";
+import { KakaoMapSet, searchAddress, panTo } from "../../../api/KakaoMapScript";
 
 
 const LocationInfo = () => {
