@@ -1,15 +1,17 @@
 import { faLocationCrosshairs } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useGeolocation from "react-hook-geolocation";
-import KakaoMapScript from "../../../api/KakaoMapScript";
+import { KakaoMapSet, searchAddress } from "../../../api/KakaoMapScript";
 
 
 const LocationInfo = () => {
+    const [address, setAddress] = useState({});
+
     const geolocation = useGeolocation();
 
     useEffect(() => {
-        KakaoMapScript();
+        KakaoMapSet();
         zipcodeApi();
     }, []);
 
@@ -33,6 +35,7 @@ const LocationInfo = () => {
         new daum.Postcode({
             oncomplete: (data) => {
                 console.log(data);
+                searchAddress(data.address);
             }
         }).open();
     }
