@@ -2,7 +2,7 @@ import { faLocationCrosshairs } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import useGeolocation from "react-hook-geolocation";
-import { KakaoMapSet, searchAddress } from "../../../api/KakaoMapScript";
+import { KakaoMapSet, searchAddress, panTo } from "../../../api/KakaoMapScript";
 
 
 const LocationInfo = () => {
@@ -26,8 +26,12 @@ const LocationInfo = () => {
 
 
     const geolocBtnClickAction = () => {
-        console.log(geolocation.loaded);
-        console.log(JSON.stringify(geolocation));
+        console.log(geolocation);
+        if(geolocation.timestamp === null) {
+            alert("위치정보 권한을 허용해 주세요.");
+            return
+        }
+        panTo(geolocation.latitude, geolocation.longitude);
     };
 
     const locInfoBtnClickAction = () => {
@@ -43,8 +47,8 @@ const LocationInfo = () => {
     return (
         <div className="location-part">
             <div id="myMap"></div>
-            <div className="info-button" onClick={geolocBtnClickAction}>
-                <button className="geoloc-btn">
+            <div className="info-button">
+                <button className="geoloc-btn" onClick={geolocBtnClickAction}>
                     <FontAwesomeIcon icon={faLocationCrosshairs} />
                 </button>
                 <input

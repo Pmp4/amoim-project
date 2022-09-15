@@ -3,6 +3,7 @@ const { kakao } = window;
 
 
 let map;
+let marker;
 
 const KakaoMapSet = () => {
     const container = document.getElementById('myMap');
@@ -11,12 +12,24 @@ const KakaoMapSet = () => {
         level: 3
     };
     map = new kakao.maps.Map(container, options);
+    marker = new kakao.maps.Marker({
+        map: map,
+        position: null
+    });
 }
 
 const panTo = (lat, lng) => {
     // 이동할 위도 경도 위치를 생성합니다 
     var moveLatLon = new kakao.maps.LatLng(lat, lng);
+    // marker.setMap(null);  
     
+    marker.setMap(null);
+    
+    marker = new kakao.maps.Marker({
+        map: map,
+        position: moveLatLon
+    });
+
     // 지도 중심을 부드럽게 이동시킵니다
     // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
     map.panTo(moveLatLon);
@@ -32,13 +45,15 @@ const searchAddress = (address) => {
             const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
     
             // 결과값으로 받은 위치를 마커로 표시합니다
-            const marker = new kakao.maps.Marker({
+            marker.setMap(null);  
+
+            marker = new kakao.maps.Marker({
                 map: map,
                 position: coords
             });
     
             // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다.
-            map.setCenter(coords);
+            map.panTo(coords);
         } 
     }); 
 }
