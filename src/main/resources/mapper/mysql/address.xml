@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pmp4.amoimproject.address.model.AddressDAO">
+    <insert id="insertAddress" parameterType="addressVo">
+        insert into address(user_no, zonecode, address, road_address, jibun_address, sido, sigungu, bname)
+        values
+            (
+                ${userNo},
+                ${zonecode},
+                ${address},
+                ${roadAddress},
+                ${jibunAddress},
+                ${sido},
+                ${sigungu},
+                ${bname}
+            )
+        <selectKey resultType="Long" keyColumn="ADDRESS_NO" keyProperty="addressNo" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+</mapper>
