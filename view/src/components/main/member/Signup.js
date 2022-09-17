@@ -64,18 +64,18 @@ const initialInterests = [
 ];
 
 
-const initialAddress = {
-    addressNo: "",
-    userNo: "",
-    zonecode: "",
-    address: "",
-    roadAddress: "",
-    jibunAddress: "",
-    sido: "",
-    sigungu: "",
-    bcode: "",
-    bname: "",
-}
+// const initialAddress = {
+//     addressNo: "",
+//     userNo: "",
+//     zonecode: "",
+//     address: "",
+//     roadAddress: "",
+//     jibunAddress: "",
+//     sido: "",
+//     sigungu: "",
+//     bcode: "",
+//     bname: "",
+// }
 
 
 
@@ -87,7 +87,7 @@ const Signup = () => {
     const [checkInputStatus, setCheckInputStatus] = useState(initialStatusValue);
     const [submitBtn, setSubmitBtn] = useState({
         submitText: "다음",
-        submitStep: 3
+        submitStep: 1
     });
     
     
@@ -97,7 +97,7 @@ const Signup = () => {
 
 
 
-    const [address, setAddress] = useState(initialAddress); //주소 데이터
+    const [address, setAddress] = useState({}); //주소 데이터
     
     
     const inputRef = useRef({});
@@ -291,30 +291,31 @@ const Signup = () => {
             //유효성 검사
             //유효성 검사
             //유효성 검사
-            // const nextCheck = inputValidation();
-            // if(nextCheck) 
-            //     setSubmitBtn({...submitBtn, submitStep: 2});
+            if(inputValidation()) setSubmitBtn({...submitBtn, submitStep: 2});
                 
-            setSubmitBtn({...submitBtn, submitStep: 2});
+            // setSubmitBtn({...submitBtn, submitStep: 2});
             return;
         }else if(submitStep === 2) {
-            // if(Object.keys(checkStatus).length < 2) {
-            //     alert("관심사는 2개 이상 선택하셔야 합니다.");
-            //     return;
-            // }
+            if(Object.keys(checkStatus).length < 2) {
+                alert("관심사는 2개 이상 선택하셔야 합니다.");
+                return;
+            }
 
-            // for(let key in checkStatus) {
-            //     if(checkStatus[key].length === 0) {
-            //         alert("관심사 별 키워드는 1개 이상 선택하셔야 합니다.");
-            //         setCurrentCode(parseInt(key));
-            //         return;
-            //     }
-            // }
+            for(let key in checkStatus) {
+                if(checkStatus[key].length === 0) {
+                    alert("관심사 별 키워드는 1개 이상 선택하셔야 합니다.");
+                    setCurrentCode(parseInt(key));
+                    return;
+                }
+            }
 
             setSubmitBtn({...submitBtn, submitStep: 3, submitText: "회원가입"});
             return;
         }else if(submitStep === 3) {
-
+            if(Object.keys(address).length === 0) {
+                alert("주소가 유효하지 않습니다.");
+                return;
+            }
         }
 
 
@@ -326,7 +327,8 @@ const Signup = () => {
             },
             interests: {
                 ...checkStatus
-            }
+            },
+            address
         }
 
         MemberService.memberSignup(apiData)

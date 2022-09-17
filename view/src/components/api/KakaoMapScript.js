@@ -124,6 +124,7 @@ const KakaoMapSet = (setAddress, setInputMsg) => {
                         setAddress(restAddress);
                     });
                 }else {
+                    setAddress({});
                     setInputMsg("정확한 위치를 클릭해주세요.");
                 }
             }
