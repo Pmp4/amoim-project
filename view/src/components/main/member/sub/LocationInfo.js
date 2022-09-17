@@ -2,13 +2,14 @@ import { faLocationCrosshairs } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import useGeolocation from "react-hook-geolocation";
-import { kakao, KakaoMapSet, searchAddress, panTo, searchDetailAddrFromCoords } from "../../../api/KakaoMapScript";
+import { 
+    kakao, 
+    KakaoMapSet, 
+    searchAddress, 
+    panTo, 
+    searchDetailAddrFromCoords, 
+    searchAddrFromCoords } from "../../../api/KakaoMapScript";
 
-
-const initialAddress = {
-    address: "",
-    zipcode: "",
-}
 
 
 /**
@@ -18,14 +19,27 @@ const initialAddress = {
  * => 
  */
 
+/**
+    const initialAddress = {
+        addressNo: "",
+        userNo: "",
+        zonecode: "",
+        address: "",
+        roadAddress: "",
+        jibunAddress: "",
+        sido: "",
+        sigungu: "",
+        bcode: "",
+        bname: "",
+    }
+ */
 
 
-
-const LocationInfo = () => {
-    const [address, setAddress] = useState({});
+const LocationInfo = ({addressSet}) => {
     const [inputMsg, setInputMsg] = useState("지역을 설정해 주세요.");
-
     const geolocation = useGeolocation();
+
+    const {address, setAddress} = addressSet;
 
     useEffect(() => {
         KakaoMapSet(setAddress, setInputMsg);
@@ -52,7 +66,7 @@ const LocationInfo = () => {
     // 현재 위치 검색
     // 현재 위치 검색
     const geolocBtnClickAction = () => {
-        console.log(geolocation.loaded);
+        // console.log(geolocation.loaded);
         console.log(geolocation);
         if(geolocation.timestamp === null) {
             alert("위치정보 권한을 허용해 주세요.");
@@ -60,18 +74,41 @@ const LocationInfo = () => {
         }
 
         panTo(geolocation.latitude, geolocation.longitude);
-        searchDetailAddrFromCoords({
+        
+        const latLng = {
             lat: geolocation.latitude, 
             lng: geolocation.longitude
-        }, (result, status) => {
+        }
+
+        searchDetailAddrFromCoords(latLng, (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
                 console.log(result[0]);
-                if(result[0].road_address === null) {
-                    setInputMsg("정확한 위치를 클릭해주세요.");
+                const addressDetail = result[0];
+
+                if(addressDetail.road_address !== null) {
+                    searchAddrFromCoords(latLng, (result, status) => {
+                        console.log(result[0]);
+                        const addressSub = result[0];
+                        const restAddress = {
+                            zonecode: addressDetail.road_address.zone_no,
+                            address: addressDetail.address.address_name,
+                            roadAddress: addressDetail.road_address.address_name,
+                            jibunAddress: addressDetail.address.address_name,
+                            sido: addressSub.region_1depth_name,
+                            sigungu: addressSub.region_2depth_name,
+                            bname: addressSub.region_3depth_name,
+                            bcode: addressSub.code,
+                        }
+
+                        setInputMsg(addressDetail.address.address_name);
+                        setAddress(restAddress);
+                    });
                 }else {
-                    setInputMsg(result[0].road_address.address_name);
+                    setInputMsg("정확한 위치를 클릭해주세요.");
                 }
                 // setTempAddress(result[0].address.address_name);
+            }else {
+                setInputMsg("정확한 위치를 클릭해주세요.");
             }
         });
     };
@@ -86,8 +123,21 @@ const LocationInfo = () => {
         const {daum} = window;
         new daum.Postcode({
             oncomplete: (data) => {
-                const resData = searchAddress(data.address);
-                console.log(resData);
+                console.log(data);
+
+                const restAddress = {
+                    zonecode: data.zonecode,
+                    address: data.address,
+                    roadAddress: data.roadAddress,
+                    jibunAddress: data.jibunAddress,
+                    sido: data.sido,
+                    sigungu: data.sigungu,
+                    bname: data.bname,
+                    bcode: data.bcode,
+                }
+
+                setAddress(restAddress);
+                setInputMsg(data.address);
             }
         }).open();
     }
