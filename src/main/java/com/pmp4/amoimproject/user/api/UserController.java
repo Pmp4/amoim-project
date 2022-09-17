@@ -1,6 +1,7 @@
 package com.pmp4.amoimproject.user.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pmp4.amoimproject.address.model.AddressVO;
 import com.pmp4.amoimproject.common.Encrypt;
 import com.pmp4.amoimproject.user.model.UserService;
 import com.pmp4.amoimproject.user.model.UserVO;
@@ -56,11 +57,15 @@ public class UserController {
     public Map<String, Object> memberSignup(@RequestBody Map<String, Object> jsonData) {
         logger.info("API 회원가입 jsonData={}", jsonData);
 
-        UserVO userVO = objectMapper.convertValue(jsonData.get("userInfo"), UserVO.class);
-        logger.info("json 추출 결과 userVO={}", userVO);
+//        UserVO userVO = objectMapper.convertValue(jsonData.get("userInfo"), UserVO.class);
+//        AddressVO addressVO = objectMapper.convertValue(jsonData.get("address"), AddressVO.class);
+//        logger.info("json 추출 결과 userVO={}", userVO);
+//        logger.info("json 추출 결과 addressVO={}", addressVO);
+//
+//        userVO.setSalt(encrypt.getSalt());
+//        userVO.setPassword(encrypt.getEncrypt(userVO.getPassword(), userVO.getSalt()));
 
-        userVO.setSalt(encrypt.getSalt());
-        userVO.setPassword(encrypt.getEncrypt(userVO.getPassword(), userVO.getSalt()));
+
 
         Map<String, Object> resJson = new HashMap<>();
         resJson.put("SUCCESS", true);
