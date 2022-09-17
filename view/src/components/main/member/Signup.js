@@ -64,6 +64,19 @@ const initialInterests = [
 ];
 
 
+const initialAddress = {
+    addressNo: "",
+    userNo: "",
+    zonecode: "",
+    address: "",
+    roadAddress: "",
+    jibunAddress: "",
+    sido: "",
+    sigungu: "",
+    bcode: "",
+    bname: "",
+}
+
 
 
 
@@ -81,6 +94,10 @@ const Signup = () => {
 
     const [checkStatus, setCheckStatus] = useState({}); //관심사에 대한 데이터
     const [currentCode, setCurrentCode] = useState(0);
+
+
+
+    const [address, setAddress] = useState(initialAddress); //주소 데이터
     
     
     const inputRef = useRef({});
@@ -441,7 +458,7 @@ const Signup = () => {
                             checkStatusAction={checkStatusAction}
                             current={{currentCode, setCurrentCode}}/> : 
                         submitStep === 3 ? 
-                        <LocationInfo/> : ""}
+                        <LocationInfo addressSet={{address, setAddress}}/> : ""}
                     <div className='button-part mt_xl'>
                         <input 
                             onClick={prevClickAction}

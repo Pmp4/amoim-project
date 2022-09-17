@@ -21,6 +21,10 @@ public class UserServiceImpl implements UserService{
         return userDAO.selectValueCount(obj);
     }
 
+    /**
+     * @param userVO
+     * @return 결과, 오류메세지
+     */
     @Override
     public int insertUser(UserVO userVO) {
         return userDAO.insertUser(userVO);

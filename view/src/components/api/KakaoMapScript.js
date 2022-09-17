@@ -81,28 +81,50 @@ const KakaoMapSet = (setAddress, setInputMsg) => {
     kakao.maps.event.addListener(map, "click", (mouseEvent) => {
         // 클릭한 위도, 경도 정보를 가져옵니다
         const latlng = mouseEvent.latLng;
-    
         // 마커 위치를 클릭한 위치로 옮깁니다
         marker.setPosition(latlng);
-    
-        searchDetailAddrFromCoords({
+
+        const latLng = {
             lng: latlng.getLng(),
             lat: latlng.getLat()
-        }, (result, status) => {
+        }
+    
+        searchDetailAddrFromCoords(latLng, (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
-                if(result[0].road_address === null) {
-                    setInputMsg("정확한 위치를 클릭해주세요.");
-                }else {
-                    console.log(result[0]);
-                    searchAddrFromCoords({
-                        lng: latlng.getLng(),
-                        lat: latlng.getLat()
-                    }, (result, status) => {
-                        if (status === kakao.maps.services.Status.OK) {
-                            console.log(result[0]);
+                // if(result[0].road_address === null) {
+                //     setInputMsg("정확한 위치를 클릭해주세요.");
+                // }else {
+                //     console.log(result[0]);
+                //     searchAddrFromCoords(latLng, (result, status) => {
+                //         if (status === kakao.maps.services.Status.OK) {
+                //             console.log(result[0]);
+                //         }
+                //     })
+                //     setInputMsg(result[0].road_address.address_name);
+                // }
+
+
+                const addressDetail = result[0];
+                console.log(addressDetail);
+                if(addressDetail.road_address !== null) {
+                    searchAddrFromCoords(latLng, (result, status) => {
+                        const addressSub = result[0];
+
+                        const restAddress = {
+                            zonecode: addressDetail.road_address.zip_code,
+                            address: addressDetail.address.address_name,
+                            roadAddress: addressDetail.road_address.address_name,
+                            jibunAddress: addressDetail.address.address_name,
+                            sido: addressSub.region_1depth_name,
+                            sigungu: addressSub.region_2depth_name,
+                            bname: addressSub.region_3depth_name,
+                            bcode: addressSub.code,
                         }
-                    })
-                    setInputMsg(result[0].road_address.address_name);
+                        setInputMsg(addressDetail.address.address_name);
+                        setAddress(restAddress);
+                    });
+                }else {
+                    setInputMsg("정확한 위치를 클릭해주세요.");
                 }
             }
         });
@@ -118,6 +140,7 @@ export {
     panTo,
     searchAddress,
     searchDetailAddrFromCoords,
+    searchAddrFromCoords,
     kakao,
     map,
     marker,
