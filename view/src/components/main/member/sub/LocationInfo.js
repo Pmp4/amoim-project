@@ -8,7 +8,8 @@ import {
     searchAddress, 
     panTo, 
     searchDetailAddrFromCoords, 
-    searchAddrFromCoords } from "../../../api/KakaoMapScript";
+    searchAddrFromCoords 
+} from "../../../api/KakaoMapScript";
 
 
 
@@ -105,9 +106,11 @@ const LocationInfo = ({addressSet}) => {
                     });
                 }else {
                     setInputMsg("정확한 위치를 클릭해주세요.");
+                    setAddress({});
                 }
                 // setTempAddress(result[0].address.address_name);
             }else {
+                setAddress({});
                 setInputMsg("정확한 위치를 클릭해주세요.");
             }
         });
