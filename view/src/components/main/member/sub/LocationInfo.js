@@ -5,30 +5,39 @@ import useGeolocation from "react-hook-geolocation";
 import { kakao, KakaoMapSet, searchAddress, panTo, searchDetailAddrFromCoords } from "../../../api/KakaoMapScript";
 
 
+const initialAddress = {
+    address: "",
+    zipcode: "",
+}
+
+
+/**
+ * 현재 위치를 클릭 할 땐,
+ * => 도로명 주소가 있을 경우
+ *    => 행정동까지 검색
+ * => 
+ */
+
+
+
+
 const LocationInfo = () => {
     const [address, setAddress] = useState({});
-    const [tempAddress, setTempAddress] = useState("");
+    const [inputMsg, setInputMsg] = useState("지역을 설정해 주세요.");
 
     const geolocation = useGeolocation();
 
     useEffect(() => {
-        KakaoMapSet();
+        KakaoMapSet(setAddress, setInputMsg);
         zipcodeApi();
     }, []);
 
-    // useEffect(() => {
-    //     if(tempAddress !== "") {
-    //         const {daum} = window;
-    //         new daum.Postcode({
-    //             oncomplete: (data) => {
-    //                 console.log(data);
-    //             }
-    //         }).open({
-    //             q: tempAddress
-    //         });
-    //     }
-    // }, [tempAddress]);
 
+
+
+    // 도로명주소 검색 api
+    // 도로명주소 검색 api
+    // 도로명주소 검색 api
     const zipcodeApi = () => {
         const script = document.createElement("script");
         script.async = true;
@@ -57,7 +66,12 @@ const LocationInfo = () => {
         }, (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
                 console.log(result[0]);
-                setTempAddress(result[0].address.address_name);
+                if(result[0].road_address === null) {
+                    setInputMsg("정확한 위치를 클릭해주세요.");
+                }else {
+                    setInputMsg(result[0].road_address.address_name);
+                }
+                // setTempAddress(result[0].address.address_name);
             }
         });
     };
@@ -89,7 +103,7 @@ const LocationInfo = () => {
                     onClick={locInfoBtnClickAction}
                     type="button"
                     className="location-info"
-                    defaultValue="지역을 설정해 주세요."
+                    defaultValue={inputMsg}
                 />
             </div>
         </div>
