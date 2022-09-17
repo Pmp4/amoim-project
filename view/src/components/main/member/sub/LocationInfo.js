@@ -16,18 +16,18 @@ const LocationInfo = () => {
         zipcodeApi();
     }, []);
 
-    useEffect(() => {
-        if(tempAddress !== "") {
-            const {daum} = window;
-            new daum.Postcode({
-                oncomplete: (data) => {
-                    console.log(data);
-                }
-            }).open({
-                q: tempAddress
-            });
-        }
-    }, [tempAddress]);
+    // useEffect(() => {
+    //     if(tempAddress !== "") {
+    //         const {daum} = window;
+    //         new daum.Postcode({
+    //             oncomplete: (data) => {
+    //                 console.log(data);
+    //             }
+    //         }).open({
+    //             q: tempAddress
+    //         });
+    //     }
+    // }, [tempAddress]);
 
     const zipcodeApi = () => {
         const script = document.createElement("script");
@@ -39,6 +39,9 @@ const LocationInfo = () => {
 
 
 
+    // 현재 위치 검색
+    // 현재 위치 검색
+    // 현재 위치 검색
     const geolocBtnClickAction = () => {
         console.log(geolocation.loaded);
         console.log(geolocation);
@@ -46,26 +49,25 @@ const LocationInfo = () => {
             alert("위치정보 권한을 허용해 주세요.");
             return
         }
-        const resData = panTo(geolocation.latitude, geolocation.longitude);
+
+        panTo(geolocation.latitude, geolocation.longitude);
         searchDetailAddrFromCoords({
             lat: geolocation.latitude, 
             lng: geolocation.longitude
         }, (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
+                console.log(result[0]);
                 setTempAddress(result[0].address.address_name);
             }
-        })
-
-        // const {daum} = window;
-        // new daum.Postcode({
-        //     oncomplete: (data) => {
-        //         console.log(data);
-        //     }
-        // }).open({
-        //     q: resData[0].address.address_name
-        // });
+        });
     };
 
+
+
+
+    // 도로명주소 검색
+    // 도로명주소 검색
+    // 도로명주소 검색
     const locInfoBtnClickAction = () => {
         const {daum} = window;
         new daum.Postcode({
