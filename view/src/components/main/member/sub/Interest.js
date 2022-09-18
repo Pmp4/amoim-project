@@ -148,9 +148,16 @@ const Interest = ({checkStatus, checkStatusAction, deleteCheckStatusAction, curr
             console.log(response);
             if (response.data.SUCCESS) {
                 if(response.data.type) {
-                    for(let i = 0; i < response.data.list.length; i++)
-                        response.data.list[i].check = false;
-                        
+                    for(let i = 0; i < response.data.list.length; i++) {
+                        console.log(Object.keys(checkStatus));
+                        console.log(response.data.list[i].categoryCode);
+                        if(!(Object.keys(checkStatus).includes(response.data.list[i].categoryCode))) {
+                            response.data.list[i].check = false;
+                        }else {
+                            response.data.list[i].check = true;
+                        }
+                    }
+                    
                     setInterests(response.data.list);
                 }else {
                     setKeywords(response.data.list);
