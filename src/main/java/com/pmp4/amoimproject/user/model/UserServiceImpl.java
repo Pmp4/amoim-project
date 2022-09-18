@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
                         Map<String, Object> tempMap = new HashMap<>();
                         tempMap.put("categoryCode", value);
                         tempMap.put("categoryParent", key);
-                        tempMap.put("userNO", userVO.getUserNo());
+                        tempMap.put("userNo", userVO.getUserNo());
 
                         interests.add(tempMap);
                     }
