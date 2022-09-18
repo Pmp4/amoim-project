@@ -1,8 +1,10 @@
 package com.pmp4.amoimproject.user.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pmp4.amoimproject.address.model.AddressDAO;
 import com.pmp4.amoimproject.address.model.AddressVO;
 import com.pmp4.amoimproject.common.Encrypt;
+import com.pmp4.amoimproject.interest.model.InterestDAO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,10 +16,13 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     private final UserDAO userDAO;
+    private final InterestDAO interestDAO;
+    private final AddressDAO addressDAO;
+
     private final ObjectMapper objectMapper;
     private final Encrypt encrypt;
 
@@ -31,10 +36,8 @@ public class UserServiceImpl implements UserService{
         return userDAO.selectValueCount(obj);
     }
 
-    /**
-     * @param restJson
-     * @return 결과
-     */
+
+
     @Override
     @Transactional
     public int insertUser(Map<String, Object> restJson) {
@@ -46,18 +49,37 @@ public class UserServiceImpl implements UserService{
         userVO.setSalt(encrypt.getSalt());
         userVO.setPassword(encrypt.getEncrypt(userVO.getPassword(), userVO.getSalt()));
 
+        int cnt = -1;
         try {
-//            int cnt = userDAO.insertUser(userVO);
-            int cnt = 1;
+            cnt = userDAO.insertUser(userVO);
             logger.info("UserService inserUser 결과 cnt={}, userVO.getUserNo={}", cnt, userVO.getUserNo());
 
             if(cnt > 0) {
-                Set<String> set = restInterest.keySet();
-                Iterator<String> iterator = set.iterator();
+                Set<Map.Entry<String, Object>> set = restInterest.entrySet();
 
-                while(iterator.hasNext()) {
-                    
+                for (Map.Entry<String, Object> entry : set) {
+                    String key = entry.getKey();
+                    List<String> values = (List<String>) entry.getValue();
+
+                    logger.info("key={}", key);
+                    logger.info("values={}", values);
+
+                    for(String value : values) {
+                        Map<String, Object> tempMap = new HashMap<>();
+                        tempMap.put("categoryCode", value);
+                        tempMap.put("categoryParent", key);
+                        tempMap.put("userNO", userVO.getUserNo());
+
+                        interests.add(tempMap);
+                    }
                 }
+
+                for(Map<String, Object> map: interests) {
+                    cnt = interestDAO.insertUserInterest(map);
+                    if(!(cnt > 0)) return -1;
+                }
+
+                cnt = addressDAO.insertAddress(addressVO);
 
             }else {
                 return -1;
@@ -68,7 +90,7 @@ public class UserServiceImpl implements UserService{
             return -1;
         }
 
-        return 1;
+        return cnt;
     }
 
 

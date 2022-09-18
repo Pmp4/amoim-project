@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -13,5 +14,12 @@ public class InterestServiceImpl implements InterestService{
     @Override
     public List<InterestVO> categorySelect(String type) {
         return interestDAO.categorySelect(type);
-    };
+    }
+
+    @Override
+    public int insertUserInterest(Map<String, Object> map) {
+        return interestDAO.insertUserInterest(map);
+    }
+
+    ;
 }
