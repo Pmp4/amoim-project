@@ -333,14 +333,14 @@ const Signup = () => {
 
         MemberService.memberSignup(apiData)
             .then(response => {
-                const {SUCCESS} = response.data
-                if(!SUCCESS) {
-                    console.log('error : DB처리');
-                    return;
+                const {SUCCESS, MESSAGE} = response.data
+                if(SUCCESS) {
+                    alert(MESSAGE);
+                    navigator("/");
+                }else {
+                    alert(MESSAGE);
+                    navigator("/member/signup");
                 }
-
-                alert("회원가입에 성공하셨습니다.");
-                navigator("/");
             })
     }
 

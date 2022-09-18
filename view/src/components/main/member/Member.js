@@ -6,7 +6,6 @@ const Account = () => {
     return (
         <div>
             <Routes>
-                <Route path='/' element={<div>MEMBERMEMBERMEMBERMEMBERMEMBERMEMBERMEMBERMEMBER</div>}></Route>
                 <Route path='/signup' element={<Signup/>}></Route>
             </Routes>
         </div>
