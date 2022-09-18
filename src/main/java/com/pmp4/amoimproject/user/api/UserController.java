@@ -54,8 +54,8 @@ public class UserController {
 
 
     @PostMapping("/signup")
-    public Map<String, Object> memberSignup(@RequestBody Map<String, Object> jsonData) {
-        logger.info("API 회원가입 jsonData={}", jsonData);
+    public Map<String, Object> memberSignup(@RequestBody Map<String, Object> restJson) {
+        logger.info("API 회원가입 restJson={}", restJson);
 
 //        UserVO userVO = objectMapper.convertValue(jsonData.get("userInfo"), UserVO.class);
 //        AddressVO addressVO = objectMapper.convertValue(jsonData.get("address"), AddressVO.class);
@@ -65,6 +65,7 @@ public class UserController {
 //        userVO.setSalt(encrypt.getSalt());
 //        userVO.setPassword(encrypt.getEncrypt(userVO.getPassword(), userVO.getSalt()));
 
+        int cnt = userService.insertUser(restJson);
 
 
         Map<String, Object> resJson = new HashMap<>();
