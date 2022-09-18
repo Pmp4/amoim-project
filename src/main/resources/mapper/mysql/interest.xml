@@ -11,4 +11,9 @@
         </if>
         order by INTEREST_NO
     </select>
+    
+    <insert id="insertUserInterest" parameterType="HashMap">
+        insert into USER_INTEREST(user_no, category_code, category_parent)
+        values (#{userNo}, #{categoryCode}, #{categoryParent});
+    </insert>
 </mapper>
