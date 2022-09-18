@@ -2,6 +2,7 @@ package com.pmp4.amoimproject.user.api;
 
 import com.pmp4.amoimproject.common.Encrypt;
 import com.pmp4.amoimproject.user.model.UserService;
+import com.pmp4.amoimproject.user.model.UserServiceImpl;
 import com.pmp4.amoimproject.user.model.UserVO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
