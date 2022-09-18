@@ -109,9 +109,9 @@ const KakaoMapSet = (setAddress, setInputMsg) => {
                 if(addressDetail.road_address !== null) {
                     searchAddrFromCoords(latLng, (result, status) => {
                         const addressSub = result[0];
-
+                        console.log(addressSub.code);
                         const restAddress = {
-                            zonecode: addressDetail.road_address.zip_code,
+                            zonecode: addressDetail.road_address.zone_no,
                             address: addressDetail.address.address_name,
                             roadAddress: addressDetail.road_address.address_name,
                             jibunAddress: addressDetail.address.address_name,

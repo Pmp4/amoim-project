@@ -26,6 +26,8 @@ public class UserServiceImpl implements UserService {
     private final ObjectMapper objectMapper;
     private final Encrypt encrypt;
 
+
+
     @Override
     public List<UserVO> selectAll() {
         return userDAO.selectAll();
@@ -59,12 +61,12 @@ public class UserServiceImpl implements UserService {
 
                 for (Map.Entry<String, Object> entry : set) {
                     String key = entry.getKey();
-                    List<String> values = (List<String>) entry.getValue();
+                    List<Integer> values = (List<Integer>) entry.getValue();
 
                     logger.info("key={}", key);
                     logger.info("values={}", values);
 
-                    for(String value : values) {
+                    for(Integer value : values) {
                         Map<String, Object> tempMap = new HashMap<>();
                         tempMap.put("categoryCode", value);
                         tempMap.put("categoryParent", key);
@@ -76,10 +78,14 @@ public class UserServiceImpl implements UserService {
 
                 for(Map<String, Object> map: interests) {
                     cnt = interestDAO.insertUserInterest(map);
+                    logger.info("UserService insertUserInterest 결과 cnt={}", cnt);
+
                     if(!(cnt > 0)) return -1;
                 }
 
+                addressVO.setUserNo(userVO.getUserNo());
                 cnt = addressDAO.insertAddress(addressVO);
+                logger.info("UserService insertAddress 결과 cnt={}", cnt);
 
             }else {
                 return -1;
