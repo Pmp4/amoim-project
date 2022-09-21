@@ -26,6 +26,9 @@ public class LoginController {
         logger.info("API 로그인 검사, loginData={}", loginData);
         logger.info("session ID={}", session.getId());
 
-        return userService.loginCheck(loginData);
+        Map<String, Object> resData = userService.loginCheck(loginData);
+
+        session.setAttribute("loginStatus", resData.get("SUCCESS"));
+        return resData;
     }
 }
