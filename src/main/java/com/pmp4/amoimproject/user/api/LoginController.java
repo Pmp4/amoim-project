@@ -1,6 +1,7 @@
 package com.pmp4.amoimproject.user.api;
 
 import com.pmp4.amoimproject.user.model.UserService;
+import com.pmp4.amoimproject.user.model.UserVO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +28,13 @@ public class LoginController {
         logger.info("session ID={}", session.getId());
 
         Map<String, Object> resData = userService.loginCheck(loginData);
+        UserVO userVO = (UserVO)resData.get("userVo");
+        if((boolean)resData.get("SUCCESS")) {
+            session.setAttribute("loginStatus", true);
+            session.setAttribute("userNo", userVO.getUserNo());
+            session.setAttribute("userId", userVO.getUserId());
+        }
 
-        session.setAttribute("loginStatus", resData.get("SUCCESS"));
         return resData;
     }
 }
