@@ -99,6 +99,13 @@ public class UserServiceImpl implements UserService {
         return cnt;
     }
 
+    @Override
+    public Map<String, Object> loginCheck(Map<String, Object> loginData) {
+        UserVO userVO = userDAO.checkUserId((String) loginData.get("userId"));
+        logger.info("userVo={}", userVO);
+
+        return null;
+    }
 
 
 }

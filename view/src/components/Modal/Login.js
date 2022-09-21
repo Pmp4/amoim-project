@@ -1,3 +1,4 @@
+import MemberService from 'api/member/MemberService';
 import React, { useCallback, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -52,7 +53,12 @@ const Login = ({modalClose}) => {
             return;
         }
 
-        alert("asdfas");
+
+
+        MemberService.loginUser(loginInfo)
+            .then(response => {
+                console.log(response);
+            });
     });
 
 
