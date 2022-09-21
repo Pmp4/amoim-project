@@ -102,9 +102,26 @@ public class UserServiceImpl implements UserService {
     @Override
     public Map<String, Object> loginCheck(Map<String, Object> loginData) {
         UserVO userVO = userDAO.checkUserId((String) loginData.get("userId"));
-        logger.info("userVo={}", userVO);
 
-        return null;
+        Map<String, Object> resMap = new HashMap<>();
+        String successText = "존재하지 않는 아이디입니다.";
+        boolean success = false;
+        if(userVO != null) {
+            logger.info("userVo={}", userVO);
+            String checkPwd = (String) loginData.get("password");
+
+            checkPwd = encrypt.getEncrypt(checkPwd, userVO.getSalt());
+            if(userVO.getPassword().equals(checkPwd)) {
+                resMap.put("userVo", userVO);
+                successText = userVO.getName() + "님, 로그인하셨습니다.";
+                success = true;
+            }
+        }
+
+        resMap.put("SUCCESS", success);
+        resMap.put("successText", successText);
+
+        return resMap;
     }
 
 
