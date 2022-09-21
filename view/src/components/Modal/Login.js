@@ -60,6 +60,7 @@ const Login = ({modalClose}) => {
                 const {successText: msg, SUCCESS, userVo: userInfo} = response.data;
                 if(SUCCESS) {
                     console.log(userInfo);
+                    modalClose();
                 }
 
                 alert(msg);
@@ -70,9 +71,8 @@ const Login = ({modalClose}) => {
     //회원가입 버튼 클릭
     //회원가입 버튼 클릭
     //회원가입 버튼 클릭
-    const signupBtn = useCallback(() => {
-        modalClose();
-    })
+    const signupBtn = () => modalClose();
+    
 
 
 
