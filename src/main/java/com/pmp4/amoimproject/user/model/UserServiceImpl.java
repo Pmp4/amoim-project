@@ -121,6 +121,7 @@ public class UserServiceImpl implements UserService {
         resMap.put("SUCCESS", success);
         resMap.put("successText", successText);
 
+        logger.info("로그인 결과 DATA={}", resMap);
         return resMap;
     }
 

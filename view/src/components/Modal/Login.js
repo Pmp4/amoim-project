@@ -57,7 +57,12 @@ const Login = ({modalClose}) => {
 
         MemberService.loginUser(loginInfo)
             .then(response => {
-                console.log(response);
+                const {successText: msg, SUCCESS, userVo: userInfo} = response.data;
+                if(SUCCESS) {
+                    console.log(userInfo);
+                }
+
+                alert(msg);
             });
     });
 
