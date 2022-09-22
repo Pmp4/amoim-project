@@ -12,7 +12,7 @@
     };
     border-radius: 40px;
     background: rgb(111,63,251);
-    background: linear-gradient(21deg, rgba(111,63,251,1) 0%, rgba(252,70,194,1) 100%);
+    background: linear-gradient(21deg, rgba(111,63,251, .7) 0%, rgba(252,70,194, .7) 100%);
     box-shadow:  20px 20px 60px #c2c2c2,
                 -20px -20px 60px #ffffff;
     
@@ -33,7 +33,7 @@
             }
         }
         position: absolute;
-        top: 8%;
-        left: 2%
+        top: 12%;
+        left: 5%
     }
 }
