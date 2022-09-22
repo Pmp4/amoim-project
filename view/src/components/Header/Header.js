@@ -4,6 +4,7 @@ import Logo from '../../images/logo-4.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faUser} from '@fortawesome/free-solid-svg-icons';
 import Menu from './Menu';
+import Search from './Search';
 
 const Header = ({loginPopup}) => {
     const location = useLocation();
@@ -42,6 +43,7 @@ const Header = ({loginPopup}) => {
                     <FontAwesomeIcon icon={faUser}/>
                 </div> */}
             </div>
+            {/* <Search/> */}
             {/* <button>TEST</button> */}
         </header>
     );
