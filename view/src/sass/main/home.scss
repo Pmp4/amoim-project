@@ -1,0 +1,39 @@
+@import '../variable.scss';
+
+
+.title-wrap {
+    width: $device-xl-width;
+    height: 400px;
+    margin: {
+        top: 20px;
+        left: auto;
+        bottom: 0;
+        right: auto;
+    };
+    border-radius: 40px;
+    background: rgb(111,63,251);
+    background: linear-gradient(21deg, rgba(111,63,251,1) 0%, rgba(252,70,194,1) 100%);
+    box-shadow:  20px 20px 60px #c2c2c2,
+                -20px -20px 60px #ffffff;
+    
+    position: relative;
+    h2{
+        font-size: 7em;
+        font-weight: 600;
+        color: rgba(255, 255, 255, .8);
+
+        p {
+            font-size: .3em;
+            line-height: 1.6em;
+            span{
+                border-radius: 16px;
+                background: rgba(255, 255, 255, .8);
+                padding: 0 10px 3px 10px;
+                color: rgba(0, 0, 0, .8);
+            }
+        }
+        position: absolute;
+        top: 8%;
+        left: 2%
+    }
+}
