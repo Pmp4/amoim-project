@@ -1,15 +1,28 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Logo from '../../images/logo-4.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faUser} from '@fortawesome/free-solid-svg-icons';
+import Menu from './Menu';
 
 const Header = ({loginPopup}) => {
+    const location = useLocation();
 
     return (
         <header>
             <div id='header-wrap'>
-                <div className='menu'>
+                <h1 className='logo'>
+                    <Link to='/'>
+                        <img src={Logo} alt='logo'/>
+                    </Link>
+                </h1>
+                <Menu/>
+                
+                <div className='account' onClick={() => loginPopup("ON")}>
+                    <span>LOGIN</span>
+                </div>
+
+                {/* <div className='menu'>
                     <div className='menu-btn'>
                         <div className='menu-btn-icon'>
                             <div></div>
@@ -27,7 +40,7 @@ const Header = ({loginPopup}) => {
                 <div className='account' onClick={() => loginPopup("ON")}>
                     <span>LOGIN</span>
                     <FontAwesomeIcon icon={faUser}/>
-                </div>
+                </div> */}
             </div>
             {/* <button>TEST</button> */}
         </header>
