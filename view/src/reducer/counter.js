@@ -11,7 +11,7 @@ const counter = (currentState = initial, action) => {
             break;
 
         default:
-            tempState.number--;
+            tempState.number = 0;
     }
 
     return tempState;
