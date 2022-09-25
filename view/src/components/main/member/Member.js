@@ -7,6 +7,7 @@ const Account = () => {
         <div>
             <Routes>
                 <Route path='/signup' element={<Signup/>}></Route>
+                <Route path='*' element={"404Page"}></Route>
             </Routes>
         </div>
     );
