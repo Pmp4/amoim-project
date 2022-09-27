@@ -15,8 +15,8 @@ const Menu = () => {
                     <Link to="/menu">내-모임</Link>
                     <div></div>
                 </li>
-                <li className={location.pathname === "/member/mypage" ? "on" : ""}>
-                    <Link to="/member/mypage">마이페이지</Link>
+                <li className={location.pathname === "/member/my" ? "on" : ""}>
+                    <Link to="/member/my">마이페이지</Link>
                     <div></div>
                 </li>
             </ul>
