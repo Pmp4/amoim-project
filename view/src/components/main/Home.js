@@ -1,11 +1,8 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 
 
 
 const Home = () => {
-    const number = useSelector(state => state.number);
-    const dispatch = useDispatch();
 
     return (
         <div className='home-page'>
@@ -17,10 +14,6 @@ const Home = () => {
                         <span>A-MOIM</span> 입니다.
                     </p>
                 </h2>
-            </div>
-            <div style={{marginTop: "50px"}}>
-                {number}
-                <button onClick={() => dispatch({type: "PLUS"})}>증가</button>
             </div>
         </div>
     );
