@@ -29,6 +29,7 @@ public class LoginController {
 
         Map<String, Object> resData = userService.loginCheck(loginData);
         UserVO userVO = (UserVO)resData.get("userVo");
+
         if((boolean)resData.get("SUCCESS")) {
             session.setAttribute("loginStatus", true);
             session.setAttribute("userNo", userVO.getUserNo());
