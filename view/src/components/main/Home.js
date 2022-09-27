@@ -1,9 +1,11 @@
 import React from 'react';
+import LoginCheck from '../common/LoginCheck';
+import { useState } from 'react';
 
 
 
 const Home = () => {
-
+    
     return (
         <div className='home-page'>
             <div className='title-wrap'>
