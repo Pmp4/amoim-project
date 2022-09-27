@@ -18,9 +18,5 @@ const memberSignup = (rest) => {
     return httpCommon.post(`/user/signup`, rest);
 }
 
-const loginUser = (rest) => {
-    return httpCommon.post(`/login/check`, rest);
-}
 
-
-export default {memberAllSelect, selectTypeCount, memberSignup, loginUser};
+export default {memberAllSelect, selectTypeCount, memberSignup};
