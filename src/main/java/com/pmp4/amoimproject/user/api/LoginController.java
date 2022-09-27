@@ -34,17 +34,34 @@ public class LoginController {
             session.setAttribute("logged", true);
             session.setAttribute("userNo", userVO.getUserNo());
             session.setAttribute("userId", userVO.getUserId());
-            session.setAttribute("userName", userVO.getName());
+            session.setAttribute("name", userVO.getName());
         }
 
         return resData;
     }
 
+
+
+
+
     @PostMapping("/check")
     public Map<String, Object> check(HttpSession session) {
-        logger.info("API 로그인 체크");
+        logger.info("API 로그인 체크, bool={}", session.getAttribute("logged"));
+//        session.invalidate();
 
         Map<String, Object> resData = new HashMap<>();
+        resData.put("logged", session.getAttribute("logged"));
+        if(session.getAttribute("logged") != null) {
+            resData.put("logged", session.getAttribute("logged"));
+            resData.put("userNo", session.getAttribute("userNo"));
+            resData.put("userId", session.getAttribute("userId"));
+            resData.put("name", session.getAttribute("name"));
+        }else {
+            resData.put("logged", false);
+            session.setAttribute("logged", false);
+        }
+//        session.invalidate();
+
         return resData;
     }
 }

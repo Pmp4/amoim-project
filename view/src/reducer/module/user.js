@@ -2,11 +2,13 @@ const initialUserInfo = {
     logged: false,
     userInfo: {
         id: "",
-        username: "",
+        no: "",
+        name: "",
     },
 };
 
 const SUCCESS_LOGGED = 1;
+const LOGOUT_LOGGED = 2;
 
 const user = (currentState = initialUserInfo, action) => {
     switch (action.type) {
@@ -20,10 +22,14 @@ const user = (currentState = initialUserInfo, action) => {
                     name: action.data.name,
                 }
             };
+        case LOGOUT_LOGGED:
+            return {
+                ...initialUserInfo
+            }
 
         default:
             return { ...currentState };
     }
 };
 
-export { user, SUCCESS_LOGGED };
+export { user, SUCCESS_LOGGED, LOGOUT_LOGGED };
