@@ -69,9 +69,25 @@ public class LoginController {
             resData.put("name", session.getAttribute("name"));
         }else {
             resData.put("logged", false);
-            session.setAttribute("logged", false);
         }
 //        session.invalidate();
+
+        return resData;
+    }
+
+
+
+    @PostMapping("/status")
+    public Map<String, Object> loggedStatus(HttpSession session) {
+        logger.info("로그인 여부 조회, sessionId={}", session.getId());
+
+        Map<String, Object> resData = new HashMap<>();
+
+        if(session.getAttribute("logged") != null) {
+            resData.put("logged", true);
+        }else {
+            resData.put("logged", false);
+        }
 
         return resData;
     }

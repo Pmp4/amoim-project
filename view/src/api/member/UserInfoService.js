@@ -15,5 +15,10 @@ const loggedInfo = () => {
 }
 
 
+const loggedCheck = () => {
+    return httpCommon.post(`/user/status`);
+}
 
-export default {loggedInfo, loginUser, logout};
+
+
+export default {loggedInfo, loginUser, logout, loggedCheck};
