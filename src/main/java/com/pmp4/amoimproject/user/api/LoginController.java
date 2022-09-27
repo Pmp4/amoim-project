@@ -15,15 +15,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class LoginController {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     private final UserService userService;
 
-    @PostMapping("/check")
-    public Map<String, Object> loginCheck(@RequestBody Map<String, Object> loginData, HttpSession session) {
+    @PostMapping("/login")
+    public Map<String, Object> login(@RequestBody Map<String, Object> loginData, HttpSession session) {
         logger.info("API 로그인 검사, loginData={}", loginData);
         logger.info("session ID={}", session.getId());
 
@@ -31,11 +31,20 @@ public class LoginController {
         UserVO userVO = (UserVO)resData.get("userVo");
 
         if((boolean)resData.get("SUCCESS")) {
-            session.setAttribute("loginStatus", true);
+            session.setAttribute("logged", true);
             session.setAttribute("userNo", userVO.getUserNo());
             session.setAttribute("userId", userVO.getUserId());
+            session.setAttribute("userName", userVO.getName());
         }
 
+        return resData;
+    }
+
+    @PostMapping("/check")
+    public Map<String, Object> check(HttpSession session) {
+        logger.info("API 로그인 체크");
+
+        Map<String, Object> resData = new HashMap<>();
         return resData;
     }
 }

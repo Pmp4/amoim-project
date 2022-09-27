@@ -1,6 +1,6 @@
-import MemberService from 'api/member/MemberService';
 import React, { useCallback, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import UserInfoService from 'api/member/UserInfoService';
 
 const initialInfo = {
     userId: "",
@@ -55,7 +55,7 @@ const Login = ({modalClose}) => {
 
 
 
-        MemberService.loginUser(loginInfo)
+        UserInfoService.loginUser(loginInfo)
             .then(response => {
                 const {successText: msg, SUCCESS, userVo: userInfo} = response.data;
                 if(SUCCESS) {
