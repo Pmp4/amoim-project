@@ -7,9 +7,9 @@ import Menu from "./Menu";
 import Search from "./Search";
 import { useDispatch, useSelector } from "react-redux";
 import {LOGOUT_LOGGED} from '../../reducer/module/user';
+import UserInfoService from 'api/member/UserInfoService';
 
 const Header = ({ loginPopup }) => {
-    const location = useLocation();
     const navigate = useNavigate();
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
@@ -17,11 +17,16 @@ const Header = ({ loginPopup }) => {
     const loginBtnAction = () => {
         if(user.logged) {
             if(window.confirm("로그아웃 하시겠습니까?")) {
-                dispatch({
-                    type: LOGOUT_LOGGED
-                });
-                alert(`${user.userInfo.name}님 로그아웃되었습니다.`);
-                navigate("/");
+                UserInfoService.logout()
+                    .then((response) => {
+                        if(response.data.SUCCESS) {
+                            dispatch({
+                                type: LOGOUT_LOGGED
+                            });
+                            alert(`${user.userInfo.name}님 로그아웃되었습니다.`);
+                            navigate("/");
+                        }
+                    });
             }
         }else {
             loginPopup("ON");

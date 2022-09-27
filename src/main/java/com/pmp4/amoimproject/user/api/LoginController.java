@@ -41,6 +41,17 @@ public class LoginController {
     }
 
 
+    @PostMapping("/logout")
+    public Map<String, Object> login(HttpSession session) {
+        logger.info("API 로그아웃, session ID={}", session.getId());
+
+        session.invalidate();
+
+        Map<String, Object> resData = new HashMap<>();
+        resData.put("SUCCESS", true);
+
+        return resData;
+    }
 
 
 
