@@ -5,7 +5,7 @@ import lombok.Data;
 import java.sql.Timestamp;
 
 @Data
-public class AddressVO {
+public class UserAddressVO {
     private Long addressNo;
     private Long userNo;
     private String zonecode;

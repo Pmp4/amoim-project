@@ -1,8 +1,8 @@
 package com.pmp4.amoimproject.user.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pmp4.amoimproject.address.model.AddressDAO;
-import com.pmp4.amoimproject.address.model.AddressVO;
+import com.pmp4.amoimproject.address.model.UserAddressDAO;
+import com.pmp4.amoimproject.address.model.UserAddressVO;
 import com.pmp4.amoimproject.common.Encrypt;
 import com.pmp4.amoimproject.interest.model.InterestDAO;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserDAO userDAO;
     private final InterestDAO interestDAO;
-    private final AddressDAO addressDAO;
+    private final UserAddressDAO addressDAO;
 
     private final ObjectMapper objectMapper;
     private final Encrypt encrypt;
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
         UserVO userVO = objectMapper.convertValue(restJson.get("userInfo"), UserVO.class);
         List<Map<String, Object>> interests = new ArrayList<>();
         Map<String, Object> restInterest = (Map) restJson.get("interests");
-        AddressVO addressVO = objectMapper.convertValue(restJson.get("address"), AddressVO.class);
+        UserAddressVO userAddressVO = objectMapper.convertValue(restJson.get("address"), UserAddressVO.class);
 
         userVO.setSalt(encrypt.getSalt());
         userVO.setPassword(encrypt.getEncrypt(userVO.getPassword(), userVO.getSalt()));
@@ -83,8 +83,8 @@ public class UserServiceImpl implements UserService {
                     if(!(cnt > 0)) return -1;
                 }
 
-                addressVO.setUserNo(userVO.getUserNo());
-                cnt = addressDAO.insertAddress(addressVO);
+                userAddressVO.setUserNo(userVO.getUserNo());
+                cnt = addressDAO.insertAddress(userAddressVO);
                 logger.info("UserService insertAddress 결과 cnt={}", cnt);
 
             }else {
