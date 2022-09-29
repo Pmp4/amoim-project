@@ -12,18 +12,20 @@ const LoginCheck = ({ children }) => {
     const user = useSelector((state) => state.user);
 
     useEffect(() => {
-        if(user.logged) {
+        if(Boolean(sessionStorage.getItem("logged"))) {
             UserInfoService.loggedCheck().then((response) => {
                 if (!response.data.logged) {
-                    console.log("dispatch 실행");
+                    console.log("1");
                     dispatch({ type: LOGOUT_LOGGED });
-                    alert("로그인 후 이용해주세요.");
+                    sessionStorage.clear();
                     navigate("/");
+                    alert("로그인 후 이용해주세요.");
                 }
             });
         }else {
-            alert("로그인 후 이용해주세요.");
+            console.log("2");
             navigate("/");
+            alert("로그인 후 이용해주세요.");
         }
     });
 
