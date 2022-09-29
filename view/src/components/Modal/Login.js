@@ -1,6 +1,8 @@
 import React, { useCallback, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import UserInfoService from 'api/member/UserInfoService';
+import { useDispatch } from 'react-redux';
+import { SUCCESS_LOGGED } from 'reducer/module/user';
 
 const initialInfo = {
     userId: "",
@@ -10,6 +12,8 @@ const initialInfo = {
 const Login = ({modalClose}) => {
     const [loginInfo, setLoginInfo] = useState({...initialInfo});
     const inputRef = useRef({});
+
+    const dispatch = useDispatch();
 
     const {userId, password} = loginInfo;
 
@@ -60,6 +64,14 @@ const Login = ({modalClose}) => {
                 const {successText: msg, SUCCESS, userVo: userInfo} = response.data;
                 if(SUCCESS) {
                     console.log(userInfo);
+                    dispatch({
+                        type: SUCCESS_LOGGED,
+                        data: {
+                            id: userInfo.userId,
+                            no: userInfo.userNo,
+                            name: userInfo.name
+                        }});
+                    sessionStorage.setItem("logged", true);
                     modalClose();
                 }
 
