@@ -35,7 +35,6 @@ public class LoginController {
             session.setAttribute("userNo", userVO.getUserNo());
             session.setAttribute("userId", userVO.getUserId());
             session.setAttribute("name", userVO.getName());
-            session.setMaxInactiveInterval(60);
         }
 
         return resData;
