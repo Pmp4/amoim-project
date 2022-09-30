@@ -1,9 +1,51 @@
-// @import '../../variable.scss';
+@import '../../variable.scss';
 
 
 
-.title{
-    h3{ 
-        font-size: 2em;
+#moim-page .title-wrap {
+    display: flex;
+    .title{
+        width: 40%;
+        background: #fff;
+        border-radius: 20px;
+        padding: 30px 40px;
+        box-sizing: border-box;
+        box-shadow:  5px 5px 44px #ebebeb,
+                -5px -5px 44px #ffffff;
+        h3{ 
+            font-size: 3em;
+            font-weight: 600;
+        }
+        p{
+            margin-top: 50px;
+            font-size: 2em;
+        }
+    }
+    a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 30px;
+        width: 7%;
+        padding: 0 0;
+        border-radius: 20px;
+        position: relative;
+        overflow: hidden;
+        font-size: 3em;
+        transition: .1s;
+        text-align: center;
+        &:hover{
+
+            box-shadow:  5px 5px 44px #ebebeb,
+                    -5px -5px 44px #ffffff;
+        }
+    }
+    margin: 80px 0 100px 0;
+}
+
+.main-part{
+    .sub-title {
+        font-size: $big-title;
+        margin-top: 40px;
     }
 }

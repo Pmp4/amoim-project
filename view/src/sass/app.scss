@@ -133,16 +133,16 @@ header {
 }
 
 
-.signup-page {
+#signup-page {
 	@import url("./main/member/signup.scss");
 }
 
 
-.home-page{
+#home-page{
 	@import url("./main/home.scss");
 }
 
 
-.moim-page{
+#moim-page{
 	@import url("./main/moim/moim.scss");
 }

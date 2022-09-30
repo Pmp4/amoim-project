@@ -7,7 +7,7 @@ import { useState } from 'react';
 const Home = () => {
     
     return (
-        <div className='home-page'>
+        <div id='home-page'>
             <div className='title-wrap'>
                 <h2>
                     안녕하세요.<br/>
