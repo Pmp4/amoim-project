@@ -430,7 +430,7 @@ const Signup = () => {
 
     return (
         <div className='signup-page'>
-            <div className='page-wrap'>
+            <div className='page-wrap' id='signup-main'>
                 <div className='title-box'></div>
                 <div className='signup-box'>
                     <h2 className='title'>

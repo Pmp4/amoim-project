@@ -1,12 +1,15 @@
 import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+import MoimMain from './sub/MoimMain';
+import MoimAdd from './sub/MoimAdd';
 
 const Moim = () => {
     return (
-        <div className='moim-page'>
-            <div className='title'>
-                <h3>나의 모임들</h3>
-                <p>모임을 만들어보세요!</p>
-            </div>
+        <div id='moim-page'>
+            <Routes>
+                <Route path='/' element={<MoimMain/>}/>
+                <Route path='/add' element={<MoimAdd/>}/>
+            </Routes>
         </div>
     );
 };
