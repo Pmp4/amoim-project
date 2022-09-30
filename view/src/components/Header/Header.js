@@ -13,9 +13,10 @@ const Header = ({ loginPopup }) => {
     const navigate = useNavigate();
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
+    const logged = Boolean(sessionStorage.getItem("logged"));
 
     const loginBtnAction = () => {
-        if(user.logged) {
+        if(logged) {
             if(window.confirm("로그아웃 하시겠습니까?")) {
                 UserInfoService.logout()
                     .then((response) => {
@@ -23,6 +24,7 @@ const Header = ({ loginPopup }) => {
                             dispatch({
                                 type: LOGOUT_LOGGED
                             });
+                            sessionStorage.clear();
                             alert(`${user.userInfo.name}님 로그아웃되었습니다.`);
                             navigate("/");
                         }
@@ -45,7 +47,7 @@ const Header = ({ loginPopup }) => {
 
 
                 <div className="account" onClick={loginBtnAction}>
-                    {user.logged ? <span>LOGOUT</span> : <span>LOGIN</span>}
+                    {logged ? <span>LOGOUT</span> : <span>LOGIN</span>}
                 </div>
 
                 {/* <div className='menu'>
