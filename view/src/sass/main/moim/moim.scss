@@ -170,6 +170,14 @@
                 font-size: 1.3em;
                 border-radius: 16px;
             }
+
+            .line {
+                display: flex;
+                margin-top: 20px;
+                label {
+                    width: 49%;
+                }
+            }
         }
     }
 }

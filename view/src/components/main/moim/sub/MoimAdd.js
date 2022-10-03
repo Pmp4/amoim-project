@@ -109,6 +109,24 @@ const MoimAdd = () => {
                             defaultValue={title}
                             onChange={(event) => inputEventAction(event)}/>
                     </label>
+                    <div className='line'>
+                        <label htmlFor='loc'>
+                            <p>위치</p>
+                            <input name='loc' 
+                                placeholder='제목을 입력하세요.'
+                                defaultValue={title}
+                                onChange={(event) => inputEventAction(event)}/>
+                        </label>
+                        <label htmlFor='dues'>
+                            <p>회비</p>
+                            <input name='dues'
+                                type='number' 
+                                placeholder='없음'
+                                defaultValue={title}
+                                onChange={(event) => inputEventAction(event)}/>
+                        </label>
+                    </div>
+                    
                 </div>
             </form>
         </div>
