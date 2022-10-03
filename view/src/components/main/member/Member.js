@@ -9,11 +9,7 @@ const Account = () => {
         <div>
             <Routes>
                 <Route path='/signup' element={<Signup/>}></Route>
-                <Route path='/my' element={
-                    <LoginCheck>
-                        <MyPage/>
-                    </LoginCheck>
-                }></Route>
+                <Route path='/my' element={<MyPage/>}></Route>
                 <Route path='*' element={"404Page"}></Route>
             </Routes>
         </div>

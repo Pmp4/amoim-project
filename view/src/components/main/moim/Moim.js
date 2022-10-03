@@ -5,7 +5,7 @@ import MoimAdd from './sub/MoimAdd';
 
 const Moim = () => {
     return (
-        <div id='moim-page'>
+        <div>
             <Routes>
                 <Route path='/' element={<MoimMain/>}/>
                 <Route path='/add' element={<MoimAdd/>}/>

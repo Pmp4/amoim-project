@@ -5,7 +5,7 @@ const MoimMain = () => {
     const location = useLocation();
 
     return (
-        <div>
+        <div id='moim-page'>
             <div className="page-wrap">
                 <div className="title-wrap">
                     <div className="title">
