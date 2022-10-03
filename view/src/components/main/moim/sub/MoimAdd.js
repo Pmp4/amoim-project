@@ -1,5 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
+import { useRef } from 'react';
+import { useEffect } from 'react';
 
 
 
@@ -10,8 +12,17 @@ const initialInput = {
 
 const MoimAdd = () => {
     const [inputData, setInputData] = useState(initialInput);
+    const [fileStatus, setFileStatus] = useState(false);
 
+    const inputRef = useRef({});
+
+    
     const {title} = inputData;
+
+
+    useEffect(() => {
+        
+    })
 
 
     const inputEventAction = (event) => {
@@ -26,6 +37,45 @@ const MoimAdd = () => {
         setInputData(tempInputData);
     }
 
+
+    const uploadImageAction = (event) => {
+        const fileArr = Array.from(event.target.files);
+
+
+        if(0 === fileArr.length || fileArr.length > 1) {
+            alert("하나의 이미지를 선택해주세요.");
+            return;
+        }
+
+
+        fileArr.forEach((item, idx) => {
+            const reader = new FileReader();
+
+            reader.onload = e => {
+                if(idx === 0) {
+                    inputRef.current.fileBox.style.backgroundImage = `url(${e.target.result})`;
+                    setFileStatus(true);
+                } 
+            }
+
+            reader.readAsDataURL(item);
+        });
+    }
+
+
+    const initialFileInput = (event) => {
+        inputRef.current.file.value = "";
+        inputRef.current.fileBox.style.backgroundImage = 'url()';
+        inputRef.current.fileRemove.className += 'fade-out';
+
+        setTimeout(() => {
+            setFileStatus(false);
+        }, 300);
+
+        return false;
+    }
+
+
     return (
         <div id='moim-add-page' className='page-wrap'>
             <div className='title-wrap'>
@@ -35,14 +85,26 @@ const MoimAdd = () => {
                 <div className='left'>
                     <div className='image-upload'>
                         <div className='main-image'>
-                            <span>+<br/> 이미지를 추가해주세요.</span>
-                            <input type="file" multiple accept=".gif, .jpg, .png"/>
+                            <span 
+                                className={fileStatus ? 'on' : ''}
+                                ref={element => inputRef.current.fileBox = element}>
+                                    +
+                            </span>
+                            <input ref={(element) => inputRef.current.file = element} type="file" 
+                                onChange={(event) => uploadImageAction(event)}
+                                multiple 
+                                accept=".gif, .jpg, .png"/>
                         </div>
+                        {fileStatus && 
+                            <button 
+                                ref={element => inputRef.current.fileRemove = element}
+                                type='button' 
+                                onClick={(event) => initialFileInput(event)}>이미지 삭제</button>}
                     </div>
                 </div>
                 <div className='right'>
                     <label htmlFor='title'>
-                        <input name='title' id='title' 
+                        <input name='title' 
                             placeholder='제목을 입력하세요.'
                             defaultValue={title}
                             onChange={(event) => inputEventAction(event)}/>
