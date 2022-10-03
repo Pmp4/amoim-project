@@ -92,6 +92,10 @@
                         box-shadow: 5px 5px 44px #ebebeb,
                         -5px -5px 44px #ffffff;
                         color: rgb(54, 54, 54);
+                        background-position: center;
+                        background-size: auto 100%;
+                        font-size: 5em;
+                        &.on {font-size: 0;}
                     }
                     input[type='file'] {
                         position: absolute;
@@ -102,6 +106,55 @@
                         display: block;
                         cursor: pointer;
                         opacity: 0;
+                    }
+                }
+
+                @keyframes inputFadeIn {
+                    0% {
+                        width: 0%;
+                        font-size: 0;
+                    }
+
+                    75% {
+                        font-size: 0;
+                    }
+
+                    100% {
+                        width: 100%;
+                        font-size: 1em;
+                    }
+                }
+                @keyframes inputFadeOut {
+                    0% {
+                        width: 100%;
+                        font-size: 1em;
+                    }
+
+                    25% {
+                        font-size: 0;
+                    }
+
+                    100% {
+                        width: 0;
+                        font-size: 0;
+                    }
+                }
+
+                button {
+                    @include initial-btn;
+                    margin-top: 30px;
+                    width: 0;
+                    line-height: 40px;
+                    font-size: 1em;
+                    background: #E06923;
+                    color: #fff;
+                    border-radius: 10px;
+                    position: relative;
+                    z-index: 2;
+                    animation: inputFadeIn .3s forwards;
+
+                    &.fade-out {
+                        animation: inputFadeOut .3s forwards;
                     }
                 }
             }
