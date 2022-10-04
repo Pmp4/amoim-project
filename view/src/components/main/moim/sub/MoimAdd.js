@@ -231,11 +231,10 @@ const MoimAdd = () => {
     //지도 마커 클릭 시, 스크롤
     const mapMarkerClickScroll = useCallback((idx) => {
         const mapSearchList = document.querySelector(".map-search-list");
-
-        console.log(idx);
-        console.log(searchRef.current[idx]);
-        console.log(searchRef.current[idx].offsetTop);
-        mapSearchList.scrollTo(0, 200);
+        const target = searchRef.current[idx];
+        // console.log(target.offsetTop);
+        mapSearchList.scrollTo({top: target.offsetTop, left: 0, behavior: 'smooth'});
+        target.className += " on";
     });
 
 
@@ -250,15 +249,15 @@ const MoimAdd = () => {
         
         return (
             <div className='item' key={item.id} ref={element => searchRef.current[idx] = element}>
-                <div className='left'>{idx+1}</div>
+                <div className='left'><span>{idx+1}</span></div>
                 <div className='right'>
                     <h4 className='search-title'>{item.place_name}</h4>
                     <h5 className='search-road-address'>{
                         item.road_address_name === "" ? item.address_name : item.road_address_name
                     }</h5>
-                    <span className='search-jibun-address'>{
-                        item.road_address_name === "" ? "" : item.address_name
-                    }</span>
+                    {item.road_address_name === "" ? "" : 
+                        <span className='search-jibun-address'><span>지번</span> {item.road_address_name}</span>
+                    }
                 </div>
             </div>
         )
@@ -303,7 +302,7 @@ const MoimAdd = () => {
                                     <input 
                                         placeholder='검색할 지역을 입력해주세요.'
                                         onChange={(event) => setSearchText(event.target.value)} 
-                                        defaultValue={searchText}/>
+                                        value={searchText}/>
                                     <button type='button' onClick={() => {searchPlaces(searchText, setSearchList)}}>
                                         <FontAwesomeIcon icon={faMagnifyingGlass}/>
                                     </button>
