@@ -230,15 +230,21 @@
                         max-height: 400px;
                         overflow-y: auto;
                         .item {
-                            padding: 5px 7px;
+                            padding: 10px 7px;
                             background-color: #fff;
                             border-radius: 10px;;
                             font-size: 1em;
                             display: flex;
+                            justify-content: space-between;
                             margin-top: 8px;
                             &:nth-child(1) {margin-top: 0;}
                             .left{
-                                width: 30%;
+                                width: 28%;
+                                font-size: 1.5em;
+                                text-align: center;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
                             }
                             .right{
                                 width: 70%;
