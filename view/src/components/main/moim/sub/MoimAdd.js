@@ -1,7 +1,7 @@
-import { faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons';
+import { faLocationCrosshairs, faMagnifyingGlass} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import InterestService from 'api/interest/InterestService';
-import { KakaoMapSet2 } from 'components/api/KakaoMapScript';
+import { KakaoMapSet2, searchPlaces } from 'components/api/KakaoMapScript';
 import React from 'react';
 import { useState } from 'react';
 import { useRef } from 'react';
@@ -22,12 +22,16 @@ const initialCategory = {
 }
 
 
+
+
 const MoimAdd = () => {
     const [inputData, setInputData] = useState(initialInput);
     const [fileStatus, setFileStatus] = useState(false);
 
     const [inputMsg, setInputMsg] = useState("지역을 설정해 주세요.");
     const [address, setAddress] = useState({});     //주소 데이터
+    const [searchText, setSearchText] = useState("");
+    const [searchList, setSearchList] = useState([]);
 
     const [category, setCategory] = useState(initialCategory);
 
@@ -215,6 +219,37 @@ const MoimAdd = () => {
         );
     });
 
+
+
+
+
+
+
+
+    //지도 검색 리스트 요소설정
+    //지도 검색 리스트 요소설정
+    //지도 검색 리스트 요소설정
+    //지도 검색 리스트 요소설정
+    const searchListComponent = searchList.map((item, idx) => {
+        if(searchList.length === 0) return "";
+
+        
+        return (
+            <div className='item'>
+                <div className='left'>asdf</div>
+                <div className='right'>
+                    <h4 className='search-title'>{item.place_name}</h4>
+                    <h5 className='search-road-address'>{
+                        item.road_address_name === "" ? item.address_name : item.road_address_name
+                    }</h5>
+                    <span className='search-jibun-address'>{
+                        item.road_address_name === "" ? "" : item.address_name
+                    }</span>
+                </div>
+            </div>
+        )
+    })
+
     return (
         <div id='moim-add-page' className='page-wrap'>
             <div className='title-wrap'>
@@ -249,6 +284,30 @@ const MoimAdd = () => {
                                 </button>
                             </label>
                             <div id="myMap"></div>
+                            <div className='map-search-part'>
+                                <label>
+                                    <input 
+                                        placeholder='검색할 지역을 입력해주세요.'
+                                        onChange={(event) => setSearchText(event.target.value)} 
+                                        defaultValue={searchText}/>
+                                    <button type='button' onClick={() => {searchPlaces(searchText, setSearchList)}}>
+                                        <FontAwesomeIcon icon={faMagnifyingGlass}/>
+                                    </button>
+                                </label>
+                                {searchList.length > 0 && 
+                                    <div className='map-search-list'>
+                                        {/* <div className='item'>
+                                            <div className='left'>asdf</div>
+                                            <div className='right'>
+                                                <h4 className='search-title'>지역입니다.</h4>
+                                                <h5 className='search-road-address'>도로명 주소입니다.</h5>
+                                                <span className='search-jibun-address'>지번 주소입니다.</span>
+                                            </div>
+                                        </div> */}
+                                        {searchListComponent}
+                                    </div>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
