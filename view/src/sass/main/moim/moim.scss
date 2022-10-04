@@ -77,11 +77,9 @@
         }
 
 
-        label {
-            p {
-                font-size: 1.3em;
-                margin-bottom: 10px;
-            }
+        p {
+            font-size: 1.3em;
+            margin-bottom: 10px;
         }
 
 
@@ -163,10 +161,10 @@
                         position: relative;
                         z-index: 2;
                         animation: inputFadeIn .3s forwards;
+                    }
 
-                        &.fade-out {
-                            animation: inputFadeOut .3s forwards;
-                        }
+                    &.fade-out {
+                        animation: inputFadeOut .3s forwards;
                     }
                 }
             }
@@ -176,12 +174,34 @@
             }
 
             .loc-part {
-                display: flex;
-                input {
-                    width: 80%;
-                    background-color: #eeeeee;
+                width: 100%;
+                label {
+                    width: 100%;
+                    display: flex;
+                    justify-content: space-between;
+                    input {
+                        display: block;
+                        width: 90%;
+                        background-color: #f6f6f6;
+                        border-radius: 10px;
+                        line-height: 40px;
+                        text-align: center;
+                        padding: 0;
+                    }
+                    button {
+                        width: 8%;
+                        height: 40px;
+                        background-color: #f6f6f6;
+                        border-radius: 10px;
+                        font-size: 1.1em;
+                    }
+                }
+
+                #myMap {
+                    width: 100%;
+                    height: 400px;
                     border-radius: 10px;
-                    line-height: 40px;
+                    margin-top: 10px;
                 }
             }
         }
@@ -189,12 +209,14 @@
             width: 56%;
             input[name='title'] {
                 padding: 10px 20px;
-                background: #eeeeee;
+                background: #fff;
                 width: 100%;
                 line-height: 30px;
                 display: block;
                 font-size: 1.3em;
                 border-radius: 16px;
+                box-shadow: 5px 5px 44px #ebebeb,
+                -5px -5px 44px #ffffff;
             }
 
             .line {
@@ -209,7 +231,7 @@
                         padding: 10px 12px;
                         resize: none;
                         width: 100%;
-                        background: #eeeeee;
+                        background: #f6f6f6;
                         display: block;
                         border: none;
                         font-size: 1.3em;
@@ -225,11 +247,58 @@
                         &:nth-child(1) {width: 78%;}
                         &:nth-child(2) {width: 20%;}
                         input {
-                            background: #eeeeee;
+                            background: #f6f6f6;
                             line-height: 30px;
                             font-size: 1em;
                             box-sizing: border-box;
                             padding: 0 5px
+                        }
+                    }
+                }
+
+                &.three {
+                    label {
+                        width: 100%;
+                        .category-parent-items {
+                            width: 100%;
+                            display: flex;
+                            flex-wrap: wrap;
+                            position: relative;
+                            top: -7px;
+                            .item {
+                                padding: 3px 5px;
+                                background: #ebebeb;
+                                margin-right: 5px;
+                                margin-top: 7px;
+                                border-radius: 4px;
+                                cursor: pointer;
+                                &.on {
+                                    background: #b0b0b0;
+                                }
+                            }
+                        }
+
+                        .category-code-items {
+                            width: 100%;
+                            display: flex;
+                            flex-wrap: wrap;
+                            position: relative;
+                            top: -7px;
+                            padding: 3px 8px 10px 8px;
+                            background-color: #ebebeb;
+                            border-radius: 10px;
+                            margin-top: 18px;
+                            .item {
+                                padding: 3px 5px;
+                                background: #fff;
+                                margin-right: 5px;
+                                margin-top: 7px;
+                                border-radius: 4px;
+                                cursor: pointer;
+                                &.on {
+                                    background: #b0b0b0;
+                                }
+                            }
                         }
                     }
                 }

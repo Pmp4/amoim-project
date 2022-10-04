@@ -135,9 +135,67 @@ const KakaoMapSet = (setAddress, setInputMsg) => {
 
 
 
+const KakaoMapSet2 = (setAddress, setInputMsg) => {
+    const container = document.getElementById("myMap");
+    const options = {
+        center: new kakao.maps.LatLng(33.450701, 126.570667),
+        level: 3,
+    };
+    map = new kakao.maps.Map(container, options);
+    marker = new kakao.maps.Marker({
+        map: map,
+        position: null,
+    });
+
+
+    kakao.maps.event.addListener(map, "click", (mouseEvent) => {
+        // 클릭한 위도, 경도 정보를 가져옵니다
+        const latlng = mouseEvent.latLng;
+        // 마커 위치를 클릭한 위치로 옮깁니다
+        marker.setPosition(latlng);
+
+        const latLng = {
+            lng: latlng.getLng(),
+            lat: latlng.getLat()
+        }
+    
+        searchDetailAddrFromCoords(latLng, (result, status) => {
+            if (status === kakao.maps.services.Status.OK) {
+                const addressDetail = result[0];
+                console.log(addressDetail);
+                if(addressDetail.road_address !== null) {
+                    searchAddrFromCoords(latLng, (result, status) => {
+                        const addressSub = result[0];
+                        console.log(addressSub.code);
+                        const restAddress = {
+                            zonecode: addressDetail.road_address.zone_no,
+                            address: addressDetail.address.address_name,
+                            roadAddress: addressDetail.road_address.address_name,
+                            jibunAddress: addressDetail.address.address_name,
+                            sido: addressSub.region_1depth_name,
+                            sigungu: addressSub.region_2depth_name,
+                            bname: addressSub.region_3depth_name,
+                            bcode: addressSub.code,
+                        }
+                        setInputMsg(addressDetail.address.address_name);
+                        setAddress(restAddress);
+                    });
+                }else {
+                    setAddress({});
+                    setInputMsg("정확한 위치를 클릭해주세요.");
+                }
+            }
+        });
+    });
+};
+
+
+
+
 
 export {
     KakaoMapSet,
+    KakaoMapSet2,
     panTo,
     searchAddress,
     searchDetailAddrFromCoords,
