@@ -235,7 +235,7 @@ const MoimAdd = () => {
 
         
         return (
-            <div className='item'>
+            <div className='item' key={item.id}>
                 <div className='left'>asdf</div>
                 <div className='right'>
                     <h4 className='search-title'>{item.place_name}</h4>
