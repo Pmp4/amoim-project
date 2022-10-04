@@ -175,7 +175,7 @@
 
             .loc-part {
                 width: 100%;
-                label {
+                label[for='loc'] {
                     width: 100%;
                     display: flex;
                     justify-content: space-between;
@@ -200,8 +200,63 @@
                 #myMap {
                     width: 100%;
                     height: 400px;
-                    border-radius: 10px;
+                    border-radius: 10px 10px 0 0;
                     margin-top: 10px;
+                }
+
+                .map-search-part {
+                    background: #f6f6f6;
+                    padding: 10px 14px;
+                    label {
+                        display: flex;
+                        input {
+                            width: 90%;
+                            line-height: 40px;
+                            font-size: 1em;
+                            box-sizing: border-box;
+                            padding: 0 12px;
+                            background: #fff;
+                        }
+                        button {
+                            width: 10%;
+                            display: block;
+                            background-color: #fff;
+                            text-align: center;
+                        }
+                    }
+
+                    .map-search-list {
+                        margin-top: 10px;
+                        max-height: 400px;
+                        overflow-y: auto;
+                        .item {
+                            padding: 5px 7px;
+                            background-color: #fff;
+                            border-radius: 10px;;
+                            font-size: 1em;
+                            display: flex;
+                            margin-top: 8px;
+                            &:nth-child(1) {margin-top: 0;}
+                            .left{
+                                width: 30%;
+                            }
+                            .right{
+                                width: 70%;
+                                .search-title {font-weight: 500;}
+                                .search-road-address {
+                                    margin-top: 7px;
+                                    font-weight: 300;
+                                    font-size: .95em;
+                                } 
+                                .search-jibun-address {
+                                    margin-top: 6px;
+                                    font-size: .8em;
+                                    font-weight: 300;
+                                    color: rgb(66, 66, 66);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
