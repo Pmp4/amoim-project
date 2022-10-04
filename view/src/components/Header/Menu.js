@@ -28,7 +28,7 @@ const Menu = () => {
                     <Link to="/moim">내-모임</Link>
                     <div></div>
                 </li>
-                <li className={pathFind('/member') ? 'on' : ''}>
+                <li className={pathFind('/member') ? location.pathname !== '/member/signup' ? 'on' : '' : ''}>
                     <Link to="/member/my">마이페이지</Link>
                     <div></div>
                 </li>

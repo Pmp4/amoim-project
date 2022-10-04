@@ -54,6 +54,7 @@
 
 
 #moim-add-page {
+    height: 2000px;
     .title-wrap {
         h3 {
             font-size: 3em;
@@ -74,6 +75,15 @@
                 outline: none;
             }
         }
+
+
+        label {
+            p {
+                font-size: 1.3em;
+                margin-bottom: 10px;
+            }
+        }
+
 
         .left{
             width: 40%;
@@ -142,20 +152,36 @@
 
                 button {
                     @include initial-btn;
-                    margin-top: 30px;
-                    width: 0;
-                    line-height: 40px;
-                    font-size: 1em;
-                    background: #E06923;
-                    color: #fff;
-                    border-radius: 10px;
-                    position: relative;
-                    z-index: 2;
-                    animation: inputFadeIn .3s forwards;
+                    &.del-btn {
+                        margin-top: 30px;
+                        width: 0;
+                        line-height: 40px;
+                        font-size: 1em;
+                        background: #E06923;
+                        color: #fff;
+                        border-radius: 10px;
+                        position: relative;
+                        z-index: 2;
+                        animation: inputFadeIn .3s forwards;
 
-                    &.fade-out {
-                        animation: inputFadeOut .3s forwards;
+                        &.fade-out {
+                            animation: inputFadeOut .3s forwards;
+                        }
                     }
+                }
+            }
+
+            p{
+                margin-top: 28px;
+            }
+
+            .loc-part {
+                display: flex;
+                input {
+                    width: 80%;
+                    background-color: #eeeeee;
+                    border-radius: 10px;
+                    line-height: 40px;
                 }
             }
         }
@@ -173,9 +199,45 @@
 
             .line {
                 display: flex;
-                margin-top: 20px;
+                justify-content: space-between;
+                margin-top: 28px;
+
+                &.one {
+                    width: 100%;
+                    display: block;
+                    textarea {
+                        padding: 10px 12px;
+                        resize: none;
+                        width: 100%;
+                        background: #eeeeee;
+                        display: block;
+                        border: none;
+                        font-size: 1.3em;
+                        box-sizing: border-box;
+                        &:focus {
+                            outline: none;
+                        }
+                    }
+                }
+
+                &.two {
+                    label {
+                        &:nth-child(1) {width: 78%;}
+                        &:nth-child(2) {width: 20%;}
+                        input {
+                            background: #eeeeee;
+                            line-height: 30px;
+                            font-size: 1em;
+                            box-sizing: border-box;
+                            padding: 0 5px
+                        }
+                    }
+                }
+
                 label {
-                    width: 49%;
+                    input {
+                        width: 100%;
+                    }
                 }
             }
         }

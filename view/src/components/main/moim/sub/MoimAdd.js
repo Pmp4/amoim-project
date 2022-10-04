@@ -1,3 +1,6 @@
+import { faLocationCrosshairs } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { KakaoMapSet } from 'components/api/KakaoMapScript';
 import React from 'react';
 import { useState } from 'react';
 import { useRef } from 'react';
@@ -7,6 +10,8 @@ import { useEffect } from 'react';
 
 const initialInput = {
     title: "",
+    content: "",
+    tag: "",
 }
 
 
@@ -14,17 +19,23 @@ const MoimAdd = () => {
     const [inputData, setInputData] = useState(initialInput);
     const [fileStatus, setFileStatus] = useState(false);
 
+    const [inputMsg, setInputMsg] = useState("지역을 설정해 주세요.");
+    const [address, setAddress] = useState({});     //주소 데이터
+
     const inputRef = useRef({});
 
-    
-    const {title} = inputData;
+    const {title, content} = inputData;
 
 
     useEffect(() => {
-        
-    })
+        KakaoMapSet(setAddress, setInputMsg);
+    }, []);
 
 
+    //input onChange 관련 함수
+    //input onChange 관련 함수
+    //input onChange 관련 함수
+    //input onChange 관련 함수
     const inputEventAction = (event) => {
         const {name, value} = event.target;
         console.log(name, value);
@@ -38,11 +49,15 @@ const MoimAdd = () => {
     }
 
 
+    //이미지 업로드 미리보기 로직
+    //이미지 업로드 미리보기 로직
+    //이미지 업로드 미리보기 로직
+    //이미지 업로드 미리보기 로직
     const uploadImageAction = (event) => {
         const fileArr = Array.from(event.target.files);
 
 
-        if(0 === fileArr.length || fileArr.length > 1) {
+        if(fileArr.length > 1) {
             alert("하나의 이미지를 선택해주세요.");
             return;
         }
@@ -63,6 +78,11 @@ const MoimAdd = () => {
     }
 
 
+
+    //이미지 업로드 초기화 함수
+    //이미지 업로드 초기화 함수
+    //이미지 업로드 초기화 함수
+    //이미지 업로드 초기화 함수
     const initialFileInput = (event) => {
         inputRef.current.file.value = "";
         inputRef.current.fileBox.style.backgroundImage = 'url()';
@@ -99,7 +119,18 @@ const MoimAdd = () => {
                             <button 
                                 ref={element => inputRef.current.fileRemove = element}
                                 type='button' 
+                                className='del-btn'
                                 onClick={(event) => initialFileInput(event)}>이미지 삭제</button>}
+                        <div className='loc-part'>
+                            <label htmlFor='loc'>
+                                <p>위치</p>
+                                <input/>
+                                <button>
+                                    <FontAwesomeIcon icon={faLocationCrosshairs}/>
+                                </button>
+                            </label>
+                            <div id="myMap"></div>
+                        </div>
                     </div>
                 </div>
                 <div className='right'>
@@ -109,18 +140,24 @@ const MoimAdd = () => {
                             defaultValue={title}
                             onChange={(event) => inputEventAction(event)}/>
                     </label>
-                    <div className='line'>
-                        <label htmlFor='loc'>
-                            <p>위치</p>
-                            <input name='loc' 
-                                placeholder='제목을 입력하세요.'
+                    <div className='line one'>
+                        <label htmlFor='content'>
+                            <p>내용</p>
+                            <textarea rows="15" defaultValue={content} onChange={(event) => inputEventAction(event)}></textarea>
+                        </label>
+                    </div>
+                    
+                    <div className='line two'>
+                        <label htmlFor='tag'>
+                            <p>태그</p>
+                            <input name='tag' 
+                                placeholder=''
                                 defaultValue={title}
                                 onChange={(event) => inputEventAction(event)}/>
                         </label>
                         <label htmlFor='dues'>
                             <p>회비</p>
-                            <input name='dues'
-                                type='number' 
+                            <input name='dues' 
                                 placeholder='없음'
                                 defaultValue={title}
                                 onChange={(event) => inputEventAction(event)}/>
