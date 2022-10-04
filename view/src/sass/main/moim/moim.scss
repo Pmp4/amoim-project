@@ -229,6 +229,23 @@
                         margin-top: 10px;
                         max-height: 400px;
                         overflow-y: auto;
+                        position: relative;
+
+                        @keyframes mapListOn {
+                            0% {
+                                background: #fff;
+                                color: #000;
+                            }
+                            50% {
+                                background: #E06923;
+                                color: #fff;
+                            }
+                            100% {
+                                background: #fff;
+                                color: #000;
+                            }
+                        }
+
                         .item {
                             padding: 10px 7px;
                             background-color: #fff;
@@ -238,13 +255,21 @@
                             justify-content: space-between;
                             margin-top: 8px;
                             &:nth-child(1) {margin-top: 0;}
+                            &.on {
+                                animation: mapListOn .6s;
+                                animation-iteration-count: 3;
+                            }
                             .left{
                                 width: 28%;
                                 font-size: 1.5em;
-                                text-align: center;
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
+                                position: relative;
+                                span {
+                                    display: block;
+                                    position: absolute;
+                                    top: 49%;
+                                    left: 50%;
+                                    transform: translate(-50%, -50%);
+                                }
                             }
                             .right{
                                 width: 70%;
@@ -255,10 +280,15 @@
                                     font-size: .95em;
                                 } 
                                 .search-jibun-address {
-                                    margin-top: 6px;
+                                    display: block;
+                                    margin-top: 7px;
                                     font-size: .8em;
                                     font-weight: 300;
                                     color: rgb(66, 66, 66);
+                                    span {
+                                        background-color: rgb(220, 220, 220);
+                                        padding: 0 2px;
+                                    }
                                 }
                             }
                         }

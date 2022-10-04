@@ -156,9 +156,10 @@ const KakaoMapSet2 = (setAddress, setInputMsg, search, mapMarkerClickScroll) => 
 
 
     kakao.maps.event.addListener(map, "click", (mouseEvent) => {
-        removeMarker();
         setSearchText("");
         setSearchList([]);
+
+        removeMarker();
 
         // 클릭한 위도, 경도 정보를 가져옵니다
         const latlng = mouseEvent.latLng;
@@ -192,8 +193,6 @@ const KakaoMapSet2 = (setAddress, setInputMsg, search, mapMarkerClickScroll) => 
                         setAddress(restAddress);
                     });
                 }else {
-                    setAddress({});
-
                     searchAddrFromCoords(latLng, (result, status) => {
                         const addressSub = result[0];
                         console.log(addressSub.code);
@@ -258,6 +257,7 @@ function placesSearchCB(data, status, pagination) {
     if (status === kakao.maps.services.Status.OK) {
         console.log(data);
         console.log(pagination);
+
         searchList(data);
         // 정상적으로 검색이 완료됐으면
         // 검색 목록과 마커를 표출합니다
@@ -281,11 +281,16 @@ function placesSearchCB(data, status, pagination) {
 function displayPlaces(places) {
     const bounds = new kakao.maps.LatLngBounds();
 
+    if(marker !== undefined) {
+        marker.setMap(null);
+    };
+
     // 지도에 표시되고 있는 마커를 제거합니다
     removeMarker();
-    
-    for ( var i=0; i<places.length; i++ ) {
 
+    
+
+    for ( var i=0; i<places.length; i++ ) {
         // 마커를 생성하고 지도에 표시합니다
         var placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
             // marker = addMarker(placePosition, i); // 검색 결과 항목 Element를 생성합니다
