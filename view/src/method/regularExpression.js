@@ -22,4 +22,20 @@ const is_birthDay = (asValue) => {
     return regBirthDay.test(asValue);
 }
 
-export {is_nickname, is_password, is_email, is_birthDay};
+
+const is_gap = (asValue) => {
+    const regGap = /\s/g;
+    return regGap.test(asValue);
+}
+
+const is_number = (asValue) => {
+    const regNumber = /[0-9]/;
+    return regNumber.test(asValue);
+}
+
+const is_specialChar = (asValue) => {
+    const regSpC = /[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gim;
+    return regSpC.test(asValue);
+}
+
+export {is_nickname, is_password, is_email, is_birthDay, is_number, is_gap, is_specialChar};
