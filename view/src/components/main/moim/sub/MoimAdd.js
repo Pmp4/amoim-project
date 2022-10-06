@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import InterestService from "api/interest/InterestService";
 import TagService from 'api/tag/TagService';
 import { KakaoMapSet2, searchPlaces, geocoder, kakao, searchAddrFromCoords } from "components/api/KakaoMapScript";
+import { is_gap, is_number, is_specialChar } from 'method/regularExpression';
 import React from "react";
 import { useState } from "react";
 import { useRef } from "react";
@@ -35,8 +36,8 @@ const MoimAdd = () => {
 
     const [category, setCategory] = useState(initialCategory);
 
-    const [tagList, setTagList] = useState([]);
-    const [tagAdd, setTagAdd] = useState([]);
+    const [tagList, setTagList] = useState([]); //검색된 태그
+    const [tagAdd, setTagAdd] = useState([]);   //등록된 태그
 
     const inputRef = useRef({});
     const searchRef = useRef([]);
@@ -67,8 +68,6 @@ const MoimAdd = () => {
             }
         });
     }
-
-
     
     //등록
     //등록
@@ -89,7 +88,43 @@ const MoimAdd = () => {
             ...inputData,
             tag: ""
         });
+        setTagList([]);
     }
+
+    const tagDeleteAction = (paramIdx) => {
+        const tempTagAdd = tagAdd.filter((item, idx) => (
+            idx !== paramIdx
+        ));
+
+        setTagAdd(tempTagAdd);
+    }
+
+
+    //엔터 감지
+    //엔터 감지
+    const tagInputEnter = (event) => {
+        if(event.keyCode === 13) {
+            if(is_gap(tag) || is_number(tag) || is_specialChar(tag)) {
+                alert('태그에는 공백, 숫자, 특수문자가 들어갈 수 없습니다.');
+                return;
+            }
+            tagAddAction(tag);
+        }
+
+        if(event.keyCode === 8) {
+            if(tag.length === 0) {
+                if(tagAdd.length !== 0) {
+                    const tempTagAdd = tagAdd.filter((item, idx) => (
+                        idx !== tagAdd.length - 1
+                    ));
+
+                    setTagAdd(tempTagAdd);
+                }
+            }
+        }
+    }
+
+    //리스트 컴포넌트
     const tagListComponent = tagList.map((item, idx) => {
         if(tagList.length === 0) return ""; 
 
@@ -101,12 +136,18 @@ const MoimAdd = () => {
             </p>
         )
     });
+
+    //태그 컴포넌트
     const tagItemComponent = tagAdd.map((item, idx) => {
         if(tagAdd.length === 0) return "";
-        console.log(item);
 
         return (
-            <span key={idx+700} className='tag'>{item}</span>
+            <span 
+                onClick={() => tagDeleteAction(idx)}
+                key={idx+700} 
+                className='tag'>
+                {item}
+            </span>
         )
     })
     
@@ -117,11 +158,15 @@ const MoimAdd = () => {
     //input onChange 관련 함수
     //input onChange 관련 함수
     const inputEventAction = (event) => {
-        const { name, value } = event.target;
-        console.log(name, value);
+        let { name, value } = event.target;
 
         if(name === 'tag') {
-            tagSelect(value);
+            if(value.length > 10) {
+                alert("태그는 10자리까지 입력 가능합니다.");
+                value = value.substring(0, 10);
+            }else if(value.length > 0) {
+                tagSelect(value);
+            }
         }
 
         const tempInputData = {
@@ -192,7 +237,6 @@ const MoimAdd = () => {
 
         let type = "";
 
-        console.log(parseInt(code.substring(3)));
         if (parseInt(code.substring(3)) === 0) {
             //parent인 경우
             type = "parent";
@@ -554,6 +598,7 @@ const MoimAdd = () => {
                                         name="tag"
                                         value={tag}
                                         onChange={(event) => inputEventAction(event)}
+                                        onKeyDown={(event) => tagInputEnter(event)}
                                     />
 
                                     {tag !== "" && 

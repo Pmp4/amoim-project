@@ -19,7 +19,7 @@ public class TagController {
 
 
     @GetMapping("/select/{keyword}")
-    public List<TagVO> selectByKeyword(@PathVariable String keyword) {
+    public List<TagVO> selectByKeyword(@PathVariable(required = false) String keyword) {
         logger.info("태그 API, keyword={}", keyword);
 
         List<TagVO> res = tagService.selectByKeyword(keyword);
