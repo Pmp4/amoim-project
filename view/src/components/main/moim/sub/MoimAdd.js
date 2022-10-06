@@ -4,6 +4,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import InterestService from "api/interest/InterestService";
+import TagService from 'api/tag/TagService';
 import { KakaoMapSet2, searchPlaces, geocoder, kakao, searchAddrFromCoords } from "components/api/KakaoMapScript";
 import React from "react";
 import { useState } from "react";
@@ -34,6 +35,12 @@ const MoimAdd = () => {
 
     const [category, setCategory] = useState(initialCategory);
 
+    const [tagList, setTagList] = useState([
+        {tagNo: '2', tagName: "test"},
+        {tagNo: '3', tagName: "11111"},
+        {tagNo: '4', tagName: "호호호호호"}
+    ]);
+
     const inputRef = useRef({});
     const searchRef = useRef([]);
 
@@ -49,6 +56,33 @@ const MoimAdd = () => {
         categoryApi("");
     }, []);
 
+
+    //태그 등록/검색 api
+    //태그 등록/검색 api
+    //태그 등록/검색 api
+    //검색
+    //검색
+    const tagSelect = (keyword) => {
+        TagService.selectByKeyword(keyword).then(response => {
+            const {status, data} = response;
+            if(status === 200) {
+                setTagList(data);
+            }
+        });
+    }
+
+
+    const tagListComponent = tagList.map((item, idx) => {
+        if(tagList.length === 0) return ""; 
+
+        return (
+            <p>{item.tagName}</p>
+        )
+    });
+
+
+
+
     //input onChange 관련 함수
     //input onChange 관련 함수
     //input onChange 관련 함수
@@ -57,6 +91,10 @@ const MoimAdd = () => {
         const { name, value } = event.target;
         console.log(name, value);
 
+        if(name === 'tag') {
+            tagSelect(value);
+        }
+
         const tempInputData = {
             ...inputData,
             [name]: value,
@@ -64,6 +102,9 @@ const MoimAdd = () => {
 
         setInputData(tempInputData);
     };
+
+
+
 
     //이미지 업로드 미리보기 로직
     //이미지 업로드 미리보기 로직
@@ -106,6 +147,9 @@ const MoimAdd = () => {
 
         return false;
     };
+
+
+
 
     //카테고리 클릭 시,
     //카테고리 클릭 시,
@@ -468,12 +512,23 @@ const MoimAdd = () => {
                     <div className="line two">
                         <label htmlFor="tag">
                             <p>태그</p>
-                            <input
-                                name="tag"
-                                placeholder=""
-                                defaultValue={title}
-                                onChange={(event) => inputEventAction(event)}
-                            />
+                            <div>
+                                <div className='left'>
+                                    <span className='tag'>태그1</span>
+                                </div>
+                                <div className='right'>
+                                    <input
+                                        name="tag"
+                                        placeholder=""
+                                        defaultValue={title}
+                                        onChange={(event) => inputEventAction(event)}
+                                    />
+
+                                    <div className='tag-list-part'>
+                                        {tagListComponent}
+                                    </div>
+                                </div>
+                            </div>
                         </label>
                         <label htmlFor="dues">
                             <p>회비</p>
