@@ -37,7 +37,6 @@ const MoimAdd = () => {
 
     const [tagList, setTagList] = useState([]);
     const [tagAdd, setTagAdd] = useState([]);
-    const [tagActive, setTagActive] = useState(false);
 
     const inputRef = useRef({});
     const searchRef = useRef([]);
@@ -77,6 +76,9 @@ const MoimAdd = () => {
         if(tagAdd.indexOf(tagText) !== -1) {
             alert("이미 등록된 태그입니다.");
             return;
+        }else if(tagAdd.length === 4) {
+            alert("태그는 4개까지 등록하실 수 있습니다.");
+            return;
         }
         
         const tempTag = [...tagAdd];
@@ -87,7 +89,6 @@ const MoimAdd = () => {
             ...inputData,
             tag: ""
         });
-        setTagActive(false);
     }
     const tagListComponent = tagList.map((item, idx) => {
         if(tagList.length === 0) return ""; 
@@ -105,7 +106,7 @@ const MoimAdd = () => {
         console.log(item);
 
         return (
-            <span className='tag'>{item}</span>
+            <span key={idx+700} className='tag'>{item}</span>
         )
     })
     
@@ -121,7 +122,6 @@ const MoimAdd = () => {
 
         if(name === 'tag') {
             tagSelect(value);
-            if(value === '') setTagActive(false);
         }
 
         const tempInputData = {
@@ -552,13 +552,11 @@ const MoimAdd = () => {
                                 <div className='right'>
                                     <input
                                         name="tag"
-                                        placeholder=""
-                                        value={title}
-                                        onFocus={() => setTagActive(true)}
+                                        value={tag}
                                         onChange={(event) => inputEventAction(event)}
                                     />
 
-                                    {tagActive && 
+                                    {tag !== "" && 
                                         <div className='tag-list-part'>
                                             {tagListComponent}
                                         </div>
