@@ -35,11 +35,9 @@ const MoimAdd = () => {
 
     const [category, setCategory] = useState(initialCategory);
 
-    const [tagList, setTagList] = useState([
-        {tagNo: '2', tagName: "test"},
-        {tagNo: '3', tagName: "11111"},
-        {tagNo: '4', tagName: "호호호호호"}
-    ]);
+    const [tagList, setTagList] = useState([]);
+    const [tagAdd, setTagAdd] = useState([]);
+    const [tagActive, setTagActive] = useState(false);
 
     const inputRef = useRef({});
     const searchRef = useRef([]);
@@ -72,17 +70,47 @@ const MoimAdd = () => {
     }
 
 
+    
+    //등록
+    //등록
+    const tagAddAction = (tagText) => {
+        if(tagAdd.indexOf(tagText) !== -1) {
+            alert("이미 등록된 태그입니다.");
+            return;
+        }
+        
+        const tempTag = [...tagAdd];
+        tempTag.push(tagText);
+        
+        setTagAdd(tempTag);
+        setInputData({
+            ...inputData,
+            tag: ""
+        });
+        setTagActive(false);
+    }
     const tagListComponent = tagList.map((item, idx) => {
         if(tagList.length === 0) return ""; 
 
         return (
-            <p>{item.tagName}</p>
+            <p 
+                key={idx+2000}
+                onClick={() => tagAddAction(item.tagName)}>
+                {item.tagName}
+            </p>
         )
     });
+    const tagItemComponent = tagAdd.map((item, idx) => {
+        if(tagAdd.length === 0) return "";
+        console.log(item);
 
-
-
-
+        return (
+            <span className='tag'>{item}</span>
+        )
+    })
+    
+    
+    
     //input onChange 관련 함수
     //input onChange 관련 함수
     //input onChange 관련 함수
@@ -93,6 +121,7 @@ const MoimAdd = () => {
 
         if(name === 'tag') {
             tagSelect(value);
+            if(value === '') setTagActive(false);
         }
 
         const tempInputData = {
@@ -514,19 +543,26 @@ const MoimAdd = () => {
                             <p>태그</p>
                             <div>
                                 <div className='left'>
-                                    <span className='tag'>태그1</span>
+                                    {tagItemComponent}
+                                    {/* <span className='tag'>태그1</span>
+                                    <span className='tag'>태그2</span>
+                                    <span className='tag'>태그3</span>
+                                    <span className='tag'>태그4</span> */}
                                 </div>
                                 <div className='right'>
                                     <input
                                         name="tag"
                                         placeholder=""
-                                        defaultValue={title}
+                                        value={title}
+                                        onFocus={() => setTagActive(true)}
                                         onChange={(event) => inputEventAction(event)}
                                     />
 
-                                    <div className='tag-list-part'>
-                                        {tagListComponent}
-                                    </div>
+                                    {tagActive && 
+                                        <div className='tag-list-part'>
+                                            {tagListComponent}
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </label>
