@@ -476,6 +476,23 @@
                         width: 100%;
                     }
                 }
+                
+            }
+            .result-btn {
+                @include initial-btn;
+                width: 100%;
+                line-height: 40px;
+                font-size: 1.2em;
+                border-radius: 12px;
+                margin-top: 40px;
+                transition: .2s;
+                background: rgb(232, 232, 232);
+                color: rgb(187, 187, 187);
+
+                &.on {
+                    color: #fff;
+                    background: #51CD9A;
+                }
             }
         }
     }

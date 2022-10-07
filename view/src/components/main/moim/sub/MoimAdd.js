@@ -18,6 +18,7 @@ const initialInput = {
     content: "",
     tag: "",
     categoryCode: "",
+    dues: ""
 };
 
 const initialCategory = {
@@ -43,7 +44,7 @@ const MoimAdd = () => {
     const inputRef = useRef({});
     const searchRef = useRef([]);
 
-    const { title, content, tag, categoryCode } = inputData;
+    const { title, content, tag, categoryCode, dues } = inputData;
 
     useEffect(() => {
         KakaoMapSet2(
@@ -189,6 +190,8 @@ const MoimAdd = () => {
     //이미지 업로드 미리보기 로직
     const uploadImageAction = (event) => {
         const fileArr = Array.from(event.target.files);
+        console.log(fileArr);
+        console.log(inputRef.current.file.files);
 
         if (fileArr.length > 1) {
             alert("하나의 이미지를 선택해주세요.");
@@ -248,7 +251,7 @@ const MoimAdd = () => {
             type = "code";
         }
 
-        if (tempCategoryCode[type][eventIdx].check) {
+        if (tempCategoryCode[type][eventIdx].check) {   //이미 체크한 경우
             tempCategoryCode[type][eventIdx].check = false;
             if (type === "parent") tempCategoryCode.code = [];
 
@@ -256,14 +259,19 @@ const MoimAdd = () => {
                 ...inputData,
                 categoryCode: "",
             });
-        } else {
+        } else {    //체크가 안된 경우
             for (let i = 0; i < tempCategoryCode[type].length; i++)
                 tempCategoryCode[type][i].check = false;
             tempCategoryCode[type][eventIdx].check = true;
 
+            let resCode = "";
+            if(type === "code") {
+                resCode = parseInt(code);
+            }
+
             setInputData({
                 ...inputData,
-                categoryCode: parseInt(code),
+                categoryCode: resCode,
             });
             if (type === "parent") categoryApi(code);
         }
@@ -485,18 +493,35 @@ const MoimAdd = () => {
 
     //페이징 클릭 시 이벤트
     const paginationClickAction = (i) => {
-        searchPagination.gotoPage(i);
-
         const mapSearchList = document.querySelector(".map-search-list");
         mapSearchList.scrollTo({
             top: 0,
             left: 0,
             behavior: "smooth",
         });
+
+
+        searchPagination.gotoPage(i);
     }
 
 
 
+
+
+
+    const inputCheck = () => {
+        let resBool = true;
+
+        if(title === "" || content === "" || dues === "" || categoryCode === "") {
+            resBool = false;
+        }
+        
+        // if(inputRef !== null) {
+        //     console.log(inputRef.current.file);
+        // }
+
+        return resBool;
+    }
 
 
 
@@ -507,7 +532,7 @@ const MoimAdd = () => {
             <div className="title-wrap">
                 <h3>모임 개설하기</h3>
             </div>
-            <form name="moim-form">
+            <form name="moim-form" onSubmit={() => {return false}}>
                 <div className="left">
                     <div className="image-upload">
                         <div className="main-image">
@@ -619,8 +644,9 @@ const MoimAdd = () => {
                         <label htmlFor="content">
                             <p>내용</p>
                             <textarea
+                                name='content'
                                 rows="15"
-                                defaultValue={content}
+                                value={content}
                                 onChange={(event) => inputEventAction(event)}
                             ></textarea>
                         </label>
@@ -658,7 +684,7 @@ const MoimAdd = () => {
                             <input
                                 name="dues"
                                 placeholder="없음"
-                                defaultValue={title}
+                                value={dues}
                                 onChange={(event) => inputEventAction(event)}
                             />
                         </label>
@@ -689,6 +715,13 @@ const MoimAdd = () => {
                             )}
                         </label>
                     </div>
+                    <button 
+                        type='button' 
+                        className={
+                            inputCheck() ? "result-btn on" : "result-btn"
+                        }>
+                        등록하기
+                    </button>
                 </div>
             </form>
         </div>
