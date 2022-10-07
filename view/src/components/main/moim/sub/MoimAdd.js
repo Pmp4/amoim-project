@@ -4,6 +4,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import InterestService from "api/interest/InterestService";
+import MeetingService from 'api/meeting/MeetingService';
 import TagService from 'api/tag/TagService';
 import { KakaoMapSet2, searchPlaces, geocoder, kakao, searchAddrFromCoords } from "components/api/KakaoMapScript";
 import { is_gap, is_number, is_specialChar } from 'method/regularExpression';
@@ -549,6 +550,37 @@ const MoimAdd = () => {
 
 
 
+    //최종
+    //최종
+    //최종
+    const resultFunc = () => {
+        const formData = new FormData();
+        const restData = {
+            title,
+            content,
+            tagAdd,
+            address,
+            categoryCode,
+            dues
+        }
+        const fileData = inputRef.current.file.files;
+        
+        for(let i = 0; i < fileData.length; i++) {
+            formData.append("file", fileData[i]);
+        }
+        formData.append("restData", restData);
+
+        // console.log(inputRef.current.file.files);
+        console.log(formData);
+
+        MeetingService.insertMeeting(formData).then(response => {
+            
+        });
+    }
+
+
+
+
 
     return (
         <div id="moim-add-page" className="page-wrap">
@@ -745,7 +777,13 @@ const MoimAdd = () => {
                         type='button' 
                         className={
                             inputCheck() ? "result-btn on" : "result-btn"
-                        }>
+                        }
+                        onClick={
+                            () => {
+                                if(inputCheck()) resultFunc();
+                            }
+                        }
+                        >
                         등록하기
                     </button>
                 </div>
