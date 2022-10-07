@@ -421,6 +421,21 @@
 
                             }
                         }
+
+
+                        &[for='dues'] {
+                            > div {
+                                display: flex;
+                                align-items: center;
+                                input {
+                                    flex-grow: 1;
+                                }
+                                span {
+                                    flex-grow: 1;
+                                    margin-left: 10px;
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -488,10 +503,11 @@
                 transition: .2s;
                 background: rgb(232, 232, 232);
                 color: rgb(187, 187, 187);
-
+                cursor: auto;
                 &.on {
                     color: #fff;
                     background: #51CD9A;
+                    cursor: pointer;
                 }
             }
         }
