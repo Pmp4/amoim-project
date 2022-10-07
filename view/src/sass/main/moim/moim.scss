@@ -299,6 +299,22 @@
                                 }
                             }
                         }
+
+                        .pagination-part {
+                            margin-top: 20px;
+                            font-size: 1em;
+                            text-align: center;
+                            span{
+                                padding: 0 4px;
+                                margin: 0 4px;
+                                border-radius: 2px;
+                                cursor: pointer;
+                                &.on {
+                                    background-color: #d5d5d5;
+                                    cursor: auto;
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -396,6 +412,10 @@
                                             cursor: pointer;
                                             &:hover {background-color: rgba(0,0,0,.2);}
                                         }
+                                    }
+
+                                    input {
+                                        border: #e1e1e1;
                                     }
                                 }
 
