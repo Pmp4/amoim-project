@@ -124,17 +124,19 @@ const KakaoMapSet = (setAddress, setInputMsg) => {
     });
 };
 
-let setSearchText, setSearchList, mapMarkerClickScrollEvent;
+let setSearchText, setSearchList, mapMarkerClickScrollEvent, searchPagination;
 
 const KakaoMapSet2 = (
     setAddress,
     setInputMsg,
     search,
-    mapMarkerClickScroll
+    mapMarkerClickScroll,
+    setSearchPagination
 ) => {
     setSearchText = search.setSearchText;
     setSearchList = search.setSearchList;
     mapMarkerClickScrollEvent = mapMarkerClickScroll;
+    searchPagination = setSearchPagination;
 
     const container = document.getElementById("myMap");
     const options = {
@@ -150,6 +152,7 @@ const KakaoMapSet2 = (
     kakao.maps.event.addListener(map, "click", (mouseEvent) => {
         setSearchText("");
         setSearchList([]);
+        searchPagination({});
 
         removeMarker();
 
@@ -239,8 +242,6 @@ function placesSearchCB(data, status, pagination) {
         console.log(data);
         // console.log(pagination);
 
-
-
         searchList(data);
         // 정상적으로 검색이 완료됐으면
         // 검색 목록과 마커를 표출합니다
@@ -249,7 +250,7 @@ function placesSearchCB(data, status, pagination) {
 
 
         // 페이지 번호를 표출합니다
-        // displayPagination(pagination);
+        displayPagination(pagination);
     } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
         alert("검색 결과가 존재하지 않습니다.");
         return;
@@ -327,33 +328,34 @@ function displayPlaces(places) {
 
 // 검색결과 목록 하단에 페이지번호를 표시는 함수입니다
 function displayPagination(pagination) {
-    var paginationEl = document.getElementById("pagination"),
-        fragment = document.createDocumentFragment(),
-        i;
+    searchPagination(pagination);
+    // var paginationEl = document.getElementById("pagination"),
+    //     fragment = document.createDocumentFragment(),
+    //     i;
 
-    // 기존에 추가된 페이지번호를 삭제합니다
-    while (paginationEl.hasChildNodes()) {
-        paginationEl.removeChild(paginationEl.lastChild);
-    }
+    // // 기존에 추가된 페이지번호를 삭제합니다
+    // while (paginationEl.hasChildNodes()) {
+    //     paginationEl.removeChild(paginationEl.lastChild);
+    // }
 
-    for (i = 1; i <= pagination.last; i++) {
-        var el = document.createElement("a");
-        el.href = "#";
-        el.innerHTML = i;
+    // for (i = 1; i <= pagination.last; i++) {
+    //     var el = document.createElement("a");
+    //     el.href = "#";
+    //     el.innerHTML = i;
 
-        if (i === pagination.current) {
-            el.className = "on";
-        } else {
-            el.onclick = (function (i) {
-                return function () {
-                    pagination.gotoPage(i);
-                };
-            })(i);
-        }
+    //     if (i === pagination.current) {
+    //         el.className = "on";
+    //     } else {
+    //         el.onclick = (function (i) {
+    //             return function () {
+    //                 pagination.gotoPage(i);
+    //             };
+    //         })(i);
+    //     }
 
-        fragment.appendChild(el);
-    }
-    paginationEl.appendChild(fragment);
+    //     fragment.appendChild(el);
+    // }
+    // paginationEl.appendChild(fragment);
 }
 
 // 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수입니다

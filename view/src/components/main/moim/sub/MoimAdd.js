@@ -33,6 +33,7 @@ const MoimAdd = () => {
     const [address, setAddress] = useState({}); //주소 데이터
     const [searchText, setSearchText] = useState("");
     const [searchList, setSearchList] = useState([]);
+    const [searchPagination, setSearchPagination] = useState({});
 
     const [category, setCategory] = useState(initialCategory);
 
@@ -49,7 +50,8 @@ const MoimAdd = () => {
             setAddress,
             setInputMsg,
             { setSearchText, setSearchList },
-            mapMarkerClickScroll
+            mapMarkerClickScroll,
+            setSearchPagination
         );
         categoryApi("");
     }, []);
@@ -149,7 +151,8 @@ const MoimAdd = () => {
                 {item}
             </span>
         )
-    })
+    });
+
     
     
     
@@ -331,6 +334,10 @@ const MoimAdd = () => {
         );
     });
 
+
+
+
+
     //지도 마커 클릭 시, 스크롤
     //지도 마커 클릭 시, 스크롤
     //지도 마커 클릭 시, 스크롤
@@ -357,22 +364,6 @@ const MoimAdd = () => {
     //지도 검색 리스트 요소설정
     const searchListComponent = searchList.map((item, idx) => {
         if (searchList.length === 0) return "";
-        // console.log(item);
-
-        /**
-         * 
-                        const restAddress = {
-                            zonecode: "",
-                            address: item.address_name,
-                            roadAddress: item.road_address_name,
-                            jibunAddress: item.address_name,
-                            sido: ?,
-                            sigungu: ?,
-                            bname: ?,
-                            bcode: ?,
-                            placeName: item.place_name
-                        }
-         */
 
         //지도 리스트 클릭 시
         //지도 리스트 클릭 시
@@ -444,7 +435,9 @@ const MoimAdd = () => {
                 onClick={(element) => searchListClickAction(item, idx)}
             >
                 <div className="left">
-                    <span>{idx + 1}</span>
+                    <span>{
+                            ((searchPagination.current - 1) * 15) + idx + 1
+                        }</span>
                 </div>
                 <div className="right">
                     <h4 className="search-title">{item.place_name}</h4>
@@ -464,6 +457,43 @@ const MoimAdd = () => {
             </div>
         );
     });
+
+
+    //지도 검색 페이징
+    //지도 검색 페이징
+    //지도 검색 페이징
+    const searchPaginationElement = () => {
+        if(searchPagination === null || searchPagination === undefined) return "";
+        // console.log(searchPagination);
+        
+        let resComp = [];
+        for(let i = 1; i <= searchPagination.last; i++) {
+            // console.log(i);
+            resComp.push(
+                <span 
+                    className={i === searchPagination.current ? 'on' : ''}
+                    key={i+6000}
+                    onClick={() => paginationClickAction(i)}>
+                    {i}
+                </span>
+            );
+        }
+
+        return resComp;
+    }
+
+
+    //페이징 클릭 시 이벤트
+    const paginationClickAction = (i) => {
+        searchPagination.gotoPage(i);
+
+        const mapSearchList = document.querySelector(".map-search-list");
+        mapSearchList.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth",
+        });
+    }
 
 
 
@@ -529,6 +559,14 @@ const MoimAdd = () => {
                                         onChange={(event) =>
                                             setSearchText(event.target.value)
                                         }
+                                        onKeyDown={(event) => {
+                                            if(event.keyCode === 13) {
+                                                searchPlaces(
+                                                    searchText,
+                                                    setSearchList
+                                                );
+                                            }
+                                        }}
                                         value={searchText}
                                     />
                                     <button
@@ -556,6 +594,12 @@ const MoimAdd = () => {
                                             </div>
                                         </div> */}
                                         {searchListComponent}
+                                        <div className='pagination-part draggable'>
+                                            {/* <span className='on'>1</span>
+                                            <span>2</span>
+                                            <span>1</span> */}
+                                            {searchPaginationElement()}
+                                        </div>
                                     </div>
                                 )}
                             </div>
