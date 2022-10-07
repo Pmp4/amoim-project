@@ -3,6 +3,7 @@
 <mapper namespace="com.pmp4.amoimproject.tag.model.TagDAO">
     <select id="selectByKeyword" parameterType="String" resultType="tagVo">
         select * from TAG
-        where TAG_NAME like CONCAT(#{keyword}, '%');
+        where TAG_NAME like CONCAT(#{keyword}, '%')
+        LIMIT 5
     </select>
 </mapper>

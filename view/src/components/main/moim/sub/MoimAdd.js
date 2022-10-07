@@ -107,7 +107,7 @@ const MoimAdd = () => {
     //엔터 감지
     const tagInputEnter = (event) => {
         if(event.keyCode === 13) {
-            if(is_gap(tag) || is_number(tag) || is_specialChar(tag)) {
+            if(is_gap(tag) || is_number(tag) || is_specialChar(tag) || tag === "") {
                 alert('태그에는 공백, 숫자, 특수문자가 들어갈 수 없습니다.');
                 return;
             }
@@ -171,6 +171,27 @@ const MoimAdd = () => {
             }else if(value.length > 0) {
                 tagSelect(value);
             }
+        }else if(name === 'title') {
+            const cutLength = 20;
+            if(value.length > cutLength) {
+                alert(`제목은 ${cutLength}자 이내로 입력해주세요`);
+                value = value.substring(0, cutLength);
+            }
+        }else if(name === 'content') {
+            const cutLength = 500;
+            if(value.length > cutLength) {
+                alert(`내용은 ${cutLength}자 이내로 입력해주세요`);
+                value = value.substring(0, cutLength);
+            }
+        }else if(name === 'dues') {
+            console.log(value);
+            const cutLength = 6;
+            const numberDues = value.replace(",", "");
+            if(numberDues.length > cutLength) {
+                value = value.substring(0, cutLength);
+            }
+            
+            value = value.replace(/[^0-9]/g, "").replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
         }
 
         const tempInputData = {
@@ -514,11 +535,13 @@ const MoimAdd = () => {
 
         if(title === "" || content === "" || dues === "" || categoryCode === "") {
             resBool = false;
+        }else if(!fileStatus) {
+            resBool = false;
+        }else if(Object.keys(address).length === 0) {
+            resBool = false;
+        }else if(tagAdd.length === 0) {
+            resBool = false;
         }
-        
-        // if(inputRef !== null) {
-        //     console.log(inputRef.current.file);
-        // }
 
         return resBool;
     }
@@ -636,7 +659,7 @@ const MoimAdd = () => {
                         <input
                             name="title"
                             placeholder="제목을 입력하세요."
-                            defaultValue={title}
+                            value={title}
                             onChange={(event) => inputEventAction(event)}
                         />
                     </label>
@@ -681,12 +704,15 @@ const MoimAdd = () => {
                         </label>
                         <label htmlFor="dues">
                             <p>회비</p>
-                            <input
-                                name="dues"
-                                placeholder="없음"
-                                value={dues}
-                                onChange={(event) => inputEventAction(event)}
-                            />
+                            <div>
+                                <input
+                                    name="dues"
+                                    placeholder="없음"
+                                    value={dues}
+                                    onChange={(event) => inputEventAction(event)}
+                                />
+                                <span>원</span>
+                            </div>
                         </label>
                     </div>
 
