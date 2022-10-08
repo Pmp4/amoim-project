@@ -395,6 +395,10 @@ const MoimAdd = () => {
     const searchListComponent = searchList.map((item, idx) => {
         if (searchList.length === 0) return "";
 
+        // console.log(searchRef);
+        searchRef.current = [];
+        // console.log(searchRef);
+
         //지도 리스트 클릭 시
         //지도 리스트 클릭 시
         //지도 리스트 클릭 시
@@ -406,6 +410,7 @@ const MoimAdd = () => {
                     let restAddress = {};
 
                     searchRef.current.forEach(item => {
+                        console.log(item);
                         item.classList.remove('click');
                     });
 
@@ -568,7 +573,7 @@ const MoimAdd = () => {
         for(let i = 0; i < fileData.length; i++) {
             formData.append("file", fileData[i]);
         }
-        formData.append("restData", restData);
+        formData.append("key", new Blob([JSON.stringify(restData)], { type: "application/json" }));
 
         // console.log(inputRef.current.file.files);
         console.log(formData);
