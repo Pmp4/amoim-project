@@ -358,8 +358,9 @@
 
                 &.two {
                     label {
-                        &:nth-child(1) {width: 78%;}
+                        &:nth-child(1) {width: 56%;}
                         &:nth-child(2) {width: 20%;}
+                        &:nth-child(3) {width: 10%;}
                         input {
                             background: #f6f6f6;
                             line-height: 30px;
@@ -423,7 +424,7 @@
                         }
 
 
-                        &[for='dues'] {
+                        &[for='dues'], &[for='personNumber'] {
                             > div {
                                 display: flex;
                                 align-items: center;
@@ -432,8 +433,14 @@
                                 }
                                 span {
                                     flex-grow: 1;
-                                    margin-left: 10px;
+                                    margin-left: 5px;
                                 }
+                            }
+                        }
+
+                        &[for='personNumber'] {
+                            input {
+                                padding-right:0;
                             }
                         }
                     }

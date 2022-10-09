@@ -6,4 +6,18 @@
         where TAG_NAME like CONCAT(#{keyword}, '%')
         LIMIT 5
     </select>
+    
+    <select id="selectByTag" parameterType="String" resultType="tagVo">
+        select * from TAG
+        where TAG_NAME = #{tagName};
+    </select>
+
+    <insert id="insertTag" parameterType="tagVo">
+        insert into TAG (TAG_NAME)
+        values (#{tagName})
+
+        <selectKey keyProperty="tagNo" keyColumn="tag_no" resultType="Long" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
 </mapper>
