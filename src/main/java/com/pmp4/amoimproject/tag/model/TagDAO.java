@@ -7,4 +7,8 @@ import java.util.List;
 @Mapper
 public interface TagDAO {
     List<TagVO> selectByKeyword(String keyword);
+
+    TagVO selectByTag(String tagName);
+
+    int insertTag(TagVO tagVO);
 }

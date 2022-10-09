@@ -13,13 +13,15 @@ import { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { useCallback } from "react";
+import { useSelector } from 'react-redux';
 
 const initialInput = {
     title: "",
     content: "",
     tag: "",
     categoryCode: "",
-    dues: ""
+    dues: "",
+    personNumber: ""
 };
 
 const initialCategory = {
@@ -45,7 +47,10 @@ const MoimAdd = () => {
     const inputRef = useRef({});
     const searchRef = useRef([]);
 
-    const { title, content, tag, categoryCode, dues } = inputData;
+
+    const user = useSelector(state => state.user);
+
+    const { title, content, tag, categoryCode, dues, personNumber } = inputData;
 
     useEffect(() => {
         KakaoMapSet2(
@@ -55,6 +60,7 @@ const MoimAdd = () => {
             mapMarkerClickScroll,
             setSearchPagination
         );
+        console.log(user.userInfo.no);
         categoryApi("");
     }, []);
 
@@ -185,7 +191,6 @@ const MoimAdd = () => {
                 value = value.substring(0, cutLength);
             }
         }else if(name === 'dues') {
-            console.log(value);
             const cutLength = 6;
             const numberDues = value.replace(",", "");
             if(numberDues.length > cutLength) {
@@ -193,6 +198,11 @@ const MoimAdd = () => {
             }
             
             value = value.replace(/[^0-9]/g, "").replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        }else if(name = 'personNumber') {
+            const cutMax = 6;
+            if(value > 50) {
+                value = 50;
+            }
         }
 
         const tempInputData = {
@@ -539,7 +549,7 @@ const MoimAdd = () => {
     const inputCheck = () => {
         let resBool = true;
 
-        if(title === "" || content === "" || dues === "" || categoryCode === "") {
+        if(title === "" || content === "" || personNumber === "" || categoryCode === "") {
             resBool = false;
         }else if(!fileStatus) {
             resBool = false;
@@ -560,26 +570,30 @@ const MoimAdd = () => {
     //최종
     const resultFunc = () => {
         const formData = new FormData();
-        const restData = {
+        const contentsData = {
+            userNo: user.userInfo.no,
             title,
             content,
-            tagAdd,
-            address,
             categoryCode,
-            dues
+            dues,
+            personNumber
         }
         const fileData = inputRef.current.file.files;
         
         for(let i = 0; i < fileData.length; i++) {
             formData.append("file", fileData[i]);
         }
-        formData.append("key", new Blob([JSON.stringify(restData)], { type: "application/json" }));
+        formData.append("contentsData", new Blob([JSON.stringify(contentsData)], { type: "application/json" }));
+        formData.append("addressData", new Blob([JSON.stringify(address)], { type: "application/json" }));
+        formData.append("tagData", new Blob([JSON.stringify(tagAdd)], {type: "application/json"}));
 
         // console.log(inputRef.current.file.files);
         console.log(formData);
 
         MeetingService.insertMeeting(formData).then(response => {
-            
+            console.log(response);
+        }).catch(response => {
+            alert("서버 error");
         });
     }
 
@@ -749,6 +763,18 @@ const MoimAdd = () => {
                                     onChange={(event) => inputEventAction(event)}
                                 />
                                 <span>원</span>
+                            </div>
+                        </label>
+                        <label htmlFor="personNumber">
+                            <p>인원</p>
+                            <div>
+                                <input
+                                    name="personNumber"
+                                    type='number'
+                                    value={personNumber}
+                                    onChange={(event) => inputEventAction(event)}
+                                />
+                                <span>명</span>
                             </div>
                         </label>
                     </div>
