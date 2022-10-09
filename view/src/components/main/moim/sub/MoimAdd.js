@@ -14,6 +14,7 @@ import { useRef } from "react";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
 const initialInput = {
     title: "",
@@ -49,6 +50,7 @@ const MoimAdd = () => {
 
 
     const user = useSelector(state => state.user);
+    const location = useLocation();
 
     const { title, content, tag, categoryCode, dues, personNumber } = inputData;
 
@@ -591,9 +593,18 @@ const MoimAdd = () => {
         console.log(formData);
 
         MeetingService.insertMeeting(formData).then(response => {
-            console.log(response);
-        }).catch(response => {
-            alert("서버 error");
+            const {status, data} = response;
+            if(status) {
+                if(data.SUCCESS) {
+                    alert(data.SUCCESS_TEXT);
+                    navigator("/moim");
+                }else {
+                    alert(data.SUCCESS_TEXT);
+                    location.reload();
+                }
+            }else {
+                alert("서버 error");
+            }
         });
     }
 

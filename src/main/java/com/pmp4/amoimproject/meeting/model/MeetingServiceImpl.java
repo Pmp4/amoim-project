@@ -46,27 +46,27 @@ public class MeetingServiceImpl implements MeetingService {
 
         try {
             result = meetingDAO.insertMeeting(meetingVO);
-            logger.info("MEETING DB INSERT 결과 result={}", result);
+            logger.info("MEETING: MEETING DB INSERT 결과 result={}", result);
 
             if(result > 0) {
                 int cnt = 0;
                 for(String tagName : tagArr) {
                     TagVO tagVO = tagDAO.selectByTag(tagName);
-                    logger.info("기존 태그 검색 tagVO={}", tagVO);
+                    logger.info("MEETING: 기존 태그 검색 tagVO={}", tagVO);
 
                     if(tagVO != null) {    //기존 태그가 있는 경우
                         result = meetingDAO.meetingTagAdd(meetingVO.getNo(), tagVO.getTagNo());
-                        logger.info("기존 태그 등록 결과 result={}", result);
+                        logger.info("MEETING: 기존 태그 등록 결과 result={}", result);
 
                     }else {     //기존 태그가 없는 경우
                         TagVO tempTagVO = new TagVO();
                         tempTagVO.setTagName(tagName);
 
                         cnt = tagDAO.insertTag(tempTagVO);
-                        logger.info("태그 DB 등록 결과 cnt={}", cnt);
+                        logger.info("MEETING: 태그 DB 등록 결과 cnt={}", cnt);
                         if(cnt > 0) {
                             result = meetingDAO.meetingTagAdd(meetingVO.getNo(), tempTagVO.getTagNo());
-                            logger.info("태그 연결 결과 cnt={}", result);
+                            logger.info("MEETING: 태그 연결 결과 cnt={}", result);
                         }
                     }
                 }
@@ -77,11 +77,13 @@ public class MeetingServiceImpl implements MeetingService {
                     for(Map<String, Object> file : fileList) {
                         file.put("meetingNo", meetingVO.getNo());
                         result = meetingDAO.insertMeetingImage(file);
+                        logger.info("MEETING: 이미지 등록 결과 cnt={}", result);
                     }
 
                     if(result > 0) {
                         meetingAddressVO.setMeetingNo(meetingVO.getNo());
                         result = meetingDAO.insertMeetingAddress(meetingAddressVO);
+                        logger.info("MEETING: 주소 등록 결과 cnt={}", result);
                     }
                 }
             }
@@ -91,15 +93,17 @@ public class MeetingServiceImpl implements MeetingService {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
 
-        if(result > 0) {
+        if(!(result > 0)) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             String filePath = fileUploadUtil.getUploadPath(request, ConstUtil.UPLOAD_IMAGE_FLAG);
 
-            for(Map<String, Object> file : fileList) {
-                File delFile = new File(filePath, (String) file.get("fileName"));
-                if(delFile.exists()) {
-                    boolean fileBool = delFile.delete();
-                    logger.info("파일 삭제 여부: {}", fileBool);
+            if(fileList != null) {
+                for(Map<String, Object> file : fileList) {
+                    File delFile = new File(filePath, (String) file.get("fileName"));
+                    if(delFile.exists()) {
+                        boolean fileBool = delFile.delete();
+                        logger.info("MEETING: 파일 삭제 여부: {}", fileBool);
+                    }
                 }
             }
         }

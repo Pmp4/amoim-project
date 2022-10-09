@@ -46,6 +46,9 @@ public class MeetingController {
         if(result > 0) {
             resData.put("SUCCESS", true);
             resData.put("SUCCESS_TEXT", "업로드 성공");
+        }else {
+            resData.put("SUCCESS", false);
+            resData.put("SUCCESS_TEXT", "서버 DB 에러");
         }
 
         return resData;
