@@ -3,58 +3,61 @@
 
 
 #moim-page {
-    .title-wrap {
+    .title-part {
+        margin: 80px auto 100px auto;
         display: flex;
-
-        .title {
-            width: 40%;
-            background: #fff;
-            border-radius: 20px;
-            padding: 30px 40px;
-            box-sizing: border-box;
-            box-shadow: 5px 5px 44px #ebebeb,
-                -5px -5px 44px #ffffff;
-
-            h3 {
-                font-size: 3em;
-                font-weight: 600;
-            }
-
-            p {
-                margin-top: 50px;
-                font-size: 2em;
-            }
-        }
-
-        a {
+        justify-content: space-between;
+        .title-wrap {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-left: 30px;
-            width: 7%;
-            padding: 0 0;
-            border-radius: 20px;
-            position: relative;
-            overflow: hidden;
-            font-size: 3em;
-            transition: .1s;
-            text-align: center;
-
-            &:hover {
-
+            width: 46%;
+            .title {
+                width: 100%;
+                background: #fff;
+                border-radius: 20px;
+                padding: 30px 40px;
+                box-sizing: border-box;
                 box-shadow: 5px 5px 44px #ebebeb,
                     -5px -5px 44px #ffffff;
+    
+                h3 {
+                    font-size: 3em;
+                    font-weight: 600;
+                }
+    
+                p {
+                    margin-top: 50px;
+                    font-size: 2em;
+                }
+            }
+    
+            a {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-left: 30px;
+                width: 7%;
+                padding: 0 25px;
+                border-radius: 20px;
+                position: relative;
+                overflow: hidden;
+                font-size: 3em;
+                transition: .1s;
+                text-align: center;
+    
+                &:hover {
+    
+                    box-shadow: 5px 5px 44px #ebebeb,
+                        -5px -5px 44px #ffffff;
+                }
             }
         }
-
-        margin: 80px 0 100px 0;
     }
 }
 
 
 
 #moim-add-page {
-    height: 2000px;
+    padding-bottom: 200px;
     .title-wrap {
         h3 {
             font-size: 3em;

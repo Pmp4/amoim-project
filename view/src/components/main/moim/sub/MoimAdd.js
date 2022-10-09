@@ -14,7 +14,7 @@ import { useRef } from "react";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useSelector } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const initialInput = {
     title: "",
@@ -51,6 +51,7 @@ const MoimAdd = () => {
 
     const user = useSelector(state => state.user);
     const location = useLocation();
+    const navigate = useNavigate();
 
     const { title, content, tag, categoryCode, dues, personNumber } = inputData;
 
@@ -422,7 +423,7 @@ const MoimAdd = () => {
                     let restAddress = {};
 
                     searchRef.current.forEach(item => {
-                        console.log(item);
+                        // console.log(item);
                         item.classList.remove('click');
                     });
 
@@ -597,7 +598,7 @@ const MoimAdd = () => {
             if(status) {
                 if(data.SUCCESS) {
                     alert(data.SUCCESS_TEXT);
-                    navigator("/moim");
+                    navigate("/moim");
                 }else {
                     alert(data.SUCCESS_TEXT);
                     location.reload();
