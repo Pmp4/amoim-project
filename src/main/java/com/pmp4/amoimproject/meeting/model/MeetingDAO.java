@@ -3,6 +3,7 @@ package com.pmp4.amoimproject.meeting.model;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Map;
 
 @Mapper
@@ -14,4 +15,6 @@ public interface MeetingDAO {
     int insertMeetingImage(Map<String, Object> map);
 
     int insertMeetingAddress(MeetingAddressVO meetingAddressVO);
+
+    List<Map<String, Object>> selectByUserNoCard(String userNo);
 }
