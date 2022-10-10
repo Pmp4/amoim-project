@@ -9,4 +9,36 @@
             select LAST_INSERT_ID()
         </selectKey>
     </insert>
+
+    <select id="selectByUserNoCard" parameterType="String" resultType="hashMap">
+        select
+            m.NO,
+            m.TITLE,
+            (
+                select i2.NAME
+                from INTERESTS i2
+                where i2.CATEGORY_CODE = i.CATEGORY_PARENT
+            ) CATEGORY_PARENT,
+                i.name CATEGORY_NAME,
+            (
+                select count(*)
+                from USER_MEETING um
+                where um.MEETING_NO = m.NO
+            ) PERSON_COUNT,
+                m.PERSON_NUMBER,
+            (
+                select JSON_ARRAYAGG(T.TAG_NAME) TAGS
+                from MEETING_TAG M
+                         join TAG T on T.TAG_NO = M.TAG_NO
+                where MEETING_NO = m.NO
+                group by MEETING_NO
+            ) TAGS,
+            m.DUES,
+            m.DEL_TAG,
+            MA.SIGUNGU
+        from
+            MEETING m join INTERESTS I on I.CATEGORY_CODE = m.CATEGORY_CODE
+                      join MEETING_ADDRESS MA on m.NO = MA.MEETING_NO
+        where USER_NO = 21 or DEL_TAG = 'N'
+    </select>
 </mapper>

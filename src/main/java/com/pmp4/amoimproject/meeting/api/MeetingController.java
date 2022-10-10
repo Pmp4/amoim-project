@@ -53,4 +53,15 @@ public class MeetingController {
 
         return resData;
     }
+
+
+    @GetMapping("/select/{userNo}")
+    public List<Map<String, Object>> selectByUserNo(@PathVariable (required = false) String userNo) {
+        logger.info("MEETING 카드 조회 userNo={}", userNo);
+
+        List<Map<String, Object>> resData = meetingService.selectByUserNoCard(userNo);
+        logger.info("MEETING 카드 조회 결과 resData={}", resData);
+
+        return resData;
+    }
 }
