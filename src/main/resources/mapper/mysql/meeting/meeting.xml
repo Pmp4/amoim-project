@@ -34,7 +34,11 @@
                 group by MEETING_NO
             ) TAGS,
             m.DUES,
-            m.DEL_TAG,
+            (
+                select count(*)
+                from MEETING_LIKE ML
+                where ML.MEETING_NO = m.NO
+            ) LIKE_COUNT,
             MI.IMAGE_NAME,
             MA.SIGUNGU
         from

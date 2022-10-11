@@ -16,7 +16,7 @@ public interface ConstUtil {
 
 	
 	//자료실 - 파일 저장 경로
-	String TEST_FILE_PATH = "/Library/DevelopProject/Project/amoim-project/view/public/upload/";	//for Mac
+	String TEST_FILE_PATH = "/Library/DevelopProject/Project/amoim-project/src/main/resources/static/upload/";	//for Mac
 	String FILE_UPLOAD_PATH = "pd_upload";
 	String FILE_UPLOAD_PATH_TEST = TEST_FILE_PATH + FILE_UPLOAD_PATH;
 
