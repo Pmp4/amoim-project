@@ -16,5 +16,5 @@ public interface MeetingDAO {
 
     int insertMeetingAddress(MeetingAddressVO meetingAddressVO);
 
-    List<Map<String, Object>> selectByUserNoCard(String userNo);
+    List<Map<String, Object>> selectByUserNoCard(Long userNo);
 }

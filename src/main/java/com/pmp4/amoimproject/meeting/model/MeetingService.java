@@ -10,5 +10,5 @@ public interface MeetingService {
                         List<String> tagArr,
                         HttpServletRequest request);
 
-    List<Map<String, Object>> selectByUserNoCard(String userNo);
+    List<Map<String, Object>> selectByUserNoCard(Long userNo);
 }

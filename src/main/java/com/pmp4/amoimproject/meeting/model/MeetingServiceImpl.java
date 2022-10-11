@@ -113,7 +113,7 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public List<Map<String, Object>> selectByUserNoCard(String userNo) {
+    public List<Map<String, Object>> selectByUserNoCard(Long userNo) {
         return meetingDAO.selectByUserNoCard(userNo);
     }
 }

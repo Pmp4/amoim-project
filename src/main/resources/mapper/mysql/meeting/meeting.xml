@@ -10,7 +10,7 @@
         </selectKey>
     </insert>
 
-    <select id="selectByUserNoCard" parameterType="String" resultType="hashMap">
+    <select id="selectByUserNoCard" parameterType="Long" resultType="hashMap">
         select
             m.NO,
             m.TITLE,
@@ -35,10 +35,12 @@
             ) TAGS,
             m.DUES,
             m.DEL_TAG,
+            MI.IMAGE_NAME,
             MA.SIGUNGU
         from
             MEETING m join INTERESTS I on I.CATEGORY_CODE = m.CATEGORY_CODE
                       join MEETING_ADDRESS MA on m.NO = MA.MEETING_NO
-        where USER_NO = 21 or DEL_TAG = 'N'
+                      join MEETING_IMAGES MI on m.NO = MI.MEETING_NO
+        where USER_NO = #{userNo} and DEL_TAG = 'N' and MI.SEQ = 1
     </select>
 </mapper>
