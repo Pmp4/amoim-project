@@ -2,29 +2,36 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faHeart } from "@fortawesome/free-solid-svg-icons";
 
-const MoimItem = () => {
+const MoimItem = (props) => {
+    console.log(props);
+    const {item, idx} = props;
+    const tagArr = item.TAGS.replace(/\[|\]|"| /g,"").split(",");
+
     return (
-        <div id="moim-item">
+        <div id="moim-item" key={item.NO}>
             <div className="item">
                 <div className="image">
-                    <img src="/upload/img_upload/test.png" alt="이미지" />
+                    <img src={`/upload/img_upload/${item.IMAGE_NAME}`} alt="이미지" />
                 </div>
                 <div className="exp-part">
                     <div className="left">
                         <div className="title">
-                            <span>미노이와 함께하는 히팝</span>
+                            <span>{item.TITLE}</span>
                         </div>
                         <div className="exp">
                             <div className="items">
-                                <span className="person-number">인원 1/10</span>
+                                <span className="person-number">인원 {item.PERSON_COUNT}/{item.PERSON_NUMBER}</span>
                                 <span className="loc">
                                     <FontAwesomeIcon icon={faLocationDot} />
-                                    &nbsp;금천구
+                                    &nbsp;{item.SIGUNGU}
                                 </span>
-                                <span className="category">음악 > 힙합</span>
+                                <span className="category">{item.CATEGORY_NAME} &gt; {item.CATEGORY_PARENT}</span>
                             </div>
                             <div className="tags">
-                                <span>#힙합 #미노이</span>
+                                <span>{tagArr.map((item, idx) => {
+                                    if(idx === 0) return ("#" + item);
+                                    else return (" #" + item)
+                                })}</span>
                             </div>
                         </div>
                     </div>

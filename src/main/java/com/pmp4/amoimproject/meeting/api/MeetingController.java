@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,13 +56,16 @@ public class MeetingController {
     }
 
 
-    @GetMapping("/select/{userNo}")
-    public List<Map<String, Object>> selectByUserNo(@PathVariable (required = false) String userNo) {
+    @GetMapping(value = {"/select/{userNo}", "/select"})
+    public List<Map<String, Object>> selectByUserNo(@PathVariable (required = false) Long userNo,
+                                                    HttpSession httpSession) {
         logger.info("MEETING 카드 조회 userNo={}", userNo);
 
-        List<Map<String, Object>> resData = meetingService.selectByUserNoCard(userNo);
-        logger.info("MEETING 카드 조회 결과 resData={}", resData);
+        if(userNo == null) userNo = (Long) httpSession.getAttribute("userNo");
 
-        return resData;
+        List<Map<String, Object>> responseData = meetingService.selectByUserNoCard(userNo);
+        logger.info("MEETING 카드 조회 결과 resData.size={}", responseData.size());
+
+        return responseData;
     }
 }
