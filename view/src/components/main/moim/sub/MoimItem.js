@@ -3,12 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faHeart } from "@fortawesome/free-solid-svg-icons";
 
 const MoimItem = (props) => {
-    console.log(props);
+    // console.log(props);
     const { item, idx } = props;
     const tagArr = item.TAGS.replace(/\[|\]|"| /g, "").split(",");
 
     return (
-        <div id="moim-item" key={item.NO}>
+        <div id="moim-item" className='draggable' key={item.NO}>
             <div className="item">
                 <div className="image">
                     <img
