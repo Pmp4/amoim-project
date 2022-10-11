@@ -32,3 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 /view/public/upload/
+/src/main/resources/static/upload/

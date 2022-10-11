@@ -11,7 +11,7 @@ const MoimItem = (props) => {
         <div id="moim-item" key={item.NO}>
             <div className="item">
                 <div className="image">
-                    <img src={`/upload/img_upload/${item.IMAGE_NAME}`} alt="이미지" />
+                    <img src={`http://localhost:8080/rest/v1/images/${item.IMAGE_NAME}`} alt="이미지" />
                 </div>
                 <div className="exp-part">
                     <div className="left">
