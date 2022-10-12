@@ -59,13 +59,25 @@ public class MeetingController {
     @GetMapping(value = {"/select/{userNo}", "/select"})
     public List<Map<String, Object>> selectByUserNo(@PathVariable (required = false) Long userNo,
                                                     HttpSession httpSession) {
-        logger.info("MEETING 카드 조회 userNo={}", userNo);
+        logger.info("MEETING 유저 생성 조회 userNo={}", userNo);
 
         if(userNo == null) userNo = (Long) httpSession.getAttribute("userNo");
 
         List<Map<String, Object>> responseData = meetingService.selectByUserNoCard(userNo);
-        logger.info("MEETING 카드 조회 결과 resData.size={}", responseData.size());
+        logger.info("MEETING 유저 생성 조회 결과 resData.size={}", responseData.size());
 
         return responseData;
+    }
+
+
+    @GetMapping("/select/view/{no}")
+    public Map<String, Object> selectByNo(@PathVariable Long no) {
+        logger.info("MEETING 유저 생성 조회 no={}", no);
+
+
+
+        Map<String, Object> restData = new HashMap<>();
+
+        return restData;
     }
 }
