@@ -10,5 +10,9 @@ const selectByUserNo = (userNo) => {
     return httpCommon.get(`/meeting/select/${userNo}`);
 }
 
+const selectByNo = (no) => {
+    return httpCommon.get(`/meeting/select/view/${no}`);
+}
 
-export default {insertMeeting, selectByUserNo};
+
+export default {insertMeeting, selectByUserNo, selectByNo};
