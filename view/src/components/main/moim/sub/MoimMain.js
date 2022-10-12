@@ -44,7 +44,7 @@ const MoimMain = () => {
                 </div>
             </div> */}
             <div className="page-wrap main-part">
-                <div className="sub-title add-moim-part">
+                <div className="add-moim-part">
                     <div className="moim-sub">
                         {
                             meetingContents.map((item, idx) => {
@@ -60,6 +60,12 @@ const MoimMain = () => {
                             </div> : ""
                         }
                     </div>
+                    {
+                        meetingContents.length > 0 &&
+                        <button className='moim-edit-btn'>
+                            수정
+                        </button>
+                    }
                 </div>
                 <div className="sub-title">
                     <h4>함께하는 모임</h4>

@@ -1,14 +1,18 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const MoimItem = (props) => {
     // console.log(props);
     const { item, idx } = props;
     const tagArr = item.TAGS.replace(/\[|\]|"| /g, "").split(",");
+    const location = useLocation();
+    const navigate = useNavigate();
+    console.log(location.pathname);
 
     return (
-        <div id="moim-item" className='draggable' key={item.NO}>
+        <div id="moim-item" className='draggable' key={item.NO} onClick={() => navigate(`${location.pathname}/view/${item.NO}`)}>
             <div className="item">
                 <div className="image">
                     <img
