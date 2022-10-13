@@ -1,17 +1,21 @@
 import MeetingService from 'api/meeting/MeetingService';
 import React from 'react';
 import { useParams } from 'react-router';
+import { useEffect } from 'react';
 
 const MoimView = () => {
     const param = useParams();
     const meetingNo = param.meetingNo;
-    console.log(param);
+    
+    useEffect(() => {
+        selectViewApi();
+    }, []);
 
     const selectViewApi = () => {
         MeetingService.selectByNo(meetingNo).then(response => {
             const{status, data} = response;
             if(status === 200) {
-                
+
             }else {
                 alert("Server DB Error");
             }

@@ -71,12 +71,21 @@ public class MeetingController {
 
 
     @GetMapping("/select/view/{no}")
-    public Map<String, Object> selectByNo(@PathVariable Long no) {
-        logger.info("MEETING 유저 생성 조회 no={}", no);
+    public Map<String, Object> selectByNo(@PathVariable String no) {
+        logger.info("MEETING 정보 조회 no={}", no);
 
-
+        Map<String, Object> dbData = meetingService.selectByNo(no);
+        logger.info("MEETING 정보 조회 결과 dbData={}", dbData);
 
         Map<String, Object> restData = new HashMap<>();
+
+        if(dbData != null) {
+            restData.put("SUCCESS", true);
+            restData.put("rest", dbData);
+        }else {
+            restData.put("SUCCESS", false);
+        }
+
 
         return restData;
     }

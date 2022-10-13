@@ -47,4 +47,38 @@
                       join MEETING_IMAGES MI on m.NO = MI.MEETING_NO
         where USER_NO = #{userNo} and DEL_TAG = 'N' and MI.SEQ = 1
     </select>
+    
+    
+    <select id="selectByNo" parameterType="String" resultType="hashMap">
+        select
+            M.NO,
+            M.USER_NO,
+            M.TITLE,
+            M.CONTENT,
+            I.CATEGORY_PARENT,
+            M.CATEGORY_CODE,
+            (
+                select NAME
+                from INTERESTS I2
+                where I2.CATEGORY_CODE = I.CATEGORY_PARENT
+            ) CATEGORY_PARENT_NAME,
+            I.NAME CATEGORY_NAME,
+            (
+                select JSON_ARRAYAGG(T.TAG_NAME)
+                from MEETING_TAG MT join TAG T on T.TAG_NO = MT.TAG_NO
+                where MT.MEETING_NO = M.NO
+                group by MT.MEETING_NO
+            ) TAGS,
+            MI.IMAGE_NAME,
+            MA.*,
+            (
+                select count(*)
+                from MEETING_LIKE ML
+                where ML.MEETING_NO = M.NO
+            ) LIKE_COUNT
+        from MEETING M join INTERESTS I on I.CATEGORY_CODE = M.CATEGORY_CODE
+                       join MEETING_IMAGES MI on M.NO = MI.MEETING_NO
+                       join MEETING_ADDRESS MA on M.NO = MA.MEETING_NO
+        where M.NO = #{no}
+    </select>
 </mapper>
