@@ -131,8 +131,8 @@ public class MeetingController {
 
 
 
-    @PostMapping(value = "/like")
-    public Map<String, Object> meetingLike(@RequestBody String meetingNo, HttpSession httpSession) {
+    @PostMapping(value = "/like/add")
+    public Map<String, Object> meetingLikeInsert(@RequestBody String meetingNo, HttpSession httpSession) {
         logger.info("MEETING LIKE 추가 meetingNo={}", meetingNo);
 
         String userNo = String.valueOf(httpSession.getAttribute("userNo"));
@@ -142,8 +142,37 @@ public class MeetingController {
         if(userNo != null && !userNo.isEmpty()) {
             int cnt = 0;
 
-            cnt = meetingService.meetingLike(userNo, meetingNo);
+            cnt = meetingService.insertMeetingLike(userNo, meetingNo);
             logger.info("MEETING LIKE 추가 결과 cnt={}", cnt);
+
+            if(cnt > 0) {
+                restData.put("SUCCESS", true);
+            }else {
+                restData.put("SUCCESS", false);
+                restData.put("SUCCESS_MSG", "Server DB Error");
+            }
+        }else {
+            restData.put("SUCCESS", false);
+            restData.put("SUCCESS_MSG", "로그인 후 시도해주세요.");
+        }
+
+
+        return restData;
+    }
+
+    @DeleteMapping(value = "/like/delete/{meetingNo}")
+    public Map<String, Object> meetingLikeDelete(@PathVariable String meetingNo, HttpSession httpSession) {
+        logger.info("MEETING LIKE 삭제 meetingNo={}", meetingNo);
+
+        String userNo = String.valueOf(httpSession.getAttribute("userNo"));
+
+        Map<String, Object> restData = new HashMap<>();
+
+        if(userNo != null && !userNo.isEmpty()) {
+            int cnt = 0;
+
+            cnt = meetingService.deleteMeetingLike(userNo, meetingNo);
+            logger.info("MEETING LIKE 삭제 결과 cnt={}", cnt);
 
             if(cnt > 0) {
                 restData.put("SUCCESS", true);

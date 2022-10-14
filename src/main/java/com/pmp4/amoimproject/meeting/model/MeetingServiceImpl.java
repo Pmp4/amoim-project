@@ -128,12 +128,17 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public int meetingLike(String userNo, String meetingNo) {
+    public int meetingLikeState(String userNo, String meetingNo) {
+        return meetingDAO.meetingLikeState(userNo, meetingNo);
+    }
+
+    @Override
+    public int insertMeetingLike(String userNo, String meetingNo) {
         return meetingDAO.insertMeetingLike(userNo, meetingNo);
     }
 
     @Override
-    public int meetingLikeState(String userNo, String meetingNo) {
-        return meetingDAO.meetingLikeState(userNo, meetingNo);
+    public int deleteMeetingLike(String userNo, String meetingNo) {
+        return meetingDAO.deleteMeetingLike(userNo, meetingNo);
     }
 }

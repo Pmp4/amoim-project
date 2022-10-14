@@ -13,6 +13,7 @@ import { faLocationDot, faHeart } from "@fortawesome/free-solid-svg-icons";
 const MoimView = () => {
     const [contents, setContents] = useState({});
     const [members, setMembers] = useState([]);
+    const [likeState, setLikeState] = useState(false);
 
     const imgPath = useSelector((state) => state.path.imagePath);
     const user = useSelector((state) => state.user);
@@ -23,6 +24,7 @@ const MoimView = () => {
 
     useEffect(() => {
         selectViewApi();
+        userLikeStateAPI();
     }, []);
 
     const selectViewApi = () => {
@@ -67,20 +69,56 @@ const MoimView = () => {
     //좋아요 상태 확인 API
     //좋아요 상태 확인 API
     const userLikeStateAPI = () => {
-        
-    }
-
-
-    const likeButtonActionAPI = () => {
-        MeetingService.meetingLike(meetingNo).then(response => {
+        MeetingService.meetingLikeState(meetingNo).then(response => {
             const {status, data} = response;
-            if(status) {
-                if(data.SUCCESS) selectViewApi();
-                else alert(data.SUCCESS_MSG);
-            }else {
+            if(status === 200) {
+                if(data === 1) {
+                    setLikeState(false);
+                }else if(data === 0) {
+                    setLikeState(true);
+                }else {
+                    alert("로그인 후 다시 시도해주세요.");
+                    navigate(-1);
+                }
+            } else {
                 alert("Server Error");
             }
-        });
+        })
+    }
+
+    //좋아요 누르면
+    //좋아요 누르면
+    //좋아요 누르면
+    const likeButtonActionAPI = () => {
+        if(!likeState) { //likeState 가 false면 delete
+            MeetingService.meetingLikeDelete(meetingNo).then(response => {
+                const {status, data} = response;
+
+                if(status === 200) {
+                    if(data.SUCCESS) {
+                        userLikeStateAPI();
+                    }else {
+                        alert(data.SUCCESS_MSG);
+                    }
+                }else {
+                    alert("Server Error");
+                }
+            })
+        }else {     //likeState 가 true면 insert
+            MeetingService.meetingLikeInsert(meetingNo).then(response => {
+                const {status, data} = response;
+
+                if(status === 200) {
+                    if(data.SUCCESS) {
+                        userLikeStateAPI();
+                    }else {
+                        alert(data.SUCCESS_MSG);
+                    }
+                }else {
+                    alert("Server Error");
+                }
+            })
+        }
     }
 
     
