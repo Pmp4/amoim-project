@@ -62,9 +62,14 @@ const MoimMain = () => {
                     </div>
                     {
                         meetingContents.length > 0 &&
-                        <button className='moim-edit-btn'>
-                            수정
-                        </button>
+                        <div className='btn-wrap'>
+                            <button className='moim-edit-btn'>
+                                수정
+                            </button>
+                            <button className='moim-confirm-btn'>
+                                가입 신청 확인
+                            </button>
+                        </div>
                     }
                 </div>
                 <div className="sub-title">

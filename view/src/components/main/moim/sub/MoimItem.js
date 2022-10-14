@@ -36,8 +36,8 @@ const MoimItem = (props) => {
                                     &nbsp;{item.SIGUNGU}
                                 </span>
                                 <span className="category">
-                                    {item.CATEGORY_NAME} &gt;{" "}
-                                    {item.CATEGORY_PARENT}
+                                    {item.CATEGORY_PARENT} &gt;{" "}
+                                    {item.CATEGORY_NAME}
                                 </span>
                             </div>
                             <div className="tags">

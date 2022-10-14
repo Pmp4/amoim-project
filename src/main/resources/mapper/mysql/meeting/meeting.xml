@@ -75,10 +75,20 @@
                 select count(*)
                 from MEETING_LIKE ML
                 where ML.MEETING_NO = M.NO
-            ) LIKE_COUNT
+            ) LIKE_COUNT,
+            M.PERSON_NUMBER,
+            (
+                select count(*)
+                from USER_MEETING um
+                where um.MEETING_NO = m.NO
+            ) PERSON_COUNT
         from MEETING M join INTERESTS I on I.CATEGORY_CODE = M.CATEGORY_CODE
                        join MEETING_IMAGES MI on M.NO = MI.MEETING_NO
                        join MEETING_ADDRESS MA on M.NO = MA.MEETING_NO
-        where M.NO = #{no}
+        where M.NO = #{no} and DEL_TAG = 'N'
+    </select>
+
+    <select id="selectByUserCount" parameterType="String" resultType="int">
+        select count(*) from MEETING where USER_NO = #{userNo}
     </select>
 </mapper>
