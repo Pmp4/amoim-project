@@ -8,83 +8,7 @@ import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faHeart } from "@fortawesome/free-solid-svg-icons";
 
-// const initialContents = {
 
-// NO
-// :
-// 13
-// MEETING_NO
-// :
-// 13
-// CATEGORY_CODE
-// :
-// "60010200"
-// IMAGE_NAME
-// :
-// "스크린샷 2022-08-31 오전 1.40.39_20221009195936603.png"
-// ZONECODE
-// :
-// ""
-// SIDO
-// :
-// "서울"
-// REGDATE
-// :
-// "2022-10-09T19:59:36.000+00:00"
-// DEL_FLAG
-// :
-// "N"
-// BNAME
-// :
-// "서초동"
-// PLACE_NAME
-// :
-// "힙합클럽NB"
-// BCODE
-// :
-// "1165010800"
-// LIKE_COUNT
-// :
-// 0
-// USER_NO
-// :
-// 21
-// CATEGORY_PARENT_NAME
-// :
-// "음악/악기"
-// ADDRESS_NO
-// :
-// 7
-// ROAD_ADDRESS
-// :
-// ""
-// ADDRESS
-// :
-// "서울 서초구 서초동 1308-4"
-// TITLE
-// :
-// "미노이와 함께하는 히팝 교실"
-// CONTENT
-// :
-// "안녕\n나랑 히팝 할 사람"
-// CATEGORY_NAME
-// :
-// "랩/힙합/DJ"
-// JIBUN_ADDRESS
-// :
-// "서울 서초구 서초동 1308-4"
-// CATEGORY_PARENT
-// :
-// "60000000"
-// TAGS
-// :
-// "[\"힙합\", \"미노이\", \"연예인\"]"
-// SIGUNGU
-// :
-// "서초구"
-// new entry
-// :
-// }
 
 const MoimView = () => {
     const [contents, setContents] = useState({});
@@ -136,6 +60,27 @@ const MoimView = () => {
                 </div>
             )
         }
+    }
+
+    
+    //좋아요 상태 확인 API
+    //좋아요 상태 확인 API
+    //좋아요 상태 확인 API
+    const userLikeStateAPI = () => {
+        
+    }
+
+
+    const likeButtonActionAPI = () => {
+        MeetingService.meetingLike(meetingNo).then(response => {
+            const {status, data} = response;
+            if(status) {
+                if(data.SUCCESS) selectViewApi();
+                else alert(data.SUCCESS_MSG);
+            }else {
+                alert("Server Error");
+            }
+        });
     }
 
     
@@ -207,7 +152,7 @@ const MoimView = () => {
                             </div>
                         </div>
                         <div className="right">
-                            <div className='like-btn draggable'>
+                            <div className='like-btn draggable' onClick={() => likeButtonActionAPI()}>
                                 <div className="like">
                                     <FontAwesomeIcon icon={faHeart} />
                                 </div>

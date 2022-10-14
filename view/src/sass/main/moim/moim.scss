@@ -835,11 +835,12 @@
                     width: 85%;
                     h3 {
                         font-size: 2em;
+                        font-weight: 600;
                     }
                     .sub-exp {
-                        margin-top: 6px;
+                        margin-top: 10px;
                         > div {
-                            margin-top: 4px;
+                            margin-top: 6px;
                             &:nth-child(1) {margin-top: 0;}
                             .box {
                                 display: inline-block;

@@ -48,13 +48,7 @@
         where USER_NO = #{userNo} and DEL_TAG = 'N' and MI.SEQ = 1
     </select>
     
-    
-    
-    
-    
-    
-    
-    
+
     
     
     
@@ -89,7 +83,7 @@
     </resultMap>
 
     <select id="selectUserMeeting" parameterType="String" resultType="hashMap">
-        select * from USER_MEETING where MEETING_NO = #{no}
+        select * from USER_MEETING where MEETING_NO = #{no} and REG_LEVEL = 1
     </select>
     
     
@@ -139,4 +133,32 @@
     <select id="selectByUserCount" parameterType="String" resultType="int">
         select count(*) from MEETING where USER_NO = #{userNo}
     </select>
+
+
+
+
+
+    <!-- 모임 좋아요 상태 -->
+    <!-- 모임 좋아요 상태 -->
+    <select id="meetingLikeState" parameterType="String" resultType="int">
+        select count(*) from MEETING_LIKE where USER_NO = #{userNo} and MEETING_NO = #{meetingNo}
+    </select>
+
+
+    <!-- 모임 좋아요 등록 -->
+    <!-- 모임 좋아요 등록 -->
+    <insert id="insertMeetingLike" parameterType="String">
+        <selectKey keyColumn="no" keyProperty="no" resultType="String" order="BEFORE">
+            select nextval('MEETING_LIKE_SEQ') from dual
+        </selectKey>
+
+        insert into MEETING_LIKE(no, meeting_no, user_no)
+        values (#{no}, #{meetingNo}, #{userNo});
+    </insert>
+
+    <!-- 모임 좋아요 취소 -->
+    <!-- 모임 좋아요 취소 -->
+    <delete id="deleteMeetingLike" parameterType="String">
+        delete MEETING_LIKE where MEETING_NO = #{meetingNo} and USER_NO = #{userNo}
+    </delete>
 </mapper>

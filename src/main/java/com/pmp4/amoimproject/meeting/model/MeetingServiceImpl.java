@@ -126,4 +126,14 @@ public class MeetingServiceImpl implements MeetingService {
     public int selectByUserCount(String userNo) {
         return meetingDAO.selectByUserCount(userNo);
     }
+
+    @Override
+    public int meetingLike(String userNo, String meetingNo) {
+        return meetingDAO.insertMeetingLike(userNo, meetingNo);
+    }
+
+    @Override
+    public int meetingLikeState(String userNo, String meetingNo) {
+        return meetingDAO.meetingLikeState(userNo, meetingNo);
+    }
 }
