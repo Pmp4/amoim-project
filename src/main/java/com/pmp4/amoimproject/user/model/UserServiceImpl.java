@@ -115,6 +115,8 @@ public class UserServiceImpl implements UserService {
                 resMap.put("userVo", userVO);
                 successText = userVO.getName() + "님, 로그인하셨습니다.";
                 success = true;
+            }else {
+                successText = "비밀번호가 일치하지 않습니다.";
             }
         }
 

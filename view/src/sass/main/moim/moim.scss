@@ -914,6 +914,25 @@
                 white-space: pre-wrap;
                 font-size: 1.2em;
             }
+
+            .membership-button-wrap {
+                margin-top: 50px;
+                button {
+                    @include initial-btn;
+                    background: #fff;
+                    padding: 3px 20px;
+                    font-size: 1.2em;
+                    transition: .2s;
+                    border-radius: 10px;
+                    line-height: 30px;
+                    box-shadow:  5px 5px 31px #f0f0f0,
+                        -5px -5px 31px #ffffff;
+                    &:hover {
+                        background: #51CD9A;
+                        color: #fff;
+                    }
+                }
+            }
         }
     }
 }

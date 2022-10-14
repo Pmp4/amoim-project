@@ -88,8 +88,10 @@ import { faLocationDot, faHeart } from "@fortawesome/free-solid-svg-icons";
 
 const MoimView = () => {
     const [contents, setContents] = useState({});
+    const [members, setMembers] = useState([]);
 
     const imgPath = useSelector((state) => state.path.imagePath);
+    const user = useSelector((state) => state.user);
     const navigate = useNavigate();
 
     const param = useParams();
@@ -105,7 +107,8 @@ const MoimView = () => {
             if (status === 200) {
                 const { SUCCESS, rest } = data;
                 if (SUCCESS) {
-                    setContents(rest);
+                    setContents(rest.CONTENTS);
+                    setMembers(rest.MEMBERS);
                     console.log(rest);
                 } else {
                     alert("잘못된 모임 정보입니다.");
@@ -116,6 +119,24 @@ const MoimView = () => {
             }
         });
     };
+
+
+    const membershipBtn = () => {
+        if(members.length > 0) {
+            let check = true;
+            for(let i = 0; i < members.length; i++) {
+                if(members[i].USER_NO === user.userInfo.no) check = false;
+            }
+
+            if(!check) return (
+                <div className='membership-button-wrap'>
+                    <button>
+                        가입 신청하기
+                    </button>
+                </div>
+            )
+        }
+    }
 
     
 
@@ -195,11 +216,7 @@ const MoimView = () => {
                         </div>
                     </div>
                     <div className="content">{contents.CONTENT}</div>
-                    <div className='membership-button-wrap'>
-                        <button>
-                            가입 신청하기
-                        </button>
-                    </div>
+                    {membershipBtn()}
                 </div>
             </div>
         </div>
