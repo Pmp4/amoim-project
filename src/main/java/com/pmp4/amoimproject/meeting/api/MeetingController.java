@@ -89,4 +89,20 @@ public class MeetingController {
 
         return restData;
     }
+
+
+
+    @GetMapping(value = {"/user/count/{userNo}", "/user/count"})
+    public int selectByUserCount(@PathVariable (required = false) String userNo,
+                                 HttpSession httpSession) {
+        logger.info("MEETING USER 생성 정보 조회 userNo={}", userNo);
+
+        if(userNo == null) userNo = String.valueOf(httpSession.getAttribute("userNo"));
+
+        int cnt = meetingService.selectByUserCount(userNo);
+        logger.info("MEETING USER 생성 정보 조회 결과 cnt={}", cnt);
+
+
+        return cnt;
+    }
 }

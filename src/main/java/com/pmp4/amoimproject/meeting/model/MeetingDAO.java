@@ -19,4 +19,6 @@ public interface MeetingDAO {
     List<Map<String, Object>> selectByUserNoCard(Long userNo);
 
     Map<String, Object> selectByNo(String no);
+
+    int selectByUserCount(String userNo);
 }

@@ -65,6 +65,20 @@ const MoimAdd = () => {
         );
         console.log(user.userInfo.no);
         categoryApi("");
+
+
+        MeetingService.countMeeting("").then(response => {
+            const {status, data} = response;
+            if(status === 200) {
+                if(data >= 4) {
+                    alert("모임 개설 횟수가 없습니다.");
+                    navigate("/moim");
+                }
+            }else {
+                alert("Server Error");
+                navigate("/");
+            }
+        })
     }, []);
 
 

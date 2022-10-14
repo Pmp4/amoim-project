@@ -643,14 +643,24 @@
             }
         }
 
-        .moim-edit-btn {
-            @include initial-btn;
+        .btn-wrap {
             margin-top: 30px;
-            background: #08B46C;
-            color: #fff;
-            padding: 5px 14px;
-            font-size: 1.1em;
-            border-radius: 12px;
+            button {
+                @include initial-btn;
+                margin-left: 10px;
+                &:nth-child(1) {margin-left: 0;}
+                padding: 5px 14px;
+                font-size: 1.1em;
+                border-radius: 12px;
+            }
+            .moim-edit-btn {
+                background: #08B46C;
+                color: #fff;
+            }
+            .moim-confirm-btn {
+                background: #ededed;
+                color: #333333;
+            }
         }
     }
 
@@ -791,11 +801,13 @@
 
 
 #view-page {
+    color: rgb(36, 36, 36);
     > div {
+        font-size: 1em;
         display: flex;
         justify-content: space-between;
         margin-top: 40px;
-        .left {
+        > .left {
             width: 40%;
             .img-box {
                 position: relative;
@@ -808,12 +820,100 @@
                     position: absolute;
                     top:0%;
                     left: 50%;
+                    height: 100%;
                     transform: translateX(-50%);
                 }
             }
         }
-        .right {
+        > .right {
             width: 56%;
+            .title-sub {
+                display: flex;
+                justify-content: space-between;
+
+                > .left {
+                    width: 85%;
+                    h3 {
+                        font-size: 2em;
+                    }
+                    .sub-exp {
+                        margin-top: 6px;
+                        > div {
+                            margin-top: 4px;
+                            &:nth-child(1) {margin-top: 0;}
+                            .box {
+                                display: inline-block;
+                                border-radius: 6px;
+                                padding: 2px 5px;
+                            }
+                            .tags {
+                                margin-top: 10px;
+                                background: #ededed;
+                            }
+                        }
+        
+                        .sub-wrap {
+                            > div {
+                                margin-left:5px;
+                                &:nth-child(1) {margin-left: 0;}
+                            }
+                            .loc {
+                                svg {
+                                    font-size: .9em;
+                                }
+                                background: #FCE4C7;
+                                color: #a4937d;
+                            }
+        
+                            .category {
+                                background: #F4FCF4;
+                                color: #828d82;
+                            }
+        
+                            .person-number {
+                                background: #FCF3F3;
+                                color: #a48f8f;
+                            }
+                        }
+                    }
+                }
+                > .right {
+                    width: 10%;
+                    .like-btn {
+                        cursor: pointer;
+                        display: flex;
+                        flex-wrap: wrap;
+                        align-items: center;
+                        align-content: center;
+                        justify-content: center;
+                        height: 100%;
+                        font-size: 2.4em;
+                        text-align: center;
+                        background: #f5bec1;
+                        border-radius: 20px;
+        
+                        .like {
+                            color: #A5676A;
+                            width: 100%;
+                        }
+        
+                        p {
+                            width: 100%;
+                            color: #A5676A;
+                            font-size: .4em;
+                            margin-top: .2em;
+                        }
+                    }
+                }
+                
+
+            }
+            
+            .content { 
+                margin-top: 30px;
+                white-space: pre-wrap;
+                font-size: 1.2em;
+            }
         }
     }
 }
