@@ -20,4 +20,14 @@ const countMeeting = (userNo) => {
 }
 
 
-export default {insertMeeting, selectByUserNo, selectByNo, countMeeting};
+const meetingLikeState = (meetingNo) => {
+    return httpCommon.get(`/meeting/like/state/${meetingNo}`);
+}
+
+
+const meetingLike = (meetingNo) => {
+    return httpCommon.post(`/meeting/like`, meetingNo);
+}
+
+
+export default {insertMeeting, selectByUserNo, selectByNo, countMeeting, meetingLike, meetingLikeState};

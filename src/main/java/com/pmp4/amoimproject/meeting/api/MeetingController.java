@@ -91,7 +91,9 @@ public class MeetingController {
     }
 
 
-
+    //해당 유저가 모임 글을 몇개 작성했는지
+    //해당 유저가 모임 글을 몇개 작성했는지
+    //해당 유저가 모임 글을 몇개 작성했는지
     @GetMapping(value = {"/user/count/{userNo}", "/user/count"})
     public int selectByUserCount(@PathVariable (required = false) String userNo,
                                  HttpSession httpSession) {
@@ -104,5 +106,57 @@ public class MeetingController {
 
 
         return cnt;
+    }
+
+
+
+    //해당 모임 글에 유저가 좋아요를 눌렀는지 아닌지
+    //해당 모임 글에 유저가 좋아요를 눌렀는지 아닌지
+    //해당 모임 글에 유저가 좋아요를 눌렀는지 아닌지
+    @GetMapping("/like/state/{meetingNo}")
+    public int likeState(@PathVariable String meetingNo, HttpSession httpSession) {
+        logger.info("MEETING LIKE 상태 확인 meetingNo={}", meetingNo);
+
+        String userNo = String.valueOf(httpSession.getAttribute("userNo"));
+        int cnt;
+        if(userNo != null && !userNo.isEmpty()) {
+            cnt = meetingService.meetingLikeState(userNo, meetingNo);
+            logger.info("MEETING LIKE 상태 확인 결과 cnt={}", cnt);
+        }else {
+            cnt = -1;
+        }
+
+        return cnt;
+    }
+
+
+
+    @PostMapping(value = "/like")
+    public Map<String, Object> meetingLike(@RequestBody String meetingNo, HttpSession httpSession) {
+        logger.info("MEETING LIKE 추가 meetingNo={}", meetingNo);
+
+        String userNo = String.valueOf(httpSession.getAttribute("userNo"));
+
+        Map<String, Object> restData = new HashMap<>();
+
+        if(userNo != null && !userNo.isEmpty()) {
+            int cnt = 0;
+
+            cnt = meetingService.meetingLike(userNo, meetingNo);
+            logger.info("MEETING LIKE 추가 결과 cnt={}", cnt);
+
+            if(cnt > 0) {
+                restData.put("SUCCESS", true);
+            }else {
+                restData.put("SUCCESS", false);
+                restData.put("SUCCESS_MSG", "Server DB Error");
+            }
+        }else {
+            restData.put("SUCCESS", false);
+            restData.put("SUCCESS_MSG", "로그인 후 시도해주세요.");
+        }
+
+
+        return restData;
     }
 }

@@ -19,4 +19,8 @@ public interface MeetingService {
     Map<String, Object> selectByNo(String no);
 
     int selectByUserCount(String userNo);
+
+    int meetingLike(String userNo, String meetingNo);
+
+    int meetingLikeState(String userNo, String meetingNo);
 }
