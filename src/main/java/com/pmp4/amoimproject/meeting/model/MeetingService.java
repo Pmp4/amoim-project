@@ -1,5 +1,7 @@
 package com.pmp4.amoimproject.meeting.model;
 
+import org.apache.ibatis.annotations.Param;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +22,9 @@ public interface MeetingService {
 
     int selectByUserCount(String userNo);
 
-    int meetingLike(String userNo, String meetingNo);
-
     int meetingLikeState(String userNo, String meetingNo);
+
+    int insertMeetingLike(@Param("userNo") String userNo, @Param("meetingNo") String meetingNo);
+
+    int deleteMeetingLike(@Param("userNo") String userNo, @Param("meetingNo") String meetingNo);
 }

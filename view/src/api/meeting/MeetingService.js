@@ -25,9 +25,23 @@ const meetingLikeState = (meetingNo) => {
 }
 
 
-const meetingLike = (meetingNo) => {
-    return httpCommon.post(`/meeting/like`, meetingNo);
+const meetingLikeInsert = (meetingNo) => {
+    return httpCommon.post(`/meeting/like/add`, meetingNo);
+}
+
+const meetingLikeDelete = (meetingNo) => {
+    return httpCommon.delete(`/meeting/like/delete/${meetingNo}`);
 }
 
 
-export default {insertMeeting, selectByUserNo, selectByNo, countMeeting, meetingLike, meetingLikeState};
+
+
+export default {
+    insertMeeting, 
+    selectByUserNo, 
+    selectByNo, 
+    countMeeting, 
+    meetingLikeState,
+    meetingLikeInsert,
+    meetingLikeDelete
+};

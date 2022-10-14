@@ -22,7 +22,9 @@ public interface MeetingDAO {
 
     int selectByUserCount(String userNo);
 
+    int meetingLikeState(@Param("userNo") String userNo, @Param("meetingNo") String meetingNo);
+
     int insertMeetingLike(@Param("userNo") String userNo, @Param("meetingNo") String meetingNo);
 
-    int meetingLikeState(@Param("userNo") String userNo, @Param("meetingNo") String meetingNo);
+    int deleteMeetingLike(@Param("userNo") String userNo, @Param("meetingNo") String meetingNo);
 }

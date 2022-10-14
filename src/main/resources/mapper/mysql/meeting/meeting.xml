@@ -159,6 +159,6 @@
     <!-- 모임 좋아요 취소 -->
     <!-- 모임 좋아요 취소 -->
     <delete id="deleteMeetingLike" parameterType="String">
-        delete MEETING_LIKE where MEETING_NO = #{meetingNo} and USER_NO = #{userNo}
+        delete from MEETING_LIKE where MEETING_NO = #{meetingNo} and USER_NO = #{userNo}
     </delete>
 </mapper>
