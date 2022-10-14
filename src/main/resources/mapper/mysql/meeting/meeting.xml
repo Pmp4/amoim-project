@@ -49,7 +49,51 @@
     </select>
     
     
-    <select id="selectByNo" parameterType="String" resultType="hashMap">
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <resultMap id="meetingViewMap" type="hashMap">
+        <association property="CONTENTS" column="no" javaType="hashMap">
+            <id column="NO" jdbcType="BIGINT" property="NO"/>
+            <result column="USERS_NO" jdbcType="BIGINT" property="USERS_NO"/>
+            <result column="TITLE" jdbcType="VARCHAR" property="TITLE"/>
+            <result column="CONTENT" jdbcType="VARCHAR" property="CONTENT"/>
+            <result column="CATEGORY_PARENT" jdbcType="VARCHAR" property="CATEGORY_PARENT"/>
+            <result column="CATEGORY_CODE" jdbcType="VARCHAR" property="CATEGORY_CODE"/>
+            <result column="CATEGORY_PARENT_NAME" jdbcType="VARCHAR" property="CATEGORY_PARENT_NAME"/>
+            <result column="CATEGORY_NAME" jdbcType="VARCHAR" property="CATEGORY_NAME"/>
+            <result column="TAGS" jdbcType="VARCHAR" property="TAGS"/>
+            <result column="IMAGE_NAME" jdbcType="VARCHAR" property="IMAGE_NAME"/>
+            <result column="ADDRESS_NO" jdbcType="BIGINT" property="ADDRESS_NO"/>
+            <result column="ADDRESS" jdbcType="VARCHAR" property="ADDRESS"/>
+            <result column="ROAD_ADDRESS" jdbcType="VARCHAR" property="ROAD_ADDRESS"/>
+            <result column="JIBUN_ADDRESS" jdbcType="VARCHAR" property="JIBUN_ADDRESS"/>
+            <result column="PLACE_NAME" jdbcType="VARCHAR" property="PLACE_NAME"/>
+            <result column="LIKE_COUNT" jdbcType="BIGINT" property="LIKE_COUNT"/>
+            <result column="PERSON_NUMBER" jdbcType="BIGINT" property="PERSON_NUMBER"/>
+            <result column="PERSON_COUNT" jdbcType="BIGINT" property="PERSON_COUNT"/>
+        </association>
+        <collection property="MEMBERS" column="NO" javaType="ArrayList" ofType="hashMap" select="selectUserMeeting">
+
+        </collection>
+    </resultMap>
+
+    <select id="selectUserMeeting" parameterType="String" resultType="hashMap">
+        select * from USER_MEETING where MEETING_NO = #{no}
+    </select>
+    
+    
+    <select id="selectByNo" parameterType="String" resultMap="meetingViewMap">
         select
             M.NO,
             M.USER_NO,
@@ -70,7 +114,11 @@
                 group by MT.MEETING_NO
             ) TAGS,
             MI.IMAGE_NAME,
-            MA.*,
+            MA.ADDRESS_NO,
+            MA.ADDRESS,
+            MA.ROAD_ADDRESS,
+            MA.JIBUN_ADDRESS,
+            MA.PLACE_NAME,
             (
                 select count(*)
                 from MEETING_LIKE ML
