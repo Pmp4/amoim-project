@@ -109,6 +109,19 @@ public class MeetingController {
     }
 
 
+    //모임의 좋아요 개수만 따로 조회하는
+    //모임의 좋아요 개수만 따로 조회하는
+    //모임의 좋아요 개수만 따로 조회하는
+    @GetMapping("/like/count/{meetingNo}")
+    public int likeCount(@PathVariable String meetingNo) {
+        logger.info("MEETING LIKE 개수 meetingNo={}", meetingNo);
+
+        int cnt = meetingService.likeCount(meetingNo);
+        logger.info("MEETING LIKE 개수 결과 cnt={}", cnt);
+
+        return cnt;
+    }
+
 
     //해당 모임 글에 유저가 좋아요를 눌렀는지 아닌지
     //해당 모임 글에 유저가 좋아요를 눌렀는지 아닌지

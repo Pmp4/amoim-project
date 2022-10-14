@@ -128,6 +128,11 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
+    public int likeCount(String meetingNo) {
+        return meetingDAO.likeCount(meetingNo);
+    }
+
+    @Override
     public int meetingLikeState(String userNo, String meetingNo) {
         return meetingDAO.meetingLikeState(userNo, meetingNo);
     }

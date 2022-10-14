@@ -22,6 +22,8 @@ public interface MeetingDAO {
 
     int selectByUserCount(String userNo);
 
+    int likeCount(@Param("meetingNo") String meetingNo);
+
     int meetingLikeState(@Param("userNo") String userNo, @Param("meetingNo") String meetingNo);
 
     int insertMeetingLike(@Param("userNo") String userNo, @Param("meetingNo") String meetingNo);

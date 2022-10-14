@@ -20,10 +20,13 @@ const countMeeting = (userNo) => {
 }
 
 
+const meetingLikeCount = (meetingNo) => {
+    return httpCommon.get(`/meeting/like/count/${meetingNo}`);
+}
+
 const meetingLikeState = (meetingNo) => {
     return httpCommon.get(`/meeting/like/state/${meetingNo}`);
 }
-
 
 const meetingLikeInsert = (meetingNo) => {
     return httpCommon.post(`/meeting/like/add`, meetingNo);
@@ -43,5 +46,6 @@ export default {
     countMeeting, 
     meetingLikeState,
     meetingLikeInsert,
-    meetingLikeDelete
+    meetingLikeDelete,
+    meetingLikeCount
 };

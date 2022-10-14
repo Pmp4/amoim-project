@@ -64,6 +64,19 @@ const MoimView = () => {
         }
     }
 
+
+    const likeCountAPI = () => {
+        MeetingService.countMeeting(meetingNo).then(response=> {
+            const {status, data} = response;
+
+            if(status === 200) {
+                setContents({...contents, LIKE_COUNT: data});
+            }else {
+                alert("Server Error");
+            }
+        })
+    }
+
     
     //좋아요 상태 확인 API
     //좋아요 상태 확인 API
@@ -96,7 +109,8 @@ const MoimView = () => {
 
                 if(status === 200) {
                     if(data.SUCCESS) {
-                        userLikeStateAPI();
+                        setLikeState(true);
+                        likeCountAPI();
                     }else {
                         alert(data.SUCCESS_MSG);
                     }
@@ -110,7 +124,8 @@ const MoimView = () => {
 
                 if(status === 200) {
                     if(data.SUCCESS) {
-                        userLikeStateAPI();
+                        setLikeState(false);
+                        likeCountAPI();
                     }else {
                         alert(data.SUCCESS_MSG);
                     }
