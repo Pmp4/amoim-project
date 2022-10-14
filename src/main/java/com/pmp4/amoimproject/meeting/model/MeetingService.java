@@ -22,6 +22,8 @@ public interface MeetingService {
 
     int selectByUserCount(String userNo);
 
+    int likeCount(String meetingNo);
+
     int meetingLikeState(String userNo, String meetingNo);
 
     int insertMeetingLike(@Param("userNo") String userNo, @Param("meetingNo") String meetingNo);

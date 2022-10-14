@@ -137,6 +137,12 @@
 
 
 
+    <!-- 모임 좋아요 개수 -->
+    <!-- 모임 좋아요 개수 -->
+    <select id="likeCount" parameterType="String" resultType="int">
+        select count(*) from MEETING_LIKE where MEETING_NO = #{meetingNo}
+    </select>
+    
 
     <!-- 모임 좋아요 상태 -->
     <!-- 모임 좋아요 상태 -->
