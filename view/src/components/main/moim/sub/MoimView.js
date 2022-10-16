@@ -66,8 +66,9 @@ const MoimView = () => {
 
 
     const likeCountAPI = () => {
-        MeetingService.countMeeting(meetingNo).then(response=> {
+        MeetingService.meetingLikeCount(meetingNo).then(response=> {
             const {status, data} = response;
+            console.log(response);
 
             if(status === 200) {
                 setContents({...contents, LIKE_COUNT: data});
