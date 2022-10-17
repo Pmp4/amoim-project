@@ -40,6 +40,10 @@ const meetingSubscribe = (meetingNo) => {
     return httpCommon.post(`/meeting/subscribe`, meetingNo);
 }
 
+const meetingSubscribeList = () => {
+    return httpCommon.get('/meeting/subscribe/list');
+}
+
 
 
 
@@ -53,4 +57,5 @@ export default {
     meetingLikeDelete,
     meetingLikeCount,
     meetingSubscribe,
+    meetingSubscribeList
 };

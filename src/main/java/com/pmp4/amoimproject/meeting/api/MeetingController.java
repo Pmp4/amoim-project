@@ -224,11 +224,22 @@ public class MeetingController {
 
 
     @GetMapping("/subscribe/list")
-    public List<Map<String, Object>> meetingSubscribeList(HttpSession httpSession) {
+    public Map<String, Object> meetingSubscribeList(HttpSession httpSession) {
         String userNo = String.valueOf(httpSession.getAttribute("userNo"));
 
         logger.info("MEETING 가입 신청 리스트 조회 userNo={}", userNo);
-        List<Map<String, Object>> resultData = meetingService.moimSubscribeList(userNo);
+        Map<String, Object> resultData = new HashMap<>();
+
+        if(userNo != null && !userNo.isEmpty()) {
+            List<Map<String, Object>> dbData = meetingService.moimSubscribeList(userNo);
+            logger.info("MEETING 가입 신청 리스트 조회 결과 dbData.size={}", dbData.size());
+
+            resultData.put("SUCCESS", true);
+            resultData.put("DATA", dbData);
+        }else {
+            resultData.put("SUCCESS", false);
+            resultData.put("SUCCESS_TEXT", "로그인 후 시도해주세요.");
+        }
 
         return resultData;
     }

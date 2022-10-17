@@ -215,9 +215,9 @@
     <!-- 가입신청 리스트 -->
     <!-- 가입신청 리스트 -->
     <select id="moimSubscribeList" parameterType="String" resultMap="moimSubscribeListMap">
-        select *
-        from USER_MEETING
-        where USER_NO = #{userNo} and RIGHT_NO = 1
+        select UM.*, M.TITLE
+        from USER_MEETING UM join MEETING M on UM.MEETING_NO = M.NO
+        where UM.USER_NO = #{userNo} and RIGHT_NO = 1
     </select>
 
     <resultMap id="moimSubscribeListMap" type="hashMap">
@@ -225,14 +225,17 @@
             <result column="NO" jdbcType="BIGINT" property="NO"/>
             <result column="USER_NO" jdbcType="BIGINT" property="USER_NO"/>
             <result column="MEETING_NO" jdbcType="BIGINT" property="MEETING_NO"/>
+            <result column="TITLE" jdbcType="VARCHAR" property="TITLE"/>
             <result column="REG_LEVEL" jdbcType="BIGINT" property="REG_LEVEL"/>
             <result column="RIGHT_NO" jdbcType="BIGINT" property="RIGHT_NO"/>
             <result column="REGDATE" jdbcType="TIMESTAMP" property="REGDATE"/>
         </association>
-        <collection property="USER_LIST" column="meeting_no" javaType="ArrayList" ofType="hashMap" select=""/>
+        <collection property="USER_LIST" column="meeting_no" javaType="ArrayList" ofType="hashMap" select="selectUserMeetingList"/>
     </resultMap>
 
     <select id="selectUserMeetingList" parameterType="String" resultType="hashMap">
-        select * from USER_MEETING where MEETING_NO = #{meetingNo} and REG_LEVEL = 1
+        select U.*, UM.NO "USER_MEETING_NO"
+        from USER_MEETING UM join USERS U on U.USER_NO = UM.USER_NO
+        where MEETING_NO = #{meetingNo} and REG_LEVEL = 2
     </select>
 </mapper>
