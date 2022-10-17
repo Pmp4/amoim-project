@@ -1,14 +1,23 @@
 import { React, useState } from 'react';
 import Login from './Login';
 import Error from './Error';
+import { useDispatch } from 'react-redux';
+import { MODAL_CLOSE } from 'reducer/module/modal';
+import { useSelector } from 'react-redux';
+import MoimSubscribe from './MoimSubscribe';
 
-const Modal = ({type, loginPopup}) => {
+const Modal = ({loginPopup}) => {
     const [modalState, setModalState] = useState(true);
 
+    const modal = useSelector(state => state.modal);
+    const dispatch = useDispatch();
+
     const modalType = () => {
-        switch(type) {
+        switch(modal.modalType) {
             case "login" : 
                 return (<Login modalClose={modalClose}/>);
+            case "moim-subscribe-list" :
+                return (<MoimSubscribe modalClose={modalClose}/>);
 
             default : return(<Error/>);
         }
@@ -17,7 +26,7 @@ const Modal = ({type, loginPopup}) => {
     const modalClose = () => {
         setModalState(false);
         setTimeout(() => {
-            loginPopup("OFF");
+            dispatch({type: MODAL_CLOSE});
         }, 300);
     }
 

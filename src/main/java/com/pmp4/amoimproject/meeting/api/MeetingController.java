@@ -201,4 +201,22 @@ public class MeetingController {
 
         return restData;
     }
+
+
+
+    @PostMapping("/subscribe")
+    public Map<String, Object> meetingSubscribe(@RequestBody String meetingNo, HttpSession httpSession) {
+        logger.info("MEETING 가입 신청 meetingNo={}", meetingNo);
+        String userNo = String.valueOf(httpSession.getAttribute("userNo"));
+
+        Map<String, Object> resultData = new HashMap<>();
+        if(userNo != null && !userNo.isEmpty()) {
+            resultData = meetingService.meetingSubscribe(userNo, meetingNo);
+        }else {
+            resultData.put("SUCCESS", false);
+            resultData.put("SUCCESS_TEXT", "로그인 후 시도해주세요.");
+        }
+
+        return resultData;
+    }
 }

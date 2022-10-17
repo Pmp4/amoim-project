@@ -9,7 +9,6 @@ const MoimItem = (props) => {
     const tagArr = item.TAGS.replace(/\[|\]|"| /g, "").split(",");
     const location = useLocation();
     const navigate = useNavigate();
-    console.log(location.pathname);
 
     return (
         <div id="moim-item" className='draggable' key={item.NO} onClick={() => navigate(`${location.pathname}/view/${item.NO}`)}>

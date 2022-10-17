@@ -59,7 +59,7 @@
     <resultMap id="meetingViewMap" type="hashMap">
         <association property="CONTENTS" column="no" javaType="hashMap">
             <id column="NO" jdbcType="BIGINT" property="NO"/>
-            <result column="USERS_NO" jdbcType="BIGINT" property="USERS_NO"/>
+            <result column="USER_NO" jdbcType="BIGINT" property="USER_NO"/>
             <result column="TITLE" jdbcType="VARCHAR" property="TITLE"/>
             <result column="CONTENT" jdbcType="VARCHAR" property="CONTENT"/>
             <result column="CATEGORY_PARENT" jdbcType="VARCHAR" property="CATEGORY_PARENT"/>
@@ -72,6 +72,8 @@
             <result column="ADDRESS" jdbcType="VARCHAR" property="ADDRESS"/>
             <result column="ROAD_ADDRESS" jdbcType="VARCHAR" property="ROAD_ADDRESS"/>
             <result column="JIBUN_ADDRESS" jdbcType="VARCHAR" property="JIBUN_ADDRESS"/>
+            <result column="LAT_Y" jdbcType="DOUBLE" property="LAT_Y"/>
+            <result column="LON_X" jdbcType="DOUBLE" property="LON_X"/>
             <result column="PLACE_NAME" jdbcType="VARCHAR" property="PLACE_NAME"/>
             <result column="LIKE_COUNT" jdbcType="BIGINT" property="LIKE_COUNT"/>
             <result column="PERSON_NUMBER" jdbcType="BIGINT" property="PERSON_NUMBER"/>
@@ -83,7 +85,15 @@
     </resultMap>
 
     <select id="selectUserMeeting" parameterType="String" resultType="hashMap">
-        select * from USER_MEETING where MEETING_NO = #{no} and REG_LEVEL = 1
+        select
+            UM.USER_NO,
+            U.BIRTH_DAY,
+            U.EMAIL,
+            U.NAME,
+            U.INTRO,
+            U.PROFILE_IMAGE
+        from USER_MEETING UM join USERS U on U.USER_NO = UM.USER_NO
+        where MEETING_NO = #{no} and REG_LEVEL = 1
     </select>
     
     
@@ -113,6 +123,8 @@
             MA.ROAD_ADDRESS,
             MA.JIBUN_ADDRESS,
             MA.PLACE_NAME,
+            MA.LAT_Y,
+            MA.LON_X,
             (
                 select count(*)
                 from MEETING_LIKE ML
@@ -167,4 +179,29 @@
     <delete id="deleteMeetingLike" parameterType="String">
         delete from MEETING_LIKE where MEETING_NO = #{meetingNo} and USER_NO = #{userNo}
     </delete>
+
+
+
+
+    <!-- 가입신청 전, 신청 여부 확인 -->
+    <!-- 가입신청 전, 신청 여부 확인 -->
+    <select id="meetingUserCount" parameterType="String" resultType="int">
+        select count(*) from USER_MEETING where USER_NO = #{userNo} and MEETING_NO = #{meetingNo}
+    </select>
+
+    <!-- 가입신청 전, 인원 확인 -->
+    <!-- 가입신청 전, 인원 확인 -->
+    <select id="meetingMemberCount" parameterType="String" resultType="hashMap">
+        select count(*) COUNT, M.PERSON_NUMBER
+            from USER_MEETING UM join MEETING M on M.NO = UM.MEETING_NO
+        where MEETING_NO = 15
+    </select>
+
+    <!-- 가입신청 -->
+    <!-- 가입신청 -->
+    <insert id="insertMeetingSub" parameterType="String">
+        insert into USER_MEETING(user_no, meeting_no, reg_level, right_no)
+        values (#{userNo}, #{meetingNo}, 2, 2)
+    </insert>
+    
 </mapper>

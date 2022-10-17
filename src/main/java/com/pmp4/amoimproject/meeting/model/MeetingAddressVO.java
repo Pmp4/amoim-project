@@ -17,6 +17,8 @@ public class MeetingAddressVO {
     private String bcode;
     private String bname;
     private String placeName;
+    private double latY;
+    private double lonX;
     private Timestamp regdate;
     private String delFlag;
 }

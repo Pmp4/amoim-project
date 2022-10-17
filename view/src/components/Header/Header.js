@@ -8,11 +8,14 @@ import Search from "./Search";
 import { useDispatch, useSelector } from "react-redux";
 import {LOGOUT_LOGGED} from '../../reducer/module/user';
 import UserInfoService from 'api/member/UserInfoService';
+import { MODAL_OPEN } from 'reducer/module/modal';
 
 const Header = ({ loginPopup }) => {
     const navigate = useNavigate();
+
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
+
     const logged = Boolean(sessionStorage.getItem("logged"));
 
     const loginBtnAction = () => {
@@ -31,7 +34,8 @@ const Header = ({ loginPopup }) => {
                     });
             }
         }else {
-            loginPopup("ON");
+            // loginPopup("ON");
+            dispatch({type: MODAL_OPEN, data: "login"})
         }
     }
 

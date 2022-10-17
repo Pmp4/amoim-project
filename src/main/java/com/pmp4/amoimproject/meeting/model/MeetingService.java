@@ -29,4 +29,7 @@ public interface MeetingService {
     int insertMeetingLike(@Param("userNo") String userNo, @Param("meetingNo") String meetingNo);
 
     int deleteMeetingLike(@Param("userNo") String userNo, @Param("meetingNo") String meetingNo);
+
+
+    Map<String, Object> meetingSubscribe(String userNo, String meetingNo);
 }

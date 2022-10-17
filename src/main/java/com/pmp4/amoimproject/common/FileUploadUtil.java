@@ -147,12 +147,16 @@ public class FileUploadUtil {
 				path = ConstUtil.FILE_UPLOAD_PATH_TEST;
 			} else if(pathFlag == ConstUtil.UPLOAD_IMAGE_FLAG) {	// 상품등록
 				path = ConstUtil.IMAGE_FILE_UPLOAD_PATH_TEST;
+			} else if(pathFlag == ConstUtil.UPLOAD_PROFILE) {
+				path = ConstUtil.PROFILE_IMAGE_PATH_TEST;
 			}
 		} else {	// deploy(배포시)
 			if(pathFlag == ConstUtil.UPLOAD_FILE_FLAG) {	// 자료실
 				path = ConstUtil.FILE_UPLOAD_PATH;	// pds_upload
 			} else if(pathFlag == ConstUtil.UPLOAD_IMAGE_FLAG) {	// 상품등록
 				path = ConstUtil.IMAGE_FILE_UPLOAD_PATH;	// pd_images
+			} else if(pathFlag == ConstUtil.UPLOAD_PROFILE) {
+				path = ConstUtil.PROFILE_IMAGE_PATH;
 			}
 			
 			//실제 물리적인 경로 구하기

@@ -29,4 +29,11 @@ public interface MeetingDAO {
     int insertMeetingLike(@Param("userNo") String userNo, @Param("meetingNo") String meetingNo);
 
     int deleteMeetingLike(@Param("userNo") String userNo, @Param("meetingNo") String meetingNo);
+
+
+    int meetingUserCount(@Param("userNo") String userNo, @Param("meetingNo") String meetingNo);
+
+    Map<String, Object> meetingMemberCount(String meetingNo);
+
+    int insertMeetingSub(@Param("userNo") String userNo, @Param("meetingNo") String meetingNo);
 }

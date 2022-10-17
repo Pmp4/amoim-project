@@ -25,6 +25,8 @@ public class MvcConfiguration implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/static/upload/img_upload/");
         registry.addResourceHandler("/default/images/**")
                 .addResourceLocations("classpath:/static/upload/images");
+        registry.addResourceHandler("/profile/images/**")
+                .addResourceLocations("classpath:/static/upload/profile/");
     }
 
     @Bean

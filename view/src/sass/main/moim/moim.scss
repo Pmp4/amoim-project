@@ -605,6 +605,7 @@
     .add-moim-part {
         width: 100%;
         margin-top: 40px;
+
         .moim-sub {
             display: flex;
             width: 100%;
@@ -645,18 +646,25 @@
 
         .btn-wrap {
             margin-top: 30px;
+
             button {
                 @include initial-btn;
                 margin-left: 10px;
-                &:nth-child(1) {margin-left: 0;}
+
+                &:nth-child(1) {
+                    margin-left: 0;
+                }
+
                 padding: 5px 14px;
                 font-size: 1.1em;
                 border-radius: 12px;
             }
+
             .moim-edit-btn {
                 background: #08B46C;
                 color: #fff;
             }
+
             .moim-confirm-btn {
                 background: #ededed;
                 color: #333333;
@@ -687,9 +695,11 @@
     transition: .2s;
     position: relative;
     top: 0;
+
     &:hover {
         top: -10px
     }
+
     .item {
         border-radius: 12px;
         box-sizing: border-box;
@@ -715,12 +725,14 @@
         .exp-part {
             padding: 16px 14px 18px 14px;
             font-size: 2em;
+
             .title {
                 font-size: .6em;
-                white-space : nowrap;
+                white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 line-height: 140%;
+
                 span {
                     text-overflow: ellipsis;
                 }
@@ -774,18 +786,20 @@
                         }
                     }
                 }
+
                 .right {
                     font-size: 1.7em;
                     text-align: center;
                     background: #f5bec1;
                     padding: 5px 6px;
-                    margin-top: 5px;;
+                    margin-top: 5px;
+                    ;
                     border-radius: 20px;
-    
+
                     .like {
                         color: #A5676A;
                     }
-    
+
                     p {
                         color: #A5676A;
                         font-size: .4em;
@@ -802,13 +816,16 @@
 
 #view-page {
     color: rgb(36, 36, 36);
-    > div {
+
+    >div {
         font-size: 1em;
         display: flex;
         justify-content: space-between;
         margin-top: 40px;
-        > .left {
+
+        >.left {
             width: 40%;
+
             .img-box {
                 position: relative;
                 width: 100%;
@@ -816,61 +833,101 @@
                 border-radius: 30px;
                 overflow: hidden;
                 box-shadow: 5px 5px 44px #ebebeb, -5px -5px 44px #ffffff;
+
                 img {
                     position: absolute;
-                    top:0%;
+                    top: 0%;
                     left: 50%;
                     height: 100%;
                     transform: translateX(-50%);
                 }
             }
+
+            .membership-button-wrap {
+                margin-top: 50px;
+
+                button {
+                    @include initial-btn;
+                    width: 100%;
+                    background: #fff;
+                    padding: 3px 20px;
+                    font-size: 1.2em;
+                    transition: .2s;
+                    border-radius: 10px;
+                    line-height: 30px;
+                    box-shadow:  5px 5px 20px #f0f0f0,
+                        -5px -5px 20px #ffffff;
+                    position: relative;
+                    top:0;
+                    &:hover {
+                        top: 3%;
+                        background: #51CD9A;
+                        color: #fff;
+                    }
+                }
+            }
         }
-        > .right {
+
+        >.right {
             width: 56%;
+
             .title-sub {
                 display: flex;
                 justify-content: space-between;
 
-                > .left {
+                >.left {
                     width: 85%;
+
                     h3 {
                         font-size: 2em;
                         font-weight: 600;
                     }
+
                     .sub-exp {
                         margin-top: 10px;
-                        > div {
+
+                        >div {
                             margin-top: 6px;
-                            &:nth-child(1) {margin-top: 0;}
+
+                            &:nth-child(1) {
+                                margin-top: 0;
+                            }
+
                             .box {
                                 display: inline-block;
                                 border-radius: 6px;
                                 padding: 2px 5px;
                             }
+
                             .tags {
                                 margin-top: 10px;
                                 background: #ededed;
                             }
                         }
-        
+
                         .sub-wrap {
-                            > div {
-                                margin-left:5px;
-                                &:nth-child(1) {margin-left: 0;}
+                            >div {
+                                margin-left: 5px;
+
+                                &:nth-child(1) {
+                                    margin-left: 0;
+                                }
                             }
+
                             .loc {
                                 svg {
                                     font-size: .9em;
                                 }
+
                                 background: #FCE4C7;
                                 color: #a4937d;
                             }
-        
+
                             .category {
                                 background: #F4FCF4;
                                 color: #828d82;
                             }
-        
+
                             .person-number {
                                 background: #FCF3F3;
                                 color: #a48f8f;
@@ -878,8 +935,10 @@
                         }
                     }
                 }
-                > .right {
+
+                >.right {
                     width: 10%;
+
                     .like-btn {
                         cursor: pointer;
                         display: flex;
@@ -890,47 +949,120 @@
                         height: 100%;
                         font-size: 2.4em;
                         text-align: center;
-                        background: #f5bec1;
+                        background: #ffe3e5;
                         border-radius: 20px;
-        
+                        position: relative;
+                        top: 0;
+                        transition: .2s;
+
+                        &:hover {
+                            top: -3%;
+                        }
+
                         .like {
-                            color: #A5676A;
+                            color: #cb9194;
                             width: 100%;
                         }
-        
+
                         p {
                             width: 100%;
-                            color: #A5676A;
+                            color: #d1979a;
                             font-size: .4em;
                             margin-top: .2em;
                         }
+
+
+                        &.on {
+                            background: #f5bec1;
+
+                            .like {
+                                color: #A5676A;
+                                width: 100%;
+                            }
+
+                            p {
+                                width: 100%;
+                                color: #A5676A;
+                                font-size: .4em;
+                                margin-top: .2em;
+                            }
+                        }
                     }
                 }
-                
+
 
             }
-            
-            .content { 
+
+            .content {
                 margin-top: 30px;
                 white-space: pre-wrap;
                 font-size: 1.2em;
+                line-height: 130%;
             }
 
-            .membership-button-wrap {
+            .sub-content {
+                display: flex;
                 margin-top: 50px;
-                button {
-                    @include initial-btn;
-                    background: #fff;
-                    padding: 3px 20px;
-                    font-size: 1.2em;
-                    transition: .2s;
-                    border-radius: 10px;
-                    line-height: 30px;
-                    box-shadow:  5px 5px 31px #f0f0f0,
-                        -5px -5px 31px #ffffff;
-                    &:hover {
-                        background: #51CD9A;
-                        color: #fff;
+                .member {
+                    width: 49%;
+
+                    .title {
+                        font-size: 1.5em;
+                        font-weight: 600;
+                    }
+
+                    .member-list {
+                        margin-top: 10px;
+                        .item {
+                            display: flex;
+                            justify-content: space-between;
+                            margin-top: 5px;
+                            
+                            .profile-img {
+                                width: 16%;
+                                display: flex;
+                                align-items: center;
+                                img {
+                                    width: 100%;
+                                    overflow: hidden;
+                                    border-radius: 100%;
+                                    padding: 5px;
+                                    &:before {
+                                        content: "";
+                                        display: block;
+                                        padding-top: 100%;
+                                        
+                                        /* 1:1 비율 */
+                                    }
+                                }
+                            }
+    
+                            .profile-exp {
+                                width: 80%;
+                                // background-color: #08B46C;
+                                display: flex;
+                                
+                                justify-content: center;
+                                align-items: center;
+                                flex-wrap: wrap;
+                                p {
+                                    width: 100%;
+                                    font-size: 1.1em;
+                                    font-weight: 500;
+                                    span {
+                                        font-size: .7em;
+                                        
+                                    }
+                                }
+                                > span {
+                                    font-size: .9em;
+                                    display: block;
+                                    width: 100%;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                }
+                            }
+                        }
                     }
                 }
             }
