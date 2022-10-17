@@ -98,6 +98,13 @@ const MoimSubscribe = () => {
     };
 
     const memberClickAction = (userMeetingNo) => {
+        for(let i = 0; i < checkList.length; i++) {
+            if(checkList[i] === userMeetingNo) {
+                setCheckList(checkList.filter(item => (checkList[i] !== userMeetingNo)));
+                return;
+            }
+        }
+
         setCheckList(checkList.concat(userMeetingNo));
     };
 
