@@ -219,4 +219,17 @@ public class MeetingController {
 
         return resultData;
     }
+
+
+
+
+    @GetMapping("/subscribe/list")
+    public List<Map<String, Object>> meetingSubscribeList(HttpSession httpSession) {
+        String userNo = String.valueOf(httpSession.getAttribute("userNo"));
+
+        logger.info("MEETING 가입 신청 리스트 조회 userNo={}", userNo);
+        List<Map<String, Object>> resultData = meetingService.moimSubscribeList(userNo);
+
+        return resultData;
+    }
 }
