@@ -146,6 +146,10 @@
 
     .list {
         margin-top: 30px;
+        > div{
+            margin-top: 10px;
+            &:nth-child(1) {margin-top: 0;}
+        }
         .moim-box {
             background-color: #fff;
             padding: 15px 10px;
