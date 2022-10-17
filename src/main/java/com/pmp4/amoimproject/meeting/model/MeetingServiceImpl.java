@@ -194,4 +194,9 @@ public class MeetingServiceImpl implements MeetingService {
 
         return resultData;
     }
+
+    @Override
+    public List<Map<String, Object>> moimSubscribeList(String userNo) {
+        return meetingDAO.moimSubscribeList(userNo);
+    }
 }

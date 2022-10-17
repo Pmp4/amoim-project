@@ -36,4 +36,6 @@ public interface MeetingDAO {
     Map<String, Object> meetingMemberCount(String meetingNo);
 
     int insertMeetingSub(@Param("userNo") String userNo, @Param("meetingNo") String meetingNo);
+
+    List<Map<String, Object>> moimSubscribeList(String userNo);
 }

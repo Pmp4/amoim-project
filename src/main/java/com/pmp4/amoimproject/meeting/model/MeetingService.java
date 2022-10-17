@@ -32,4 +32,7 @@ public interface MeetingService {
 
 
     Map<String, Object> meetingSubscribe(String userNo, String meetingNo);
+
+
+    List<Map<String, Object>> moimSubscribeList(String userNo);
 }
