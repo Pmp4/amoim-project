@@ -8,7 +8,7 @@ import LoginCheck from './common/LoginCheck';
 const Main = () => {
 
     return (
-        <div>
+        <div id='main-wrap'>
             <Routes>
                 <Route path='/' element={<Home/>}></Route> 
                 <Route path='/moim/*' element={<Moim/>}></Route>

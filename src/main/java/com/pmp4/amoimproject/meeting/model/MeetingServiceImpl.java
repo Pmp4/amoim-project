@@ -14,6 +14,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +25,6 @@ public class MeetingServiceImpl implements MeetingService {
     private final MeetingDAO meetingDAO;
     private final TagDAO tagDAO;
     private final FileUploadUtil fileUploadUtil;
-    private final ObjectMapper objectMapper;
 
 
     /*
@@ -145,5 +145,53 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public int deleteMeetingLike(String userNo, String meetingNo) {
         return meetingDAO.deleteMeetingLike(userNo, meetingNo);
+    }
+
+    @Override
+    @Transactional
+    public Map<String, Object> meetingSubscribe(String userNo, String meetingNo) {
+        logger.info("MEETING: 신청 로직 userNo={}, meetingNo={}", userNo, meetingNo);
+
+        Map<String, Object> resultData = new HashMap<>();
+        String msg = "";
+        boolean success = false;
+
+        try {
+            int cnt = meetingDAO.meetingUserCount(userNo, meetingNo);
+            logger.info("MEETING: 신청 로직 대기 여부 확인 cnt={}", cnt);
+
+            if(cnt == 0) {
+                Map<String, Object> res = meetingDAO.meetingMemberCount(meetingNo);
+                logger.info("MEETING: 신청 로직 인원 수 확인 res={}", res);
+
+                int personNumber = Integer.parseInt ((String)res.get("PERSON_NUMBER"));
+                int personCount = Integer.parseInt((String.valueOf(res.get("COUNT"))));
+
+                if(!(personNumber <= personCount)) {
+                    cnt = meetingDAO.insertMeetingSub(userNo, meetingNo);
+                    logger.info("MEETING: 신청 최종 cnt={}", cnt);
+                    if(cnt > 0) {
+                        success = true;
+                        msg = "가입 신청 되었습니다.";
+                    }else {
+                        msg = "Server DB Error";
+                    }
+                }else {
+                    msg = "인원 수가 꽉 찼습니다.";
+                }
+            }else {
+                msg = "신청 대기중인 모임입니다.";
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            msg = "Server DB Error";
+        }
+
+
+        resultData.put("SUCCESS", success);
+        resultData.put("SUCCESS_TEXT", msg);
+
+        return resultData;
     }
 }

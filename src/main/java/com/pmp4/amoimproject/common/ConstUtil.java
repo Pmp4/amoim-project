@@ -24,9 +24,13 @@ public interface ConstUtil {
 	String IMAGE_FILE_UPLOAD_PATH = "img_upload";
 	String IMAGE_FILE_UPLOAD_PATH_TEST = TEST_FILE_PATH + IMAGE_FILE_UPLOAD_PATH;
 
+	String PROFILE_IMAGE_PATH = "profile";
+	String PROFILE_IMAGE_PATH_TEST = TEST_FILE_PATH + PROFILE_IMAGE_PATH;
+
 	//자료실 업로드인지, 상품 등록시 업로드인지 구분값
 	int UPLOAD_FILE_FLAG = 1;	// 자료실 업로드
 	int UPLOAD_IMAGE_FLAG = 2;	// 상품 등록시 이미지 업로드
+	int UPLOAD_PROFILE = 3;
 	
 	//장바구니 관련 상수
 	//구매금액이 3만원 미만이면 배송비 3000원

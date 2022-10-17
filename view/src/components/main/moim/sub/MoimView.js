@@ -7,8 +7,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faHeart } from "@fortawesome/free-solid-svg-icons";
-
-
+import { staticMapSet } from "components/api/KakaoMapScript"
 
 const MoimView = () => {
     const [contents, setContents] = useState({});
@@ -16,6 +15,7 @@ const MoimView = () => {
     const [likeState, setLikeState] = useState(false);
 
     const imgPath = useSelector((state) => state.path.imagePath);
+    const profileImgPath = useSelector((state) => state.path.profileImagePath);
     const user = useSelector((state) => state.user);
     const navigate = useNavigate();
 
@@ -35,7 +35,7 @@ const MoimView = () => {
                 if (SUCCESS) {
                     setContents(rest.CONTENTS);
                     setMembers(rest.MEMBERS);
-                    console.log(rest);
+                    staticMapSet({lat: rest.LAT_Y, lng: rest.LON_X}, "map");
                 } else {
                     alert("잘못된 모임 정보입니다.");
                     navigate(-1);
@@ -46,98 +46,132 @@ const MoimView = () => {
         });
     };
 
-
     const membershipBtn = () => {
-        if(members.length > 0) {
+        if (members.length > 0) {
             let check = true;
-            for(let i = 0; i < members.length; i++) {
-                if(members[i].USER_NO === user.userInfo.no) check = false;
+            for (let i = 0; i < members.length; i++) {
+                if (members[i].USER_NO === user.userInfo.no) check = false;
             }
 
-            if(!check) return (
-                <div className='membership-button-wrap'>
-                    <button>
-                        가입 신청하기
-                    </button>
-                </div>
-            )
+            if (check)
+                return (
+                    <div className="membership-button-wrap">
+                        <button onClick={() => subscribeActionAPI()}>가입 신청하기</button>
+                    </div>
+                );
         }
-    }
-
+    };
 
     const likeCountAPI = () => {
-        MeetingService.meetingLikeCount(meetingNo).then(response=> {
-            const {status, data} = response;
+        MeetingService.meetingLikeCount(meetingNo).then((response) => {
+            const { status, data } = response;
             console.log(response);
 
-            if(status === 200) {
-                setContents({...contents, LIKE_COUNT: data});
-            }else {
+            if (status === 200) {
+                setContents({ ...contents, LIKE_COUNT: data });
+            } else {
                 alert("Server Error");
             }
-        })
-    }
+        });
+    };
 
-    
     //좋아요 상태 확인 API
     //좋아요 상태 확인 API
     //좋아요 상태 확인 API
     const userLikeStateAPI = () => {
-        MeetingService.meetingLikeState(meetingNo).then(response => {
-            const {status, data} = response;
-            if(status === 200) {
-                if(data === 1) {
+        MeetingService.meetingLikeState(meetingNo).then((response) => {
+            const { status, data } = response;
+            if (status === 200) {
+                if (data === 1) {
                     setLikeState(false);
-                }else if(data === 0) {
+                } else if (data === 0) {
                     setLikeState(true);
-                }else {
+                } else {
                     alert("로그인 후 다시 시도해주세요.");
                     navigate(-1);
                 }
             } else {
                 alert("Server Error");
             }
-        })
-    }
+        });
+    };
 
     //좋아요 누르면
     //좋아요 누르면
     //좋아요 누르면
     const likeButtonActionAPI = () => {
-        if(!likeState) { //likeState 가 false면 delete
-            MeetingService.meetingLikeDelete(meetingNo).then(response => {
-                const {status, data} = response;
+        if (!likeState) {
+            //likeState 가 false면 delete
+            MeetingService.meetingLikeDelete(meetingNo).then((response) => {
+                const { status, data } = response;
 
-                if(status === 200) {
-                    if(data.SUCCESS) {
+                if (status === 200) {
+                    if (data.SUCCESS) {
                         setLikeState(true);
                         likeCountAPI();
-                    }else {
+                    } else {
                         alert(data.SUCCESS_MSG);
                     }
-                }else {
+                } else {
                     alert("Server Error");
                 }
-            })
-        }else {     //likeState 가 true면 insert
-            MeetingService.meetingLikeInsert(meetingNo).then(response => {
-                const {status, data} = response;
+            });
+        } else {
+            //likeState 가 true면 insert
+            MeetingService.meetingLikeInsert(meetingNo).then((response) => {
+                const { status, data } = response;
 
-                if(status === 200) {
-                    if(data.SUCCESS) {
+                if (status === 200) {
+                    if (data.SUCCESS) {
                         setLikeState(false);
                         likeCountAPI();
-                    }else {
+                    } else {
                         alert(data.SUCCESS_MSG);
                     }
-                }else {
+                } else {
                     alert("Server Error");
                 }
-            })
+            });
         }
-    }
+    };
 
-    
+    const memberList = () =>
+        members.map((item, idx) => {
+            if (members.length === 0) return "";
+
+            return (
+                <div className="item" key={8000 + idx}>
+                    <div className="profile-img">
+                        <img
+                            src={profileImgPath + item.PROFILE_IMAGE}
+                            alt={item.NAME + "의 프로필 이미지"}
+                        />
+                    </div>
+                    <div className="profile-exp">
+                        <p>
+                            {item.NAME}{" "}
+                            {item.USER_NO === contents.USER_NO && (
+                                <span>관리자</span>
+                            )}
+                        </p>
+                        <span>{item.INTRO}</span>
+                    </div>
+                </div>
+            );
+        });
+
+
+    const subscribeActionAPI = () => {
+        MeetingService.meetingSubscribe(meetingNo).then(response => {
+            const {status, data} = response;
+            if(status === 200) {
+                const {SUCCESS, SUCCESS_TEXT} = data;
+                alert(SUCCESS_TEXT);
+            }else {
+                alert("Server Error");
+            }
+        });
+    }
 
     return (
         <div id="view-page">
@@ -151,6 +185,8 @@ const MoimView = () => {
                             />
                         )}
                     </div>
+
+                    {membershipBtn()}
                 </div>
                 <div className="right">
                     <div className="title-sub">
@@ -206,7 +242,14 @@ const MoimView = () => {
                             </div>
                         </div>
                         <div className="right">
-                            <div className='like-btn draggable' onClick={() => likeButtonActionAPI()}>
+                            <div
+                                className={
+                                    !likeState
+                                        ? "like-btn draggable on"
+                                        : "like-btn draggable"
+                                }
+                                onClick={() => likeButtonActionAPI()}
+                            >
                                 <div className="like">
                                     <FontAwesomeIcon icon={faHeart} />
                                 </div>
@@ -215,7 +258,29 @@ const MoimView = () => {
                         </div>
                     </div>
                     <div className="content">{contents.CONTENT}</div>
-                    {membershipBtn()}
+                    <div className="sub-content">
+                        <div id="map"></div>
+                        <div className="member">
+                            <div className="title">멤버</div>
+                            <div className="member-list">
+                                {/* <div className='item'>
+                                    <div 
+                                        className='profile-img'
+                                        // style={{
+                                        //     backgroundImage: `url(${profileImgPath}default_profile.png)`
+                                        // }}
+                                        >
+                                        <img src={profileImgPath + 'default_profile.png'} />
+                                    </div>
+                                    <div className='profile-exp'>
+                                        <p>홍길동</p>
+                                        <span>한줄소개</span>
+                                    </div>
+                                </div> */}
+                                {memberList()}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

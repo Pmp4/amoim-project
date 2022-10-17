@@ -5,11 +5,18 @@ import { faLocationDot, faHeart } from "@fortawesome/free-solid-svg-icons";
 import MoimItem from './MoimItem';
 import MeetingService from 'api/meeting/MeetingService';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { MODAL_OPEN } from 'reducer/module/modal';
 
 const MoimMain = () => {
     const [meetingContents, setMeetingContents] = useState([]);
+
     const location = useLocation();
+
     const user = useSelector(state => state.user);
+    const modal = useSelector(state => state.modal);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         myAddMeetingData();
@@ -27,6 +34,15 @@ const MoimMain = () => {
             }
         });
     };
+
+
+
+    //가입 신청 리스트 확인
+    //가입 신청 리스트 확인
+    //가입 신청 리스트 확인
+    const subscribeListBtnAction = () => {
+        dispatch({type: MODAL_OPEN, data: 'moim-subscribe-list'});
+    }
 
 
 
@@ -66,7 +82,9 @@ const MoimMain = () => {
                             <button className='moim-edit-btn'>
                                 수정
                             </button>
-                            <button className='moim-confirm-btn'>
+                            <button 
+                                className='moim-confirm-btn'
+                                onClick={() => subscribeListBtnAction()}>
                                 가입 신청 확인
                             </button>
                         </div>

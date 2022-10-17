@@ -63,7 +63,7 @@ const MoimAdd = () => {
             mapMarkerClickScroll,
             setSearchPagination
         );
-        console.log(user.userInfo.no);
+        // console.log(user.userInfo.no);
         categoryApi("");
 
 
@@ -219,6 +219,8 @@ const MoimAdd = () => {
             const cutMax = 6;
             if(value > 50) {
                 value = 50;
+            }else if(0 > value) {
+                value = 0;
             }
         }
 
@@ -444,6 +446,7 @@ const MoimAdd = () => {
                     // 정상적으로 검색이 완료됐으면
                     if (status === kakao.maps.services.Status.OK) {
                         const item = result[0];
+                        console.log(item);
 
                         restAddress = {
                             zonecode: "",
@@ -454,7 +457,9 @@ const MoimAdd = () => {
                             sigungu: item.address.region_2depth_name,
                             bname: item.address.region_3depth_name,
                             bcode: item.address.b_code,
-                            placeName: data.place_name
+                            placeName: data.place_name,
+                            latY: parseFloat(item.y),
+                            lonX: parseFloat(item.x)
                         }
 
                         setAddress(restAddress);
@@ -476,7 +481,9 @@ const MoimAdd = () => {
                                 sigungu: addressSub.region_2depth_name,
                                 bname: addressSub.region_3depth_name,
                                 bcode: addressSub.code,
-                                placeName: data.place_name
+                                placeName: data.place_name,
+                                latY: parseFloat(latLng.lat),
+                                lonX: parseFloat(latLng.lng),
                             }
 
                             setAddress(restAddress);
@@ -804,16 +811,6 @@ const MoimAdd = () => {
                             </div>
                         </label>
                     </div>
-
-                    {/* <div className='line three'>
-                        <label htmlFor='dues'>
-                            <p>회비</p>
-                            <input name='dues' 
-                                placeholder='없음'
-                                defaultValue={title}
-                                onChange={(event) => inputEventAction(event)}/>
-                        </label>
-                    </div> */}
 
                     <div className="line three">
                         <label htmlFor="interests" className="draggable">

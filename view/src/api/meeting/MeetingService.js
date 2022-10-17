@@ -36,6 +36,10 @@ const meetingLikeDelete = (meetingNo) => {
     return httpCommon.delete(`/meeting/like/delete/${meetingNo}`);
 }
 
+const meetingSubscribe = (meetingNo) => {
+    return httpCommon.post(`/meeting/subscribe`, meetingNo);
+}
+
 
 
 
@@ -47,5 +51,6 @@ export default {
     meetingLikeState,
     meetingLikeInsert,
     meetingLikeDelete,
-    meetingLikeCount
+    meetingLikeCount,
+    meetingSubscribe,
 };

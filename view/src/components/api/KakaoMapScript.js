@@ -169,7 +169,6 @@ const KakaoMapSet2 = (
         searchDetailAddrFromCoords(latLng, (result, status) => {
             if (status === kakao.maps.services.Status.OK) {
                 const addressDetail = result[0];
-                console.log(addressDetail);
                 if (addressDetail.road_address !== null) {
                     searchAddrFromCoords(latLng, (result, status) => {
                         const addressSub = result[0];
@@ -184,7 +183,10 @@ const KakaoMapSet2 = (
                             sigungu: addressSub.region_2depth_name,
                             bname: addressSub.region_3depth_name,
                             bcode: addressSub.code,
+                            latY: latLng.lat,
+                            lonX: latLng.lng,
                         };
+                        console.log(restAddress);
                         setInputMsg(addressDetail.address.address_name);
                         setAddress(restAddress);
                     });
@@ -201,7 +203,10 @@ const KakaoMapSet2 = (
                             sigungu: addressSub.region_2depth_name,
                             bname: addressSub.region_3depth_name,
                             bcode: addressSub.code,
+                            latY: latLng.lat,
+                            lonX: latLng.lng,
                         };
+                        console.log(restAddress);
                         setInputMsg(addressDetail.address.address_name);
                         setAddress(restAddress);
                     });
@@ -246,8 +251,6 @@ function placesSearchCB(data, status, pagination) {
         // 정상적으로 검색이 완료됐으면
         // 검색 목록과 마커를 표출합니다
         displayPlaces(data);
-
-
 
         // 페이지 번호를 표출합니다
         displayPagination(pagination);
@@ -367,6 +370,29 @@ function displayPagination(pagination) {
 //     infowindow.open(map, marker);
 // }
 
+const staticMapSet = (latLng, elementId) => {
+    var markerPosition = new kakao.maps.LatLng(latLng.lat, latLng.lng);
+
+    // 이미지 지도에 표시할 마커입니다
+    // 이미지 지도에 표시할 마커는 Object 형태입니다
+    var marker = {
+        position: markerPosition,
+    };
+
+    var staticMapContainer = document.getElementById(elementId), // 이미지 지도를 표시할 div
+        staticMapOption = {
+            center: new kakao.maps.LatLng(latLng.lat, latLng.lng), // 이미지 지도의 중심좌표
+            level: 3, // 이미지 지도의 확대 레벨
+            marker: marker, // 이미지 지도에 표시할 마커
+        };
+
+    // 이미지 지도를 생성합니다
+    var staticMap = new kakao.maps.StaticMap(
+        staticMapContainer,
+        staticMapOption
+    );
+};
+
 export {
     KakaoMapSet,
     KakaoMapSet2,
@@ -375,6 +401,7 @@ export {
     searchDetailAddrFromCoords,
     searchAddrFromCoords,
     searchPlaces,
+    staticMapSet,
     kakao,
     map,
     marker,
