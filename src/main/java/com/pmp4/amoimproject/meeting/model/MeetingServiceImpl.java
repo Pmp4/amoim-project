@@ -209,6 +209,8 @@ public class MeetingServiceImpl implements MeetingService {
         int[] noArr = noList.stream()
                 .mapToInt(i -> i)
                 .toArray();
+        Map<String, int[]> dbMap = new HashMap<>();
+        dbMap.put("Array", noArr);
 
         logger.info("MEETING: 수락 로직 - 분리 결과 meetingNo={}, noArr={}", meetingNo, noArr);
 
@@ -223,7 +225,7 @@ public class MeetingServiceImpl implements MeetingService {
             long minusCut = cut - currentCount;
 
             if(minusCut > noArr.length) {
-                int cnt = meetingDAO.updateUserMeetingSubResult(noArr);
+                int cnt = meetingDAO.updateUserMeetingSubResult(dbMap);
                 logger.info("MEETING: 수락 로직 - 완료 확인 cnt={}", cnt);
 
                 if(cnt > 0) success = true;
