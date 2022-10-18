@@ -20,7 +20,6 @@ const MoimSubscribe = () => {
         if (item.USER_LIST.length === 0) return "";
 
         const { USER_LIST, MEETING } = item;
-        console.log(item);
 
         return (
             <div className="moim-box" key={600 + idx}>
@@ -173,6 +172,7 @@ const MoimSubscribe = () => {
         });
     };
 
+
     /**
      * @param {*} type Result/Refusal 구분
      * @param {*} meetingNo MEETING 테이블의 기본키
@@ -190,8 +190,6 @@ const MoimSubscribe = () => {
                 meetingNo,
                 list: memberList,
             };
-
-            console.log(memberList)
 
             if(type === 1) {
                 if (0 < memberList.length && memberList.length <= cut) {
@@ -212,25 +210,50 @@ const MoimSubscribe = () => {
     };
 
     const resultAPI = (rest, idx) => {
-        // MeetingService.subscribeResult(rest).then((response) => {});
-        const tempArr = [...content[idx].USER_LIST];
-        console.log(tempArr);
+        MeetingService.subscribeResult(rest).then((response) => {
+            const {status, data} = response;
+            
+            if(status === 200) {
+                const {SUCCESS, SUCCESS_TEXT} = data;
 
-        for(let i = 0; i < tempArr.length; i++) {
-            for(let j = 0; j < rest.list.length; j++) {
-                if(rest.list[j] === tempArr[j].USER_MEETING_NO) {
-                    console.log(rest.list[j]);
-                    console.log(tempArr[j].USER_MEETING_NO);
+                if(SUCCESS) {
+                    refreshList(rest, idx);
+                }else {
+                    alert(SUCCESS_TEXT);
                 }
+            }else {
+                alert("Server Error");
             }
-        }
-
-        console.log(tempArr);
+        });
     };
 
     const refusalAPI = (rest, idx) => {
         MeetingService.subscribeResult().then((response) => {});
     };
+
+
+    /**
+     * @param {*} rest 선택한 데이터
+     * @param {*} idx 부모 요소
+     */
+    const refreshList = (rest, idx) => {
+        const tempArr = [...content[idx].USER_LIST];
+
+        for(let i = 0; i < tempArr.length; i++) {
+            for(let j = 0; j < rest.list.length; j++) {
+                console.log(tempArr[i].USER_MEETING_NO);
+                if(rest.list[j] === tempArr[i].USER_MEETING_NO) {
+                    tempArr.splice(i, 1);
+                }
+            }
+        }
+
+        let resData = [...content];
+        resData.splice(idx, 1, {MEETING: {...content[idx].MEETING}, USER_LIST: tempArr});
+
+        setContent(resData);
+    }
+
 
     return (
         <div className="moim-sub-list">
