@@ -45,6 +45,15 @@ const meetingSubscribeList = () => {
 }
 
 
+const subscribeResult = (rest) => {
+    return httpCommon.put(`/meeting/subscribe/result`, rest);
+}
+
+const subscribeRefusal = (rest) => {
+    return httpCommon.put(`/meeting/subscribe/refusal`, rest);
+}
+
+
 
 
 export default {
@@ -57,5 +66,7 @@ export default {
     meetingLikeDelete,
     meetingLikeCount,
     meetingSubscribe,
-    meetingSubscribeList
+    meetingSubscribeList,
+    subscribeResult,
+    subscribeRefusal
 };
