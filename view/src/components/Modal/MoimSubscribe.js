@@ -50,7 +50,7 @@ const MoimSubscribe = () => {
                                 key={1200 + idx}
                                 onClick={() =>
                                     memberClickAction(
-                                        MEETING.NO,
+                                        MEETING.MEETING_NO,
                                         member.USER_MEETING_NO
                                     )
                                 }
@@ -92,7 +92,7 @@ const MoimSubscribe = () => {
                         onClick={() =>
                             buttonActionEvent(
                                 1,
-                                MEETING.NO,
+                                MEETING.MEETING_NO,
                                 parseInt(MEETING.PERSON_NUMBER)
                             )
                         }
@@ -104,7 +104,7 @@ const MoimSubscribe = () => {
                         onClick={() =>
                             buttonActionEvent(
                                 2,
-                                MEETING.NO,
+                                MEETING.MEETING_NO,
                                 parseInt(MEETING.PERSON_NUMBER)
                             )
                         }
@@ -181,26 +181,31 @@ const MoimSubscribe = () => {
         if (
             Object.keys(checkList).findIndex(
                 (item) => parseInt(item) === meetingNo
-            )
+            ) !== -1
         ) {
             const memberList = checkList[meetingNo];
-            if (memberList.length <= cut) {
-                check = true;
-                const rest = {
-                    meetingNo,
-                    list: memberList,
-                };
+            const rest = {
+                meetingNo,
+                list: memberList,
+            };
 
-                if(type === 1) {
+            console.log(memberList)
+
+            if(type === 1) {
+                if (0 < memberList.length && memberList.length <= cut) {
+                    check = true;
                     resultAPI(rest);
-                } else {
+                }
+            }else {
+                if(0 < memberList.length) {
+                    check = true;
                     refusalAPI(rest);
                 }
             }
         }
 
         if (!check) {
-            alert("");
+            alert("허용 가능 인원이 유효하지 않습니다.");
         }
     };
 

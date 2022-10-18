@@ -243,4 +243,28 @@ public class MeetingController {
 
         return resultData;
     }
+
+
+
+
+    @PutMapping("/subscribe/result")
+    public Map<String, Object> subscribeResult (@RequestBody Map<String, Object> rest) {
+        logger.info("MEETING 가입 신청 수락 rest={}", rest);
+
+        Map<String, Object> resultData = meetingService.moimSubscribeResult(rest);
+
+        return resultData;
+    }
+
+
+    @PutMapping("/subscribe/refusal")
+    public Map<String, Object> subscribeRefusal (@RequestBody Map<String, Object> rest) {
+        logger.info("MEETING 가입 신청 거절 rest={}", rest);
+
+
+
+        Map<String, Object> resultData = new HashMap<>();
+
+        return resultData;
+    }
 }

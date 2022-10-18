@@ -192,9 +192,10 @@
     <!-- 가입신청 전, 인원 확인 -->
     <!-- 가입신청 전, 인원 확인 -->
     <select id="meetingMemberCount" parameterType="String" resultType="hashMap">
-        select count(*) COUNT, M.PERSON_NUMBER
+        select cast(count(*) as SIGNED INTEGER) as COUNT, cast((M.PERSON_NUMBER) as SIGNED INTEGER) as "PERSON_NUMBER"
             from USER_MEETING UM join MEETING M on M.NO = UM.MEETING_NO
-        where MEETING_NO = 15
+        where MEETING_NO = #{meetingNo} and UM.REG_LEVEL = 1
+        group by PERSON_NUMBER
     </select>
 
     <!-- 가입신청 -->
@@ -247,10 +248,25 @@
     <!-- 최종 수락 -->
     <!-- 최종 수락 -->
     <!-- 최종 수락 -->
-
+    <update id="updateUserMeetingSubResult" parameterType="List">
+        update USER_MEETING
+        set REG_LEVEL = 1
+        where 
+        <foreach collection="List or Array" item="item" index="index" separator="and">
+            #{item}
+        </foreach>
+    </update>
     
     
     <!-- 최종 거절 -->
     <!-- 최종 거절 -->
     <!-- 최종 거절 -->
+    <update id="updateUserMeetingSubRefusal">
+        update USER_MEETING
+        set REG_LEVEL = 3
+        where
+        <foreach collection="List or Array" item="item" index="index" separator="and">
+            #{item}
+        </foreach>
+    </update>
 </mapper>
