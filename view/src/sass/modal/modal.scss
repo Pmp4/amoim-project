@@ -142,6 +142,8 @@
 
 .moim-sub-list {
     width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
     background-color: #f6f6f6;
 
     .list {
