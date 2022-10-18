@@ -7,7 +7,7 @@ import MeetingService from "api/meeting/MeetingService";
 
 const MoimSubscribe = () => {
     const [content, setContent] = useState([]);
-    const [checkList, setCheckList] = useState([]);
+    const [checkList, setCheckList] = useState({});
 
     const profileImgPath = useSelector((state) => state.path.profileImagePath);
 
@@ -27,9 +27,19 @@ const MoimSubscribe = () => {
                 <div className="sub-list draggable">
                     {USER_LIST.map((member, idx) => {
                         let classNameSet = "item";
+                        const keyArr = Object.keys(checkList);
+                        if(keyArr.length !== 0) {
+                            for(let i = 0; i < keyArr.length; i++) {
+                                const key = keyArr[i];
+                                const checkArr = checkList[key];
 
-                        for(let i = 0; i < checkList.length; i++) 
-                            if(checkList[i] === member.USER_MEETING_NO) classNameSet += " on";
+                                for(let j = 0; j < checkArr.length; j++) {
+                                    if(checkArr[j] === member.USER_MEETING_NO) {
+                                        classNameSet += " on";
+                                    }
+                                }
+                            }
+                        }
                         
 
                         return (
@@ -37,7 +47,7 @@ const MoimSubscribe = () => {
                                 className={classNameSet}
                                 key={1200 + idx}
                                 onClick={() =>
-                                    memberClickAction(member.USER_MEETING_NO)
+                                    memberClickAction(MEETING.NO, member.USER_MEETING_NO)
                                 }
                             >
                                 <div className="cover"></div>
@@ -59,8 +69,7 @@ const MoimSubscribe = () => {
                                         {new Date().getFullYear() -
                                             new Date(
                                                 member.BIRTH_DAY
-                                            ).getFullYear() +
-                                            1}
+                                            ).getFullYear()}
                                         세
                                     </div>
                                 </div>
@@ -95,18 +104,38 @@ const MoimSubscribe = () => {
         });
     };
 
-    const memberClickAction = (userMeetingNo) => {
-        console.log(userMeetingNo);
-        console.log(checkList);
+    const memberClickAction = (meetingNo, userMeetingNo) => {
+        let temp;
+        const keyArr = Object.keys(checkList);
 
-        for(let i = 0; i < checkList.length; i++) {
-            if(checkList[i] === userMeetingNo) {
-                setCheckList(checkList.filter(item => (item !== userMeetingNo)));
-                return;
+        if(keyArr.length !== 0) {
+            All:
+            for(let i = 0; i < keyArr.length; i++) {
+                const key = keyArr[i];
+                const checkArr = [...checkList[key]];
+
+                for(let j = 0; j < checkArr.length; j++) {
+                    if(checkArr[j] === userMeetingNo) {
+                        checkArr.splice(j, 1);
+                        temp = checkArr;
+                        break All;
+                    }
+                }
+
+                if(parseInt(key) === meetingNo) {   //이미 있는 키(meetingNo)
+                    temp = checkArr.concat(userMeetingNo);
+                }else { //이미 있는 키가 아닐 때(meetingNo)
+                    temp = [userMeetingNo];
+                }
             }
+        }else {
+            temp = [userMeetingNo];
         }
-
-        setCheckList(checkList.concat(userMeetingNo));
+        
+        setCheckList({
+            ...checkList, 
+            [meetingNo]: temp
+        });
     };
 
     return (
