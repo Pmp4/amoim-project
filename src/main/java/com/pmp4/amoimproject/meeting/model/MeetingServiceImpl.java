@@ -1,6 +1,5 @@
 package com.pmp4.amoimproject.meeting.model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pmp4.amoimproject.common.ConstUtil;
 import com.pmp4.amoimproject.common.FileUploadUtil;
 import com.pmp4.amoimproject.tag.model.TagDAO;
@@ -198,5 +197,51 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public List<Map<String, Object>> moimSubscribeList(String userNo) {
         return meetingDAO.moimSubscribeList(userNo);
+    }
+
+    @Override
+    public Map<String, Object> moimSubscribeResult(Map<String, Object> rest) {
+        logger.info("MEETING: 수락 로직 rest={}", rest);
+
+        String meetingNo = String.valueOf(rest.get("meetingNo"));
+        List<Integer> noList= (List<Integer>) rest.get("list");
+
+        int[] noArr = noList.stream()
+                .mapToInt(i -> i)
+                .toArray();
+
+        logger.info("MEETING: 수락 로직 - 분리 결과 meetingNo={}, noArr={}", meetingNo, noArr);
+
+        Map<String, Object> map = meetingDAO.meetingMemberCount(meetingNo);
+        Long cut = (Long) map.get("PERSON_NUMBER");
+        Long currentCount = (Long) map.get("COUNT");
+
+        logger.info("MEETING: 수락 로직 - 현재 멤버 수 확인 map={}", map);
+
+        boolean success = false;
+        if(currentCount < cut) {
+            long minusCut = cut - currentCount;
+
+            if(minusCut > noArr.length) {
+                int cnt = meetingDAO.updateUserMeetingSubResult(noArr);
+                logger.info("MEETING: 수락 로직 - 완료 확인 cnt={}", cnt);
+
+                if(cnt > 0) success = true;
+            }
+        }
+
+        Map<String, Object> resultData = new HashMap<>();
+        String successText = "Server DB Error";
+        if(success) successText = "success!";
+
+        resultData.put("SUCCESS", success);
+        resultData.put("SUCCESS_TEXT", successText);
+
+        return resultData;
+    }
+
+    @Override
+    public Map<String, Object> moimSubscribeRefusal(Map<String, Object> rest) {
+        return null;
     }
 }
