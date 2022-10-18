@@ -20,6 +20,7 @@ const MoimSubscribe = () => {
         if (item.USER_LIST.length === 0) return "";
 
         const { USER_LIST, MEETING } = item;
+        console.log(item);
 
         return (
             <div className="moim-box" key={600 + idx}>
@@ -28,26 +29,30 @@ const MoimSubscribe = () => {
                     {USER_LIST.map((member, idx) => {
                         let classNameSet = "item";
                         const keyArr = Object.keys(checkList);
-                        if(keyArr.length !== 0) {
-                            for(let i = 0; i < keyArr.length; i++) {
+                        if (keyArr.length !== 0) {
+                            for (let i = 0; i < keyArr.length; i++) {
                                 const key = keyArr[i];
                                 const checkArr = checkList[key];
 
-                                for(let j = 0; j < checkArr.length; j++) {
-                                    if(checkArr[j] === member.USER_MEETING_NO) {
+                                for (let j = 0; j < checkArr.length; j++) {
+                                    if (
+                                        checkArr[j] === member.USER_MEETING_NO
+                                    ) {
                                         classNameSet += " on";
                                     }
                                 }
                             }
                         }
-                        
 
                         return (
                             <div
                                 className={classNameSet}
                                 key={1200 + idx}
                                 onClick={() =>
-                                    memberClickAction(MEETING.NO, member.USER_MEETING_NO)
+                                    memberClickAction(
+                                        MEETING.NO,
+                                        member.USER_MEETING_NO
+                                    )
                                 }
                             >
                                 <div className="cover"></div>
@@ -82,8 +87,30 @@ const MoimSubscribe = () => {
                 </div>
                 <div className="line"></div>
                 <div className="btn-box">
-                    <button className="result-btn">수락</button>
-                    <button className="refusal-btn">거절</button>
+                    <button
+                        className="result-btn"
+                        onClick={() =>
+                            buttonActionEvent(
+                                1,
+                                MEETING.NO,
+                                parseInt(MEETING.PERSON_NUMBER)
+                            )
+                        }
+                    >
+                        수락
+                    </button>
+                    <button
+                        className="refusal-btn"
+                        onClick={() =>
+                            buttonActionEvent(
+                                2,
+                                MEETING.NO,
+                                parseInt(MEETING.PERSON_NUMBER)
+                            )
+                        }
+                    >
+                        거절
+                    </button>
                 </div>
             </div>
         );
@@ -104,11 +131,10 @@ const MoimSubscribe = () => {
         });
     };
 
-
     /**
-     * 
-     * @param {*} meetingNo 
-     * @param {*} userMeetingNo 
+     * @param {*} meetingNo MEETING 테이블의 기본키
+     * @param {*} userMeetingNo USER_MEETING 테이블의 기본키
+     *
      * 1. 빈 값 체크
      * 2. 클릭 한 부모 구분
      * 3. 체크했는지 안했는 지 구분
@@ -117,27 +143,73 @@ const MoimSubscribe = () => {
         let tempArr;
         const keyArr = Object.keys(checkList);
 
-        if(keyArr.length !== 0) {
-            console.log(keyArr);
-            if(keyArr.findIndex(item => parseInt(item) === meetingNo) !== -1) {
+        if (keyArr.length !== 0) {
+            if (
+                keyArr.findIndex((item) => parseInt(item) === meetingNo) !== -1
+            ) {
                 tempArr = [...checkList[meetingNo]];
 
-                if(tempArr.findIndex(item => item === userMeetingNo) === -1) {  //등록
+                if (
+                    tempArr.findIndex((item) => item === userMeetingNo) === -1
+                ) {
+                    //등록
                     tempArr.push(userMeetingNo);
-                }else {     //삭제
-                    tempArr = tempArr.filter(item => item !== userMeetingNo);
+                } else {
+                    //삭제
+                    tempArr = tempArr.filter((item) => item !== userMeetingNo);
                 }
-            }else {
+            } else {
                 tempArr = [userMeetingNo];
             }
-        }else {
+        } else {
             tempArr = [userMeetingNo];
         }
-        
+
         setCheckList({
-            ...checkList, 
-            [meetingNo]: tempArr
+            ...checkList,
+            [meetingNo]: tempArr,
         });
+    };
+
+    /**
+     * @param {*} type Result/Refusal 구분
+     * @param {*} meetingNo MEETING 테이블의 기본키
+     *
+     */
+    const buttonActionEvent = (type, meetingNo, cut) => {
+        let check = false;
+        if (
+            Object.keys(checkList).findIndex(
+                (item) => parseInt(item) === meetingNo
+            )
+        ) {
+            const memberList = checkList[meetingNo];
+            if (memberList.length <= cut) {
+                check = true;
+                const rest = {
+                    meetingNo,
+                    list: memberList,
+                };
+
+                if(type === 1) {
+                    resultAPI(rest);
+                } else {
+                    refusalAPI(rest);
+                }
+            }
+        }
+
+        if (!check) {
+            alert("");
+        }
+    };
+
+    const resultAPI = (rest) => {
+        MeetingService.subscribeResult(rest).then((response) => {});
+    };
+
+    const refusalAPI = (rest) => {
+        MeetingService.subscribeResult().then((response) => {});
     };
 
     return (
