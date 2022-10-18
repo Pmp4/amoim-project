@@ -93,7 +93,8 @@ const MoimSubscribe = () => {
                             buttonActionEvent(
                                 1,
                                 MEETING.MEETING_NO,
-                                parseInt(MEETING.PERSON_NUMBER)
+                                parseInt(MEETING.PERSON_NUMBER),
+                                idx
                             )
                         }
                     >
@@ -105,7 +106,8 @@ const MoimSubscribe = () => {
                             buttonActionEvent(
                                 2,
                                 MEETING.MEETING_NO,
-                                parseInt(MEETING.PERSON_NUMBER)
+                                parseInt(MEETING.PERSON_NUMBER),
+                                idx
                             )
                         }
                     >
@@ -176,7 +178,7 @@ const MoimSubscribe = () => {
      * @param {*} meetingNo MEETING 테이블의 기본키
      *
      */
-    const buttonActionEvent = (type, meetingNo, cut) => {
+    const buttonActionEvent = (type, meetingNo, cut, idx) => {
         let check = false;
         if (
             Object.keys(checkList).findIndex(
@@ -194,12 +196,12 @@ const MoimSubscribe = () => {
             if(type === 1) {
                 if (0 < memberList.length && memberList.length <= cut) {
                     check = true;
-                    resultAPI(rest);
+                    resultAPI(rest, idx);
                 }
             }else {
                 if(0 < memberList.length) {
                     check = true;
-                    refusalAPI(rest);
+                    refusalAPI(rest, idx);
                 }
             }
         }
@@ -209,11 +211,24 @@ const MoimSubscribe = () => {
         }
     };
 
-    const resultAPI = (rest) => {
-        MeetingService.subscribeResult(rest).then((response) => {});
+    const resultAPI = (rest, idx) => {
+        // MeetingService.subscribeResult(rest).then((response) => {});
+        const tempArr = [...content[idx].USER_LIST];
+        console.log(tempArr);
+
+        for(let i = 0; i < tempArr.length; i++) {
+            for(let j = 0; j < rest.list.length; j++) {
+                if(rest.list[j] === tempArr[j].USER_MEETING_NO) {
+                    console.log(rest.list[j]);
+                    console.log(tempArr[j].USER_MEETING_NO);
+                }
+            }
+        }
+
+        console.log(tempArr);
     };
 
-    const refusalAPI = (rest) => {
+    const refusalAPI = (rest, idx) => {
         MeetingService.subscribeResult().then((response) => {});
     };
 
