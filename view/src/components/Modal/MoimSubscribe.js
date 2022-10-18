@@ -104,37 +104,39 @@ const MoimSubscribe = () => {
         });
     };
 
+
+    /**
+     * 
+     * @param {*} meetingNo 
+     * @param {*} userMeetingNo 
+     * 1. 빈 값 체크
+     * 2. 클릭 한 부모 구분
+     * 3. 체크했는지 안했는 지 구분
+     */
     const memberClickAction = (meetingNo, userMeetingNo) => {
-        let temp;
+        let tempArr;
         const keyArr = Object.keys(checkList);
 
         if(keyArr.length !== 0) {
-            All:
-            for(let i = 0; i < keyArr.length; i++) {
-                const key = keyArr[i];
-                const checkArr = [...checkList[key]];
+            console.log(keyArr);
+            if(keyArr.findIndex(item => parseInt(item) === meetingNo) !== -1) {
+                tempArr = [...checkList[meetingNo]];
 
-                for(let j = 0; j < checkArr.length; j++) {
-                    if(checkArr[j] === userMeetingNo) {
-                        checkArr.splice(j, 1);
-                        temp = checkArr;
-                        break All;
-                    }
+                if(tempArr.findIndex(item => item === userMeetingNo) === -1) {  //등록
+                    tempArr.push(userMeetingNo);
+                }else {     //삭제
+                    tempArr = tempArr.filter(item => item !== userMeetingNo);
                 }
-
-                if(parseInt(key) === meetingNo) {   //이미 있는 키(meetingNo)
-                    temp = checkArr.concat(userMeetingNo);
-                }else { //이미 있는 키가 아닐 때(meetingNo)
-                    temp = [userMeetingNo];
-                }
+            }else {
+                tempArr = [userMeetingNo];
             }
         }else {
-            temp = [userMeetingNo];
+            tempArr = [userMeetingNo];
         }
         
         setCheckList({
             ...checkList, 
-            [meetingNo]: temp
+            [meetingNo]: tempArr
         });
     };
 
