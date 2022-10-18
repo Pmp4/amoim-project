@@ -252,6 +252,7 @@ public class MeetingController {
         logger.info("MEETING 가입 신청 수락 rest={}", rest);
 
         Map<String, Object> resultData = meetingService.moimSubscribeResult(rest);
+        logger.info("MEETING 가입 신청 최종확인 resultData={}", resultData);
 
         return resultData;
     }
