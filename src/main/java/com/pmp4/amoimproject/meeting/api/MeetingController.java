@@ -262,9 +262,8 @@ public class MeetingController {
     public Map<String, Object> subscribeRefusal (@RequestBody Map<String, Object> rest) {
         logger.info("MEETING 가입 신청 거절 rest={}", rest);
 
-
-
-        Map<String, Object> resultData = new HashMap<>();
+        Map<String, Object> resultData = meetingService.moimSubscribeRefusal(rest);
+        logger.info("MEETING 가입 거절 최종확인 resultData={}", resultData);
 
         return resultData;
     }

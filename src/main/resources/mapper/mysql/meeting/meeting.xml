@@ -265,8 +265,8 @@
         update USER_MEETING
         set REG_LEVEL = 3
         where
-        <foreach collection="List or Array" item="item" index="index" separator="and">
-            #{item}
+        <foreach collection="Array" item="item" index="index" separator="or">
+            NO = #{item}
         </foreach>
     </update>
 </mapper>
