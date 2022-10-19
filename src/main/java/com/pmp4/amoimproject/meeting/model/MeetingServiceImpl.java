@@ -244,6 +244,33 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Override
     public Map<String, Object> moimSubscribeRefusal(Map<String, Object> rest) {
-        return null;
+        logger.info("MEETING: 거절 로직 rest={}", rest);
+
+        String meetingNo = String.valueOf(rest.get("meetingNo"));
+        List<Integer> noList= (List<Integer>) rest.get("list");
+
+        int[] noArr = noList.stream()
+                .mapToInt(i -> i)
+                .toArray();
+        Map<String, int[]> dbMap = new HashMap<>();
+        dbMap.put("Array", noArr);
+
+        logger.info("MEETING: 거절 로직 - 분리 결과 meetingNo={}, noArr={}", meetingNo, noArr);
+
+        int cnt = meetingDAO.updateUserMeetingSubRefusal(dbMap);
+        logger.info("MEETING: 거절 로직 - 완료 확인 cnt={}", cnt);
+
+        Map<String, Object> resultData = new HashMap<>();
+        boolean success = false;
+        String successText = "Server DB Error";
+        if(cnt < 0) {
+            successText = "success!";
+            success = true;
+        }
+
+        resultData.put("SUCCESS", success);
+        resultData.put("SUCCESS_TEXT", successText);
+
+        return resultData;
     }
 }

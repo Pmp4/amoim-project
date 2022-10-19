@@ -212,7 +212,7 @@ const MoimSubscribe = () => {
     const resultAPI = (rest, idx) => {
         MeetingService.subscribeResult(rest).then((response) => {
             const {status, data} = response;
-            
+
             if(status === 200) {
                 const {SUCCESS, SUCCESS_TEXT} = data;
 
@@ -228,7 +228,21 @@ const MoimSubscribe = () => {
     };
 
     const refusalAPI = (rest, idx) => {
-        MeetingService.subscribeResult().then((response) => {});
+        MeetingService.subscribeRefusal(rest).then((response) => {
+            const {status, data} = response;
+
+            if(status === 200) {
+                const {SUCCESS, SUCCESS_TEXT} = data;
+
+                if(SUCCESS) {
+                    refreshList(rest, idx);
+                }else {
+                    alert(SUCCESS_TEXT);
+                }
+            }else {
+                alert("Server Error");
+            }
+        });
     };
 
 
