@@ -6,8 +6,8 @@ const insertMeeting = (data) => {
     return httpMultipartCommon.post(`/meeting/insert`, data);
 }
 
-const selectByUserNo = (userNo) => {
-    return httpCommon.get(`/meeting/select/${userNo}`);
+const selectByCard = (type, key) => {
+    return httpCommon.get(`/meeting/select/${type}/${key}`);
 }
 
 const selectByNo = (no) => {
@@ -58,7 +58,7 @@ const subscribeRefusal = (rest) => {
 
 export default {
     insertMeeting, 
-    selectByUserNo, 
+    selectByCard, 
     selectByNo, 
     countMeeting, 
     meetingLikeState,

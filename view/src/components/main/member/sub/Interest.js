@@ -145,7 +145,7 @@ const Interest = ({checkStatus, checkStatusAction, deleteCheckStatusAction, curr
     //메인 카테고리 리스트 api
     const categoryApi = (type) => {
         InterestService.selectCategory(type).then((response) => {
-            console.log(response);
+            // console.log(response);
             if (response.data.SUCCESS) {
                 if(response.data.type) {
                     for(let i = 0; i < response.data.list.length; i++) {

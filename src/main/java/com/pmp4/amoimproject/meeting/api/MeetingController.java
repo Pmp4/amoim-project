@@ -56,14 +56,19 @@ public class MeetingController {
     }
 
 
-    @GetMapping(value = {"/select/{userNo}", "/select"})
-    public List<Map<String, Object>> selectByUserNo(@PathVariable (required = false) Long userNo,
+    @GetMapping(value = {"/select/{type}/{key}", "/select/{type}/"})
+    public List<Map<String, Object>> selectByCard(@PathVariable String type,
+                                                  @PathVariable (required = false) String key,
                                                     HttpSession httpSession) {
-        logger.info("MEETING 유저 생성 조회 userNo={}", userNo);
+        logger.info("MEETING 유저 생성 조회 type={}, key={}", type, key);
 
-        if(userNo == null) userNo = (Long) httpSession.getAttribute("userNo");
+        if(type.equals("USER_NO")) key = String.valueOf(httpSession.getAttribute("userNo"));
 
-        List<Map<String, Object>> responseData = meetingService.selectByUserNoCard(userNo);
+        Map<String, Object> dbType = new HashMap<>();
+        dbType.put("type", type);
+        dbType.put("key", key);
+
+        List<Map<String, Object>> responseData = meetingService.selectByUserNoCard(dbType);
         logger.info("MEETING 유저 생성 조회 결과 resData.size={}", responseData.size());
 
         return responseData;
