@@ -8,6 +8,7 @@ import MeetingService from "api/meeting/MeetingService";
 const MoimSubscribe = () => {
     const [content, setContent] = useState([]);
     const [checkList, setCheckList] = useState({});
+    const [userState, setUserState] = useState(false);
 
     const profileImgPath = useSelector((state) => state.path.profileImagePath);
 
@@ -16,8 +17,7 @@ const MoimSubscribe = () => {
     }, []);
 
     const listSet = content.map((item, idx) => {
-        if (content.length === 0) return "";
-        if (item.USER_LIST.length === 0) return "";
+        if (content.length === 0 || item.USER_LIST.length === 0) return "";
 
         const { USER_LIST, MEETING } = item;
 
@@ -123,6 +123,14 @@ const MoimSubscribe = () => {
             if (status === 200) {
                 if (data.SUCCESS) {
                     setContent(data.DATA);
+                    if (data.DATA.length !== 0) {
+                        for(let i = 0; i < data.DATA.length; i++) {
+                            if(data.DATA[i].USER_LIST.length !== 0) {
+                                setUserState(true);
+                                break;
+                            }
+                        }
+                    }
                 } else {
                     alert(data.SUCCESS_TEXT);
                 }
@@ -282,7 +290,7 @@ const MoimSubscribe = () => {
                 </div>
             </div> */}
             <div className="list">
-                {listSet}
+                {userState ? listSet : <div className='empty-box'>리스트가 없습니다.</div>}
                 {/* <div className="moim-box">
                     <p>모임명입니다.</p>
                     <div className="sub-list draggable">
