@@ -10,7 +10,7 @@
         </selectKey>
     </insert>
 
-    <select id="selectByUserNoCard" parameterType="Long" resultType="hashMap">
+    <select id="selectByUserNoCard" parameterType="hashMap" resultType="hashMap">
         select
             m.NO,
             m.TITLE,
@@ -45,7 +45,17 @@
             MEETING m join INTERESTS I on I.CATEGORY_CODE = m.CATEGORY_CODE
                       join MEETING_ADDRESS MA on m.NO = MA.MEETING_NO
                       join MEETING_IMAGES MI on m.NO = MI.MEETING_NO
-        where USER_NO = #{userNo} and DEL_TAG = 'N' and MI.SEQ = 1
+        where
+        DEL_TAG = 'N' and MI.SEQ = 1
+        <choose>
+            <when test='type != null and (type eq "USER_NO".toString())'>
+                and ${type} = #{key}
+            </when>
+            <when test='type != null and (type eq "BCODE".toString())'>
+                and ${type} like CONCAT(#{key}, '%') order by LIKE_COUNT desc
+            </when>
+        </choose>
+        LIMIT 12
     </select>
     
 

@@ -2,19 +2,19 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faHeart } from "@fortawesome/free-solid-svg-icons";
-import MoimItem from './MoimItem';
-import MeetingService from 'api/meeting/MeetingService';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { MODAL_OPEN } from 'reducer/module/modal';
+import MoimItem from "./MoimItem";
+import MeetingService from "api/meeting/MeetingService";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { MODAL_OPEN } from "reducer/module/modal";
 
 const MoimMain = () => {
     const [meetingContents, setMeetingContents] = useState([]);
 
     const location = useLocation();
 
-    const user = useSelector(state => state.user);
-    const modal = useSelector(state => state.modal);
+    const user = useSelector((state) => state.user);
+    const modal = useSelector((state) => state.modal);
 
     const dispatch = useDispatch();
 
@@ -24,27 +24,23 @@ const MoimMain = () => {
 
     const myAddMeetingData = () => {
         console.log(user);
-        MeetingService.selectByUserNo("").then(response => {
-            const {status, data} = response;
+        MeetingService.selectByCard("USER_NO", "").then((response) => {
+            const { status, data } = response;
             console.log(response);
-            if(status === 200) {
+            if (status === 200) {
                 setMeetingContents(data);
-            }else {
+            } else {
                 alert("서버 ERROR");
             }
         });
     };
 
-
-
     //가입 신청 리스트 확인
     //가입 신청 리스트 확인
     //가입 신청 리스트 확인
     const subscribeListBtnAction = () => {
-        dispatch({type: MODAL_OPEN, data: 'moim-subscribe-list'});
-    }
-
-
+        dispatch({ type: MODAL_OPEN, data: "moim-subscribe-list" });
+    };
 
     return (
         <div id="moim-page">
@@ -62,33 +58,34 @@ const MoimMain = () => {
             <div className="page-wrap main-part">
                 <div className="add-moim-part">
                     <div className="moim-sub">
-                        {
-                            meetingContents.map((item, idx) => {
-                                if(meetingContents.length === 0) return "";
+                        <div id="moim-item" className="draggable">
+                            {meetingContents.map((item, idx) => {
+                                if (meetingContents.length === 0) return "";
 
-                                return <MoimItem item={item} key={idx}/>
-                            })
-                        }
-                        {
-                            meetingContents.length < 4 ? 
-                            <div className='add-btn'>
-                                <Link to={`${location.pathname}/add`}>+</Link>
-                            </div> : ""
-                        }
+                                return <MoimItem item={item} key={idx} />;
+                            })}
+                            {meetingContents.length < 4 ? (
+                                <div className="add-btn">
+                                    <Link to={`${location.pathname}/add`}>
+                                        +
+                                    </Link>
+                                </div>
+                            ) : (
+                                ""
+                            )}
+                        </div>
                     </div>
-                    {
-                        meetingContents.length > 0 &&
-                        <div className='btn-wrap'>
-                            <button className='moim-edit-btn'>
-                                수정
-                            </button>
-                            <button 
-                                className='moim-confirm-btn'
-                                onClick={() => subscribeListBtnAction()}>
+                    {meetingContents.length > 0 && (
+                        <div className="btn-wrap">
+                            <button className="moim-edit-btn">수정</button>
+                            <button
+                                className="moim-confirm-btn"
+                                onClick={() => subscribeListBtnAction()}
+                            >
                                 가입 신청 확인
                             </button>
                         </div>
-                    }
+                    )}
                 </div>
                 <div className="sub-title">
                     <h4>함께하는 모임</h4>

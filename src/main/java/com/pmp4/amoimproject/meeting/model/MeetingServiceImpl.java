@@ -112,8 +112,8 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public List<Map<String, Object>> selectByUserNoCard(Long userNo) {
-        return meetingDAO.selectByUserNoCard(userNo);
+    public List<Map<String, Object>> selectByUserNoCard(Map<String, Object> map) {
+        return meetingDAO.selectByUserNoCard(map);
     }
 
     @Override

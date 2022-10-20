@@ -612,14 +612,20 @@
             height: 100%;
             margin-top: 20px;
 
-            >div {
-                width: 24%;
-                margin-left: 2%;
-                border-radius: 16px;
+            #moim-item {
+                display: flex;
+                width: 100%;
 
-                &:nth-child(1) {
-                    margin-left: 0;
+                >div {
+                    width: 24%;
+                    margin-left: 2%;
+                    border-radius: 16px;
+
+                    &:nth-child(1) {
+                        margin-left: 0;
+                    }
                 }
+
             }
 
             .add-btn {
@@ -691,19 +697,22 @@
 
 
 #moim-item {
-    cursor: pointer;
-    transition: .2s;
-    position: relative;
-    top: 0;
-    &:hover {
-        top: -10px
-    }
 
     .item {
+        cursor: pointer;
+        transition: .2s;
+        position: relative;
+
+        &:hover {
+            top: -10px
+        }
+
+        top: 0;
+
         border-radius: 12px;
         box-sizing: border-box;
         box-shadow: 5px 5px 44px #ebebeb,
-            -5px -5px 44px #ffffff;
+        -5px -5px 44px #ffffff;
 
         .image {
             width: 100%;
@@ -854,10 +863,11 @@
                     transition: .2s;
                     border-radius: 10px;
                     line-height: 30px;
-                    box-shadow:  5px 5px 20px #f0f0f0,
+                    box-shadow: 5px 5px 20px #f0f0f0,
                         -5px -5px 20px #ffffff;
                     position: relative;
-                    top:0;
+                    top: 0;
+
                     &:hover {
                         top: 3%;
                         background: #51CD9A;
@@ -1002,6 +1012,7 @@
             .sub-content {
                 display: flex;
                 margin-top: 50px;
+
                 .member {
                     width: 49%;
 
@@ -1012,48 +1023,54 @@
 
                     .member-list {
                         margin-top: 10px;
+
                         .item {
                             display: flex;
                             justify-content: space-between;
                             margin-top: 5px;
-                            
+
                             .profile-img {
                                 width: 16%;
                                 display: flex;
                                 align-items: center;
+
                                 img {
                                     width: 100%;
                                     overflow: hidden;
                                     border-radius: 100%;
                                     padding: 5px;
+
                                     &:before {
                                         content: "";
                                         display: block;
                                         padding-top: 100%;
-                                        
+
                                         /* 1:1 비율 */
                                     }
                                 }
                             }
-    
+
                             .profile-exp {
                                 width: 80%;
                                 // background-color: #08B46C;
                                 display: flex;
-                                
+
                                 justify-content: center;
                                 align-items: center;
                                 flex-wrap: wrap;
+
                                 p {
                                     width: 100%;
                                     font-size: 1.1em;
                                     font-weight: 500;
+
                                     span {
                                         font-size: .7em;
-                                        
+
                                     }
                                 }
-                                > span {
+
+                                >span {
                                     font-size: .9em;
                                     display: block;
                                     width: 100%;
@@ -1065,6 +1082,117 @@
                     }
                 }
             }
+        }
+    }
+}
+
+
+#moim-search-list {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    display: flex;
+    background-color: #f2f2f2;
+    padding: 0 16px 16px 16px;
+    box-sizing: border-box;
+    border-radius: 16px;
+
+    margin-top: 14px;
+    > div {
+        width: 49%;
+    }
+
+    .item {
+        padding: 10px;
+        margin-top: 16px;
+        box-sizing: border-box;
+        background: #fff;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        // background: #08B46C;
+
+        .left {
+            width: 90%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .thumbnail {
+                width: 10%;
+                overflow: hidden;
+                position: relative;
+                border-radius: 8px;
+
+                &::before {
+                    content: "";
+                    display: block;
+                    padding-top: 100%;
+                }
+
+                img {
+                    height: 100%;
+                    display: block;
+                    overflow: hidden;
+                    box-sizing: border-box;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                }
+            }
+
+
+            .exp {
+                width: 87%;
+
+                >p {
+                    font-size: 1.2em;
+                    font-weight: 500;
+                }
+                .sub-exp {
+                    margin-top: 12px;
+                    > span {
+                        padding: 1px 6px;
+                        border-radius: 6px;
+                        margin-right: 5px;
+                        font-size: .8em;
+                    }
+
+                    .person {    
+                        background: #FCF3F3;
+                        color: #a48f8f;
+                    }
+                    .loc {
+                        background: #FCE4C7;
+                        color: #a4937d;
+                    }
+                    .cat {
+                        background: #F4FCF4;
+                        color: #828d82;
+                    }
+                    .tag {
+                        background: #ededed;
+                    }
+                }
+            }
+        }
+
+        .right {
+            width: 7%;
+            border-radius: 12px;
+            &::before {
+                content: "";
+                display: block;
+                padding-top: 100%;
+            }
+            background-color: #F4BEC1;
+            color: #A4686B;
+            font-size: 1.5em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     }
 }
