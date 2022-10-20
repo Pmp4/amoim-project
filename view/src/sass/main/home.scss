@@ -1,40 +1,138 @@
 @import '../variable.scss';
 
 
-#home-page 
+#home-page {
     .title-wrap {
-    width: $device-xl-width;
-    height: 400px;
-    margin: {
-        top: 20px;
-        left: auto;
-        bottom: 0;
-        right: auto;
-    };
-    border-radius: 40px;
-    background: rgb(111,63,251);
-    background: linear-gradient(21deg, rgba(111,63,251, .4) 0%, rgba(252,70,194, .4) 100%);
-    box-shadow:  20px 20px 60px #c2c2c2,
-                -20px -20px 60px #ffffff;
-    
-    position: relative;
-    h2{
-        font-size: 7em;
-        font-weight: 600;
-        color: rgba(255, 255, 255, .8);
+        width: $device-xl-width;
+        padding: 50px 40px;
+        box-sizing: border-box;
 
-        p {
-            font-size: .3em;
-            line-height: 1.6em;
-            span{
-                border-radius: 16px;
-                background: rgba(255, 255, 255, .8);
-                padding: 0 10px 3px 10px;
-                color: rgba(0, 0, 0, .8);
+        margin: {
+            top: 20px;
+            left: auto;
+            bottom: 0;
+            right: auto;
+        }
+
+        ;
+        border-radius: 40px;
+        background: rgb(111, 63, 251);
+        background: linear-gradient(21deg, rgba(111, 63, 251, .4) 0%, rgba(252, 70, 194, .4) 100%);
+        box-shadow: 20px 20px 60px #c2c2c2,
+        -20px -20px 60px #ffffff;
+
+        position: relative;
+
+        h2 {
+            font-size: 7em;
+            font-weight: 600;
+            color: rgba(255, 255, 255, .8);
+
+            p {
+                font-size: .3em;
+                line-height: 1.6em;
+
+                span {
+                    border-radius: 16px;
+                    background: rgba(255, 255, 255, .8);
+                    padding: 0 10px 3px 10px;
+                    color: rgba(0, 0, 0, .8);
+                }
             }
         }
-        position: absolute;
-        top: 12%;
-        left: 5%
+    }
+
+
+
+    .moim-contents-part {
+        margin-top: 120px;
+
+        .title {
+            font-size: 2em;
+
+            h3>span {
+                &.loc {
+                    background-color: #ffe4a6;
+                    color: #684e13;
+                }
+                &.cat {
+                    background: #ee8b6a;
+                    color: #7b422f;
+                }
+                padding: 2px 8px;
+                line-height: 110%;
+                border-radius: 16px;
+                margin-right: 10px;
+            }
+        }
+
+        #moim-item {
+            width: calc(100% + 30px);
+            left: -15px;
+            position: relative;
+
+            .gradient {
+                width: 15px;
+                height: 130%;
+                position: absolute;
+
+                &.left {
+                    top: -15%;
+                    left: 0;
+                    // background: #fff;
+                    z-index: 11;
+                    background: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+                }
+
+                &.right {
+                    top: -15%;
+                    right: 0;
+                    // background: #fff;
+                    z-index: 11;
+                    background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+                }
+            }
+
+            &:hover {
+                top: 0;
+            }
+
+            .slick-slider {
+                margin-top: 40px;
+
+                .slick-arrow {
+                    display: none;
+                }
+
+                .slick-dots {
+                    position: relative;
+                    bottom: 0;
+                    margin-top: 20px;
+                }
+
+                .slick-list {
+                    overflow-y: initial;
+                    overflow-x: clip;
+
+                    // overflow: visible;
+                    .slick-slide {
+                        padding: 0 15px;
+                        box-sizing: border-box;
+
+                        div {
+                            position: relative;
+                            top: 0;
+                            transition: .2s;
+
+                            .item {
+                                &:hover {
+                                    top: -10px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

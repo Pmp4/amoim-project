@@ -163,7 +163,7 @@ public class MeetingServiceImpl implements MeetingService {
                 Map<String, Object> res = meetingDAO.meetingMemberCount(meetingNo);
                 logger.info("MEETING: 신청 로직 인원 수 확인 res={}", res);
 
-                int personNumber = Integer.parseInt ((String)res.get("PERSON_NUMBER"));
+                int personNumber = Integer.parseInt ((String.valueOf(res.get("PERSON_NUMBER"))));
                 int personCount = Integer.parseInt((String.valueOf(res.get("COUNT"))));
 
                 if(!(personNumber <= personCount)) {
