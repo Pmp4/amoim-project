@@ -3,6 +3,7 @@ package com.pmp4.amoimproject.meeting.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pmp4.amoimproject.common.ConstUtil;
 import com.pmp4.amoimproject.common.FileUploadUtil;
+import com.pmp4.amoimproject.common.PaginationInfo;
 import com.pmp4.amoimproject.meeting.model.MeetingAddressVO;
 import com.pmp4.amoimproject.meeting.model.MeetingService;
 import com.pmp4.amoimproject.meeting.model.MeetingVO;
@@ -56,24 +57,31 @@ public class MeetingController {
     }
 
 
-    @GetMapping(value = {"/select/{type}/{key}", "/select/{type}/"})
-    public List<Map<String, Object>> selectByCard(@PathVariable String type,
-                                                  @PathVariable (required = false) String key,
-                                                    HttpSession httpSession) {
-        logger.info("MEETING 카드 조회 type={}, key={}", type, key);
+    @GetMapping("/select")
+    public List<Map<String, Object>> selectByCard(@RequestParam String type,
+                                                  @RequestParam String key,
+                                                  @RequestParam (defaultValue = "1") int page,
+                                                  @RequestParam (defaultValue = "8") int length,
+                                                  HttpSession httpSession) {
+        logger.info("MEETING 카드 조회 type={}, key={}, page={}, length={}", type, key, page, length);
 
         if(type.equals("USER_NO")) {
             key = String.valueOf(httpSession.getAttribute("userNo"));
+            length = 12;
         } else if (type.equals("CATEGORY_CODE")) {
             type = "i." + type;
             key = key.substring(0, 3);
         }
+
+        PaginationInfo paginationInfo = new PaginationInfo(length, page);
 
         logger.info("MEETING 카드 조회 필터 type={}, key={}", type, key);
 
         Map<String, Object> dbType = new HashMap<>();
         dbType.put("type", type);
         dbType.put("key", key);
+        dbType.put("length", paginationInfo.getLength());
+        dbType.put("start", paginationInfo.getStart());
 
         List<Map<String, Object>> responseData = meetingService.selectByUserNoCard(dbType);
         logger.info("MEETING 카드 조회 결과 resData.size={}", responseData.size());

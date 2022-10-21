@@ -60,7 +60,7 @@
                 and ${type} like CONCAT(#{key}, '%') order by LIKE_COUNT desc
             </when>
         </choose>
-        LIMIT 12
+        LIMIT #{length} OFFSET #{start}
     </select>
     
 
