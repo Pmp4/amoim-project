@@ -60,16 +60,23 @@ public class MeetingController {
     public List<Map<String, Object>> selectByCard(@PathVariable String type,
                                                   @PathVariable (required = false) String key,
                                                     HttpSession httpSession) {
-        logger.info("MEETING 유저 생성 조회 type={}, key={}", type, key);
+        logger.info("MEETING 카드 조회 type={}, key={}", type, key);
 
-        if(type.equals("USER_NO")) key = String.valueOf(httpSession.getAttribute("userNo"));
+        if(type.equals("USER_NO")) {
+            key = String.valueOf(httpSession.getAttribute("userNo"));
+        } else if (type.equals("CATEGORY_CODE")) {
+            type = "i." + type;
+            key = key.substring(0, 3);
+        }
+
+        logger.info("MEETING 카드 조회 필터 type={}, key={}", type, key);
 
         Map<String, Object> dbType = new HashMap<>();
         dbType.put("type", type);
         dbType.put("key", key);
 
         List<Map<String, Object>> responseData = meetingService.selectByUserNoCard(dbType);
-        logger.info("MEETING 유저 생성 조회 결과 resData.size={}", responseData.size());
+        logger.info("MEETING 카드 조회 결과 resData.size={}", responseData.size());
 
         return responseData;
     }

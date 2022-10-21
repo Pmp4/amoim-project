@@ -16,6 +16,7 @@ const Home = () => {
     const [locMeeting, setLocMeeting] = useState([]);
     const [category, setCategory] = useState([]);
     const [categoryState, setCategoryState] = useState(0);
+    const [categoryMoim, setCategoryMoim] = useState([]);
 
     useEffect(() => {
         locAPI();
@@ -48,7 +49,13 @@ const Home = () => {
 
     const categorySelectActionAPI = (code) => {
         MeetingService.selectByCard("CATEGORY_CODE", code).then(response => {
-
+            const {status, data} = response;
+        
+            if(status === 200) {
+                setCategoryMoim(data);
+            }else {
+                alert("Server Error");
+            }
         });
     }
 
@@ -109,7 +116,7 @@ const Home = () => {
                     <div className='select'>
                         {setCategoryComp}
                     </div>
-                    <MoimList/>
+                    <MoimList items={categoryMoim}/>
                 </div>
             </div>
         </div>
