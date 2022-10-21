@@ -117,6 +117,11 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
+    public int selectByUserNoCardPageCount(Map<String, Object> map) {
+        return meetingDAO.selectByUserNoCardPageCount(map);
+    }
+
+    @Override
     public Map<String, Object> selectByNo(String no) {
         return meetingDAO.selectByNo(no);
     }

@@ -13,10 +13,12 @@ import InterestService from 'api/interest/InterestService';
 
 
 const Home = () => {
-    const [locMeeting, setLocMeeting] = useState([]);
+    const [locMoim, setLocMoim] = useState([]);
     const [category, setCategory] = useState([]);
     const [categoryState, setCategoryState] = useState(0);
+
     const [categoryMoim, setCategoryMoim] = useState([]);
+    const [pageInfo, setPageInfo] = useState({});
 
     useEffect(() => {
         locAPI();
@@ -29,7 +31,7 @@ const Home = () => {
             const {status, data} = response;
 
             if(status === 200) {
-                setLocMeeting(data);
+                setLocMoim(data.list);
             }else {
                 alert("서버 ERROR");
             }
@@ -50,9 +52,11 @@ const Home = () => {
     const categorySelectActionAPI = (code) => {
         MeetingService.selectByCard("CATEGORY_CODE", code).then(response => {
             const {status, data} = response;
+            console.log(response);
         
             if(status === 200) {
-                setCategoryMoim(data);
+                setCategoryMoim(data.list);
+                setPageInfo(data.pageInfo);
             }else {
                 alert("Server Error");
             }
@@ -104,7 +108,7 @@ const Home = () => {
                     <div className='title'>
                         <h3><span className='loc'><FontAwesomeIcon icon={faLocationDot}/> 서울</span> 근처 인기항목</h3>
                     </div>
-                    <MoimSlider meeting={locMeeting}/>
+                    <MoimSlider meeting={locMoim}/>
                 </div>
             </div>
             <div className='moim-contents-part page-wrap'>
@@ -117,7 +121,7 @@ const Home = () => {
                     <div className='select'>
                         {setCategoryComp}
                     </div>
-                    <MoimList items={categoryMoim}/>
+                    <MoimList items={categoryMoim} pageInfo={pageInfo}/>
                 </div>
             </div>
         </div>

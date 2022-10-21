@@ -6,7 +6,7 @@ const insertMeeting = (data) => {
     return httpMultipartCommon.post(`/meeting/insert`, data);
 }
 
-const selectByCard = (type, key, page = 1, length = 8) => {
+const selectByCard = (type, key, length = 8, page = 1) => {
     return httpCommon.get(`/meeting/select?type=${type}&key=${key}&page=${page}&length=${length}`);
 }
 

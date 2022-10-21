@@ -28,7 +28,7 @@ const MoimMain = () => {
             const { status, data } = response;
             console.log(response);
             if (status === 200) {
-                setMeetingContents(data);
+                setMeetingContents(data.list);
             } else {
                 alert("서버 ERROR");
             }

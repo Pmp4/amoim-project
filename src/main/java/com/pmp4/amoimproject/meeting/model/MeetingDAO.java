@@ -18,6 +18,8 @@ public interface MeetingDAO {
 
     List<Map<String, Object>> selectByUserNoCard(Map<String, Object> map);
 
+    int selectByUserNoCardPageCount(Map<String, Object> map);
+
     Map<String, Object> selectByNo(String no);
 
     int selectByUserCount(String userNo);
