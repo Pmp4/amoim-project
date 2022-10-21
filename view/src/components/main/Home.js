@@ -1,16 +1,14 @@
-import React from 'react';
-import LoginCheck from '../common/LoginCheck';
-import { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot, faStar } from '@fortawesome/free-solid-svg-icons';
-import { Slider } from 'react-slick';
-import MoimSlider from './moim/sub/MoimSlider';
-import { useEffect } from 'react';
-import MeetingService from 'api/meeting/MeetingService';
-import MoimList from './moim/sub/MoimList';
-import InterestService from 'api/interest/InterestService';
-
-
+import React from "react";
+import LoginCheck from "../common/LoginCheck";
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLocationDot, faStar } from "@fortawesome/free-solid-svg-icons";
+import { Slider } from "react-slick";
+import MoimSlider from "./moim/sub/MoimSlider";
+import { useEffect } from "react";
+import MeetingService from "api/meeting/MeetingService";
+import MoimList from "./moim/sub/MoimList";
+import InterestService from "api/interest/InterestService";
 
 const Home = () => {
     const [locMoim, setLocMoim] = useState([]);
@@ -18,110 +16,148 @@ const Home = () => {
     const [categoryState, setCategoryState] = useState(0);
 
     const [categoryMoim, setCategoryMoim] = useState([]);
-    const [pageInfo, setPageInfo] = useState({});
+    const [pageInfo, setPageInfo] = useState({
+        blockSize: 2,
+        currentPage: 1,
+        lastPage: 0,
+        pageSize: 0,
+        startPage: 0,
+        startRecord: 0,
+        totalPage: 0,
+        totalRecord: 0,
+    });
+
+    const {blockSize, currentPage, pageSize} = pageInfo
+
 
     useEffect(() => {
         locAPI();
         categoryAPI();
     }, []);
-    
 
     const locAPI = () => {
-        MeetingService.selectByCard("BCODE", '11').then(response => {
-            const {status, data} = response;
+        MeetingService.selectByCard("BCODE", "11").then((response) => {
+            const { status, data } = response;
 
-            if(status === 200) {
+            if (status === 200) {
                 setLocMoim(data.list);
-            }else {
+            } else {
                 alert("서버 ERROR");
             }
         });
-    }
+    };
 
     const categoryAPI = () => {
-        InterestService.selectCategory("").then(response => {
+        InterestService.selectCategory("").then((response) => {
             if (response.data.SUCCESS) {
-                if(response.data.type) {
+                if (response.data.type) {
                     setCategory(response.data.list);
                     firstCategorySet(response.data.list);
                 }
             }
-        })
-    }
-
-    const categorySelectActionAPI = (code) => {
-        MeetingService.selectByCard("CATEGORY_CODE", code).then(response => {
-            const {status, data} = response;
-            console.log(response);
-        
-            if(status === 200) {
-                setCategoryMoim(data.list);
-                setPageInfo(data.pageInfo);
-            }else {
-                alert("Server Error");
-            }
         });
-    }
+    };
+
+
+    //카테고리 code에 맞는 리스트를 뽑아줌
+    //카테고리 code에 맞는 리스트를 뽑아줌
+    //카테고리 code에 맞는 리스트를 뽑아줌
+    //카테고리 code에 맞는 리스트를 뽑아줌
+    const categorySelectActionAPI = (code, page, length) => {
+        MeetingService.selectByCard("CATEGORY_CODE", code, page, length).then(
+            (response) => {
+                const { status, data } = response;
+                console.log(response);
+
+                if (status === 200) {
+                    setCategoryMoim(data.list);
+                    setPageInfo(data.pageInfo);
+                } else {
+                    alert("Server Error");
+                }
+            }
+        );
+    };
 
 
     const firstCategorySet = (list) => {
-        if(list.length === 0) return;
+        if (list.length === 0) return;
 
         setCategoryState(parseInt(list[0].categoryCode));
         categoryBtnAction(parseInt(list[0].categoryCode));
-    }
+    };
 
+
+    
 
     const setCategoryComp = category.map((item, idx) => {
-        if(category.length === 0) return "";
+        if (category.length === 0) return "";
 
         return (
-            <div 
-                className={categoryState === parseInt(item.categoryCode) ? 
-                    'item on' : 'item'
-                } 
+            <div
+                className={
+                    categoryState === parseInt(item.categoryCode)
+                        ? "item on"
+                        : "item"
+                }
                 onClick={() => categoryBtnAction(parseInt(item.categoryCode))}
-                key={item.categoryCode}>
+                key={item.categoryCode}
+            >
                 {item.name}
             </div>
-        )
+        );
     });
 
     const categoryBtnAction = (code) => {
         setCategoryState(code);
-        categorySelectActionAPI(code);
+        categorySelectActionAPI(code, 1, blockSize);
+    };
+
+
+
+    const categoryMoimPageBtnAction = (page) => {
+        categorySelectActionAPI(categoryState, page, blockSize);
     }
 
     return (
-        <div id='home-page'>
-            <div className='title-wrap'>
+        <div id="home-page">
+            <div className="title-wrap">
                 <h2>
-                    안녕하세요.<br/>
-                    <p className='mt_md'>
-                        사람들의 모임서비스 <br/>
+                    안녕하세요.
+                    <br />
+                    <p className="mt_md">
+                        사람들의 모임서비스 <br />
                         <span>A-MOIM</span> 입니다.
                     </p>
                 </h2>
             </div>
-            <div className='moim-contents-part page-wrap'>
-                <div className='loc-part'>
-                    <div className='title'>
-                        <h3><span className='loc'><FontAwesomeIcon icon={faLocationDot}/> 서울</span> 근처 인기항목</h3>
+            <div className="moim-contents-part page-wrap">
+                <div className="loc-part">
+                    <div className="title">
+                        <h3>
+                            <span className="loc">
+                                <FontAwesomeIcon icon={faLocationDot} /> 서울
+                            </span>{" "}
+                            근처 인기항목
+                        </h3>
                     </div>
-                    <MoimSlider meeting={locMoim}/>
+                    <MoimSlider meeting={locMoim} />
                 </div>
             </div>
-            <div className='moim-contents-part page-wrap'>
-                <div className='category-part'>
-                    <div className='title'>
-                        <h3><span className='cat'><FontAwesomeIcon icon={faStar}/></span> 카테고리 별</h3>
+            <div className="moim-contents-part page-wrap">
+                <div className="category-part">
+                    <div className="title">
+                        <h3>
+                            <span className="cat">
+                                <FontAwesomeIcon icon={faStar} />
+                            </span>{" "}
+                            카테고리 별
+                        </h3>
                     </div>
                 </div>
-                <div className='category-list draggable'>
-                    <div className='select'>
-                        {setCategoryComp}
-                    </div>
-                    <MoimList items={categoryMoim} pageInfo={pageInfo}/>
+                <div className="category-list draggable">
+                    <div className="select">{setCategoryComp}</div>
+                    <MoimList items={categoryMoim} pageInfo={pageInfo} pageBtn={categoryMoimPageBtnAction}/>
                 </div>
             </div>
         </div>

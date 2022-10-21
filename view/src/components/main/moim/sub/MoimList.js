@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { faHeart, faLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faLocationDot, faBackward, faForward } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 
-const MoimList = ({ items, pageInfo }) => {
+const MoimList = ({ items, pageInfo, pageBtn }) => {
     const imgPath = useSelector((state) => state.path.imagePath);
     const navigate = useNavigate();
 
@@ -61,12 +61,13 @@ const MoimList = ({ items, pageInfo }) => {
 
 
         let tempPageArr = [];
-        for(let i = 1; i < (pageInfo.startPage + pageInfo.pageSize); i++) tempPageArr.push(i);
+        for(let i = pageInfo.startPage; i < pageInfo.lastPage + 1; i++) tempPageArr.push(i);
     
 
         const page = tempPageArr.map((item, idx) => (
             <span key={idx} 
                 className={item === pageInfo.currentPage ? "page-item on" : "page-item"}
+                onClick={() => pageBtn(item)}
             >
                 {item}
             </span>
@@ -79,7 +80,22 @@ const MoimList = ({ items, pageInfo }) => {
         <div id="moim-search-list">
             {content}
             <div className="pagination-info">
-                {pageSet()}
+                <div>
+                    {pageInfo.startPage !== 1 && 
+                        <span onClick={
+                                () => pageBtn(pageInfo.startPage - 1)
+                            } className='prev'>
+                            <FontAwesomeIcon icon={faBackward}/>
+                        </span>
+                    }
+                    {pageSet()}
+                    {pageInfo.lastPage !== pageInfo.totalPage && 
+                        <span onClick={
+                                () => pageBtn(pageInfo.lastPage + 1)
+                            } className='next'>
+                            <FontAwesomeIcon icon={faForward}/>
+                        </span>}
+                </div>
             </div>
         </div>
     );

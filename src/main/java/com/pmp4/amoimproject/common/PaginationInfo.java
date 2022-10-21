@@ -63,13 +63,20 @@ public class PaginationInfo {
         this.totalRecord = totalRecord;
         totalPage = (int) Math.ceil((float)totalRecord / blockSize);
 
-        startPage = currentPage / pageSize + 1;
+        startPage = currentPage - ((currentPage - 1) % pageSize);
+        lastPage = startPage + (pageSize-1);
+
+        if(lastPage > totalPage) lastPage = totalPage;
     }
 
 
 
     public int getStartPage() {
         return startPage;
+    }
+
+    public int getLastPage() {
+        return lastPage;
     }
 
 
