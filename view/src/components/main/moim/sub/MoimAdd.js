@@ -4,17 +4,23 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import InterestService from "api/interest/InterestService";
-import MeetingService from 'api/meeting/MeetingService';
-import TagService from 'api/tag/TagService';
-import { KakaoMapSet2, searchPlaces, geocoder, kakao, searchAddrFromCoords } from "components/api/KakaoMapScript";
-import { is_gap, is_number, is_specialChar } from 'method/regularExpression';
+import MeetingService from "api/meeting/MeetingService";
+import TagService from "api/tag/TagService";
+import {
+    KakaoMapSet2,
+    searchPlaces,
+    geocoder,
+    kakao,
+    searchAddrFromCoords,
+} from "components/api/KakaoMapScript";
+import { is_gap, is_number, is_specialChar } from "method/regularExpression";
 import React from "react";
 import { useState } from "react";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { useCallback } from "react";
-import { useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const initialInput = {
     title: "",
@@ -22,7 +28,7 @@ const initialInput = {
     tag: "",
     categoryCode: "",
     dues: "",
-    personNumber: ""
+    personNumber: 1,
 };
 
 const initialCategory = {
@@ -43,13 +49,12 @@ const MoimAdd = () => {
     const [category, setCategory] = useState(initialCategory);
 
     const [tagList, setTagList] = useState([]); //검색된 태그
-    const [tagAdd, setTagAdd] = useState([]);   //등록된 태그
+    const [tagAdd, setTagAdd] = useState([]); //등록된 태그
 
     const inputRef = useRef({});
     const searchRef = useRef([]);
 
-
-    const user = useSelector(state => state.user);
+    const user = useSelector((state) => state.user);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -66,21 +71,19 @@ const MoimAdd = () => {
         // console.log(user.userInfo.no);
         categoryApi("");
 
-
-        MeetingService.countMeeting("").then(response => {
-            const {status, data} = response;
-            if(status === 200) {
-                if(data >= 4) {
+        MeetingService.countMeeting("").then((response) => {
+            const { status, data } = response;
+            if (status === 200) {
+                if (data >= 4) {
                     alert("모임 개설 횟수가 없습니다.");
                     navigate("/moim");
                 }
-            }else {
+            } else {
                 alert("Server Error");
                 navigate("/");
             }
-        })
+        });
     }, []);
-
 
     //태그 등록/검색 api
     //태그 등록/검색 api
@@ -88,99 +91,97 @@ const MoimAdd = () => {
     //검색
     //검색
     const tagSelect = (keyword) => {
-        TagService.selectByKeyword(keyword).then(response => {
-            const {status, data} = response;
-            if(status === 200) {
+        TagService.selectByKeyword(keyword).then((response) => {
+            const { status, data } = response;
+            if (status === 200) {
                 setTagList(data);
             }
         });
-    }
-    
+    };
+
     //등록
     //등록
     const tagAddAction = (tagText) => {
-        if(tagAdd.indexOf(tagText) !== -1) {
+        if (tagAdd.indexOf(tagText) !== -1) {
             alert("이미 등록된 태그입니다.");
             return;
-        }else if(tagAdd.length === 4) {
+        } else if (tagAdd.length === 4) {
             alert("태그는 4개까지 등록하실 수 있습니다.");
             return;
         }
-        
+
         const tempTag = [...tagAdd];
         tempTag.push(tagText);
-        
+
         setTagAdd(tempTag);
         setInputData({
             ...inputData,
-            tag: ""
+            tag: "",
         });
         setTagList([]);
-    }
+    };
 
     const tagDeleteAction = (paramIdx) => {
-        const tempTagAdd = tagAdd.filter((item, idx) => (
-            idx !== paramIdx
-        ));
+        const tempTagAdd = tagAdd.filter((item, idx) => idx !== paramIdx);
 
         setTagAdd(tempTagAdd);
-    }
-
+    };
 
     //엔터 감지
     //엔터 감지
     const tagInputEnter = (event) => {
-        if(event.keyCode === 13) {
-            if(is_gap(tag) || is_number(tag) || is_specialChar(tag) || tag === "") {
-                alert('태그에는 공백, 숫자, 특수문자가 들어갈 수 없습니다.');
+        if (event.keyCode === 13) {
+            if (
+                is_gap(tag) ||
+                is_number(tag) ||
+                is_specialChar(tag) ||
+                tag === ""
+            ) {
+                alert("태그에는 공백, 숫자, 특수문자가 들어갈 수 없습니다.");
                 return;
             }
             tagAddAction(tag);
         }
 
-        if(event.keyCode === 8) {
-            if(tag.length === 0) {
-                if(tagAdd.length !== 0) {
-                    const tempTagAdd = tagAdd.filter((item, idx) => (
-                        idx !== tagAdd.length - 1
-                    ));
+        if (event.keyCode === 8) {
+            if (tag.length === 0) {
+                if (tagAdd.length !== 0) {
+                    const tempTagAdd = tagAdd.filter(
+                        (item, idx) => idx !== tagAdd.length - 1
+                    );
 
                     setTagAdd(tempTagAdd);
                 }
             }
         }
-    }
+    };
 
     //리스트 컴포넌트
     const tagListComponent = tagList.map((item, idx) => {
-        if(tagList.length === 0) return ""; 
+        if (tagList.length === 0) return "";
 
         return (
-            <p 
-                key={idx+2000}
-                onClick={() => tagAddAction(item.tagName)}>
+            <p key={idx + 2000} onClick={() => tagAddAction(item.tagName)}>
                 {item.tagName}
             </p>
-        )
+        );
     });
 
     //태그 컴포넌트
     const tagItemComponent = tagAdd.map((item, idx) => {
-        if(tagAdd.length === 0) return "";
+        if (tagAdd.length === 0) return "";
 
         return (
-            <span 
+            <span
                 onClick={() => tagDeleteAction(idx)}
-                key={idx+700} 
-                className='tag'>
+                key={idx + 700}
+                className="tag"
+            >
                 {item}
             </span>
-        )
+        );
     });
 
-    
-    
-    
     //input onChange 관련 함수
     //input onChange 관련 함수
     //input onChange 관련 함수
@@ -188,39 +189,41 @@ const MoimAdd = () => {
     const inputEventAction = (event) => {
         let { name, value } = event.target;
 
-        if(name === 'tag') {
-            if(value.length > 10) {
+        if (name === "tag") {
+            if (value.length > 10) {
                 alert("태그는 10자리까지 입력 가능합니다.");
                 value = value.substring(0, 10);
-            }else if(value.length > 0) {
+            } else if (value.length > 0) {
                 tagSelect(value);
             }
-        }else if(name === 'title') {
+        } else if (name === "title") {
             const cutLength = 20;
-            if(value.length > cutLength) {
+            if (value.length > cutLength) {
                 alert(`제목은 ${cutLength}자 이내로 입력해주세요`);
                 value = value.substring(0, cutLength);
             }
-        }else if(name === 'content') {
+        } else if (name === "content") {
             const cutLength = 500;
-            if(value.length > cutLength) {
+            if (value.length > cutLength) {
                 alert(`내용은 ${cutLength}자 이내로 입력해주세요`);
                 value = value.substring(0, cutLength);
             }
-        }else if(name === 'dues') {
+        } else if (name === "dues") {
             const cutLength = 6;
             const numberDues = value.replace(",", "");
-            if(numberDues.length > cutLength) {
+            if (numberDues.length > cutLength) {
                 value = value.substring(0, cutLength);
             }
-            
-            value = value.replace(/[^0-9]/g, "").replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-        }else if(name = 'personNumber') {
+
+            value = value
+                .replace(/[^0-9]/g, "")
+                .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        } else if ((name = "personNumber")) {
             const cutMax = 6;
-            if(value > 50) {
+            if (value > 50) {
                 value = 50;
-            }else if(0 > value) {
-                value = 0;
+            } else if (1 > value) {
+                value = 1;
             }
         }
 
@@ -231,9 +234,6 @@ const MoimAdd = () => {
 
         setInputData(tempInputData);
     };
-
-
-
 
     //이미지 업로드 미리보기 로직
     //이미지 업로드 미리보기 로직
@@ -246,6 +246,8 @@ const MoimAdd = () => {
 
         if (fileArr.length > 1) {
             alert("하나의 이미지를 선택해주세요.");
+            return;
+        }else if(fileArr.length === 0) {
             return;
         }
 
@@ -279,9 +281,6 @@ const MoimAdd = () => {
         return false;
     };
 
-
-
-
     //카테고리 클릭 시,
     //카테고리 클릭 시,
     //카테고리 클릭 시,
@@ -302,7 +301,8 @@ const MoimAdd = () => {
             type = "code";
         }
 
-        if (tempCategoryCode[type][eventIdx].check) {   //이미 체크한 경우
+        if (tempCategoryCode[type][eventIdx].check) {
+            //이미 체크한 경우
             tempCategoryCode[type][eventIdx].check = false;
             if (type === "parent") tempCategoryCode.code = [];
 
@@ -310,13 +310,14 @@ const MoimAdd = () => {
                 ...inputData,
                 categoryCode: "",
             });
-        } else {    //체크가 안된 경우
+        } else {
+            //체크가 안된 경우
             for (let i = 0; i < tempCategoryCode[type].length; i++)
                 tempCategoryCode[type][i].check = false;
             tempCategoryCode[type][eventIdx].check = true;
 
             let resCode = "";
-            if(type === "code") {
+            if (type === "code") {
                 resCode = parseInt(code);
             }
 
@@ -393,10 +394,6 @@ const MoimAdd = () => {
         );
     });
 
-
-
-
-
     //지도 마커 클릭 시, 스크롤
     //지도 마커 클릭 시, 스크롤
     //지도 마커 클릭 시, 스크롤
@@ -438,9 +435,9 @@ const MoimAdd = () => {
                 function (result, status) {
                     let restAddress = {};
 
-                    searchRef.current.forEach(item => {
+                    searchRef.current.forEach((item) => {
                         // console.log(item);
-                        item.classList.remove('click');
+                        item.classList.remove("click");
                     });
 
                     // 정상적으로 검색이 완료됐으면
@@ -459,11 +456,11 @@ const MoimAdd = () => {
                             bcode: item.address.b_code,
                             placeName: data.place_name,
                             latY: parseFloat(item.y),
-                            lonX: parseFloat(item.x)
-                        }
+                            lonX: parseFloat(item.x),
+                        };
 
                         setAddress(restAddress);
-                    }else {
+                    } else {
                         const latLng = {
                             lng: data.x,
                             lat: data.y,
@@ -471,7 +468,7 @@ const MoimAdd = () => {
 
                         searchAddrFromCoords(latLng, (result, status) => {
                             const addressSub = result[0];
-                            
+
                             restAddress = {
                                 zonecode: "",
                                 address: data.address_name,
@@ -484,17 +481,17 @@ const MoimAdd = () => {
                                 placeName: data.place_name,
                                 latY: parseFloat(latLng.lat),
                                 lonX: parseFloat(latLng.lng),
-                            }
+                            };
 
                             setAddress(restAddress);
                         });
                     }
-                    
+
                     setInputMsg(data.place_name);
-                    searchRef.current[idx].classList += ' click';
+                    searchRef.current[idx].classList += " click";
                 }
             );
-        }
+        };
 
         return (
             <div
@@ -504,9 +501,7 @@ const MoimAdd = () => {
                 onClick={(element) => searchListClickAction(item, idx)}
             >
                 <div className="left">
-                    <span>{
-                            ((searchPagination.current - 1) * 15) + idx + 1
-                        }</span>
+                    <span>{(searchPagination.current - 1) * 15 + idx + 1}</span>
                 </div>
                 <div className="right">
                     <h4 className="search-title">{item.place_name}</h4>
@@ -527,30 +522,30 @@ const MoimAdd = () => {
         );
     });
 
-
     //지도 검색 페이징
     //지도 검색 페이징
     //지도 검색 페이징
     const searchPaginationElement = () => {
-        if(searchPagination === null || searchPagination === undefined) return "";
+        if (searchPagination === null || searchPagination === undefined)
+            return "";
         // console.log(searchPagination);
-        
+
         let resComp = [];
-        for(let i = 1; i <= searchPagination.last; i++) {
+        for (let i = 1; i <= searchPagination.last; i++) {
             // console.log(i);
             resComp.push(
-                <span 
-                    className={i === searchPagination.current ? 'on' : ''}
-                    key={i+6000}
-                    onClick={() => paginationClickAction(i)}>
+                <span
+                    className={i === searchPagination.current ? "on" : ""}
+                    key={i + 6000}
+                    onClick={() => paginationClickAction(i)}
+                >
                     {i}
                 </span>
             );
         }
 
         return resComp;
-    }
-
+    };
 
     //페이징 클릭 시 이벤트
     const paginationClickAction = (i) => {
@@ -561,33 +556,29 @@ const MoimAdd = () => {
             behavior: "smooth",
         });
 
-
         searchPagination.gotoPage(i);
-    }
-
-
-
-
-
+    };
 
     const inputCheck = () => {
         let resBool = true;
 
-        if(title === "" || content === "" || personNumber === "" || categoryCode === "") {
+        if (
+            title === "" ||
+            content === "" ||
+            personNumber === "" ||
+            categoryCode === ""
+        ) {
             resBool = false;
-        }else if(!fileStatus) {
+        } else if (!fileStatus) {
             resBool = false;
-        }else if(Object.keys(address).length === 0) {
+        } else if (Object.keys(address).length === 0) {
             resBool = false;
-        }else if(tagAdd.length === 0) {
+        } else if (tagAdd.length === 0) {
             resBool = false;
         }
 
         return resBool;
-    }
-
-
-
+    };
 
     //최종
     //최종
@@ -600,46 +591,59 @@ const MoimAdd = () => {
             content,
             categoryCode,
             dues,
-            personNumber
-        }
+            personNumber,
+        };
         const fileData = inputRef.current.file.files;
-        
-        for(let i = 0; i < fileData.length; i++) {
+
+        for (let i = 0; i < fileData.length; i++) {
             formData.append("file", fileData[i]);
+            console.log(fileData[i]);
         }
-        formData.append("contentsData", new Blob([JSON.stringify(contentsData)], { type: "application/json" }));
-        formData.append("addressData", new Blob([JSON.stringify(address)], { type: "application/json" }));
-        formData.append("tagData", new Blob([JSON.stringify(tagAdd)], {type: "application/json"}));
+        formData.append(
+            "contentsData",
+            new Blob([JSON.stringify(contentsData)], {
+                type: "application/json",
+            })
+        );
+        formData.append(
+            "addressData",
+            new Blob([JSON.stringify(address)], { type: "application/json" })
+        );
+        formData.append(
+            "tagData",
+            new Blob([JSON.stringify(tagAdd)], { type: "application/json" })
+        );
 
         // console.log(inputRef.current.file.files);
         console.log(formData);
 
-        MeetingService.insertMeeting(formData).then(response => {
-            const {status, data} = response;
-            if(status) {
-                if(data.SUCCESS) {
+        MeetingService.insertMeeting(formData).then((response) => {
+            const { status, data } = response;
+            if (status) {
+                if (data.SUCCESS) {
                     alert(data.SUCCESS_TEXT);
                     navigate("/moim");
-                }else {
+                } else {
                     alert(data.SUCCESS_TEXT);
                     location.reload();
                 }
-            }else {
+            } else {
                 alert("서버 error");
             }
         });
-    }
-
-
-
-
+    };
 
     return (
         <div id="moim-add-page" className="page-wrap">
             <div className="title-wrap">
                 <h3>모임 개설하기</h3>
             </div>
-            <form name="moim-form" onSubmit={() => {return false}}>
+            <form
+                name="moim-form"
+                onSubmit={() => {
+                    return false;
+                }}
+            >
                 <div className="left">
                     <div className="image-upload">
                         <div className="main-image">
@@ -692,7 +696,7 @@ const MoimAdd = () => {
                                             setSearchText(event.target.value)
                                         }
                                         onKeyDown={(event) => {
-                                            if(event.keyCode === 13) {
+                                            if (event.keyCode === 13) {
                                                 searchPlaces(
                                                     searchText,
                                                     setSearchList
@@ -726,7 +730,7 @@ const MoimAdd = () => {
                                             </div>
                                         </div> */}
                                         {searchListComponent}
-                                        <div className='pagination-part draggable'>
+                                        <div className="pagination-part draggable">
                                             {/* <span className='on'>1</span>
                                             <span>2</span>
                                             <span>1</span> */}
@@ -751,7 +755,7 @@ const MoimAdd = () => {
                         <label htmlFor="content">
                             <p>내용</p>
                             <textarea
-                                name='content'
+                                name="content"
                                 rows="15"
                                 value={content}
                                 onChange={(event) => inputEventAction(event)}
@@ -763,26 +767,30 @@ const MoimAdd = () => {
                         <label htmlFor="tag">
                             <p>태그</p>
                             <div>
-                                <div className='left'>
+                                <div className="left">
                                     {tagItemComponent}
                                     {/* <span className='tag'>태그1</span>
                                     <span className='tag'>태그2</span>
                                     <span className='tag'>태그3</span>
                                     <span className='tag'>태그4</span> */}
                                 </div>
-                                <div className='right'>
+                                <div className="right">
                                     <input
                                         name="tag"
                                         value={tag}
-                                        onChange={(event) => inputEventAction(event)}
-                                        onKeyDown={(event) => tagInputEnter(event)}
+                                        onChange={(event) =>
+                                            inputEventAction(event)
+                                        }
+                                        onKeyDown={(event) =>
+                                            tagInputEnter(event)
+                                        }
                                     />
 
-                                    {tag !== "" && 
-                                        <div className='tag-list-part'>
+                                    {tag !== "" && (
+                                        <div className="tag-list-part">
                                             {tagListComponent}
                                         </div>
-                                    }
+                                    )}
                                 </div>
                             </div>
                         </label>
@@ -793,7 +801,9 @@ const MoimAdd = () => {
                                     name="dues"
                                     placeholder="없음"
                                     value={dues}
-                                    onChange={(event) => inputEventAction(event)}
+                                    onChange={(event) =>
+                                        inputEventAction(event)
+                                    }
                                 />
                                 <span>원</span>
                             </div>
@@ -803,9 +813,11 @@ const MoimAdd = () => {
                             <div>
                                 <input
                                     name="personNumber"
-                                    type='number'
+                                    type="number"
                                     value={personNumber}
-                                    onChange={(event) => inputEventAction(event)}
+                                    onChange={(event) =>
+                                        inputEventAction(event)
+                                    }
                                 />
                                 <span>명</span>
                             </div>
@@ -827,17 +839,15 @@ const MoimAdd = () => {
                             )}
                         </label>
                     </div>
-                    <button 
-                        type='button' 
+                    <button
+                        type="button"
                         className={
                             inputCheck() ? "result-btn on" : "result-btn"
                         }
-                        onClick={
-                            () => {
-                                if(inputCheck()) resultFunc();
-                            }
-                        }
-                        >
+                        onClick={() => {
+                            if (inputCheck()) resultFunc();
+                        }}
+                    >
                         등록하기
                     </button>
                 </div>

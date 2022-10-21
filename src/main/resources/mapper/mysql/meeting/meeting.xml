@@ -18,14 +18,15 @@
                 select i2.NAME
                 from INTERESTS i2
                 where i2.CATEGORY_CODE = i.CATEGORY_PARENT
-            ) CATEGORY_PARENT,
-                i.name CATEGORY_NAME,
+            ) "CATEGORY_PARENT",
+            m.CATEGORY_CODE,
+            i.name CATEGORY_NAME,
             (
                 select count(*)
                 from USER_MEETING um
                 where um.MEETING_NO = m.NO
             ) PERSON_COUNT,
-                m.PERSON_NUMBER,
+            m.PERSON_NUMBER,
             (
                 select JSON_ARRAYAGG(T.TAG_NAME) TAGS
                 from MEETING_TAG M
@@ -40,18 +41,22 @@
                 where ML.MEETING_NO = m.NO
             ) LIKE_COUNT,
             MI.IMAGE_NAME,
-            MA.SIGUNGU
+            MA.SIGUNGU,
+            m.REGDATE
         from
             MEETING m join INTERESTS I on I.CATEGORY_CODE = m.CATEGORY_CODE
                       join MEETING_ADDRESS MA on m.NO = MA.MEETING_NO
                       join MEETING_IMAGES MI on m.NO = MI.MEETING_NO
-        where
-        DEL_TAG = 'N' and MI.SEQ = 1
+        where DEL_TAG = 'N' and MI.SEQ = 1
         <choose>
             <when test='type != null and (type eq "USER_NO".toString())'>
                 and ${type} = #{key}
+                order by m.REGDATE desc
             </when>
             <when test='type != null and (type eq "BCODE".toString())'>
+                and ${type} like CONCAT(#{key}, '%') order by LIKE_COUNT desc
+            </when>
+            <when test='type != null and (type eq "i.CATEGORY_CODE".toString())'>
                 and ${type} like CONCAT(#{key}, '%') order by LIKE_COUNT desc
             </when>
         </choose>
