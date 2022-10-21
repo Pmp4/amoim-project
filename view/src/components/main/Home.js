@@ -64,6 +64,7 @@ const Home = () => {
         if(list.length === 0) return;
 
         setCategoryState(parseInt(list[0].categoryCode));
+        categoryBtnAction(parseInt(list[0].categoryCode));
     }
 
 
