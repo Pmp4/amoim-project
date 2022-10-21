@@ -1198,4 +1198,25 @@
             align-items: center;
         }
     }
+
+    .pagination-info {
+        color: rgb(43, 43, 43);
+        margin-top: 40px;
+        width: 100%;
+        text-align: center;
+
+        .page-item {
+            font-size: 1.2em;
+            padding: 0 7px;
+            margin: 0 3px;
+            line-height: 150%;
+            border-radius: 4px;
+            cursor: pointer;
+
+            &.on {
+                cursor:auto;
+                background: #fff;
+            }
+        }
+    }
 }

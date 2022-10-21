@@ -58,10 +58,10 @@ public class MeetingController {
 
 
     @GetMapping("/select")
-    public List<Map<String, Object>> selectByCard(@RequestParam String type,
+    public Map<String, Object> selectByCard(@RequestParam String type,
                                                   @RequestParam String key,
-                                                  @RequestParam (defaultValue = "1") int page,
-                                                  @RequestParam (defaultValue = "8") int length,
+                                                  @RequestParam (required = false, defaultValue = "1") int page,
+                                                  @RequestParam (required = false, defaultValue = "8") int length,
                                                   HttpSession httpSession) {
         logger.info("MEETING 카드 조회 type={}, key={}, page={}, length={}", type, key, page, length);
 
@@ -80,11 +80,20 @@ public class MeetingController {
         Map<String, Object> dbType = new HashMap<>();
         dbType.put("type", type);
         dbType.put("key", key);
-        dbType.put("length", paginationInfo.getLength());
-        dbType.put("start", paginationInfo.getStart());
+        dbType.put("length", paginationInfo.getBlockSize());
+        dbType.put("start", paginationInfo.getStartRecord());
 
-        List<Map<String, Object>> responseData = meetingService.selectByUserNoCard(dbType);
-        logger.info("MEETING 카드 조회 결과 resData.size={}", responseData.size());
+        List<Map<String, Object>> list = meetingService.selectByUserNoCard(dbType);
+        int totalRecord = meetingService.selectByUserNoCardPageCount(dbType);
+        logger.info("MEETING 카드 조회 결과 list.size={}, totalRecord={}", list.size(), totalRecord);
+
+        paginationInfo.setTotalRecord(totalRecord);
+
+        logger.info("MEETING 카드 조회 paginationInfo={}", paginationInfo);
+
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("list", list);
+        responseData.put("pageInfo", paginationInfo);
 
         return responseData;
     }

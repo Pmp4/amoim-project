@@ -1,20 +1,24 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { faHeart, faLocationDot } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
-const MoimList = ({ items }) => {
+const MoimList = ({ items, pageInfo }) => {
     const imgPath = useSelector((state) => state.path.imagePath);
     const navigate = useNavigate();
 
-    if (items.length === 0) return;
+
 
     const content = items.map((item, idx) => {
         const tagArr = item.TAGS.replace(/\[|\]|"| /g, "").split(",");
 
         return (
-            <div className="item" key={item.NO} onClick={() => navigate(`/moim/view/${item.NO}`)}>
+            <div
+                className="item"
+                key={item.NO}
+                onClick={() => navigate(`/moim/view/${item.NO}`)}
+            >
                 <div className="left">
                     <div className="thumbnail">
                         <img
@@ -51,7 +55,34 @@ const MoimList = ({ items }) => {
         );
     });
 
-    return <div id="moim-search-list">{content}</div>;
+
+    const pageSet = () => {
+        if (items.length === 0) return;
+
+
+        let tempPageArr = [];
+        for(let i = 1; i < (pageInfo.startPage + pageInfo.pageSize); i++) tempPageArr.push(i);
+    
+
+        const page = tempPageArr.map((item, idx) => (
+            <span key={idx} 
+                className={item === pageInfo.currentPage ? "page-item on" : "page-item"}
+            >
+                {item}
+            </span>
+        ))
+
+        return page;
+    }
+
+    return (
+        <div id="moim-search-list">
+            {content}
+            <div className="pagination-info">
+                {pageSet()}
+            </div>
+        </div>
+    );
 };
 
 export default MoimList;
