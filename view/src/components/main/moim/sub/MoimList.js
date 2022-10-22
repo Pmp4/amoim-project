@@ -79,7 +79,7 @@ const MoimList = ({ items, pageInfo, pageBtn }) => {
     return (
         <div id="moim-search-list">
             {items.length > 0 ? content : <div className='none'>모임이 없습니다.</div>}
-            <div className="pagination-info">
+            {items.length > 0 ? <div className="pagination-info">
                 <div>
                     {pageInfo.startPage !== 1 && 
                         <span onClick={
@@ -96,7 +96,7 @@ const MoimList = ({ items, pageInfo, pageBtn }) => {
                             <FontAwesomeIcon icon={faForward}/>
                         </span>}
                 </div>
-            </div>
+            </div> : ""}
         </div>
     );
 };

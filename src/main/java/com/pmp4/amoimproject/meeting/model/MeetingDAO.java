@@ -46,4 +46,5 @@ public interface MeetingDAO {
     int updateUserMeetingSubRefusal(Map<String, int[]> map);
 
     List<Map<String, Object>> signingUpMoim(Map<String, Object> map);
+    int signingUpMoimCount(Map<String, Object> map);
 }

@@ -12,6 +12,18 @@ import MoimList from './MoimList';
 const MoimMain = () => {
     const [meetingContents, setMeetingContents] = useState([]);
 
+    const [signingList, setSigningList] = useState([]);
+    const [pageInfo, setPageInfo] = useState({
+        blockSize: 8,
+        currentPage: 1,
+        lastPage: 0,
+        pageSize: 0,
+        startPage: 0,
+        startRecord: 0,
+        totalPage: 0,
+        totalRecord: 0,
+    });
+
     const location = useLocation();
 
     const user = useSelector((state) => state.user);
@@ -34,6 +46,7 @@ const MoimMain = () => {
             console.log(response);
             if (status === 200) {
                 setMeetingContents(data.list);
+                setPageInfo(data.pageInfo);
             } else {
                 alert("서버 ERROR");
             }
@@ -52,9 +65,15 @@ const MoimMain = () => {
     //접속중인 유저가 가입한 모임 리스트 항목 API
     //접속중인 유저가 가입한 모임 리스트 항목 API
     //접속중인 유저가 가입한 모임 리스트 항목 API
-    const signingUpList = () => {
-        MeetingService.selectByCard("").then(response => {
-            console.log(response);
+    const signingUpList = (page) => {
+        MeetingService.signingList(1).then(response => {
+            const {status, data} = response;
+
+            if(status === 200) {
+                setSigningList(data.list);
+            }else {
+                alert("Server Error");
+            }
         })
     }
 
@@ -106,7 +125,7 @@ const MoimMain = () => {
                 </div>
                 <div className="sub-title">
                     <h4>함께하는 모임</h4>
-                    {/* <MoimList/> */}
+                    <MoimList items={signingList} pageInfo={pageInfo} pageBtn={signingUpList}/>
                 </div>
             </div>
         </div>
