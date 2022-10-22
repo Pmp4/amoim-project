@@ -10,44 +10,81 @@
         </selectKey>
     </insert>
 
-    <select id="selectByUserNoCard" parameterType="hashMap" resultType="hashMap">
+
+
+
+
+
+    <!-- 모임 정보를 카드로 내보내기 위한 컬럼 정보 구성 -->
+    <!-- 모임 정보를 카드로 내보내기 위한 컬럼 정보 구성 -->
+    <!-- 모임 정보를 카드로 내보내기 위한 컬럼 정보 구성 -->
+    <!-- 모임 정보를 카드로 내보내기 위한 컬럼 정보 구성 -->
+    <sql id="moimCardSelect">
         select
-            m.NO,
-            m.TITLE,
-            (
-                select i2.NAME
-                from INTERESTS i2
-                where i2.CATEGORY_CODE = i.CATEGORY_PARENT
-            ) "CATEGORY_PARENT",
-            m.CATEGORY_CODE,
-            i.name CATEGORY_NAME,
-            (
-                select count(*)
-                from USER_MEETING um
-                where um.MEETING_NO = m.NO
-            ) PERSON_COUNT,
-            m.PERSON_NUMBER,
-            (
-                select JSON_ARRAYAGG(T.TAG_NAME) TAGS
-                from MEETING_TAG M
-                         join TAG T on T.TAG_NO = M.TAG_NO
-                where MEETING_NO = m.NO
-                group by MEETING_NO
-            ) TAGS,
-            m.DUES,
-            (
-                select count(*)
-                from MEETING_LIKE ML
-                where ML.MEETING_NO = m.NO
-            ) LIKE_COUNT,
-            MI.IMAGE_NAME,
-            MA.SIGUNGU,
-            m.REGDATE
+        <choose>
+            <when test="number">
+                count(*)
+            </when>
+            <otherwise>
+                m.NO,
+                m.TITLE,
+                (
+                    select i2.NAME
+                    from INTERESTS i2
+                    where i2.CATEGORY_CODE = i.CATEGORY_PARENT
+                ) "CATEGORY_PARENT",
+                m.CATEGORY_CODE,
+                i.name CATEGORY_NAME,
+                (
+                    select count(*)
+                    from USER_MEETING um
+                    where um.MEETING_NO = m.NO
+                ) PERSON_COUNT,
+                m.PERSON_NUMBER,
+                (
+                    select JSON_ARRAYAGG(T.TAG_NAME) TAGS
+                    from MEETING_TAG M join TAG T on T.TAG_NO = M.TAG_NO
+                    where MEETING_NO = m.NO
+                    group by MEETING_NO
+                ) TAGS,
+                m.DUES,
+                (
+                    select count(*)
+                    from MEETING_LIKE ML
+                    where ML.MEETING_NO = m.NO
+                ) LIKE_COUNT,
+                MI.IMAGE_NAME,
+                MA.SIGUNGU,
+                m.REGDATE
+            </otherwise>
+        </choose>
         from
             MEETING m join INTERESTS I on I.CATEGORY_CODE = m.CATEGORY_CODE
                       join MEETING_ADDRESS MA on m.NO = MA.MEETING_NO
                       join MEETING_IMAGES MI on m.NO = MI.MEETING_NO
         where DEL_TAG = 'N' and MI.SEQ = 1
+    </sql>
+
+
+
+    <!-- 모임 정보를 카드로 내보내기 위한 from -->
+    <!-- 모임 정보를 카드로 내보내기 위한 from -->
+    <!-- 모임 정보를 카드로 내보내기 위한 from -->
+    <!-- 모임 정보를 카드로 내보내기 위한 from -->
+<!--    <sql id="moimCardJoin">-->
+<!--        from-->
+<!--            MEETING m join INTERESTS I on I.CATEGORY_CODE = m.CATEGORY_CODE-->
+<!--                      join MEETING_ADDRESS MA on m.NO = MA.MEETING_NO-->
+<!--                      join MEETING_IMAGES MI on m.NO = MI.MEETING_NO-->
+<!--        where DEL_TAG = 'N' and MI.SEQ = 1-->
+<!--    </sql>-->
+
+
+
+
+
+    <select id="selectByUserNoCard" parameterType="hashMap" resultType="hashMap">
+        <include refid="moimCardSelect"/>
         <choose>
             <when test='type != null and (type eq "USER_NO".toString())'>
                 and ${type} = #{key}
@@ -64,12 +101,7 @@
     </select>
 
     <select id="selectByUserNoCardPageCount" parameterType="hashMap" resultType="int">
-        select count(*)
-        from
-        MEETING m join INTERESTS I on I.CATEGORY_CODE = m.CATEGORY_CODE
-            join MEETING_ADDRESS MA on m.NO = MA.MEETING_NO
-            join MEETING_IMAGES MI on m.NO = MI.MEETING_NO
-        where DEL_TAG = 'N' and MI.SEQ = 1
+        <include refid="moimCardSelect"/>
         <choose>
             <when test='type != null and (type eq "USER_NO".toString())'>
                 and ${type} = #{key}
@@ -86,7 +118,51 @@
     
 
     
-    
+
+    <select id="signingUpMoim" parameterType="hashMap" resultType="hashMap">
+        select M.NO,
+               M.TITLE,
+               (
+                   select i2.NAME
+                   from INTERESTS i2
+                   where i2.CATEGORY_CODE = i.CATEGORY_PARENT
+               ) "CATEGORY_PARENT",
+               M.CATEGORY_CODE,
+               I.NAME CATEGORY_NAME,
+               (
+                   select count(*)
+                   from USER_MEETING um
+                   where um.MEETING_NO = m.NO
+               ) PERSON_COUNT,
+               m.PERSON_NUMBER,
+               (
+                   select JSON_ARRAYAGG(T.TAG_NAME) TAGS
+                   from MEETING_TAG M
+                            join TAG T on T.TAG_NO = M.TAG_NO
+                   where MEETING_NO = m.NO
+                   group by MEETING_NO
+               ) TAGS,
+               m.DUES,
+               (
+                   select count(*)
+                   from MEETING_LIKE ML
+                   where ML.MEETING_NO = m.NO
+               ) LIKE_COUNT,
+               MI.IMAGE_NAME,
+               MA.SIGUNGU,
+               M.REGDATE
+        from USER_MEETING UM join USERS U on U.USER_NO = UM.USER_NO
+                             join MEETING M on M.NO = UM.MEETING_NO
+                             join INTERESTS I on M.CATEGORY_CODE = I.CATEGORY_CODE
+                             join MEETING_IMAGES MI on M.NO = MI.MEETING_NO
+                             join MEETING_ADDRESS MA on M.NO = MA.MEETING_NO
+        where UM.USER_NO = #{userNo}
+          and RIGHT_NO = 2
+          and REG_LEVEL = 1
+          and UM.OUT_DATE is null
+          and U.OUT_DATE is null
+        LIMIT #{length} OFFSET #{start}
+    </select>
     
     
     
