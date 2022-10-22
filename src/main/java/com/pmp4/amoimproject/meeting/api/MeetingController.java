@@ -1,7 +1,5 @@
 package com.pmp4.amoimproject.meeting.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pmp4.amoimproject.common.ConstUtil;
 import com.pmp4.amoimproject.common.FileUploadUtil;
 import com.pmp4.amoimproject.common.PaginationInfo;
 import com.pmp4.amoimproject.meeting.model.MeetingAddressVO;
@@ -11,12 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,14 +58,21 @@ public class MeetingController {
                                                   @RequestParam (required = false, defaultValue = "1") int page,
                                                   @RequestParam (required = false, defaultValue = "8") int length,
                                                   HttpSession httpSession) {
+        String userNo = String.valueOf(httpSession.getAttribute("userNo"));
         logger.info("MEETING 카드 조회 type={}, key={}, page={}, length={}", type, key, page, length);
 
-        if(type.equals("USER_NO")) {
-            key = String.valueOf(httpSession.getAttribute("userNo"));
-            length = 12;
-        } else if (type.equals("CATEGORY_CODE")) {
-            type = "i." + type;
-            key = key.substring(0, 3);
+        switch (type) {
+            case "USER_NO":
+                key = userNo;
+                length = 12;
+                break;
+            case "CATEGORY_CODE":
+                type = "i." + type;
+                key = key.substring(0, 3);
+                break;
+            case "SIGNING":
+                key = userNo;
+                break;
         }
 
         PaginationInfo paginationInfo = new PaginationInfo(length, page);
@@ -103,7 +105,7 @@ public class MeetingController {
     }
 
 
-    @GetMapping("/select/signing/")
+    @GetMapping("/signing")
     public Map<String, Object> selectUserSigning(@RequestParam (required = false, defaultValue = "1") int page,
                                                  @RequestParam (required = false, defaultValue = "8") int length,
                                                  HttpSession httpSession) {
@@ -119,10 +121,14 @@ public class MeetingController {
         dbType.put("start", paginationInfo.getStartRecord());
 
         List<Map<String, Object>> dbData = meetingService.signingUpMoim(dbType);
-        logger.info("MEETING 가입된 모임 정보 조회 결과 dbData={}", dbData);
+        int count = meetingService.signingUpMoimCount(dbType);
 
+        logger.info("MEETING 가입된 모임 정보 조회 결과 dbData={}, count={}", dbData, count);
+        paginationInfo.setTotalRecord(count);
 
         Map<String, Object> responseData = new HashMap<>();
+        responseData.put("list", dbData);
+        responseData.put("count", count);
 
         return responseData;
     }

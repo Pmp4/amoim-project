@@ -1,5 +1,5 @@
 import MeetingService from "api/meeting/MeetingService";
-import React from "react";
+import React, { useRef } from "react";
 import { useParams } from "react-router";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,12 +7,16 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faHeart } from "@fortawesome/free-solid-svg-icons";
-import { staticMapSet } from "components/api/KakaoMapScript"
+import { staticMapSet } from "components/api/KakaoMapScript";
 
 const MoimView = () => {
     const [contents, setContents] = useState({});
     const [members, setMembers] = useState([]);
     const [likeState, setLikeState] = useState(false);
+
+    const tabRef = useRef({});
+
+    const [pageState, setPageState] = useState(1); //1: 모임, 2:게시판, 3:채팅
 
     const imgPath = useSelector((state) => state.path.imagePath);
     const profileImgPath = useSelector((state) => state.path.profileImagePath);
@@ -27,15 +31,33 @@ const MoimView = () => {
         userLikeStateAPI();
     }, []);
 
+    useEffect(() => {
+        if (pageState === 1) {
+            if (Object.keys(contents).length > 0) {
+                if (
+                    contents.LON_X !== undefined &&
+                    contents.LAT_Y !== undefined
+                ) {
+                    staticMapSet(
+                        { lat: contents.LAT_Y, lng: contents.LON_X },
+                        "map"
+                    );
+                }
+            }
+        }
+    }, [pageState, contents]);
+
     const selectViewApi = () => {
         MeetingService.selectByNo(meetingNo).then((response) => {
             const { status, data } = response;
+
             if (status === 200) {
                 const { SUCCESS, rest } = data;
+
                 if (SUCCESS) {
                     setContents(rest.CONTENTS);
                     setMembers(rest.MEMBERS);
-                    staticMapSet({lat: rest.LAT_Y, lng: rest.LON_X}, "map");
+                    // staticMapSet({lat: rest.CONTENTS.LAT_Y, lng: rest.CONTENTS.LON_X}, "map");
                 } else {
                     alert("잘못된 모임 정보입니다.");
                     navigate(-1);
@@ -56,7 +78,9 @@ const MoimView = () => {
             if (check)
                 return (
                     <div className="membership-button-wrap">
-                        <button onClick={() => subscribeActionAPI()}>가입 신청하기</button>
+                        <button onClick={() => subscribeActionAPI()}>
+                            가입 신청하기
+                        </button>
                     </div>
                 );
         }
@@ -160,22 +184,37 @@ const MoimView = () => {
             );
         });
 
-
     const subscribeActionAPI = () => {
-        MeetingService.meetingSubscribe(meetingNo).then(response => {
-            const {status, data} = response;
-            if(status === 200) {
-                const {SUCCESS, SUCCESS_TEXT} = data;
+        MeetingService.meetingSubscribe(meetingNo).then((response) => {
+            const { status, data } = response;
+            if (status === 200) {
+                const { SUCCESS, SUCCESS_TEXT } = data;
                 alert(SUCCESS_TEXT);
-            }else {
+            } else {
                 alert("Server Error");
             }
         });
-    }
+    };
 
-    return (
-        <div id="view-page">
-            <div className="page-wrap">
+    const tabButtonAction = (num) => {
+        switch (num) {
+            case 1:
+                console.log(tabRef.current.moim);
+                break;
+            case 2:
+
+                break;
+            case 3:
+
+                break;
+
+            default: return;
+        }
+    };
+
+    const viewPage = () => {
+        return (
+            <div className="page-wrap view">
                 <div className="left">
                     <div className="img-box">
                         {Object.keys(contents).length !== 0 && (
@@ -259,7 +298,10 @@ const MoimView = () => {
                     </div>
                     <div className="content">{contents.CONTENT}</div>
                     <div className="sub-content">
-                        <div id="map"></div>
+                        <div className="map">
+                            <div className="title">위치</div>
+                            <div id="map"></div>
+                        </div>
                         <div className="member">
                             <div className="title">멤버</div>
                             <div className="member-list">
@@ -282,6 +324,49 @@ const MoimView = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+        );
+    };
+
+    const community = () => {
+        return <div className="page-wrap community">커뮤니티</div>;
+    };
+
+    return (
+        <div id="view-page">
+            {pageState === 1
+                ? viewPage()
+                : pageState === 2
+                ? community()
+                : pageState === 3
+                ? ""
+                : ""}
+
+            <div className="nav-tab">
+                <ul>
+                    <li
+                        ref={(element) => (tabRef.current.moim = element)}
+                        className="on"
+                        onClick={() => tabButtonAction(1)}
+                    >
+                        <div className="line"></div>
+                        모임
+                    </li>
+                    <li
+                        ref={(element) => (tabRef.current.community = element)}
+                        onClick={() => tabButtonAction(2)}
+                    >
+                        <div className="line"></div>
+                        커뮤니티
+                    </li>
+                    <li
+                        ref={(element) => (tabRef.current.chat = element)}
+                        onClick={() => tabButtonAction(3)}
+                    >
+                        <div className="line"></div>
+                        대화하기
+                    </li>
+                </ul>
             </div>
         </div>
     );

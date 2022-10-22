@@ -10,6 +10,10 @@ const selectByCard = (type, key, page = 1, length = 8) => {
     return httpCommon.get(`/meeting/select?type=${type}&key=${key}&page=${page}&length=${length}`);
 }
 
+const signingList = (page = 1, length = 8) => {
+    return httpCommon.get(`/meeting/signing?&page=${page}&length=${length}`);
+}
+
 const selectByNo = (no) => {
     return httpCommon.get(`/meeting/select/view/${no}`);
 }
@@ -60,6 +64,7 @@ export default {
     insertMeeting, 
     selectByCard, 
     selectByNo, 
+    signingList,
     countMeeting, 
     meetingLikeState,
     meetingLikeInsert,

@@ -379,7 +379,7 @@ const staticMapSet = (latLng, elementId) => {
         position: markerPosition,
     };
 
-    var staticMapContainer = document.getElementById(elementId), // 이미지 지도를 표시할 div
+    var staticMapContainer = document.getElementById("map"), // 이미지 지도를 표시할 div
         staticMapOption = {
             center: new kakao.maps.LatLng(latLng.lat, latLng.lng), // 이미지 지도의 중심좌표
             level: 3, // 이미지 지도의 확대 레벨
