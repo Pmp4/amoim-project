@@ -82,18 +82,47 @@ public class MeetingController {
         dbType.put("key", key);
         dbType.put("length", paginationInfo.getBlockSize());
         dbType.put("start", paginationInfo.getStartRecord());
+        dbType.put("number", false);
 
         List<Map<String, Object>> list = meetingService.selectByUserNoCard(dbType);
+
+        dbType.put("number", true);
         int totalRecord = meetingService.selectByUserNoCardPageCount(dbType);
+
         logger.info("MEETING 카드 조회 결과 list.size={}, totalRecord={}", list.size(), totalRecord);
 
-        paginationInfo.setTotalRecord(totalRecord);
 
+        paginationInfo.setTotalRecord(totalRecord);
         logger.info("MEETING 카드 조회 paginationInfo={}", paginationInfo);
 
         Map<String, Object> responseData = new HashMap<>();
         responseData.put("list", list);
         responseData.put("pageInfo", paginationInfo);
+
+        return responseData;
+    }
+
+
+    @GetMapping("/select/signing/")
+    public Map<String, Object> selectUserSigning(@RequestParam (required = false, defaultValue = "1") int page,
+                                                 @RequestParam (required = false, defaultValue = "8") int length,
+                                                 HttpSession httpSession) {
+        String userNo = String.valueOf(httpSession.getAttribute("userNo"));
+
+        logger.info("MEETING 가입된 모임 정보 조회 userNo={}, page={}, length={}", userNo, page, length);
+
+        PaginationInfo paginationInfo = new PaginationInfo(length, page);
+
+        Map<String, Object> dbType = new HashMap<>();
+        dbType.put("userNo", userNo);
+        dbType.put("length", paginationInfo.getBlockSize());
+        dbType.put("start", paginationInfo.getStartRecord());
+
+        List<Map<String, Object>> dbData = meetingService.signingUpMoim(dbType);
+        logger.info("MEETING 가입된 모임 정보 조회 결과 dbData={}", dbData);
+
+
+        Map<String, Object> responseData = new HashMap<>();
 
         return responseData;
     }

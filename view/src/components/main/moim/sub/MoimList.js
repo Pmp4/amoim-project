@@ -78,7 +78,7 @@ const MoimList = ({ items, pageInfo, pageBtn }) => {
 
     return (
         <div id="moim-search-list">
-            {content}
+            {items.length > 0 ? content : <div className='none'>모임이 없습니다.</div>}
             <div className="pagination-info">
                 <div>
                     {pageInfo.startPage !== 1 && 

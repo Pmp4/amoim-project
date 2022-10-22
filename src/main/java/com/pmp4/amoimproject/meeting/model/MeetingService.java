@@ -41,4 +41,7 @@ public interface MeetingService {
     Map<String, Object> moimSubscribeResult(Map<String, Object> rest);
 
     Map<String, Object> moimSubscribeRefusal(Map<String, Object> rest);
+
+
+    List<Map<String, Object>> signingUpMoim(Map<String, Object> map);
 }

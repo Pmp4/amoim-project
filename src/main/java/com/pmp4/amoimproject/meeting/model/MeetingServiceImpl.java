@@ -278,4 +278,9 @@ public class MeetingServiceImpl implements MeetingService {
 
         return resultData;
     }
+
+    @Override
+    public List<Map<String, Object>> signingUpMoim(Map<String, Object> map) {
+        return meetingDAO.signingUpMoim(map);
+    }
 }

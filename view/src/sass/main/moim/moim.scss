@@ -1100,11 +1100,15 @@
     border-radius: 16px;
 
     margin-top: 14px;
-    > div {
-        width: 49%;
+    
+    .none {
+        font-size: 2em;
+        text-align: center;
+        margin:20px auto;
     }
 
     .item {
+        width: 49%;
         cursor: pointer;
         padding: 10px;
         margin-top: 16px;

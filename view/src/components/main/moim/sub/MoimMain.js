@@ -7,6 +7,7 @@ import MeetingService from "api/meeting/MeetingService";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { MODAL_OPEN } from "reducer/module/modal";
+import MoimList from './MoimList';
 
 const MoimMain = () => {
     const [meetingContents, setMeetingContents] = useState([]);
@@ -20,7 +21,11 @@ const MoimMain = () => {
 
     useEffect(() => {
         myAddMeetingData();
+        signingUpList();
+        console.log(user);
     }, []);
+
+
 
     const myAddMeetingData = () => {
         console.log(user);
@@ -41,6 +46,18 @@ const MoimMain = () => {
     const subscribeListBtnAction = () => {
         dispatch({ type: MODAL_OPEN, data: "moim-subscribe-list" });
     };
+
+
+
+    //접속중인 유저가 가입한 모임 리스트 항목 API
+    //접속중인 유저가 가입한 모임 리스트 항목 API
+    //접속중인 유저가 가입한 모임 리스트 항목 API
+    const signingUpList = () => {
+        MeetingService.selectByCard("").then(response => {
+            console.log(response);
+        })
+    }
+
 
     return (
         <div id="moim-page">
@@ -89,6 +106,7 @@ const MoimMain = () => {
                 </div>
                 <div className="sub-title">
                     <h4>함께하는 모임</h4>
+                    {/* <MoimList/> */}
                 </div>
             </div>
         </div>

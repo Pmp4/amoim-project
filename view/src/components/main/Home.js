@@ -17,7 +17,7 @@ const Home = () => {
 
     const [categoryMoim, setCategoryMoim] = useState([]);
     const [pageInfo, setPageInfo] = useState({
-        blockSize: 2,
+        blockSize: 8,
         currentPage: 1,
         lastPage: 0,
         pageSize: 0,
@@ -35,8 +35,25 @@ const Home = () => {
         categoryAPI();
     }, []);
 
-    const locAPI = () => {
-        MeetingService.selectByCard("BCODE", "11").then((response) => {
+
+    const loggedLocalBcodeGet = () => {
+        const logged = sessionStorage.getItem("logged");
+
+        if(logged) {
+            
+        }else {
+
+        }
+
+    }
+
+
+    //로그인 된 유저의 지역 리스트 API
+    //로그인 된 유저의 지역 리스트 API
+    //로그인 된 유저의 지역 리스트 API
+    //로그인 된 유저의 지역 리스트 API
+    const locAPI = (code = "11") => {
+        MeetingService.selectByCard("BCODE", code).then((response) => {
             const { status, data } = response;
 
             if (status === 200) {
@@ -47,6 +64,11 @@ const Home = () => {
         });
     };
 
+
+    //카테고리 목록 출력 API
+    //카테고리 목록 출력 API
+    //카테고리 목록 출력 API
+    //카테고리 목록 출력 API
     const categoryAPI = () => {
         InterestService.selectCategory("").then((response) => {
             if (response.data.SUCCESS) {
@@ -59,10 +81,11 @@ const Home = () => {
     };
 
 
-    //카테고리 code에 맞는 리스트를 뽑아줌
-    //카테고리 code에 맞는 리스트를 뽑아줌
-    //카테고리 code에 맞는 리스트를 뽑아줌
-    //카테고리 code에 맞는 리스트를 뽑아줌
+
+    //카테고리 code에 맞는 리스트를 뽑아주는 API
+    //카테고리 code에 맞는 리스트를 뽑아주는 API
+    //카테고리 code에 맞는 리스트를 뽑아주는 API
+    //카테고리 code에 맞는 리스트를 뽑아주는 API
     const categorySelectActionAPI = (code, page, length) => {
         MeetingService.selectByCard("CATEGORY_CODE", code, page, length).then(
             (response) => {
@@ -80,6 +103,12 @@ const Home = () => {
     };
 
 
+    //최초 실행 함수
+    //최초 실행 함수
+    //최초 실행 함수
+    /**
+     * 카테고리 상태 설정과 현재 카테고리의 리스트를 설정
+     */
     const firstCategorySet = (list) => {
         if (list.length === 0) return;
 
@@ -108,6 +137,10 @@ const Home = () => {
         );
     });
 
+
+    /**
+     * 카테고리 버튼 클릭 시, 리스트 출력
+     */
     const categoryBtnAction = (code) => {
         setCategoryState(code);
         categorySelectActionAPI(code, 1, blockSize);
