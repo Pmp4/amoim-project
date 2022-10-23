@@ -14,9 +14,12 @@ const MoimView = () => {
     const [members, setMembers] = useState([]);
     const [likeState, setLikeState] = useState(false);
 
-    const tabRef = useRef({});
-
+    const [slide, setSlide] = useState();
     const [pageState, setPageState] = useState(1); //1: 모임, 2:게시판, 3:채팅
+
+    const tabRef = useRef({});
+    const slideRef = useRef([]);
+
 
     const imgPath = useSelector((state) => state.path.imagePath);
     const profileImgPath = useSelector((state) => state.path.profileImagePath);
@@ -32,7 +35,27 @@ const MoimView = () => {
     }, []);
 
     useEffect(() => {
-        if (pageState === 1) {
+        if (Object.keys(contents).length > 0) {
+            setSlide(slideSet());
+        }
+    }, [contents]);
+
+    // useEffect(() => {
+    //     if (pageState === 1) {
+    //         // tabRef.current.body.classList.add('on');
+    //         // animateTimeOut(viewComp());
+    //     }else if(pageState === 2) {
+    //         tabRef.current.body.classList.add('on');
+    //         animateTimeOut(communityComp());
+    //     }else if(pageState === 3) {
+    //         tabRef.current.body.classList.add('on');
+    //         animateTimeOut(chatComp());
+    //     }
+    // }, [pageState]);
+
+
+    useEffect(() => {
+        if(pageState === 1 || pageState === 0) {
             if (Object.keys(contents).length > 0) {
                 if (
                     contents.LON_X !== undefined &&
@@ -45,7 +68,8 @@ const MoimView = () => {
                 }
             }
         }
-    }, [pageState, contents]);
+    }, []);
+
 
     const selectViewApi = () => {
         MeetingService.selectByNo(meetingNo).then((response) => {
@@ -197,129 +221,217 @@ const MoimView = () => {
     };
 
     const tabButtonAction = (num) => {
-        switch (num) {
-            case 1:
-                console.log(tabRef.current.moim);
-                break;
-            case 2:
+        console.log(num);
+        
+        if(pageState > num) {   //클릭한 페이지가 현재 페이지 상태보다 작을 때 (prev)
+            slideRef.current[num].style.zIndex = '10';
+            slideRef.current[num].classList.add('on');
+            tabRef.current.body.classList.add('prev');
+            
+            setTimeout(() => {
+                for(let i = 1; i < 4; i++) {
+                    slideRef.current[i].classList.remove("prev");
+                    if(i < num) slideRef.current[i].classList.add('prev');
+                    else if(i > num) slideRef.current[i].classList.add('next');
+                }
+                
+                tabRef.current.body.classList.remove('prev');
+                slideRef.current[num].style.zIndex = '1';
+                slideRef.current[num].classList.remove('on');
+            }, 400);
+            
+        }else if(pageState < num) { //클릭한 페이지가 현재 페이지 상태보다 클 때 (next)
+            slideRef.current[num].style.zIndex = '10';
+            tabRef.current.body.classList.add('next');
+            
+            setTimeout(() => {
+                for(let i = 1; i < 4; i++) {
+                    slideRef.current[i].classList.remove("next");
+                    if(i < num) slideRef.current[i].classList.add('prev');
+                    else if(i > num) slideRef.current[i].classList.add('next');
+                }
 
-                break;
-            case 3:
-
-                break;
-
-            default: return;
+                tabRef.current.body.classList.remove('next');
+                slideRef.current[num].style.zIndex = '1';
+                slideRef.current[num].classList.remove('on');
+            }, 400);
         }
+
+
+
+
+
+        setPageState(num);
+
+        // slideRef.current[2].style.zIndex = '111';
+        // tabRef.current.body.classList.add('on');
+        
+
+        // setTimeout(() => {
+        //     slideRef.current[2].classList.remove('next');
+        //     slideRef.current[1].classList.add('prev');
+        //     tabRef.current.body.classList.remove('on');
+        // }, 400);
+
+        // let tempCurrentSlide, slideType;
+        // switch (pageState) {
+        //     case 0:
+        //     case 1:
+        //         tempCurrentSlide = viewComp();
+        //         break;
+        //     case 2:
+        //         tempCurrentSlide = communityComp();
+        //         break;
+        //     case 3:
+        //         tempCurrentSlide = chatComp();
+        //         break;
+
+        //     default: return;
+        // }
+
+        // if(num > pageState) slideType = "next";
+        // else if(num < pageState) slideType = "prev";
+
+
+        // let tempAnimSlide;
+        // switch (num) {
+        //     case 1:
+        //         tempAnimSlide = viewComp();
+        //         break;
+        //     case 2:
+        //         tempAnimSlide = communityComp();
+        //         break;
+        //     case 3:
+        //         tempAnimSlide = chatComp();
+        //         break;
+
+        //     default:
+        //         return;
+        // }
+
+        // setSlide(slideSet(tempCurrentSlide, tempAnimSlide, slideType));
+        // setPageState(num);
     };
 
-    const viewPage = () => {
+    const viewComp = () => {
         return (
-            <div className="page-wrap view">
-                <div className="left">
-                    <div className="img-box">
-                        {Object.keys(contents).length !== 0 && (
-                            <img
-                                src={`${imgPath}${contents.IMAGE_NAME}`}
-                                alt={contents.TITLE}
-                            />
-                        )}
-                    </div>
+            <div className="slide" ref={element => slideRef.current[1] = element}>
+                <div className="page-wrap view">
+                    <div className="left">
+                        <div className="img-box">
+                            {Object.keys(contents).length !== 0 && (
+                                <img
+                                    src={`${imgPath}${contents.IMAGE_NAME}`}
+                                    alt={contents.TITLE}
+                                />
+                            )}
+                        </div>
 
-                    {membershipBtn()}
-                </div>
-                <div className="right">
-                    <div className="title-sub">
-                        <div className="left">
-                            <h3>{contents.TITLE}</h3>
-                            <div className="sub-exp">
-                                <div className="tags-wrap">
-                                    <div className="tags box">
-                                        {Object.keys(contents).length !== 0 &&
-                                            contents.TAGS.replace(
-                                                /\[|\]|"| /g,
-                                                ""
-                                            )
-                                                .split(",")
-                                                .map((item, idx) => {
-                                                    if (idx === 0)
-                                                        return (
-                                                            <span
-                                                                key={idx + 101}
-                                                            >
-                                                                #{item}
-                                                            </span>
-                                                        );
-                                                    else
-                                                        return (
-                                                            <span
-                                                                key={idx + 101}
-                                                            >
-                                                                {" "}
-                                                                #{item}
-                                                            </span>
-                                                        );
-                                                })}
-                                    </div>
-                                </div>
-                                <div className="sub-wrap">
-                                    <div className="loc box">
-                                        <FontAwesomeIcon icon={faLocationDot} />
-                                        &nbsp;
-                                        {contents.PLACE_NAME !== undefined
-                                            ? contents.PLACE_NAME
-                                            : contents.JIBUN_ADDRESS}
-                                    </div>
-                                    <div className="category box">
-                                        {contents.CATEGORY_PARENT_NAME} &gt;{" "}
-                                        {contents.CATEGORY_NAME}
-                                    </div>
-                                    <div className="person-number box">
-                                        인원 {contents.PERSON_COUNT}/
-                                        {contents.PERSON_NUMBER}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="right">
-                            <div
-                                className={
-                                    !likeState
-                                        ? "like-btn draggable on"
-                                        : "like-btn draggable"
-                                }
-                                onClick={() => likeButtonActionAPI()}
-                            >
-                                <div className="like">
-                                    <FontAwesomeIcon icon={faHeart} />
-                                </div>
-                                <p>{contents.LIKE_COUNT}</p>
-                            </div>
-                        </div>
+                        {membershipBtn()}
                     </div>
-                    <div className="content">{contents.CONTENT}</div>
-                    <div className="sub-content">
-                        <div className="map">
-                            <div className="title">위치</div>
-                            <div id="map"></div>
+                    <div className="right">
+                        <div className="title-sub">
+                            <div className="left">
+                                <h3>{contents.TITLE}</h3>
+                                <div className="sub-exp">
+                                    <div className="tags-wrap">
+                                        <div className="tags box">
+                                            {Object.keys(contents).length !==
+                                                0 &&
+                                                contents.TAGS.replace(
+                                                    /\[|\]|"| /g,
+                                                    ""
+                                                )
+                                                    .split(",")
+                                                    .map((item, idx) => {
+                                                        if (idx === 0)
+                                                            return (
+                                                                <span
+                                                                    key={
+                                                                        idx +
+                                                                        101
+                                                                    }
+                                                                >
+                                                                    #{item}
+                                                                </span>
+                                                            );
+                                                        else
+                                                            return (
+                                                                <span
+                                                                    key={
+                                                                        idx +
+                                                                        101
+                                                                    }
+                                                                >
+                                                                    {" "}
+                                                                    #{item}
+                                                                </span>
+                                                            );
+                                                    })}
+                                        </div>
+                                    </div>
+                                    <div className="sub-wrap">
+                                        <div className="loc box">
+                                            <FontAwesomeIcon
+                                                icon={faLocationDot}
+                                            />
+                                            &nbsp;
+                                            {contents.PLACE_NAME !== undefined
+                                                ? contents.PLACE_NAME
+                                                : contents.JIBUN_ADDRESS}
+                                        </div>
+                                        <div className="category box">
+                                            {contents.CATEGORY_PARENT_NAME} &gt;{" "}
+                                            {contents.CATEGORY_NAME}
+                                        </div>
+                                        <div className="person-number box">
+                                            인원 {contents.PERSON_COUNT}/
+                                            {contents.PERSON_NUMBER}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="right">
+                                <div
+                                    className={
+                                        !likeState
+                                            ? "like-btn draggable on"
+                                            : "like-btn draggable"
+                                    }
+                                    onClick={() => likeButtonActionAPI()}
+                                >
+                                    <div className="like">
+                                        <FontAwesomeIcon icon={faHeart} />
+                                    </div>
+                                    <p>{contents.LIKE_COUNT}</p>
+                                </div>
+                            </div>
                         </div>
-                        <div className="member">
-                            <div className="title">멤버</div>
-                            <div className="member-list">
-                                {/* <div className='item'>
-                                    <div 
-                                        className='profile-img'
-                                        // style={{
-                                        //     backgroundImage: `url(${profileImgPath}default_profile.png)`
-                                        // }}
-                                        >
-                                        <img src={profileImgPath + 'default_profile.png'} />
-                                    </div>
-                                    <div className='profile-exp'>
-                                        <p>홍길동</p>
-                                        <span>한줄소개</span>
-                                    </div>
-                                </div> */}
-                                {memberList()}
+                        <div className="content">{contents.CONTENT}</div>
+                        <div className="sub-content">
+                            <div className="map">
+                                <div className="title">위치</div>
+                                <div id="map"></div>
+                            </div>
+                            <div className="member">
+                                <div className="title">멤버</div>
+                                <div className="member-list">
+                                    {/* <div className='item'>
+                                        <div 
+                                            className='profile-img'
+                                            // style={{
+                                            //     backgroundImage: `url(${profileImgPath}default_profile.png)`
+                                            // }}
+                                            >
+                                            <img src={profileImgPath + 'default_profile.png'} />
+                                        </div>
+                                        <div className='profile-exp'>
+                                            <p>홍길동</p>
+                                            <span>한줄소개</span>
+                                        </div>
+                                    </div> */}
+                                    {memberList()}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -328,25 +440,68 @@ const MoimView = () => {
         );
     };
 
-    const community = () => {
-        return <div className="page-wrap community">커뮤니티</div>;
+    const communityComp = () => {
+        return (
+            <div className="slide next" ref={element => slideRef.current[2] = element}>
+                <div className="page-wrap community">커뮤니티</div>
+            </div>
+        );
+    };
+
+    const chatComp = () => {
+        return (
+            <div className="slide next" ref={element => slideRef.current[3] = element}>
+                <div className="page-wrap chatt">채팅</div>
+            </div>
+        );
+    };
+
+    const slideSet = (
+        currentSlide = viewComp(),
+        animateSlide,
+        type = "none"
+    ) => {
+        if (type === "none") {
+            return (
+                <div className='clearfix'>
+                    {currentSlide}
+                </div>
+            )
+        } else if (type === "next") {
+            return (
+                <div className='clearfix'>
+                    {currentSlide}
+                    {animateSlide}
+                </div>
+            );
+        } else if (type === "prev") {
+            return (
+                <div className='clearfix'>
+                    {animateSlide}
+                    {currentSlide}
+                </div>
+            );
+        }
+
+        return <div className='clearfix'>{currentSlide}</div>;
     };
 
     return (
         <div id="view-page">
-            {pageState === 1
-                ? viewPage()
-                : pageState === 2
-                ? community()
-                : pageState === 3
-                ? ""
-                : ""}
+            <div className="tab-page" 
+                ref={(element => tabRef.current.body = element)}
+            >
+                {/* {slide} */}
+                {viewComp()}
+                {communityComp()}
+                {chatComp()}
+            </div>
 
             <div className="nav-tab">
                 <ul>
                     <li
                         ref={(element) => (tabRef.current.moim = element)}
-                        className="on"
+                        className={pageState === 1 ? "on" : ""}
                         onClick={() => tabButtonAction(1)}
                     >
                         <div className="line"></div>
@@ -354,6 +509,7 @@ const MoimView = () => {
                     </li>
                     <li
                         ref={(element) => (tabRef.current.community = element)}
+                        className={pageState === 2 ? "on" : ""}
                         onClick={() => tabButtonAction(2)}
                     >
                         <div className="line"></div>
@@ -361,6 +517,7 @@ const MoimView = () => {
                     </li>
                     <li
                         ref={(element) => (tabRef.current.chat = element)}
+                        className={pageState === 3 ? "on" : ""}
                         onClick={() => tabButtonAction(3)}
                     >
                         <div className="line"></div>
