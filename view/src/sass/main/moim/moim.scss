@@ -858,7 +858,15 @@
         .slide {
             width: 50%;
             background: #fff;
+            padding-bottom: 100px;
             // min-height: 800px;
+
+            > div {
+                > .title {
+                    font-size: 2em;
+                    font-weight: 600;
+                } 
+            }
 
             &.next {
                 position: absolute;
@@ -1402,4 +1410,16 @@
         }
 
     }
+}
+
+
+
+
+
+
+
+
+
+#board-part {
+    @import url(../../board/board.scss);
 }
