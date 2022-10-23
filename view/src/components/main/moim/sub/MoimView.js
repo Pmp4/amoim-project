@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { staticMapSet } from "components/api/KakaoMapScript";
+import BoardList from 'components/main/board/sub/BoardList';
 
 const MoimView = () => {
     const [contents, setContents] = useState({});
@@ -221,8 +222,6 @@ const MoimView = () => {
     };
 
     const tabButtonAction = (num) => {
-        console.log(num);
-        
         if(pageState > num) {   //클릭한 페이지가 현재 페이지 상태보다 작을 때 (prev)
             slideRef.current[num].style.zIndex = '10';
             slideRef.current[num].classList.add('on');
@@ -258,59 +257,7 @@ const MoimView = () => {
         }
 
 
-
-
-
         setPageState(num);
-
-        // slideRef.current[2].style.zIndex = '111';
-        // tabRef.current.body.classList.add('on');
-        
-
-        // setTimeout(() => {
-        //     slideRef.current[2].classList.remove('next');
-        //     slideRef.current[1].classList.add('prev');
-        //     tabRef.current.body.classList.remove('on');
-        // }, 400);
-
-        // let tempCurrentSlide, slideType;
-        // switch (pageState) {
-        //     case 0:
-        //     case 1:
-        //         tempCurrentSlide = viewComp();
-        //         break;
-        //     case 2:
-        //         tempCurrentSlide = communityComp();
-        //         break;
-        //     case 3:
-        //         tempCurrentSlide = chatComp();
-        //         break;
-
-        //     default: return;
-        // }
-
-        // if(num > pageState) slideType = "next";
-        // else if(num < pageState) slideType = "prev";
-
-
-        // let tempAnimSlide;
-        // switch (num) {
-        //     case 1:
-        //         tempAnimSlide = viewComp();
-        //         break;
-        //     case 2:
-        //         tempAnimSlide = communityComp();
-        //         break;
-        //     case 3:
-        //         tempAnimSlide = chatComp();
-        //         break;
-
-        //     default:
-        //         return;
-        // }
-
-        // setSlide(slideSet(tempCurrentSlide, tempAnimSlide, slideType));
-        // setPageState(num);
     };
 
     const viewComp = () => {
@@ -443,7 +390,12 @@ const MoimView = () => {
     const communityComp = () => {
         return (
             <div className="slide next" ref={element => slideRef.current[2] = element}>
-                <div className="page-wrap community">커뮤니티</div>
+                <div className="page-wrap community">
+                    <h3 className='title'>커뮤니티</h3>
+                    <div className='board-box'>
+                        {pageState === 2 && <BoardList/>}
+                    </div>
+                </div>
             </div>
         );
     };
