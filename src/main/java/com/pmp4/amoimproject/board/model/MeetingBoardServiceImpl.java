@@ -34,7 +34,7 @@ public class MeetingBoardServiceImpl implements MeetingBoardService{
             cnt = meetingBoardDAO.insertBoard(meetingBoardVO);
 
             if(cnt > 0) {
-                fileList = fileUploadUtil.mulitiFileUpload(request, ConstUtil.UPLOAD_IMAGE_FLAG);
+                fileList = fileUploadUtil.mulitiFileUpload(request, ConstUtil.UPLOAD_FILE_FLAG);
 
                 for (Map<String, Object> file : fileList) {
                     file.put("boardNo", meetingBoardVO.getNo());
@@ -58,5 +58,10 @@ public class MeetingBoardServiceImpl implements MeetingBoardService{
 
 
         return cnt;
+    }
+
+    @Override
+    public List<Map<String, Object>> selectByMeetingNo(Map<String, Object> map) {
+        return meetingBoardDAO.selectByMeetingNo(map);
     }
 }

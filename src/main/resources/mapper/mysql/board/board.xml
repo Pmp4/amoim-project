@@ -16,4 +16,13 @@
         values (#{boardNo}, #{fileName}, #{originalFileName}, #{fileSize})
     </insert>
 
+
+
+    <select id="selectByMeetingNo" parameterType="hashMap" resultType="hashMap">
+        select MB.*, U.NAME from MEETING_BOARD MB join USERS U on MB.USER_NO = U.USER_NO
+        where MEETING_NO = #{meetingNo}
+        order by REGDATE desc
+        LIMIT #{length} offset #{start}
+    </select>
+
 </mapper>

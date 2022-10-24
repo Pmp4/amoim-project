@@ -4,6 +4,8 @@ import { useParams } from 'react-router';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import BoardService from 'api/board/BoardService';
+import { MODAL_CLOSE } from 'reducer/module/modal';
+import { useDispatch } from 'react-redux';
 
 const BoardAdd = ({ modalClose }) => {
     const [contents, setContents] = useState({
@@ -13,6 +15,8 @@ const BoardAdd = ({ modalClose }) => {
 
     const location = useLocation();
     const meetingNo = useSelector(state => state.modal.modalParam);
+    
+    const dispatch = useDispatch();
     
     // const meetingNo = parseInt(location.pathname.substring(location.pathname.lastIndexOf("/")+1));
 
@@ -30,7 +34,7 @@ const BoardAdd = ({ modalClose }) => {
 
     const submitEvent = () => {
         const files = document.querySelector("input[type=file]").files;
-        
+
         if(title === "" || content === " ") {
             alert("제목이 비어있습니다.");
             return;
@@ -59,7 +63,19 @@ const BoardAdd = ({ modalClose }) => {
 
 
         BoardService.insertBoard(formData).then(response => {
-            console.log(response);
+            const {status, data} = response;
+
+            if(status === 200) {
+                if(data.SUCCESS) {
+                    alert("게시글을 등록하였습니다.");
+                    dispatch({type:MODAL_CLOSE});
+                }else {
+                    alert(data.SUCCESS_TEXT);
+                }
+            }else {
+                alert("Server Error");
+            }
+            
         })
     };
 
