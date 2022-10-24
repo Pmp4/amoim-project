@@ -1,56 +1,68 @@
-import React from 'react';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import BoardService from 'api/board/BoardService';
+import React, { useSelector, useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { MODAL_OPEN } from 'reducer/module/modal';
 
 const BoardList = ({meetingNo}) => {
     const [addBtn, setAddBtn] = useState(false);
     const [boardBool, setBoardBool] = useState(false);
-    const[boardList, setBoardList] = useState([
-        {no: 10, content: "귀찮고 어렵다", name: "너굴맨", regdate: "2022-07-01"},
-        {no: 9, content: "취업 할 수 있겠지", name: "로켓맨", regdate: "2022-07-01"},
-        {no: 8, content: "나는 독서실에서 하는중", name: "나일론머스크", regdate: "2022-07-01"},
-        {no: 7, content: "집에서는 집중이 안된다", name: "너굴맨", regdate: "2022-07-01"},
-        {no: 6, content: "집에서하면 30분하고 1시간 쉬고 반복", name: "너굴맨", regdate: "2022-07-01"},
-        {no: 5, content: "더 이상 쓸 말이 없다", name: "너굴맨", regdate: "2022-07-01"},
-        {no: 4, content: "리액트로 게시판 만들기", name: "너굴맨", regdate: "2022-07-01"},
-        {no: 3, content: "귀찮고 어렵다", name: "너굴맨", regdate: "2022-07-01"},
-        {no: 2, content: "귀찮고 어렵다", name: "너굴맨", regdate: "2022-07-01"},
-        {no: 1, content: "귀찮고 어렵다", name: "너굴맨", regdate: "2022-07-01"},
-    ]);
+    const [boardList, setBoardList] = useState([]);
     // const [boardList, setBoardList] = useState([]);
 
     const dispatch = useDispatch();
+
+
+    useEffect(() => {
+        boardApi(1);
+    }, []);
+
+
+    const boardApi = (page) => {
+        BoardService.moimBoardSelect(meetingNo, page).then(response => {
+            const {status, data} = response;
+            console.log(response);
+
+            if(status === 200) {
+                if(data.SUCCESS) {
+                    setBoardList(data.list);
+                }else {
+                    alert(data.SUCCESS_TEXT);
+                }
+            }else {
+                alert("Server Error");
+            }
+        });
+    }
+
 
 
     // 실제적으로 list가 되는 div 요소 셋팅
     // console.log("boardList : " +  boardList);
     const conList = boardList.map((item,idx) => {
         const date = new Date(item.REGDATE);
+        const dateStr = (date.getFullYear()) + "-" + ((date.getMonth() + 1) >= 10 ? 
+                    (date.getMonth() + 1) : ("0" + (date.getMonth() + 1))) + "-" + (date.getDate() >= 10 ? 
+                        date.getDate() : ("0" + date.getDate()));
+
         return (
-            <div key={idx} className="list-line">
-                <div className="list-col-1">{1}</div>
+            <div key={item.NO} className="list-line">
+                <div className="list-col-1">{item.NO}</div>
                 <div className="list-col-2">
-                    <button>제목</button>
+                    <button>{item.TITLE}</button>
                 </div>
-                <div className="list-col-3">이름</div>
+                <div className="list-col-3">{item.NAME}</div>
                 <div className="list-col-4">{4}</div>
-                <div className="list-col-5">{1111}</div>
+                <div className="list-col-5">{dateStr}</div>
             </div>
         )
     });
 
-    const addBtnOnClickEvent = () => {
-        if (addBtn) {
-            setBoardBool(!boardBool);
-            setTimeout(() => setAddBtn(!addBtn), 460);
-        } else {
-            setBoardBool(!boardBool);
-            setAddBtn(!addBtn);
-        }
-    }
 
+    const dateReturn = useCallback((date) => {
+        return `${date.getFullYear()} - ${(date.getMonth() + 1) >= 10 ? 
+            (date.getMonth() + 1) : ("0" + (date.getMonth() + 1))} - ${date.getDate() >= 10 ? 
+                date.getDate() : ("0" + date.getDate())}`;
+    });
 
 
     const addModal = () => {
