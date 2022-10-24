@@ -1,6 +1,7 @@
 const initialModal = {
     modalState: false,
-    modalType: ""
+    modalType: "",
+    modalParam: ""
 };
 const MODAL_CLOSE = "MODAL_CLOSE";
 const MODAL_OPEN = "MODAL_OPEN";
@@ -13,7 +14,8 @@ const modal = (state = initialModal, action) => {
             return {
                 ...state,
                 modalState: true,
-                modalType: action.data
+                modalType: action.data,
+                modalParam: action.param,
             };
 
         default :

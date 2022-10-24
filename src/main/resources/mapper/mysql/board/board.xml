@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pmp4.amoimproject.board.model.MeetingBoardDAO">
+    <insert id="insertBoard" parameterType="meetingBoardVo">
+        insert into MEETING_BOARD(title, content, user_no, meeting_no)
+        values (#{title}, #{content}, #{userNo}, #{meetingNo})
+
+        <selectKey keyProperty="no" keyColumn="no" resultType="Long" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+
+    <insert id="insertBoardUploadFile" parameterType="hashMap">
+        insert into BOARD_UPLOAD_FILE(BOARD_NO, file_name, original_file_name, file_size)
+        values (#{boardNo}, #{fileName}, #{originalFileName}, #{fileSize})
+    </insert>
+
+</mapper>

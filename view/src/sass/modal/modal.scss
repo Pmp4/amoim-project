@@ -284,3 +284,61 @@
         }
     }
 }
+
+
+
+
+.board-add{
+    width: 800px;
+    font-size: 16px;
+
+    label {
+        margin-top: 18px;
+        display: block;
+
+        p {
+            font-size: 1.4em;
+            font-weight: 500;
+        }
+        input {
+            padding: 5px;
+            box-sizing: border-box;
+        }
+
+        input, textarea {
+            margin-top: 10px;
+            font-size: 1.2em;
+            background: #f7f7f7;
+            display: block;
+            width: 100%;
+        }
+
+        textarea {
+            height: 200px;
+            resize: none;
+            border: none;
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+
+    input[type='file'] {
+        display: block;
+        margin-top: 10px;
+    }
+
+    button {
+        width: 100%;
+        display: block;
+        margin-top: 30px;
+        line-height: 50px;
+        font-size: 1.3em;
+        background: #fdc076;
+        border-radius: 12px;
+        color: #fff;
+        &:hover {
+            background-color: #F6951B;
+        }
+    }
+}

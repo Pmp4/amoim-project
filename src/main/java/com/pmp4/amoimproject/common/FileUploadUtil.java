@@ -207,7 +207,20 @@ public class FileUploadUtil {
 	
 	
 	
-	
+	public Boolean deleteFileList(List<Map<String, Object>> files, String filePath) {
+		boolean fileBool = false;
+
+		if(!files.isEmpty()) {
+			for(Map<String, Object> file : files) {
+				File delFile = new File(filePath, (String) file.get("fileName"));
+				if(delFile.exists()) {
+					fileBool = delFile.delete();
+				}
+			}
+		}
+
+		return fileBool;
+	}
 	
 	
 	

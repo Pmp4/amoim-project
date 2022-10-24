@@ -1,7 +1,10 @@
 import React from 'react';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { MODAL_OPEN } from 'reducer/module/modal';
 
-const BoardList = () => {
+const BoardList = ({meetingNo}) => {
     const [addBtn, setAddBtn] = useState(false);
     const [boardBool, setBoardBool] = useState(false);
     const[boardList, setBoardList] = useState([
@@ -18,13 +21,15 @@ const BoardList = () => {
     ]);
     // const [boardList, setBoardList] = useState([]);
 
+    const dispatch = useDispatch();
+
 
     // 실제적으로 list가 되는 div 요소 셋팅
     // console.log("boardList : " +  boardList);
-    const conList = boardList.map(item => {
+    const conList = boardList.map((item,idx) => {
         const date = new Date(item.REGDATE);
         return (
-            <div key={item.NO} className="list-line">
+            <div key={idx} className="list-line">
                 <div className="list-col-1">{1}</div>
                 <div className="list-col-2">
                     <button>제목</button>
@@ -46,28 +51,31 @@ const BoardList = () => {
         }
     }
 
-    const btnComponent = (
-        <div className="add-btn">
-            <button className={addBtn ? "on" : ""} onClick={addBtnOnClickEvent}><i className="fa-solid fa-plus"></i>
-            </button>
-        </div>
-    );
+
+
+    const addModal = () => {
+        dispatch({type:MODAL_OPEN, data:"boardAdd", param: meetingNo});
+    }
 
 
     return (
         <div className="board-list-component">
-            <div className="title-wrap">
-                <div className="search-part">
-                    <h2>Filter</h2>
-                    <form name="search">
-                        <select name="search-type">
-                            <option value="title">제목</option>
-                            <option value="content">내용</option>
-                            <option value="name">이름</option>
-                        </select>
-                        <input name="search-text"/>
-                    </form>
+            <div className='top'>
+                <div className="title-wrap">
+                    <div className='title'>커뮤니티</div>
+                    <div className="search-part">
+                        <h2>Filter</h2>
+                        <form name="search">
+                            <select name="search-type">
+                                <option value="title">제목</option>
+                                <option value="content">내용</option>
+                                <option value="name">이름</option>
+                            </select>
+                            <input name="search-text"/>
+                        </form>
+                    </div>
                 </div>
+                <div className='add-btn' onClick={() => addModal()}>+</div>
             </div>
             <div className="list-part">
                 <form>

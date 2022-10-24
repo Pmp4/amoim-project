@@ -222,6 +222,10 @@ const MoimView = () => {
     };
 
     const tabButtonAction = (num) => {
+
+        console.log(slideRef.current[num].clientHeight);
+        tabRef.current.body.style.height = slideRef.current[num].clientHeight + "px";
+
         if(pageState > num) {   //클릭한 페이지가 현재 페이지 상태보다 작을 때 (prev)
             slideRef.current[num].style.zIndex = '10';
             slideRef.current[num].classList.add('on');
@@ -237,6 +241,7 @@ const MoimView = () => {
                 tabRef.current.body.classList.remove('prev');
                 slideRef.current[num].style.zIndex = '1';
                 slideRef.current[num].classList.remove('on');
+                tabRef.current.body.style.height = "";
             }, 400);
             
         }else if(pageState < num) { //클릭한 페이지가 현재 페이지 상태보다 클 때 (next)
@@ -253,6 +258,7 @@ const MoimView = () => {
                 tabRef.current.body.classList.remove('next');
                 slideRef.current[num].style.zIndex = '1';
                 slideRef.current[num].classList.remove('on');
+                tabRef.current.body.style.height = "";
             }, 400);
         }
 
@@ -391,9 +397,8 @@ const MoimView = () => {
         return (
             <div className="slide next" ref={element => slideRef.current[2] = element}>
                 <div className="page-wrap community">
-                    <h3 className='title'>커뮤니티</h3>
                     <div className='board-box'>
-                        {pageState === 2 && <BoardList/>}
+                        {<BoardList meetingNo={meetingNo}/>}
                     </div>
                 </div>
             </div>

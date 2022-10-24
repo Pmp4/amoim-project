@@ -5,6 +5,8 @@ import { useDispatch } from 'react-redux';
 import { MODAL_CLOSE } from 'reducer/module/modal';
 import { useSelector } from 'react-redux';
 import MoimSubscribe from './MoimSubscribe';
+import BoardAdd from './BoardAdd';
+import { useParams } from 'react-router';
 
 const Modal = ({loginPopup}) => {
     const [modalState, setModalState] = useState(true);
@@ -18,7 +20,9 @@ const Modal = ({loginPopup}) => {
                 return (<Login modalClose={modalClose}/>);
             case "moim-subscribe-list" :
                 return (<MoimSubscribe modalClose={modalClose}/>);
-
+            case "boardAdd" : 
+                return (<BoardAdd modalClose={modalClose}/>);
+            
             default : return(<Error/>);
         }
     }
