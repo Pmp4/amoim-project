@@ -2,6 +2,7 @@ package com.pmp4.amoimproject.meeting.model;
 
 import com.pmp4.amoimproject.common.ConstUtil;
 import com.pmp4.amoimproject.common.FileUploadUtil;
+import com.pmp4.amoimproject.jwt.JwtTokenProvider;
 import com.pmp4.amoimproject.tag.model.TagDAO;
 import com.pmp4.amoimproject.tag.model.TagVO;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,8 @@ public class MeetingServiceImpl implements MeetingService {
     private final MeetingDAO meetingDAO;
     private final TagDAO tagDAO;
     private final FileUploadUtil fileUploadUtil;
+
+    private final JwtTokenProvider jwtTokenProvider;
 
 
     /*
@@ -110,6 +113,47 @@ public class MeetingServiceImpl implements MeetingService {
 
         return result;
     }
+
+
+
+    @Override
+    public Map<String, Object> mainLocList(HttpServletRequest request) {
+        logger.info("[mainLocList] 서비스 로직");
+
+        String token = jwtTokenProvider.resolveToken(request);
+        logger.info("[mainLocList] 토큰 추출 token : {}", token);
+
+
+        if(!token.isEmpty()) {
+            String username = jwtTokenProvider.getUsername(token);
+            logger.info("[mainLocList] 토큰에서 값 추출 username : {}", username);
+        }
+
+        List<Map<String, Object>> list = meetingDAO.locSelectCard("11");
+        logger.info("[mainLocList] 리스트 조회 결과 list.size : {}", list.size());
+
+        Map<String, Object> responseData = new HashMap<>();
+
+
+        if (!list.isEmpty()) {
+            responseData.put("SUCCESS", true);
+            responseData.put("list", list);
+        }else {
+            responseData.put("SUCCESS", false);
+            responseData.put("SUCCESS_TEXT", "Server DB Error");
+        }
+
+
+        return responseData;
+    }
+
+    @Override
+    public Map<String, Object> pageItemList(String type, String page, String blockSize) {
+
+
+        return null;
+    }
+
 
     @Override
     public List<Map<String, Object>> selectByUserNoCard(Map<String, Object> map) {

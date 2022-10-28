@@ -52,57 +52,80 @@ public class MeetingController {
     }
 
 
-    @GetMapping("/select")
-    public Map<String, Object> selectByCard(@RequestParam String type,
-                                                  @RequestParam String key,
-                                                  @RequestParam (required = false, defaultValue = "1") int page,
-                                                  @RequestParam (required = false, defaultValue = "8") int length,
-                                                  HttpSession httpSession) {
-        String userNo = String.valueOf(httpSession.getAttribute("userNo"));
-        logger.info("MEETING 카드 조회 type={}, key={}, page={}, length={}", type, key, page, length);
-
-        switch (type) {
-            case "USER_NO":
-                key = userNo;
-                length = 12;
-                break;
-            case "CATEGORY_CODE":
-                type = "i." + type;
-                key = key.substring(0, 3);
-                break;
-            case "SIGNING":
-                key = userNo;
-                break;
-        }
-
-        PaginationInfo paginationInfo = new PaginationInfo(length, page);
-
-        logger.info("MEETING 카드 조회 필터 type={}, key={}", type, key);
-
-        Map<String, Object> dbType = new HashMap<>();
-        dbType.put("type", type);
-        dbType.put("key", key);
-        dbType.put("length", paginationInfo.getBlockSize());
-        dbType.put("start", paginationInfo.getStartRecord());
-        dbType.put("number", false);
-
-        List<Map<String, Object>> list = meetingService.selectByUserNoCard(dbType);
-
-        dbType.put("number", true);
-        int totalRecord = meetingService.selectByUserNoCardPageCount(dbType);
-
-        logger.info("MEETING 카드 조회 결과 list.size={}, totalRecord={}", list.size(), totalRecord);
 
 
-        paginationInfo.setTotalRecord(totalRecord);
-        logger.info("MEETING 카드 조회 paginationInfo={}", paginationInfo);
+//    @GetMapping("/select")
+//    public Map<String, Object> selectByCard(@RequestParam String type,
+//                                                  @RequestParam String key,
+//                                                  @RequestParam (required = false, defaultValue = "1") int page,
+//                                                  @RequestParam (required = false, defaultValue = "8") int length,
+//                                                  HttpSession httpSession) {
+//        String userNo = String.valueOf(httpSession.getAttribute("userNo"));
+//        logger.info("MEETING 카드 조회 type={}, key={}, page={}, length={}", type, key, page, length);
+//
+//        switch (type) {
+//            case "USER_NO":
+//                key = userNo;
+//                length = 12;
+//                break;
+//            case "CATEGORY_CODE":
+//                type = "i." + type;
+//                key = key.substring(0, 3);
+//                break;
+//            case "SIGNING":
+//                key = userNo;
+//                break;
+//        }
+//
+//        PaginationInfo paginationInfo = new PaginationInfo(length, page);
+//
+//        logger.info("MEETING 카드 조회 필터 type={}, key={}", type, key);
+//
+//        Map<String, Object> dbType = new HashMap<>();
+//        dbType.put("type", type);
+//        dbType.put("key", key);
+//        dbType.put("length", paginationInfo.getBlockSize());
+//        dbType.put("start", paginationInfo.getStartRecord());
+//        dbType.put("number", false);
+//
+//        List<Map<String, Object>> list = meetingService.selectByUserNoCard(dbType);
+//
+//        dbType.put("number", true);
+//        int totalRecord = meetingService.selectByUserNoCardPageCount(dbType);
+//
+//        logger.info("MEETING 카드 조회 결과 list.size={}, totalRecord={}", list.size(), totalRecord);
+//
+//
+//        paginationInfo.setTotalRecord(totalRecord);
+//        logger.info("MEETING 카드 조회 paginationInfo={}", paginationInfo);
+//
+//        Map<String, Object> responseData = new HashMap<>();
+//        responseData.put("list", list);
+//        responseData.put("pageInfo", paginationInfo);
+//
+//        return responseData;
+//    }
+
+
+    @GetMapping("/select/main/loc")
+    public Map<String, Object> moimHomeLocList(HttpServletRequest httpServletRequest) {
+        logger.info("[moimHomeLocList] 핸들러");
+
+        return meetingService.mainLocList(httpServletRequest);
+    }
+
+    @GetMapping("/select/main/category")
+    public Map<String, Object> moimHomeCategoryList(@RequestParam String code,
+                                                    @RequestParam int page,
+                                                    @RequestParam int length) {
+        logger.info("[moimHomeCategoryList] 핸들러 code : {}, page : {}, length : {}",
+                code, page, length);
 
         Map<String, Object> responseData = new HashMap<>();
-        responseData.put("list", list);
-        responseData.put("pageInfo", paginationInfo);
 
         return responseData;
     }
+
 
 
     @GetMapping("/signing")

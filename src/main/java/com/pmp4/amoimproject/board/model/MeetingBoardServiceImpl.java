@@ -64,4 +64,9 @@ public class MeetingBoardServiceImpl implements MeetingBoardService{
     public List<Map<String, Object>> selectByMeetingNo(Map<String, Object> map) {
         return meetingBoardDAO.selectByMeetingNo(map);
     }
+
+    @Override
+    public int selectByMeetingNoCount(Map<String, Object> map) {
+        return meetingBoardDAO.selectByMeetingNoCount(map);
+    }
 }

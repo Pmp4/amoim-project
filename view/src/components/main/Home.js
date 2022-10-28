@@ -1,5 +1,5 @@
 import React from "react";
-import LoginCheck from "../common/LoginCheck";
+import LoginCheck from "../common/PrivateRoute";
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faStar } from "@fortawesome/free-solid-svg-icons";
@@ -14,7 +14,7 @@ const Home = () => {
     const [locMoim, setLocMoim] = useState([]);
     const [category, setCategory] = useState([]);
     const [categoryState, setCategoryState] = useState(0);
-
+    
     const [categoryMoim, setCategoryMoim] = useState([]);
     const [pageInfo, setPageInfo] = useState({
         blockSize: 8,
@@ -36,16 +36,6 @@ const Home = () => {
     }, []);
 
 
-    const loggedLocalBcodeGet = () => {
-        const logged = sessionStorage.getItem("logged");
-
-        if(logged) {
-            
-        }else {
-
-        }
-
-    }
 
 
     //로그인 된 유저의 지역 리스트 API
@@ -53,13 +43,26 @@ const Home = () => {
     //로그인 된 유저의 지역 리스트 API
     //로그인 된 유저의 지역 리스트 API
     const locAPI = (code = "11") => {
-        MeetingService.selectByCard("BCODE", code).then((response) => {
-            const { status, data } = response;
+        // MeetingService.selectByCard("BCODE", code).then((response) => {
+        //     const { status, data } = response;
 
-            if (status === 200) {
-                setLocMoim(data.list);
-            } else {
-                alert("서버 ERROR");
+        //     if (status === 200) {
+        //         setLocMoim(data.list);
+        //     } else {
+        //         alert("서버 ERROR");
+        //     }
+        // });
+
+        MeetingService.mainSelectLoc().then(response => {
+            const {status, data} = response;
+            if(status === 200) {
+                if(data.SUCCESS) {
+                    setLocMoim(data.list);
+                }else {
+                    alert(data.SUCCESS_TEXT);
+                }
+            }else {
+                alert("Server Error");
             }
         });
     };
@@ -87,19 +90,24 @@ const Home = () => {
     //카테고리 code에 맞는 리스트를 뽑아주는 API
     //카테고리 code에 맞는 리스트를 뽑아주는 API
     const categorySelectActionAPI = (code, page, length) => {
-        MeetingService.selectByCard("CATEGORY_CODE", code, page, length).then(
-            (response) => {
-                const { status, data } = response;
-                console.log(response);
+        // MeetingService.selectByCard("CATEGORY_CODE", code, page, length).then(
+        //     (response) => {
+        //         const { status, data } = response;
+        //         console.log(response);
 
-                if (status === 200) {
-                    setCategoryMoim(data.list);
-                    setPageInfo(data.pageInfo);
-                } else {
-                    alert("Server Error");
-                }
-            }
-        );
+        //         if (status === 200) {
+        //             setCategoryMoim(data.list);
+        //             setPageInfo(data.pageInfo);
+        //         } else {
+        //             alert("Server Error");
+        //         }
+        //     }
+        // );
+
+        MeetingService.mainSelectCategoryList(code, page, length).then(response => {
+            const {status, data} = response;
+            
+        });
     };
 
 
@@ -142,6 +150,7 @@ const Home = () => {
      * 카테고리 버튼 클릭 시, 리스트 출력
      */
     const categoryBtnAction = (code) => {
+        
         setCategoryState(code);
         categorySelectActionAPI(code, 1, blockSize);
     };

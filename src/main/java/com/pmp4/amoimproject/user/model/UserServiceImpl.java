@@ -3,11 +3,14 @@ package com.pmp4.amoimproject.user.model;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pmp4.amoimproject.address.model.UserAddressDAO;
 import com.pmp4.amoimproject.address.model.UserAddressVO;
+import com.pmp4.amoimproject.common.CommonResponse;
 import com.pmp4.amoimproject.common.Encrypt;
 import com.pmp4.amoimproject.interest.model.InterestDAO;
+import com.pmp4.amoimproject.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -128,4 +131,11 @@ public class UserServiceImpl implements UserService {
     }
 
 
+
+    //JWT 테스트
+    //JWT 테스트
+    //JWT 테스트
+    public UserVO getByUid(String userId) {
+        return userDAO.getUserInfo(userId);
+    }
 }

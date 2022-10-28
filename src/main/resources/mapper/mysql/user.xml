@@ -23,4 +23,9 @@
     <select id="checkUserId" parameterType="String" resultType="userVo">
         select * from USERS where USER_ID = #{userId}
     </select>
+
+
+    <select id="getUserInfo" parameterType="String" resultType="userVo">
+        select * from USERS where USER_ID = #{userId}
+    </select>
 </mapper>
