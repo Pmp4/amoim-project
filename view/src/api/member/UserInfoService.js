@@ -1,4 +1,4 @@
-import httpCommon from '../httpCommon';
+import httpCommon from '../http-common';
 
 
 // const loginUser = (rest) => {
