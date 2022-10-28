@@ -121,9 +121,8 @@ public class MeetingController {
         logger.info("[moimHomeCategoryList] 핸들러 code : {}, page : {}, length : {}",
                 code, page, length);
 
-        Map<String, Object> responseData = new HashMap<>();
-
-        return responseData;
+        code = code.substring(0, 3);
+        return meetingService.pageItemList("category", code, page, length);
     }
 
 

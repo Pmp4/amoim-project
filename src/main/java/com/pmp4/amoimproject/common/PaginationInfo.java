@@ -26,7 +26,7 @@ public class PaginationInfo {
 
 
     private void startNum () {
-        startRecord = blockSize * (currentPage-1);
+        startRecord = blockSize * (currentPage - 1);
     }
 
 

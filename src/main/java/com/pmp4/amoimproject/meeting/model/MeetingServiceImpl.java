@@ -2,12 +2,14 @@ package com.pmp4.amoimproject.meeting.model;
 
 import com.pmp4.amoimproject.common.ConstUtil;
 import com.pmp4.amoimproject.common.FileUploadUtil;
+import com.pmp4.amoimproject.common.PaginationInfo;
 import com.pmp4.amoimproject.jwt.JwtTokenProvider;
 import com.pmp4.amoimproject.tag.model.TagDAO;
 import com.pmp4.amoimproject.tag.model.TagVO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -124,7 +126,7 @@ public class MeetingServiceImpl implements MeetingService {
         logger.info("[mainLocList] 토큰 추출 token : {}", token);
 
 
-        if(!token.isEmpty()) {
+        if(!token.isEmpty() && jwtTokenProvider.validateToken(token)) {
             String username = jwtTokenProvider.getUsername(token);
             logger.info("[mainLocList] 토큰에서 값 추출 username : {}", username);
         }
@@ -148,10 +150,35 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public Map<String, Object> pageItemList(String type, String page, String blockSize) {
+    public Map<String, Object> pageItemList(String type, String key, int page, int blockSize) {
+        logger.info("[pageItemList] 서비스 로직 type : {}, page : {}, blockSize : {}",
+                type, page, blockSize);
 
+        PaginationInfo paginationInfo = new PaginationInfo(blockSize, page);
 
-        return null;
+        Map<String, Object> dbParam = new HashMap<>();
+
+        dbParam.put("type", type);
+        dbParam.put("key", key);
+        dbParam.put("blockSize", blockSize);
+        dbParam.put("start", paginationInfo.getStartRecord());
+        dbParam.put("count", false);
+
+        List<Map<String, Object>> list = meetingDAO.moimItemList(dbParam);
+        logger.info("[pageItemList] 리스트 조회 결과 list.size : {}", list.size());
+
+        dbParam.put("count", true);
+        int count = meetingDAO.moimItemCount(dbParam);
+        logger.info("[pageItemList] 리스트 총 개수 count : {}", count);
+
+        paginationInfo.setTotalRecord(count);
+        logger.info("[pageItemList] 페이지 정보 paginationInfo : {}", paginationInfo);
+
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("list", list);
+        responseData.put("pageInfo", paginationInfo);
+
+        return responseData;
     }
 
 

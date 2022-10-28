@@ -25,7 +25,7 @@ public interface MeetingService {
      * @param blockSize - 페이지당 item 개수
      * @return itemList, pageInfo
      */
-    Map<String, Object> pageItemList(String type, String page, String blockSize);
+    Map<String, Object> pageItemList(String type, String key, int page, int blockSize);
 
 
 

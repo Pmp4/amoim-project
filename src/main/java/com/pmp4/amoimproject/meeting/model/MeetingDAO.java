@@ -19,6 +19,9 @@ public interface MeetingDAO {
 
     List<Map<String, Object>> locSelectCard(String bcode);
 
+    List<Map<String, Object>> moimItemList(Map<String, Object> dbParam);
+    int moimItemCount(Map<String, Object> dbParam);
+
 
 
 
