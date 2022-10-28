@@ -14,7 +14,7 @@ const Home = () => {
     const [locMoim, setLocMoim] = useState([]);
     const [category, setCategory] = useState([]);
     const [categoryState, setCategoryState] = useState(0);
-    
+
     const [categoryMoim, setCategoryMoim] = useState([]);
     const [pageInfo, setPageInfo] = useState({
         blockSize: 8,
@@ -27,16 +27,12 @@ const Home = () => {
         totalRecord: 0,
     });
 
-    const {blockSize, currentPage, pageSize} = pageInfo
-
+    const { blockSize, currentPage, pageSize } = pageInfo;
 
     useEffect(() => {
         locAPI();
         categoryAPI();
     }, []);
-
-
-
 
     //로그인 된 유저의 지역 리스트 API
     //로그인 된 유저의 지역 리스트 API
@@ -53,20 +49,19 @@ const Home = () => {
         //     }
         // });
 
-        MeetingService.mainSelectLoc().then(response => {
-            const {status, data} = response;
-            if(status === 200) {
-                if(data.SUCCESS) {
+        MeetingService.mainSelectLoc().then((response) => {
+            const { status, data } = response;
+            if (status === 200) {
+                if (data.SUCCESS) {
                     setLocMoim(data.list);
-                }else {
+                } else {
                     alert(data.SUCCESS_TEXT);
                 }
-            }else {
+            } else {
                 alert("Server Error");
             }
         });
     };
-
 
     //카테고리 목록 출력 API
     //카테고리 목록 출력 API
@@ -82,8 +77,6 @@ const Home = () => {
             }
         });
     };
-
-
 
     //카테고리 code에 맞는 리스트를 뽑아주는 API
     //카테고리 code에 맞는 리스트를 뽑아주는 API
@@ -104,12 +97,19 @@ const Home = () => {
         //     }
         // );
 
-        MeetingService.mainSelectCategoryList(code, page, length).then(response => {
-            const {status, data} = response;
-            
-        });
-    };
+        MeetingService.mainSelectCategoryList(code, page, length).then(
+            (response) => {
+                const { status, data } = response;
 
+                if (status === 200) {
+                    setCategoryMoim(data.list);
+                    setPageInfo(data.pageInfo);
+                } else {
+                    alert("Server Error");
+                }
+            }
+        );
+    };
 
     //최초 실행 함수
     //최초 실행 함수
@@ -124,9 +124,7 @@ const Home = () => {
         categoryBtnAction(parseInt(list[0].categoryCode));
     };
 
-
     
-
     const setCategoryComp = category.map((item, idx) => {
         if (category.length === 0) return "";
 
@@ -145,21 +143,17 @@ const Home = () => {
         );
     });
 
-
     /**
      * 카테고리 버튼 클릭 시, 리스트 출력
      */
     const categoryBtnAction = (code) => {
-        
         setCategoryState(code);
         categorySelectActionAPI(code, 1, blockSize);
     };
 
-
-
     const categoryMoimPageBtnAction = (page) => {
         categorySelectActionAPI(categoryState, page, blockSize);
-    }
+    };
 
     return (
         <div id="home-page">
@@ -199,7 +193,11 @@ const Home = () => {
                 </div>
                 <div className="category-list draggable">
                     <div className="select">{setCategoryComp}</div>
-                    <MoimList items={categoryMoim} pageInfo={pageInfo} pageBtn={categoryMoimPageBtnAction}/>
+                    <MoimList
+                        items={categoryMoim}
+                        pageInfo={pageInfo}
+                        pageBtn={categoryMoimPageBtnAction}
+                    />
                 </div>
             </div>
         </div>

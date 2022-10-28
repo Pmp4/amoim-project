@@ -63,7 +63,7 @@
     <sql id="moimCardSelect">
         select
         <choose>
-            <when test="number">
+            <when test="count">
                 count(*)
             </when>
             <otherwise>
@@ -88,7 +88,35 @@
 
 
 
-    <!--  -->
+    <!-- 모임 아이템의 리스트 출력 -->
+    <!-- 모임 아이템의 리스트 출력 -->
+    <!-- 모임 아이템의 리스트 출력 -->
+    <select id="moimItemList" parameterType="hashMap" resultType="hashMap">
+        <include refid="moimCardSelect"/>
+        <choose>
+            <when test='type != null and (type eq "user".toString())'>
+                and USER_ID = #{key}
+                order by M.REGDATE desc
+            </when>
+            <when test='type != null and (type eq "category".toString())'>
+                and I.CATEGORY_CODE like CONCAT(#{key}, '%') order by LIKE_COUNT desc
+            </when>
+        </choose>
+        LIMIT #{blockSize} OFFSET #{start}
+    </select>
+
+    <select id="moimItemCount" parameterType="hashMap" resultType="int">
+        <include refid="moimCardSelect"/>
+        <choose>
+            <when test='type != null and (type eq "user".toString())'>
+                and USER_ID = #{key}
+                order by M.REGDATE desc
+            </when>
+            <when test='type != null and (type eq "category".toString())'>
+                and I.CATEGORY_CODE like CONCAT(#{key}, '%')
+            </when>
+        </choose>
+    </select>
 
 
 
