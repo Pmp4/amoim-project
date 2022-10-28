@@ -1,11 +1,10 @@
-package com.pmp4.amoimproject.user.model;
+package com.pmp4.amoimproject.sign.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.sql.Timestamp;
 import java.util.Collection;
 
 @Getter

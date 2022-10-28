@@ -107,6 +107,9 @@ public class MeetingController {
 //    }
 
 
+    //지역별(시, 도) 모임 리스트 12개
+    //지역별(시, 도) 모임 리스트 12개
+    //지역별(시, 도) 모임 리스트 12개
     @GetMapping("/select/main/loc")
     public Map<String, Object> moimHomeLocList(HttpServletRequest httpServletRequest) {
         logger.info("[moimHomeLocList] 핸들러");
@@ -114,6 +117,9 @@ public class MeetingController {
         return meetingService.mainLocList(httpServletRequest);
     }
 
+    // 메인화면 카테고리별 모임 아이템 리스트
+    // 메인화면 카테고리별 모임 아이템 리스트
+    // 메인화면 카테고리별 모임 아이템 리스트
     @GetMapping("/select/main/category")
     public Map<String, Object> moimHomeCategoryList(@RequestParam String code,
                                                     @RequestParam int page,
@@ -124,6 +130,30 @@ public class MeetingController {
         code = code.substring(0, 3);
         return meetingService.pageItemList("category", code, page, length);
     }
+
+
+
+
+
+
+    // 자신이 생성한 모임
+    // 자신이 생성한 모임
+    // 자신이 생성한 모임
+    @GetMapping("/select/own")
+    public List<Map<String, Object>> moimOwnList() {
+        logger.info("[moimOwnList] 핸들러");
+
+        return null;
+    }
+
+
+    // 자신이 생성한 모임 개수
+    // 자신이 생성한 모임 개수
+    // 자신이 생성한 모임 개수
+
+
+
+
 
 
 

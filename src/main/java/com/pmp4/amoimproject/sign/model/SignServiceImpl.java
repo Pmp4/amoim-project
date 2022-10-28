@@ -1,8 +1,9 @@
-package com.pmp4.amoimproject.user.model;
+package com.pmp4.amoimproject.sign.model;
 
 import com.pmp4.amoimproject.common.CommonResponse;
 import com.pmp4.amoimproject.common.Encrypt;
 import com.pmp4.amoimproject.jwt.JwtTokenProvider;
+import com.pmp4.amoimproject.user.model.UserDAO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

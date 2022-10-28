@@ -1,15 +1,9 @@
 package com.pmp4.amoimproject.interceptor;
 
-import com.pmp4.amoimproject.jwt.JwtTokenProvider;
-import com.pmp4.amoimproject.user.model.PrincipalDetails;
-import com.pmp4.amoimproject.user.model.UserVO;
-import lombok.RequiredArgsConstructor;
+import com.pmp4.amoimproject.sign.model.PrincipalDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 

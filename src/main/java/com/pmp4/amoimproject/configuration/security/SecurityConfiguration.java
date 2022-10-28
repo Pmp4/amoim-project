@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsUtils;
 
 
 /*
@@ -47,6 +48,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.httpBasic().disable()  //UI를 사용하는 것을 기본값으로 가진 시큐리티 설정을 비활성화
                 .csrf().disable()           //CSRF 비활성화, REST API 에서는 CSRF 보안이 필요 없음
+                .cors().and()
 
                 .sessionManagement()
                 .sessionCreationPolicy(
@@ -58,7 +60,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()    //애플리케이션에 들어오는 요청에 대한 사용 권한
                 .antMatchers("/sign-api/sign-in", "/sign-api/sign-up",
                         "/sign-api/exception").permitAll()  //해당 URI는 모두 허용
+                .antMatchers("/user/**").permitAll()
                 .antMatchers("**exception**").permitAll()   //'exception' 단어는 모두 허용
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 
                 .and()
                 .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())   //권한이 안맞을 때 exception

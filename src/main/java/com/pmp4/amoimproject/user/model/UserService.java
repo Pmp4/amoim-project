@@ -1,6 +1,6 @@
 package com.pmp4.amoimproject.user.model;
 
-import org.springframework.security.core.userdetails.UserDetails;
+import com.pmp4.amoimproject.sign.model.UserVO;
 
 import java.util.List;
 import java.util.Map;

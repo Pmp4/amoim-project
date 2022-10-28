@@ -1,4 +1,4 @@
-package com.pmp4.amoimproject.user.model;
+package com.pmp4.amoimproject.sign.model;
 
 import lombok.*;
 

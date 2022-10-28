@@ -33,24 +33,26 @@ const MoimMain = () => {
 
     useEffect(() => {
         myAddMeetingData();
-        signingUpList();
-        console.log(user);
+        // signingUpList();
     }, []);
 
 
 
     const myAddMeetingData = () => {
-        console.log(user);
-        MeetingService.selectByCard("USER_NO", "").then((response) => {
-            const { status, data } = response;
-            console.log(response);
-            if (status === 200) {
-                setMeetingContents(data.list);
-                setPageInfo(data.pageInfo);
-            } else {
-                alert("서버 ERROR");
-            }
-        });
+        // MeetingService.selectByCard("USER_NO", "").then((response) => {
+        //     const { status, data } = response;
+        //     console.log(response);
+        //     if (status === 200) {
+        //         setMeetingContents(data.list);
+        //         setPageInfo(data.pageInfo);
+        //     } else {
+        //         alert("서버 ERROR");
+        //     }
+        // });
+
+        MeetingService.moimOwnList().then(response => {
+            const {status, data} = response;
+        })
     };
 
     //가입 신청 리스트 확인
