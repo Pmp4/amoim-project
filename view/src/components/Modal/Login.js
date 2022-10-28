@@ -42,7 +42,7 @@ const Login = ({ modalClose }) => {
     //로그인 유효성 검사
     //로그인 유효성 검사
     //로그인 유효성 검사
-    const loginInfoCheck = useCallback(() => {
+    const loginInfoCheck = useCallback(async () => {
         if (userId === "") {
             alert(`아이디를 입력하세요.`);
             inputRef.userId.focus();
@@ -72,16 +72,21 @@ const Login = ({ modalClose }) => {
         //         alert(msg);
         //     });
 
-        UserInfoService.loginUser(userId, password).then((response) => {
-            const { status, data } = response;
-            console.log(response);
-            if (status === 200) {
-                dispatch({type: SUCCESS_LOGGED});
-                localStorage.setItem("logged", true);
-                localStorage.setItem("X-AUTH-TOKEN", data.token);
-                modalClose();
-            }
-        });
+        const response = await UserInfoService.loginUser(userId, password);
+        const { status, data } = response;
+        if (status === 200) {
+            localStorage.setItem("logged", true);
+            localStorage.setItem("X-AUTH-TOKEN", data.token);
+
+            const base64Payload = data.token.split(".")[1];
+            const payload = atob(base64Payload, "base64");
+            const result = JSON.parse(payload);
+
+            dispatch({ type: SUCCESS_LOGGED });
+            console.log(result);
+
+            modalClose();
+        }
     });
 
     //회원가입 버튼 클릭

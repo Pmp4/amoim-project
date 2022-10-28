@@ -21,17 +21,19 @@ const Header = ({ loginPopup }) => {
     const loginBtnAction = () => {
         if(logged) {
             if(window.confirm("로그아웃 하시겠습니까?")) {
-                UserInfoService.logout()
-                    .then((response) => {
-                        if(response.data.SUCCESS) {
-                            dispatch({
-                                type: LOGOUT_LOGGED
-                            });
-                            localStorage.clear();
-                            alert(`${user.userInfo.name}님 로그아웃되었습니다.`);
-                            navigate("/");
-                        }
-                    });
+                // UserInfoService.logout()
+                //     .then((response) => {
+                //         if(response.data.SUCCESS) {
+                //             dispatch({
+                //                 type: LOGOUT_LOGGED
+                //             });
+                //             localStorage.clear();
+                //             alert(`${user.userInfo.name}님 로그아웃되었습니다.`);
+                //             navigate("/");
+                //         }
+                //     });'
+                localStorage.clear();
+                navigate("/");
             }
         }else {
             // loginPopup("ON");
