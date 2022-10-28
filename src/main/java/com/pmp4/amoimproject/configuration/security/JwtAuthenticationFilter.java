@@ -34,27 +34,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = jwtTokenProvider.resolveToken(httpServletRequest);
         LOGGER.info("[doFilterInternal] token 값 추출 완료. token : {}", token);
 
+
         LOGGER.info("[doFilterInternal] token 값 유효성 체크 시작");
-        if(token != null && jwtTokenProvider.validateToken(token)) {
-            Authentication authentication = jwtTokenProvider.getAuthentication(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        if(!token.equals("null")) {
+            if(jwtTokenProvider.validateToken(token)) {
+                Authentication authentication = jwtTokenProvider.getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            LOGGER.info("[doFilterInternal] token 값 유효성 체크 완료");
+                LOGGER.info("[doFilterInternal] token 값 유효성 체크 완료");
+
+                filterChain.doFilter(httpServletRequest, httpServletResponse);
+            } else {
+                LOGGER.info("[doFilterInternal] 토큰 유효 체크 실패");
+
+                ObjectMapper objectMapper = new ObjectMapper();
+                EntryPointErrorResponse entryPointErrorResponse = new EntryPointErrorResponse();
+                entryPointErrorResponse.setMsg("인증이 실패하였습니다.");
+
+                httpServletResponse.setStatus(401);
+                httpServletResponse.setContentType("application/json");
+                httpServletResponse.setCharacterEncoding("UTF-8");
+                httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+                httpServletResponse.getWriter().write(objectMapper.writeValueAsString(entryPointErrorResponse));
+                httpServletResponse.getWriter().flush();
+            }
+        } else {
+            LOGGER.info("[doFilterInternal] 토큰 없음");
             filterChain.doFilter(httpServletRequest, httpServletResponse);
-
-        }else {
-            LOGGER.info("[doFilterInternal] 토큰 유효 체크 실패");
-
-            ObjectMapper objectMapper = new ObjectMapper();
-            EntryPointErrorResponse entryPointErrorResponse = new EntryPointErrorResponse();
-            entryPointErrorResponse.setMsg("인증이 실패하였습니다.");
-
-            httpServletResponse.setStatus(401);
-            httpServletResponse.setContentType("application/json");
-            httpServletResponse.setCharacterEncoding("UTF-8");
-            httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
-            httpServletResponse.getWriter().write(objectMapper.writeValueAsString(entryPointErrorResponse));
-            httpServletResponse.getWriter().flush();
         }
     }
 }

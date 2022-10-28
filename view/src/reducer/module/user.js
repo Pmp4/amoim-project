@@ -1,9 +1,14 @@
 const initialUserInfo = {
-    logged: false
+    logged: false,
+    userInfo: {
+        no: "",
+        id: "",
+        username: "",
+    }
 };
 
-const SUCCESS_LOGGED = 1;
-const LOGOUT_LOGGED = 2;
+const SUCCESS_LOGGED = "SUCCESS_LOGGED";
+const LOGOUT_LOGGED = "LOGOUT_LOGGED";
 
 const user = (currentState = initialUserInfo, action) => {
     switch (action.type) {

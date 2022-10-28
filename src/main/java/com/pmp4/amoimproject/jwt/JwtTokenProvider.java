@@ -81,13 +81,13 @@ public class JwtTokenProvider {
 
     //클라이언트의 요청 헤더에 있는 'X-AUTH-TOKEN'을 가져옴
     public String resolveToken(HttpServletRequest httpServletRequest) {
-        LOGGER.info("[resolveToken] HTTP 헤더에서 Token 값 추출 url : {}", httpServletRequest.getServletPath());
+        LOGGER.info("[resolveToken] HTTP 헤더에서 Token 값 추출 getServletPath : {}", httpServletRequest.getServletPath());
         return httpServletRequest.getHeader("X-AUTH-TOKEN");
     }
 
     // 토큰의 클레임에 저장된 유효기간을 체크하고 boolean 타입의 값으로 리턴한다.
     public boolean validateToken(String token) {
-        LOGGER.info("[validateToken] 토큰 유효 체크 시작");
+        LOGGER.info("[validateToken] 토큰 유효 체크 시작 : {}", token);
         try {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
 

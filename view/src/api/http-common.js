@@ -21,7 +21,7 @@ instance.interceptors.request.use(
 )
 
 instance.interceptors.response.use(response => {
-    console.log(response);
+    // console.log(response);
     return response;
 }, error => {
     if(error.response.status === 401) {     //토큰 유효시간 지날 때
