@@ -35,7 +35,8 @@ public class SignServiceImpl implements SignService{
         SignInResultVO signInResultVO = SignInResultVO.builder()
                 .token(jwtTokenProvider.createToken(
                             String.valueOf(principalDetails.getUserVO().getUserId()),
-                            String.valueOf(principalDetails.getUserVO().getUserNo())
+                            String.valueOf(principalDetails.getUserVO().getUserNo()),
+                            principalDetails.getUserVO().getName()
                         )
                 )
                 .build();

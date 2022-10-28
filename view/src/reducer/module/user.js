@@ -1,8 +1,8 @@
 const initialUserInfo = {
     logged: false,
     userInfo: {
+        sub: "",
         no: "",
-        id: "",
         username: "",
     }
 };
@@ -16,6 +16,7 @@ const user = (currentState = initialUserInfo, action) => {
             return {
                 ...currentState,
                 logged: true,
+                userInfo: {...action.data}
             };
         case LOGOUT_LOGGED:
             return {

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import UserInfoService from "api/member/UserInfoService";
 import { useDispatch } from "react-redux";
 import { SUCCESS_LOGGED } from "reducer/module/user";
+import { parseJwt } from 'method/method';
 
 const initialInfo = {
     userId: "",
@@ -78,13 +79,9 @@ const Login = ({ modalClose }) => {
             localStorage.setItem("logged", true);
             localStorage.setItem("X-AUTH-TOKEN", data.token);
 
-            const base64Payload = data.token.split(".")[1];
-            const payload = atob(base64Payload, "base64");
-            const result = JSON.parse(payload);
+            const result = parseJwt(data.token); 
 
-            dispatch({ type: SUCCESS_LOGGED });
-            console.log(result);
-
+            dispatch({ type: SUCCESS_LOGGED, data: result});
             modalClose();
         }
     });

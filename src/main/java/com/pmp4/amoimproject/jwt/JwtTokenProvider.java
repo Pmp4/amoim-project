@@ -42,11 +42,11 @@ public class JwtTokenProvider {
     }
 
 
-    public String createToken(String userUid, String userNo) {
-        LOGGER.info("[createToken] 토큰 생성 시작");
+    public String createToken(String userUid, String userNo, String name) {
+        LOGGER.info("[createToken] 토큰 생성 시작 name : {}", name);
         Claims claims = Jwts.claims().setSubject(userUid);  //JWT의 제목
-        claims.put("userId", userUid);  //공개 클레임
         claims.put("no", userNo);       //공개 클레임
+        claims.put("username", name);
 
         Date now = new Date();
 
