@@ -126,10 +126,10 @@ public class MeetingServiceImpl implements MeetingService {
         logger.info("[mainLocList] 토큰 추출 token : {}", token);
 
 
-        if(!token.isEmpty() && jwtTokenProvider.validateToken(token)) {
-            String username = jwtTokenProvider.getUsername(token);
-            logger.info("[mainLocList] 토큰에서 값 추출 username : {}", username);
-        }
+//        if(!token.isEmpty() && jwtTokenProvider.validateToken(token)) {
+//            String username = jwtTokenProvider.getUsername(token);
+//            logger.info("[mainLocList] 토큰에서 값 추출 username : {}", username);
+//        }
 
         List<Map<String, Object>> list = meetingDAO.locSelectCard("11");
         logger.info("[mainLocList] 리스트 조회 결과 list.size : {}", list.size());

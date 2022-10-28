@@ -1,10 +1,9 @@
 package com.pmp4.amoimproject.configuration.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pmp4.amoimproject.user.model.EntryPointErrorResponse;
+import com.pmp4.amoimproject.sign.model.EntryPointErrorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,7 @@
-package com.pmp4.amoimproject.user.api;
+package com.pmp4.amoimproject.sign.controller;
 
-import com.pmp4.amoimproject.user.model.SignInResultVO;
-import com.pmp4.amoimproject.user.model.SignService;
+import com.pmp4.amoimproject.sign.model.SignInResultVO;
+import com.pmp4.amoimproject.sign.model.SignService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +23,9 @@ public class SignController {
 
     private final SignService signService;
 
+    //로그인
+    //로그인
+    //로그인
     @PostMapping("/sign-in")
     public SignInResultVO signIn (@RequestParam String id,
                                   @RequestParam String password) {
@@ -36,6 +39,17 @@ public class SignController {
 
         return signInResultVO;
     }
+
+
+
+    //로그아웃
+    //로그아웃
+    //로그아웃
+//    @PostMapping("/logout")
+//    public SignInResultVO logout() {
+//        LOGGER.info("[signIn] 로그인 시도중. id : {}, pw : ****", id);
+//    }
+
 
     @GetMapping("/exception")
     public void exceptionTest() throws RuntimeException {

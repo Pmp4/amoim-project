@@ -1,5 +1,5 @@
 import httpMultipartCommon from 'api/httpMultipartCommon';
-import httpCommon from 'api/httpCommon';
+import httpCommon from 'api/http-common';
 import { user } from 'reducer/module/user';
 
 const insertMeeting = (data) => {
@@ -17,6 +17,14 @@ const mainSelectCategoryList = (code, page = 1, length = 8) => {
 }
 //메인화면에서 필요한 api
 //로그인 권한 필요없음
+
+
+
+
+//자신이 생성한 모임 조회 API
+const moimOwnList = () => {
+    return httpCommon.get(`/meeting/select/own`);
+}
 
 
 
@@ -88,6 +96,8 @@ export default {
     meetingSubscribeList,
     subscribeResult,
     subscribeRefusal,
+
     mainSelectLoc,
-    mainSelectCategoryList
+    mainSelectCategoryList,
+    moimOwnList
 };

@@ -1,7 +1,7 @@
 package com.pmp4.amoimproject.user.model;
 
+import com.pmp4.amoimproject.sign.model.UserVO;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 import java.util.Map;

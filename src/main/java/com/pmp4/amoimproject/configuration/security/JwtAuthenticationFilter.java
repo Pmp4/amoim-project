@@ -1,12 +1,12 @@
 package com.pmp4.amoimproject.configuration.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pmp4.amoimproject.jwt.JwtTokenProvider;
-import lombok.RequiredArgsConstructor;
+import com.pmp4.amoimproject.sign.model.EntryPointErrorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -40,8 +40,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             LOGGER.info("[doFilterInternal] token 값 유효성 체크 완료");
-        }
+            filterChain.doFilter(httpServletRequest, httpServletResponse);
 
-        filterChain.doFilter(httpServletRequest, httpServletResponse);
+        }else {
+            LOGGER.info("[doFilterInternal] 토큰 유효 체크 실패");
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            EntryPointErrorResponse entryPointErrorResponse = new EntryPointErrorResponse();
+            entryPointErrorResponse.setMsg("인증이 실패하였습니다.");
+
+            httpServletResponse.setStatus(401);
+            httpServletResponse.setContentType("application/json");
+            httpServletResponse.setCharacterEncoding("UTF-8");
+            httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+            httpServletResponse.getWriter().write(objectMapper.writeValueAsString(entryPointErrorResponse));
+            httpServletResponse.getWriter().flush();
+        }
     }
 }
