@@ -11,7 +11,6 @@
     </insert>
 
 
-
     
     <sql id="moimCardColum">
         M.NO,
@@ -47,6 +46,14 @@
                 M.REGDATE
     </sql>
 
+    <sql id="moimCardFromJoin">
+        from
+            MEETING M join INTERESTS I on I.CATEGORY_CODE = m.CATEGORY_CODE
+        join MEETING_ADDRESS MA on m.NO = MA.MEETING_NO
+                      join MEETING_IMAGES MI on m.NO = MI.MEETING_NO
+        where DEL_TAG = 'N' and MI.SEQ = 1
+    </sql>
+
 
 
     <!-- 모임 정보를 카드로 내보내기 위한 컬럼 정보 구성 -->
@@ -63,12 +70,28 @@
                 <include refid="moimCardColum"/>
             </otherwise>
         </choose>
-        from
-            MEETING M join INTERESTS I on I.CATEGORY_CODE = m.CATEGORY_CODE
-                      join MEETING_ADDRESS MA on m.NO = MA.MEETING_NO
-                      join MEETING_IMAGES MI on m.NO = MI.MEETING_NO
-        where DEL_TAG = 'N' and MI.SEQ = 1
+        <include refid="moimCardFromJoin"/>
     </sql>
+
+
+
+    <!-- 메인화면에서의 지역 카드 -->
+    <!-- 메인화면에서의 지역 카드 -->
+    <!-- 메인화면에서의 지역 카드 -->
+    <select id="locSelectCard" parameterType="String" resultType="hashMap">
+        select
+            <include refid="moimCardColum"/>
+            <include refid="moimCardFromJoin"/>
+            and MA.BCODE like CONCAT(#{bcode}, '%')
+            LIMIT 12
+    </select>
+
+
+
+    <!--  -->
+
+
+
 
 
 

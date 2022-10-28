@@ -6,6 +6,20 @@ const insertMeeting = (data) => {
     return httpMultipartCommon.post(`/meeting/insert`, data);
 }
 
+
+//메인화면에서 필요한 api
+//로그인 권한 필요없음
+const mainSelectLoc = () => {
+    return httpCommon.get(`/meeting/select/main/loc`);
+}
+const mainSelectCategoryList = (code, page = 1, length = 8) => {
+    return httpCommon.get(`/meeting/select/main/category?code=${code}&page=${page}&length=${length}`);
+}
+//메인화면에서 필요한 api
+//로그인 권한 필요없음
+
+
+
 const selectByCard = (type, key, page = 1, length = 8) => {
     return httpCommon.get(`/meeting/select?type=${type}&key=${key}&page=${page}&length=${length}`);
 }
@@ -73,5 +87,7 @@ export default {
     meetingSubscribe,
     meetingSubscribeList,
     subscribeResult,
-    subscribeRefusal
+    subscribeRefusal,
+    mainSelectLoc,
+    mainSelectCategoryList
 };

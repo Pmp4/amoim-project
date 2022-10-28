@@ -1,4 +1,4 @@
-import LoginCheck from 'components/common/LoginCheck';
+import PrivateRoute from 'components/common/PrivateRoute';
 import React from 'react';
 import { Route, Routes } from 'react-router';
 import MyPage from './MyPage';

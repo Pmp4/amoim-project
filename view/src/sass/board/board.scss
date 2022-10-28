@@ -206,5 +206,60 @@ button {
                 text-align: left;
             }
         }
+
+        .pagination-info {
+            color: rgb(43, 43, 43);
+            margin-top: 40px;
+            width: 100%;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+    
+            >div {
+                position: relative;
+    
+                .prev,
+                .next {
+                    position: absolute;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    cursor: pointer;
+                    transition: .2s;
+                    border-radius: 4px;
+                    padding: 0 4px;
+    
+                    &:hover {
+                        background: #999999;
+                        color: #fff;
+                    }
+    
+                    &.prev {
+                        left: -40px;
+                    }
+    
+                    &.next {
+                        right: -40px;
+                    }
+                }
+    
+                .page-item {
+                    font-size: 1.2em;
+                    padding: 0 7px;
+                    margin: 0 3px;
+                    line-height: 150%;
+                    border-radius: 4px;
+                    cursor: pointer;
+    
+                    &.on {
+                        cursor: auto;
+                        background: #fff;
+                        font-weight: 500;
+                    }
+                }
+            }
+    
+        }
+
     }
 }

@@ -1,13 +1,19 @@
 import BoardService from 'api/board/BoardService';
-import React, { useSelector, useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { MODAL_OPEN } from 'reducer/module/modal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBackward } from '@fortawesome/free-solid-svg-icons';
+import { faForward } from '@fortawesome/free-solid-svg-icons';
 
 const BoardList = ({meetingNo}) => {
     const [addBtn, setAddBtn] = useState(false);
     const [boardBool, setBoardBool] = useState(false);
     const [boardList, setBoardList] = useState([]);
+    const [pageInfo, setPageInfo] = useState({});
     // const [boardList, setBoardList] = useState([]);
+
+    const modal = useSelector(state => state.modal);
 
     const dispatch = useDispatch();
 
@@ -15,6 +21,10 @@ const BoardList = ({meetingNo}) => {
     useEffect(() => {
         boardApi(1);
     }, []);
+
+    useEffect(() => {
+        boardApi(1);
+    }, [modal]);
 
 
     const boardApi = (page) => {
@@ -25,6 +35,7 @@ const BoardList = ({meetingNo}) => {
             if(status === 200) {
                 if(data.SUCCESS) {
                     setBoardList(data.list);
+                    setPageInfo(data.pageInfo);
                 }else {
                     alert(data.SUCCESS_TEXT);
                 }
@@ -48,10 +59,10 @@ const BoardList = ({meetingNo}) => {
             <div key={item.NO} className="list-line">
                 <div className="list-col-1">{item.NO}</div>
                 <div className="list-col-2">
-                    <button>{item.TITLE}</button>
+                    <button type='button'>{item.TITLE}</button>
                 </div>
                 <div className="list-col-3">{item.NAME}</div>
-                <div className="list-col-4">{4}</div>
+                <div className="list-col-4">{item.VIEW_COUNT}</div>
                 <div className="list-col-5">{dateStr}</div>
             </div>
         )
@@ -67,6 +78,34 @@ const BoardList = ({meetingNo}) => {
 
     const addModal = () => {
         dispatch({type:MODAL_OPEN, data:"boardAdd", param: meetingNo});
+    }
+
+
+    const pageSet = () => {
+        if (boardList.length === 0) return;
+
+
+        let tempPageArr = [];
+        for(let i = pageInfo.startPage; i < pageInfo.lastPage + 1; i++) tempPageArr.push(i);
+    
+
+        const page = tempPageArr.map((item, idx) => (
+            <span key={idx} 
+                className={item === pageInfo.currentPage ? "page-item on" : "page-item"}
+                onClick={() => boardApi(item)}
+            >
+                {item}
+            </span>
+        ))
+
+        return page;
+    }
+
+
+
+    //글 상세보기
+    const boardListButtonAction = (no) => {
+        
     }
 
 
@@ -99,14 +138,25 @@ const BoardList = ({meetingNo}) => {
                         <div className="list-col-5">등록일</div>
                     </div>
                     {conList}
-                    
-                    {/* <div className="list-line">
-                        <div className="list-col-1">10</div>
-                        <div className="list-col-2">귀찮고 어렵다</div>
-                        <div className="list-col-3">너굴맨</div>
-                        <div className="list-col-4">2022-07-01</div>
-                    </div> */}
                 </form>
+                {boardList.length > 0 ? <div className="pagination-info">
+                    <div>
+                        {pageInfo.startPage !== 1 && 
+                            <span onClick={
+                                    () => boardApi(pageInfo.startPage - 1)
+                                } className='prev'>
+                                <FontAwesomeIcon icon={faBackward}/>
+                            </span>
+                        }
+                        {pageSet()}
+                        {pageInfo.lastPage !== pageInfo.totalPage && 
+                            <span onClick={
+                                    () => boardApi(pageInfo.lastPage + 1)
+                                } className='next'>
+                                <FontAwesomeIcon icon={faForward}/>
+                            </span>}
+                    </div>
+                </div> : ""}
             </div>
         </div>
     );

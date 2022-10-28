@@ -8,4 +8,5 @@ public interface MeetingBoardService {
     int boardRegister(HttpServletRequest request, MeetingBoardVO meetingBoardVO);
 
     List<Map<String, Object>> selectByMeetingNo(Map<String, Object> map);
+    int selectByMeetingNoCount(Map<String, Object> map);
 }

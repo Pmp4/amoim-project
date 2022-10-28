@@ -11,6 +11,7 @@ public class MeetingBoardVO {
     private String content;
     private Long userNo;
     private Long meetingNo;
+    private Long viewCount;
     private Timestamp regdate;
     private char delFlag;
     private Long categoryNo;

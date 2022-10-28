@@ -16,6 +16,12 @@ public interface MeetingDAO {
 
     int insertMeetingAddress(MeetingAddressVO meetingAddressVO);
 
+
+    List<Map<String, Object>> locSelectCard(String bcode);
+
+
+
+
     List<Map<String, Object>> selectByUserNoCard(Map<String, Object> map);
 
     int selectByUserNoCardPageCount(Map<String, Object> map);

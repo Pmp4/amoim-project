@@ -11,4 +11,6 @@ public interface MeetingBoardDAO {
     int insertBoardUploadFile(Map<String, Object> map);
 
     List<Map<String, Object>> selectByMeetingNo(Map<String, Object> map);
+
+    int selectByMeetingNoCount(Map<String, Object> map);
 }

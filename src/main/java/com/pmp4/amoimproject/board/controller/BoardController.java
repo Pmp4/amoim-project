@@ -76,7 +76,11 @@ public class BoardController {
             dbSet.put("meetingNo", meetingNo);
 
             list = meetingBoardService.selectByMeetingNo(dbSet);
+            int cnt = meetingBoardService.selectByMeetingNoCount(dbSet);
             logger.info("BOARD 글 조회 결과 list.size={}", list.size());
+            logger.info("BOARD 글 조회 총 개수 cnt={}", cnt);
+
+            paginationInfo.setTotalRecord(cnt);
 
             if(list != null) {
                 responseData.put("SUCCESS", true);

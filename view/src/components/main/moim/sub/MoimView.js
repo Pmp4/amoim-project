@@ -56,7 +56,7 @@ const MoimView = () => {
 
 
     useEffect(() => {
-        if(pageState === 1 || pageState === 0) {
+        if(pageState === 1) {
             if (Object.keys(contents).length > 0) {
                 if (
                     contents.LON_X !== undefined &&
@@ -69,7 +69,7 @@ const MoimView = () => {
                 }
             }
         }
-    }, []);
+    });
 
 
     const selectViewApi = () => {

@@ -12,6 +12,33 @@ public interface MeetingService {
                         List<String> tagArr,
                         HttpServletRequest request);
 
+
+
+    // 메인화면에서의 지역 좋아요 리스트 8개
+    Map<String, Object> mainLocList(HttpServletRequest request);
+
+
+    /**
+     *
+     * @param type - adf
+     * @param page - 페이지 번호
+     * @param blockSize - 페이지당 item 개수
+     * @return itemList, pageInfo
+     */
+    Map<String, Object> pageItemList(String type, String page, String blockSize);
+
+
+
+
+
+
+
+
+
+
+
+
+
     //해당 유저가 생성한 모임 리스트를 카드 형식으로
     //해당 유저가 생성한 모임 리스트를 카드 형식으로
     //해당 유저가 생성한 모임 리스트를 카드 형식으로

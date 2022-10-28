@@ -1,6 +1,7 @@
 package com.pmp4.amoimproject.user.model;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 import java.util.Map;
@@ -14,4 +15,6 @@ public interface UserDAO {
     UserVO checkUserId(String userId);
 
     int checkPassword(String password);
+
+    UserVO getUserInfo(String userId);
 }

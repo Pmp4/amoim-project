@@ -16,7 +16,7 @@ const Header = ({ loginPopup }) => {
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
-    const logged = Boolean(sessionStorage.getItem("logged"));
+    const logged = Boolean(localStorage.getItem("logged"));
 
     const loginBtnAction = () => {
         if(logged) {
@@ -27,7 +27,7 @@ const Header = ({ loginPopup }) => {
                             dispatch({
                                 type: LOGOUT_LOGGED
                             });
-                            sessionStorage.clear();
+                            localStorage.clear();
                             alert(`${user.userInfo.name}님 로그아웃되었습니다.`);
                             navigate("/");
                         }

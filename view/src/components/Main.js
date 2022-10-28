@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import Member from './main/member/Member';
 import Home from './main/Home';
 import Moim from './main/moim/Moim';
-import LoginCheck from './common/LoginCheck';
+import PrivateRoute from './common/PrivateRoute';
 
 const Main = () => {
 
@@ -11,7 +11,12 @@ const Main = () => {
         <div id='main-wrap'>
             <Routes>
                 <Route path='/' element={<Home/>}></Route> 
-                <Route path='/moim/*' element={<Moim/>}></Route>
+                <Route path='/moim/*' 
+                    element={
+                        <PrivateRoute>
+                            <Moim/>
+                        </PrivateRoute>
+                    }/>
                 <Route path='/member/*' element={<Member/>}></Route>
                 <Route path='*' element={"404Page"}></Route>
             </Routes>
