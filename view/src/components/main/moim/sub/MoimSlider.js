@@ -16,7 +16,7 @@ const MoimSlider = ({meeting}) => {
     };
 
     return (
-        <div id="moim-item" className="draggable" onClick={() => Navigate("/")}>
+        <div id="moim-item" className="draggable">
             <div className='gradient left'></div>
             <Slider {...settings}>
                 {meeting.map((item, idx) => {

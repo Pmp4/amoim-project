@@ -1,13 +1,19 @@
-package com.pmp4.amoimproject.meeting.api;
+package com.pmp4.amoimproject.meeting.controller;
 
 import com.pmp4.amoimproject.common.FileUploadUtil;
 import com.pmp4.amoimproject.common.PaginationInfo;
 import com.pmp4.amoimproject.meeting.model.MeetingAddressVO;
 import com.pmp4.amoimproject.meeting.model.MeetingService;
 import com.pmp4.amoimproject.meeting.model.MeetingVO;
+import com.pmp4.amoimproject.sign.model.PrincipalDetails;
+import com.pmp4.amoimproject.sign.model.UserVO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -140,16 +146,184 @@ public class MeetingController {
     // 자신이 생성한 모임
     // 자신이 생성한 모임
     @GetMapping("/select/own")
-    public List<Map<String, Object>> moimOwnList() {
+    public Map<String, Object> moimOwnList() {
         logger.info("[moimOwnList] 핸들러");
+        PrincipalDetails principal =
+                (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return null;
+        Long userNo = principal.getUserVO().getUserNo();
+        logger.info("[moimOwnList] SecurityContextHolder 추출 userNo : {}", userNo);
+
+        return meetingService.pageItemList("user", String.valueOf(userNo), 1, 4);
     }
 
 
     // 자신이 생성한 모임 개수
     // 자신이 생성한 모임 개수
     // 자신이 생성한 모임 개수
+    @GetMapping("/select/own/count")
+    public int moimOwnCount() {
+        logger.info("[moimOwnCount] 핸들러");
+
+        PrincipalDetails principal =
+                (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Long userNo = principal.getUserVO().getUserNo();
+        logger.info("[moimOwnCount] SecurityContextHolder 추출 userNo : {}", userNo);
+
+        return meetingService.moimOwnCount("user", String.valueOf(userNo));
+    }
+
+
+    // 가입한 모임
+    // 가입한 모임
+    // 가입한 모임
+    @GetMapping("/select/subscript")
+    public Map<String, Object> moimSubscriptList(@RequestParam (defaultValue = "1") int page,
+                                                 @RequestParam (defaultValue = "8") int blockSize) {
+        logger.info("[moimSubscriptList] 핸들러");
+
+        PrincipalDetails principal =
+                (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Long userNo = principal.getUserVO().getUserNo();
+        logger.info("[moimSubscriptList] SecurityContextHolder 추출 userNo : {}", userNo);
+
+        return meetingService.moimSubscript(String.valueOf(userNo), page, blockSize);
+    }
+
+
+    // 모임 보기
+    // 모임 보기
+    // 모임 보기
+    @GetMapping("/view/{no}")
+    public Map<String, Object> moimView(@PathVariable Long no) {
+        logger.info("[moimView] 핸들러 no : {}", no);
+
+        return meetingService.selectByNoView(no);
+    }
+
+
+
+
+
+    //모임의 좋아요 개수만 따로 조회하는
+    //모임의 좋아요 개수만 따로 조회하는
+    //모임의 좋아요 개수만 따로 조회하는
+    @GetMapping("/like/count/{meetingNo}")
+    public int likeCount(@PathVariable String meetingNo) {
+        logger.info("MEETING LIKE 개수 meetingNo={}", meetingNo);
+
+        int cnt = meetingService.likeCount(meetingNo);
+        logger.info("MEETING LIKE 개수 결과 cnt={}", cnt);
+
+        return cnt;
+    }
+
+
+
+
+    //해당 모임 글에 유저가 좋아요를 눌렀는지 아닌지
+    //해당 모임 글에 유저가 좋아요를 눌렀는지 아닌지
+    //해당 모임 글에 유저가 좋아요를 눌렀는지 아닌지
+    @GetMapping("/like/state/{meetingNo}")
+    public int likeState(@PathVariable Long meetingNo) {
+        logger.info("[likeState] 핸들러 meetingNo={}", meetingNo);
+
+        PrincipalDetails principal =
+                (PrincipalDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long userNo = principal.getUserVO().getUserNo();
+        logger.info("[likeState] SecurityContextHolder 추출 userNo={}", userNo);
+
+        Map<String, Object> dbParam = new HashMap<>();
+        dbParam.put("userNo", userNo);
+        dbParam.put("meetingNo", meetingNo);
+
+        return meetingService.meetingLikeState(dbParam);
+    }
+
+
+
+    @PostMapping(value = "/like/add")
+    public Map<String, Object> meetingLikeInsert(@RequestBody String meetingNo) {
+        logger.info("[meetingLikeInsert] 핸들러 meetingNo={}", meetingNo);
+
+        PrincipalDetails principal =
+                (PrincipalDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Long userNo = principal.getUserVO().getUserNo();
+        logger.info("[meetingLikeInsert] SecurityContextHolder 추출 userNo={}", userNo);
+
+
+        Map<String, Object> restData = new HashMap<>();
+
+        int cnt = meetingService.insertMeetingLike(String.valueOf(userNo), meetingNo);
+        logger.info("MEETING LIKE 추가 결과 cnt={}", cnt);
+
+        if(cnt > 0) {
+            restData.put("SUCCESS", true);
+        }else {
+            throw new RuntimeException();
+        }
+
+        return restData;
+    }
+
+    @DeleteMapping(value = "/like/delete/{meetingNo}")
+    public Map<String, Object> meetingLikeDelete(@PathVariable Long meetingNo) {
+        logger.info("[meetingLikeDelete] 핸들러 meetingNo : {}", meetingNo);
+
+        PrincipalDetails principal =
+                (PrincipalDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Long userNo = principal.getUserVO().getUserNo();
+        logger.info("[meetingLikeInsert] SecurityContextHolder 추출 userNo={}", userNo);
+
+        Map<String, Object> restData = new HashMap<>();
+
+            int cnt = meetingService.deleteMeetingLike(String.valueOf(userNo), String.valueOf(meetingNo));
+            logger.info("MEETING LIKE 삭제 결과 cnt={}", cnt);
+
+            if(cnt > 0) {
+                restData.put("SUCCESS", true);
+            }else {
+                throw new RuntimeException();
+            }
+
+
+        return restData;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @ExceptionHandler(value = RuntimeException.class)
+    public ResponseEntity<Map<String, Object>> ExceptionHandler(RuntimeException e) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+
+        logger.error("ExceptionHandler 호출, {}, {}", e.getCause(), e.getMessage());
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("error type", httpStatus.getReasonPhrase());
+        map.put("code", "400");
+        map.put("message", "에러 발생");
+
+        return new ResponseEntity<>(map, responseHeaders, httpStatus);
+    }
+
+
 
 
 
@@ -186,25 +360,25 @@ public class MeetingController {
     }
 
 
-    @GetMapping("/select/view/{no}")
-    public Map<String, Object> selectByNo(@PathVariable String no) {
-        logger.info("MEETING 정보 조회 no={}", no);
-
-        Map<String, Object> dbData = meetingService.selectByNo(no);
-        logger.info("MEETING 정보 조회 결과 dbData={}", dbData);
-
-        Map<String, Object> restData = new HashMap<>();
-
-        if(dbData != null) {
-            restData.put("SUCCESS", true);
-            restData.put("rest", dbData);
-        }else {
-            restData.put("SUCCESS", false);
-        }
-
-
-        return restData;
-    }
+//    @GetMapping("/select/view/{no}")
+//    public Map<String, Object> selectByNo(@PathVariable String no) {
+//        logger.info("MEETING 정보 조회 no={}", no);
+//
+//        Map<String, Object> dbData = meetingService.selectByNo(no);
+//        logger.info("MEETING 정보 조회 결과 dbData={}", dbData);
+//
+//        Map<String, Object> restData = new HashMap<>();
+//
+//        if(dbData != null) {
+//            restData.put("SUCCESS", true);
+//            restData.put("rest", dbData);
+//        }else {
+//            restData.put("SUCCESS", false);
+//        }
+//
+//
+//        return restData;
+//    }
 
 
     //해당 유저가 모임 글을 몇개 작성했는지
@@ -222,100 +396,6 @@ public class MeetingController {
 
 
         return cnt;
-    }
-
-
-    //모임의 좋아요 개수만 따로 조회하는
-    //모임의 좋아요 개수만 따로 조회하는
-    //모임의 좋아요 개수만 따로 조회하는
-    @GetMapping("/like/count/{meetingNo}")
-    public int likeCount(@PathVariable String meetingNo) {
-        logger.info("MEETING LIKE 개수 meetingNo={}", meetingNo);
-
-        int cnt = meetingService.likeCount(meetingNo);
-        logger.info("MEETING LIKE 개수 결과 cnt={}", cnt);
-
-        return cnt;
-    }
-
-
-    //해당 모임 글에 유저가 좋아요를 눌렀는지 아닌지
-    //해당 모임 글에 유저가 좋아요를 눌렀는지 아닌지
-    //해당 모임 글에 유저가 좋아요를 눌렀는지 아닌지
-    @GetMapping("/like/state/{meetingNo}")
-    public int likeState(@PathVariable String meetingNo, HttpSession httpSession) {
-        logger.info("MEETING LIKE 상태 확인 meetingNo={}", meetingNo);
-
-        String userNo = String.valueOf(httpSession.getAttribute("userNo"));
-        int cnt;
-        if(userNo != null && !userNo.isEmpty()) {
-            cnt = meetingService.meetingLikeState(userNo, meetingNo);
-            logger.info("MEETING LIKE 상태 확인 결과 cnt={}", cnt);
-        }else {
-            cnt = -1;
-        }
-
-        return cnt;
-    }
-
-
-
-    @PostMapping(value = "/like/add")
-    public Map<String, Object> meetingLikeInsert(@RequestBody String meetingNo, HttpSession httpSession) {
-        logger.info("MEETING LIKE 추가 meetingNo={}", meetingNo);
-
-        String userNo = String.valueOf(httpSession.getAttribute("userNo"));
-
-        Map<String, Object> restData = new HashMap<>();
-
-        if(userNo != null && !userNo.isEmpty()) {
-            int cnt = 0;
-
-            cnt = meetingService.insertMeetingLike(userNo, meetingNo);
-            logger.info("MEETING LIKE 추가 결과 cnt={}", cnt);
-
-            if(cnt > 0) {
-                restData.put("SUCCESS", true);
-            }else {
-                restData.put("SUCCESS", false);
-                restData.put("SUCCESS_MSG", "Server DB Error");
-            }
-        }else {
-            restData.put("SUCCESS", false);
-            restData.put("SUCCESS_MSG", "로그인 후 시도해주세요.");
-        }
-
-
-        return restData;
-    }
-
-    @DeleteMapping(value = "/like/delete/{meetingNo}")
-    public Map<String, Object> meetingLikeDelete(@PathVariable String meetingNo, HttpSession httpSession) {
-        logger.info("MEETING LIKE 삭제 meetingNo={}", meetingNo);
-
-        String userNo = String.valueOf(httpSession.getAttribute("userNo"));
-
-        Map<String, Object> restData = new HashMap<>();
-
-        if(userNo != null && !userNo.isEmpty()) {
-            int cnt = 0;
-
-            cnt = meetingService.deleteMeetingLike(userNo, meetingNo);
-            logger.info("MEETING LIKE 삭제 결과 cnt={}", cnt);
-
-            if(cnt > 0) {
-                restData.put("SUCCESS", true);
-            }else {
-                restData.put("SUCCESS", false);
-                restData.put("SUCCESS_MSG", "Server DB Error");
-            }
-        }else {
-            restData.put("SUCCESS", false);
-            restData.put("SUCCESS_MSG", "로그인 후 시도해주세요.");
-        }
-
-
-        return restData;
     }
 
 

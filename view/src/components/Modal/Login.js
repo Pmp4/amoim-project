@@ -83,6 +83,7 @@ const Login = ({ modalClose }) => {
 
             dispatch({ type: SUCCESS_LOGGED, data: result});
             modalClose();
+            window.location.replace("/");
         }
     });
 

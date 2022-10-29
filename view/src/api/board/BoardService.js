@@ -1,5 +1,5 @@
-import httpMultipartCommon from 'api/httpMultipartCommon';
-import httpCommon from 'api/httpCommon';
+import httpMultipartCommon from 'api/http-multipart-common';
+import httpCommon from 'api/http-common';
 
 const insertBoard = (rest) => {
     return httpMultipartCommon.post("/board/insert", rest);

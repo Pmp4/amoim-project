@@ -25,7 +25,7 @@
         LIMIT #{length} offset #{start}
     </select>
 
-    <select id="selectByMeetingNoCount" parameterType="hashMap" resultType="int">
+    <select id="selectByMeetingNoCount" parameterType="Long" resultType="int">
         select count(*) from MEETING_BOARD MB join USERS U on MB.USER_NO = U.USER_NO
         where MEETING_NO = #{meetingNo}
     </select>

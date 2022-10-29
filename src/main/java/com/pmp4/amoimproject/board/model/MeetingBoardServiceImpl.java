@@ -2,7 +2,7 @@ package com.pmp4.amoimproject.board.model;
 
 import com.pmp4.amoimproject.common.ConstUtil;
 import com.pmp4.amoimproject.common.FileUploadUtil;
-import com.pmp4.amoimproject.meeting.model.MeetingDAO;
+import com.pmp4.amoimproject.common.PaginationInfo;
 import com.pmp4.amoimproject.meeting.model.MeetingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +26,7 @@ public class MeetingBoardServiceImpl implements MeetingBoardService{
     @Override
     @Transactional
     public int boardRegister(HttpServletRequest request, MeetingBoardVO meetingBoardVO) {
-        logger.info("BOARD: 게시판 등록 로직, meetingBoardVo={}", meetingBoardVO);
+        logger.info("[boardRegister] 게시판 등록 로직, meetingBoardVo={}", meetingBoardVO);
         int cnt = 0;
         List<Map<String, Object>> fileList = null;
 
@@ -39,7 +39,7 @@ public class MeetingBoardServiceImpl implements MeetingBoardService{
                 for (Map<String, Object> file : fileList) {
                     file.put("boardNo", meetingBoardVO.getNo());
                     cnt = meetingBoardDAO.insertBoardUploadFile(file);
-                    logger.info("MEETING: 이미지 등록 결과 cnt={}", cnt);
+                    logger.info("[boardRegister] 파일 등록 결과 cnt={}", cnt);
                 }
             }
         }catch(Exception e) {
@@ -50,6 +50,7 @@ public class MeetingBoardServiceImpl implements MeetingBoardService{
 
 
         if(!(cnt > 0)) {
+            logger.info("[boardRegister] 파일 등록 삭제");
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             String filePath = fileUploadUtil.getUploadPath(request, ConstUtil.UPLOAD_FILE_FLAG);
 
@@ -60,13 +61,40 @@ public class MeetingBoardServiceImpl implements MeetingBoardService{
         return cnt;
     }
 
-    @Override
-    public List<Map<String, Object>> selectByMeetingNo(Map<String, Object> map) {
-        return meetingBoardDAO.selectByMeetingNo(map);
-    }
 
     @Override
-    public int selectByMeetingNoCount(Map<String, Object> map) {
-        return meetingBoardDAO.selectByMeetingNoCount(map);
+    public Map<String, Object> selectBoard(Long meetingNo, int page, int length) {
+        logger.info("[selectBoard] 서비스 로직");
+
+        Map<String, Object> responseData = new HashMap<>();
+        PaginationInfo paginationInfo = new PaginationInfo(length, page);
+
+        Map<String, Object> dbParam = new HashMap<>();
+        dbParam.put("meetingNo", meetingNo);
+        dbParam.put("start", paginationInfo.getStartRecord());
+        dbParam.put("length", length);
+
+        List<Map<String, Object>> list = meetingBoardDAO.selectByMeetingNo(dbParam);
+        int count = meetingBoardDAO.selectByMeetingNoCount(meetingNo);
+
+        logger.info("[selectBoard] 게시판 조회 결과 list.size : {}", list.size());
+
+        paginationInfo.setTotalRecord(count);
+        logger.info("[selectBoard] 게시판 페이징 정보 pageInfo : {}", paginationInfo);
+
+        responseData.put("list", list);
+        responseData.put("pageInfo", paginationInfo);
+        responseData.put("SUCCESS", true);
+
+
+        return responseData;
     }
+
+//    @Override
+//    public List<Map<String, Object>> selectByMeetingNo(Map<String, Object> map) {
+//
+//
+//        return meetingBoardDAO.selectByMeetingNo(map);
+//    }
+
 }

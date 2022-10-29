@@ -4,10 +4,11 @@ import axios from 'axios';
 const instance = axios.create({
     baseURL: "http://localhost:8080/rest/v1",
     headers: {
-        "Content-type":"application/json",
+        "Content-type":"multipart/form-data",
         // 'X-AUTH-TOKEN': `${localStorage.getItem('X-AUTH-TOKEN')}`
     },
 });
+
 
 instance.interceptors.request.use(
     config => {

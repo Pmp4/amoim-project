@@ -181,6 +181,66 @@ public class MeetingServiceImpl implements MeetingService {
         return responseData;
     }
 
+    @Override
+    public int moimOwnCount(String type, String key) {
+        logger.info("[moimOwnCount] 서비스 로직 key : {}", key);
+
+        Map<String, Object> dbParam = new HashMap<>();
+        dbParam.put("type", type);
+        dbParam.put("key", key);
+        dbParam.put("count", true);
+
+        int count = meetingDAO.moimItemCount(dbParam);
+        logger.info("[moimOwnCount] 리스트 총 개수 count : {}", count);
+
+        return count;
+    }
+
+    @Override
+    public Map<String, Object> moimSubscript(String key, int page, int blockSize) {
+        logger.info("[moimSubscript] 서비스 로직 key : {}, page : {}, blockSize : {}", key, page, blockSize);
+
+        PaginationInfo paginationInfo = new PaginationInfo(blockSize, page);
+
+        Map<String, Object> dbParam = new HashMap<>();
+        dbParam.put("key", key);
+        dbParam.put("blockSize", blockSize);
+        dbParam.put("start", paginationInfo.getStartRecord());
+
+        List<Map<String, Object>> list = meetingDAO.moimSubscriptList(dbParam);
+        logger.info("[moimSubscript] 리스트 조회 결과 list.size : {}", list.size());
+
+        dbParam.put("count", true);
+        int count = meetingDAO.moimSubscriptCount(dbParam);
+
+        paginationInfo.setTotalRecord(count);
+        logger.info("[moimSubscript] 페이지 정보 paginationInfo : {}", paginationInfo);
+
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("list", list);
+        responseData.put("pageInfo", paginationInfo);
+
+        return responseData;
+    }
+
+    public Map<String, Object> selectByNoView(Long no) {
+        logger.info("[selectByNoView] 서비스 로직");
+
+        Map<String, Object> dbData = meetingDAO.selectByNoView(no);
+        logger.info("[selectByNoView] 조회 결과 dbData : {}", dbData);
+
+
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("rest", dbData);
+        responseData.put("SUCCESS", true);
+
+        return responseData;
+    }
+
+
+
+
+
 
     @Override
     public List<Map<String, Object>> selectByUserNoCard(Map<String, Object> map) {
@@ -192,10 +252,10 @@ public class MeetingServiceImpl implements MeetingService {
         return meetingDAO.selectByUserNoCardPageCount(map);
     }
 
-    @Override
-    public Map<String, Object> selectByNo(String no) {
-        return meetingDAO.selectByNo(no);
-    }
+//    @Override
+//    public Map<String, Object> selectByNo(String no) {
+//        return meetingDAO.selectByNo(no);
+//    }
 
     @Override
     public int selectByUserCount(String userNo) {
@@ -208,8 +268,13 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public int meetingLikeState(String userNo, String meetingNo) {
-        return meetingDAO.meetingLikeState(userNo, meetingNo);
+    public int meetingLikeState(Map<String, Object> dbParam) {
+        logger.info("[meetingLikeState] 서비스 로직");
+
+        int cnt = meetingDAO.meetingLikeState(dbParam);
+        logger.info("[meetingLikeState] 상태 결과 cnt : {}", cnt);
+
+        return cnt;
     }
 
     @Override
