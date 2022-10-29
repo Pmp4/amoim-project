@@ -7,7 +7,6 @@ import com.pmp4.amoimproject.sign.model.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,15 +15,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/board")
 public class BoardController {
     private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
     private final MeetingBoardService meetingBoardService;
-
-    @Autowired
-    public BoardController(MeetingBoardService meetingBoardService) {
-        this.meetingBoardService = meetingBoardService;
-    }
 
 
     @PostMapping("/insert")

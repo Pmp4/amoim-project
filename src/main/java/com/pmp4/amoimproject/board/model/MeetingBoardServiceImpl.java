@@ -7,6 +7,7 @@ import com.pmp4.amoimproject.meeting.model.MeetingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -19,7 +20,7 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class MeetingBoardServiceImpl implements MeetingBoardService{
-    private static Logger logger = LoggerFactory.getLogger(MeetingServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(MeetingServiceImpl.class);
     private final MeetingBoardDAO meetingBoardDAO;
     private final FileUploadUtil fileUploadUtil;
 

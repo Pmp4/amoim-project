@@ -290,42 +290,47 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     @Transactional
     public Map<String, Object> meetingSubscribe(String userNo, String meetingNo) {
-        logger.info("MEETING: 신청 로직 userNo={}, meetingNo={}", userNo, meetingNo);
+        logger.info("[meetingSubscribe] 서비스 로직 userNo={}, meetingNo={}", userNo, meetingNo);
 
         Map<String, Object> resultData = new HashMap<>();
         String msg = "";
         boolean success = false;
 
         try {
+            Exception e = new Exception("고의 발생");
+
             int cnt = meetingDAO.meetingUserCount(userNo, meetingNo);
-            logger.info("MEETING: 신청 로직 대기 여부 확인 cnt={}", cnt);
+            logger.info("[meetingSubscribe] 대기중 여부 확인 cnt : {}", cnt);
 
             if(cnt == 0) {
                 Map<String, Object> res = meetingDAO.meetingMemberCount(meetingNo);
-                logger.info("MEETING: 신청 로직 인원 수 확인 res={}", res);
+                logger.info("[meetingSubscribe] 인원 수 확인 res : {}", res);
 
                 int personNumber = Integer.parseInt ((String.valueOf(res.get("PERSON_NUMBER"))));
                 int personCount = Integer.parseInt((String.valueOf(res.get("COUNT"))));
 
                 if(!(personNumber <= personCount)) {
                     cnt = meetingDAO.insertMeetingSub(userNo, meetingNo);
-                    logger.info("MEETING: 신청 최종 cnt={}", cnt);
+                    logger.info("[meetingSubscribe] 신청 최종 cnt : {}", cnt);
                     if(cnt > 0) {
                         success = true;
                         msg = "가입 신청 되었습니다.";
                     }else {
-                        msg = "Server DB Error";
+                        throw new RuntimeException();
                     }
                 }else {
+                    logger.info("[meetingSubscribe] 인원 수 제한으로 취소");
                     msg = "인원 수가 꽉 찼습니다.";
+                    throw e;
                 }
             }else {
+                logger.info("[meetingSubscribe] 신청 대기중인 모임으로 취소");
                 msg = "신청 대기중인 모임입니다.";
+                throw e;
             }
         }catch (Exception e) {
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            msg = "Server DB Error";
         }
 
 
@@ -336,8 +341,17 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public List<Map<String, Object>> moimSubscribeList(String userNo) {
-        return meetingDAO.moimSubscribeList(userNo);
+    public Map<String, Object> moimSubscribeList(String userNo) {
+        logger.info("[moimSubscribeList] 서비스 로직");
+
+        List<Map<String, Object>> dbData = meetingDAO.moimSubscribeList(userNo);
+        logger.info("[moimSubscribeList] 조회 결과 dbData : {}", dbData);
+
+        Map<String, Object> resultData = new HashMap<>();
+        resultData.put("SUCCESS", true);
+        resultData.put("DATA", dbData);
+
+        return resultData;
     }
 
     @Override
@@ -404,7 +418,7 @@ public class MeetingServiceImpl implements MeetingService {
         Map<String, Object> resultData = new HashMap<>();
         boolean success = false;
         String successText = "Server DB Error";
-        if(cnt < 0) {
+        if(cnt > 0) {
             successText = "success!";
             success = true;
         }

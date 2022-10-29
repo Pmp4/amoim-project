@@ -72,10 +72,7 @@ const BoardAdd = ({ modalClose }) => {
                 }else {
                     alert(data.SUCCESS_TEXT);
                 }
-            }else {
-                alert("Server Error");
             }
-            
         })
     };
 

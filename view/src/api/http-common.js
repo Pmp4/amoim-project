@@ -29,6 +29,12 @@ instance.interceptors.response.use(response => {
         alert("로그인 후, 시도하세요.");
         localStorage.clear();
         window.location.replace("/");
+    } else if(error.response.status === 400) {
+        alert("Server DB Error");
+        window.location.reload();
+    } else if(error.response.status === 500 && error.response.status === 404) {
+        alert("Server Error");
+        window.location.replace("/");
     }
 
     return error.response;
