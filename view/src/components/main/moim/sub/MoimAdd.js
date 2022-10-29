@@ -78,9 +78,6 @@ const MoimAdd = () => {
                     alert("모임 개설 횟수가 없습니다.");
                     navigate("/moim");
                 }
-            } else {
-                alert("Server Error");
-                navigate("/");
             }
         });
     }, []);

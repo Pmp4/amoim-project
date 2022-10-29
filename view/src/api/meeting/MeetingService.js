@@ -53,8 +53,8 @@ const selectByNo = (no) => {
 }
 
 
-const countMeeting = (userNo) => {
-    return httpCommon.get(`/meeting/user/count/${userNo}`);
+const countMeeting = () => {
+    return httpCommon.get(`/meeting/user/count`);
 }
 
 
