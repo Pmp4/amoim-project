@@ -317,6 +317,28 @@ public class MeetingController {
 
 
 
+    //해당 유저가 모임 글을 몇개 작성했는지
+    //해당 유저가 모임 글을 몇개 작성했는지
+    //해당 유저가 모임 글을 몇개 작성했는지
+    @GetMapping("/user/count")
+    public int selectByUserCount() {
+        logger.info("[selectByUserCount] 핸들러");
+
+        PrincipalDetails principal =
+                (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Long userNo = principal.getUserVO().getUserNo();
+        logger.info("[meetingSubscribeList] SecurityContextHolder 추출 userNo : {}", userNo);
+
+        int cnt = meetingService.selectByUserCount(String.valueOf(userNo));
+        logger.info("[meetingSubscribeList] 생성 정보 조회 결과 cnt : {}", cnt);
+
+        return cnt;
+    }
+
+
+
+
 
     @ExceptionHandler(value = RuntimeException.class)
     public ResponseEntity<Map<String, Object>> ExceptionHandler(RuntimeException e) {
@@ -402,23 +424,6 @@ public class MeetingController {
 //        return restData;
 //    }
 
-
-    //해당 유저가 모임 글을 몇개 작성했는지
-    //해당 유저가 모임 글을 몇개 작성했는지
-    //해당 유저가 모임 글을 몇개 작성했는지
-    @GetMapping(value = {"/user/count/{userNo}", "/user/count"})
-    public int selectByUserCount(@PathVariable(required = false) String userNo,
-                                 HttpSession httpSession) {
-        logger.info("MEETING USER 생성 정보 조회 userNo={}", userNo);
-
-        if (userNo == null) userNo = String.valueOf(httpSession.getAttribute("userNo"));
-
-        int cnt = meetingService.selectByUserCount(userNo);
-        logger.info("MEETING USER 생성 정보 조회 결과 cnt={}", cnt);
-
-
-        return cnt;
-    }
 
 
     @PutMapping("/subscribe/result")
