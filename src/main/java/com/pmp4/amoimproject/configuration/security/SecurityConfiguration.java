@@ -20,8 +20,6 @@ import org.springframework.web.cors.CorsUtils;
  * 인증 실패 시 발생하는 예외 처리
  * 인증 로직 커스텀마이징
  * csrf, cors 등의 스프링 시큐리티 설정
- *
- *
  */
 @Configuration
 @EnableWebSecurity

@@ -16,7 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-//JWT 토큰의 유효성 확인 후, SecurityContextHolder에 추가하는 필터 (보안필터 체인에 추가됨)
+
+//JWT 토큰의 유효성 확인 후, SecurityContextHolder 에 추가하는 필터 (보안필터 체인에 추가됨, SecurityConfiguration 에서)
+//JWT 토큰의 유효성 확인 후, SecurityContextHolder 에 추가하는 필터 (보안필터 체인에 추가됨, SecurityConfiguration 에서)
+//JWT 토큰의 유효성 확인 후, SecurityContextHolder 에 추가하는 필터 (보안필터 체인에 추가됨, SecurityConfiguration 에서)
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
     private final JwtTokenProvider jwtTokenProvider;

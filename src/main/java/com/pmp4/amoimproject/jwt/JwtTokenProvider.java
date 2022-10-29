@@ -20,7 +20,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
 
-//JWT Token 생성객체
+//JWT Token 관련 객체
+//JWT Token 관련 객체
+//JWT Token 관련 객체
+//JWT Token 관련 객체
 @Component
 @RequiredArgsConstructor
 public class JwtTokenProvider {
@@ -30,7 +33,7 @@ public class JwtTokenProvider {
     //application.properties
     @Value("${springboot.jwt.secret}")
     private String secretKey = "secretKey";
-    private final long tokenValidMillisecond = 1000L * 60;     //1시간
+    private final long tokenValidMillisecond = 1000L * 60 * 60;     //1시간
 
 
     //PostConstruct : 해당 객체(클래스)가 빈 객체로 주입된 이후 수행된다는 걸 명시
@@ -61,7 +64,11 @@ public class JwtTokenProvider {
         return token;
     }
 
-    // SecurityContextHolder에 저장할 Authentication을 생성
+
+
+    // SecurityContextHolder 에 저장할 Authentication 을 생성
+    // SecurityContextHolder 에 저장할 Authentication 을 생성
+    // SecurityContextHolder 에 저장할 Authentication 을 생성
     public Authentication getAuthentication(String token) {
         LOGGER.info("[getAuthentication] 토큰 인증 정보 조회 시작") ;
         PrincipalDetails principalDetails = new PrincipalDetails(userService.getByUid(this.getUsername(token)));
@@ -70,7 +77,12 @@ public class JwtTokenProvider {
         return new UsernamePasswordAuthenticationToken(principalDetails, "", principalDetails.getAuthorities());
     }
 
-    //토큰에 저장한 데이터 추출
+
+
+
+    //토큰에 저장한 데이터 추출(payload 에서 sub 을 꺼냄)
+    //토큰에 저장한 데이터 추출(payload 에서 sub 을 꺼냄)
+    //토큰에 저장한 데이터 추출(payload 에서 sub 을 꺼냄)
     public String getUsername(String token) {
         LOGGER.info("[getUsername] 토큰 기반 회원 구별 정보 추출");
         String info = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
@@ -79,12 +91,20 @@ public class JwtTokenProvider {
         return info;
     }
 
-    //클라이언트의 요청 헤더에 있는 'X-AUTH-TOKEN'을 가져옴
+
+
+    //클라이언트의 요청 헤더에 있는 'X-AUTH-TOKEN' 을 가져옴
+    //클라이언트의 요청 헤더에 있는 'X-AUTH-TOKEN' 을 가져옴
+    //클라이언트의 요청 헤더에 있는 'X-AUTH-TOKEN' 을 가져옴
     public String resolveToken(HttpServletRequest httpServletRequest) {
         LOGGER.info("[resolveToken] HTTP 헤더에서 Token 값 추출 getServletPath : {}", httpServletRequest.getServletPath());
         return httpServletRequest.getHeader("X-AUTH-TOKEN");
     }
 
+
+
+    // 토큰의 클레임에 저장된 유효기간을 체크하고 boolean 타입의 값으로 리턴한다.
+    // 토큰의 클레임에 저장된 유효기간을 체크하고 boolean 타입의 값으로 리턴한다.
     // 토큰의 클레임에 저장된 유효기간을 체크하고 boolean 타입의 값으로 리턴한다.
     public boolean validateToken(String token) {
         LOGGER.info("[validateToken] 토큰 유효 체크 시작 : {}", token);

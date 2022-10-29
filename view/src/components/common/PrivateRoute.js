@@ -1,18 +1,18 @@
-import React, { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
 
 const PrivateRoute = ({ children }) => {
-    const navigate = useNavigate();
-
     useEffect(() => {
         if(!Boolean(localStorage.getItem("logged"))) {
             alert("로그인 후, 이용해주세요.");
-            navigate("/");
             return;
         }
     })
 
-    return <div>{children}</div>;
+    return !Boolean(localStorage.getItem("logged")) ? <Navigate to="/"/> : <div>{children}</div>
+    // return (
+    //     <div>{!Boolean(localStorage.getItem("logged") && children}</div>
+    // );
 };
 
 export default PrivateRoute;

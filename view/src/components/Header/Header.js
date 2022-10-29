@@ -33,7 +33,7 @@ const Header = ({ loginPopup }) => {
                 //         }
                 //     });'
                 localStorage.clear();
-                navigate("/");
+                window.location.replace("/");
             }
         }else {
             // loginPopup("ON");

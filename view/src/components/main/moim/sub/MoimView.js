@@ -31,16 +31,15 @@ const MoimView = () => {
     const meetingNo = param.meetingNo;
 
     useEffect(() => {
-        selectViewApi();
-        userLikeStateAPI();
+        async function initialFunc() {
+            await selectViewApi();
+            userLikeStateAPI();
+        }
+
+        initialFunc();
     }, []);
 
-    useEffect(() => {
-        if (Object.keys(contents).length > 0) {
-            setSlide(slideSet());
-        }
-    }, [contents]);
-
+    
     // useEffect(() => {
     //     if (pageState === 1) {
     //         // tabRef.current.body.classList.add('on');
@@ -73,7 +72,7 @@ const MoimView = () => {
 
 
     const selectViewApi = () => {
-        MeetingService.selectByNo(meetingNo).then((response) => {
+        MeetingService.moimByNoView(meetingNo).then((response) => {
             const { status, data } = response;
 
             if (status === 200) {
@@ -87,8 +86,6 @@ const MoimView = () => {
                     alert("잘못된 모임 정보입니다.");
                     navigate(-1);
                 }
-            } else {
-                alert("Server DB Error");
             }
         });
     };
@@ -97,7 +94,9 @@ const MoimView = () => {
         if (members.length > 0) {
             let check = true;
             for (let i = 0; i < members.length; i++) {
-                if (members[i].USER_NO === user.userInfo.no) check = false;
+                if (members[i].USER_NO === parseInt(user.userInfo.no)) {
+                    check = false;
+                };
             }
 
             if (check)
@@ -127,8 +126,8 @@ const MoimView = () => {
     //좋아요 상태 확인 API
     //좋아요 상태 확인 API
     //좋아요 상태 확인 API
-    const userLikeStateAPI = () => {
-        MeetingService.meetingLikeState(meetingNo).then((response) => {
+    const userLikeStateAPI = async() => {
+        await MeetingService.meetingLikeState(meetingNo).then((response) => {
             const { status, data } = response;
             if (status === 200) {
                 if (data === 1) {
@@ -177,8 +176,6 @@ const MoimView = () => {
                     } else {
                         alert(data.SUCCESS_MSG);
                     }
-                } else {
-                    alert("Server Error");
                 }
             });
         }
@@ -222,6 +219,7 @@ const MoimView = () => {
     };
 
     const tabButtonAction = (num) => {
+        setPageState(num);
 
         console.log(slideRef.current[num].clientHeight);
         tabRef.current.body.style.height = slideRef.current[num].clientHeight + "px";
@@ -261,9 +259,6 @@ const MoimView = () => {
                 tabRef.current.body.style.height = "";
             }, 400);
         }
-
-
-        setPageState(num);
     };
 
     const viewComp = () => {
@@ -398,7 +393,7 @@ const MoimView = () => {
             <div className="slide next" ref={element => slideRef.current[2] = element}>
                 <div className="page-wrap community">
                     <div className='board-box'>
-                        {<BoardList meetingNo={meetingNo}/>}
+                        {pageState === 2 && <BoardList meetingNo={meetingNo}/>}
                     </div>
                 </div>
             </div>

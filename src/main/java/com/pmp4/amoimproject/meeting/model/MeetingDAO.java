@@ -23,19 +23,29 @@ public interface MeetingDAO {
     int moimItemCount(Map<String, Object> dbParam);
 
 
+    List<Map<String, Object>> moimSubscriptList(Map<String, Object> dbParam);
+    int moimSubscriptCount(Map<String, Object> dbParam);
+
+
+    Map<String, Object> selectByNoView(Long no);
+
+
+
+
+
+
 
 
     List<Map<String, Object>> selectByUserNoCard(Map<String, Object> map);
 
     int selectByUserNoCardPageCount(Map<String, Object> map);
 
-    Map<String, Object> selectByNo(String no);
 
     int selectByUserCount(String userNo);
 
     int likeCount(@Param("meetingNo") String meetingNo);
 
-    int meetingLikeState(@Param("userNo") String userNo, @Param("meetingNo") String meetingNo);
+    int meetingLikeState(Map<String, Object> dbParam);
 
     int insertMeetingLike(@Param("userNo") String userNo, @Param("meetingNo") String meetingNo);
 

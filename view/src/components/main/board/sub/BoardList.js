@@ -11,7 +11,7 @@ const BoardList = ({meetingNo}) => {
     const [boardBool, setBoardBool] = useState(false);
     const [boardList, setBoardList] = useState([]);
     const [pageInfo, setPageInfo] = useState({});
-    // const [boardList, setBoardList] = useState([]);
+    const [modalState, setModalState] = useState(false);
 
     const modal = useSelector(state => state.modal);
 
@@ -23,15 +23,16 @@ const BoardList = ({meetingNo}) => {
     }, []);
 
     useEffect(() => {
-        boardApi(1);
+        if(!modal.modalState && modalState) {
+            boardApi(1);
+        }
     }, [modal]);
 
 
     const boardApi = (page) => {
         BoardService.moimBoardSelect(meetingNo, page).then(response => {
             const {status, data} = response;
-            console.log(response);
-
+            console.log("게시판");
             if(status === 200) {
                 if(data.SUCCESS) {
                     setBoardList(data.list);
@@ -39,8 +40,6 @@ const BoardList = ({meetingNo}) => {
                 }else {
                     alert(data.SUCCESS_TEXT);
                 }
-            }else {
-                alert("Server Error");
             }
         });
     }
@@ -69,15 +68,10 @@ const BoardList = ({meetingNo}) => {
     });
 
 
-    const dateReturn = useCallback((date) => {
-        return `${date.getFullYear()} - ${(date.getMonth() + 1) >= 10 ? 
-            (date.getMonth() + 1) : ("0" + (date.getMonth() + 1))} - ${date.getDate() >= 10 ? 
-                date.getDate() : ("0" + date.getDate())}`;
-    });
-
 
     const addModal = () => {
         dispatch({type:MODAL_OPEN, data:"boardAdd", param: meetingNo});
+        setModalState(true);
     }
 
 

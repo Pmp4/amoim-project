@@ -32,13 +32,17 @@ const MoimMain = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        myAddMeetingData();
-        // signingUpList();
+        async function initialFunc() {
+            await myAddMeetingData();
+            signingUpList(1);
+        }
+
+        initialFunc();
     }, []);
 
 
 
-    const myAddMeetingData = () => {
+    const myAddMeetingData = async() => {
         // MeetingService.selectByCard("USER_NO", "").then((response) => {
         //     const { status, data } = response;
         //     console.log(response);
@@ -50,9 +54,8 @@ const MoimMain = () => {
         //     }
         // });
 
-        MeetingService.moimOwnList().then(response => {
-            const {status, data} = response;
-        })
+        const response = await MeetingService.moimOwnList();
+        setMeetingContents(response.data.list);
     };
 
     //가입 신청 리스트 확인
@@ -67,16 +70,21 @@ const MoimMain = () => {
     //접속중인 유저가 가입한 모임 리스트 항목 API
     //접속중인 유저가 가입한 모임 리스트 항목 API
     //접속중인 유저가 가입한 모임 리스트 항목 API
-    const signingUpList = (page) => {
-        MeetingService.signingList(1).then(response => {
-            const {status, data} = response;
+    const signingUpList = async (page) => {
+        // MeetingService.signingList(1).then(response => {
+        //     const {status, data} = response;
 
-            if(status === 200) {
-                setSigningList(data.list);
-            }else {
-                alert("Server Error");
-            }
-        })
+        //     if(status === 200) {
+        //         setSigningList(data.list);
+        //     }else {
+        //         alert("Server Error");
+        //     }
+        // })
+
+        const response = await MeetingService.moimSubscript(page);
+        
+        setSigningList(response.data.list);
+        setPageInfo(response.data.pageInfo);
     }
 
 

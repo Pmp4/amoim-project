@@ -24,9 +24,35 @@ public interface MeetingService {
      * @param page - 페이지 번호
      * @param blockSize - 페이지당 item 개수
      * @return itemList, pageInfo
+     *
+     * 모임의 리스트 출력
      */
     Map<String, Object> pageItemList(String type, String key, int page, int blockSize);
 
+
+    /**
+     *
+     * @param type - user 라고 지정
+     * @param key - userNo
+     * @return count
+     *
+     * 내가 생성한 모임의 개수
+     */
+    int moimOwnCount(String type, String key);
+
+
+    /**
+     *
+     * @param key userNo
+     * @param page 페이지번호
+     * @param blockSize - 페이지당 item 개수
+     * @return itemList, pageInfo
+     */
+    Map<String, Object> moimSubscript(String key, int page, int blockSize);
+
+
+
+    Map<String, Object> selectByNoView(Long no);
 
 
 
@@ -46,13 +72,13 @@ public interface MeetingService {
     int selectByUserNoCardPageCount(Map<String, Object> map);
 
 
-    Map<String, Object> selectByNo(String no);
+//    Map<String, Object> selectByNo(String no);
 
     int selectByUserCount(String userNo);
 
     int likeCount(String meetingNo);
 
-    int meetingLikeState(String userNo, String meetingNo);
+    int meetingLikeState(Map<String, Object> dbParam);
 
     int insertMeetingLike(@Param("userNo") String userNo, @Param("meetingNo") String meetingNo);
 

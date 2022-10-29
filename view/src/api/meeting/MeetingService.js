@@ -26,6 +26,18 @@ const moimOwnList = () => {
     return httpCommon.get(`/meeting/select/own`);
 }
 
+//자신이 가입중인 모임 조회 api
+const moimSubscript = (page = 1, blockSize = 8) => {
+    return httpCommon.get(`/meeting/select/subscript?page=${page}&blockSize=${blockSize}`);
+}
+
+//모임 자세히 보기
+const moimByNoView = (no) => {
+    return httpCommon.get(`/meeting/view/${no}`);
+}
+
+
+
 
 
 const selectByCard = (type, key, page = 1, length = 8) => {
@@ -99,5 +111,7 @@ export default {
 
     mainSelectLoc,
     mainSelectCategoryList,
-    moimOwnList
+    moimOwnList,
+    moimSubscript,
+    moimByNoView
 };
