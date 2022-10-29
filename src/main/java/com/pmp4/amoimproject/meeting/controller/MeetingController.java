@@ -6,7 +6,6 @@ import com.pmp4.amoimproject.meeting.model.MeetingAddressVO;
 import com.pmp4.amoimproject.meeting.model.MeetingService;
 import com.pmp4.amoimproject.meeting.model.MeetingVO;
 import com.pmp4.amoimproject.sign.model.PrincipalDetails;
-import com.pmp4.amoimproject.sign.model.UserVO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +28,8 @@ public class MeetingController {
     private static final Logger logger = LoggerFactory.getLogger(MeetingController.class);
 
     private final MeetingService meetingService;
-    private final FileUploadUtil fileUploadUtil;
 
-//    @PostMapping("/insert")
+    //    @PostMapping("/insert")
 //    public Map<String, Object> insertMeeting(@RequestPart(value = "key") Map<String, Object> key,
 //                                             @RequestPart(value = "file") MultipartFile multipartFile) {
     @PostMapping("/insert")
@@ -46,18 +44,16 @@ public class MeetingController {
         int result = meetingService.meetingRegister(meetingVO, meetingAddressVO, tagData, httpServletRequest);
         Map<String, Object> resData = new HashMap<>();
 
-        if(result > 0) {
+        if (result > 0) {
             resData.put("SUCCESS", true);
             resData.put("SUCCESS_TEXT", "업로드 성공");
-        }else {
+        } else {
             resData.put("SUCCESS", false);
             resData.put("SUCCESS_TEXT", "서버 DB 에러");
         }
 
         return resData;
     }
-
-
 
 
 //    @GetMapping("/select")
@@ -138,10 +134,6 @@ public class MeetingController {
     }
 
 
-
-
-
-
     // 자신이 생성한 모임
     // 자신이 생성한 모임
     // 자신이 생성한 모임
@@ -179,8 +171,8 @@ public class MeetingController {
     // 가입한 모임
     // 가입한 모임
     @GetMapping("/select/subscript")
-    public Map<String, Object> moimSubscriptList(@RequestParam (defaultValue = "1") int page,
-                                                 @RequestParam (defaultValue = "8") int blockSize) {
+    public Map<String, Object> moimSubscriptList(@RequestParam(defaultValue = "1") int page,
+                                                 @RequestParam(defaultValue = "8") int blockSize) {
         logger.info("[moimSubscriptList] 핸들러");
 
         PrincipalDetails principal =
@@ -204,9 +196,6 @@ public class MeetingController {
     }
 
 
-
-
-
     //모임의 좋아요 개수만 따로 조회하는
     //모임의 좋아요 개수만 따로 조회하는
     //모임의 좋아요 개수만 따로 조회하는
@@ -221,8 +210,6 @@ public class MeetingController {
     }
 
 
-
-
     //해당 모임 글에 유저가 좋아요를 눌렀는지 아닌지
     //해당 모임 글에 유저가 좋아요를 눌렀는지 아닌지
     //해당 모임 글에 유저가 좋아요를 눌렀는지 아닌지
@@ -231,7 +218,7 @@ public class MeetingController {
         logger.info("[likeState] 핸들러 meetingNo={}", meetingNo);
 
         PrincipalDetails principal =
-                (PrincipalDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long userNo = principal.getUserVO().getUserNo();
         logger.info("[likeState] SecurityContextHolder 추출 userNo={}", userNo);
 
@@ -243,13 +230,12 @@ public class MeetingController {
     }
 
 
-
     @PostMapping(value = "/like/add")
     public Map<String, Object> meetingLikeInsert(@RequestBody String meetingNo) {
         logger.info("[meetingLikeInsert] 핸들러 meetingNo={}", meetingNo);
 
         PrincipalDetails principal =
-                (PrincipalDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Long userNo = principal.getUserVO().getUserNo();
         logger.info("[meetingLikeInsert] SecurityContextHolder 추출 userNo={}", userNo);
@@ -260,9 +246,9 @@ public class MeetingController {
         int cnt = meetingService.insertMeetingLike(String.valueOf(userNo), meetingNo);
         logger.info("MEETING LIKE 추가 결과 cnt={}", cnt);
 
-        if(cnt > 0) {
+        if (cnt > 0) {
             restData.put("SUCCESS", true);
-        }else {
+        } else {
             throw new RuntimeException();
         }
 
@@ -274,35 +260,59 @@ public class MeetingController {
         logger.info("[meetingLikeDelete] 핸들러 meetingNo : {}", meetingNo);
 
         PrincipalDetails principal =
-                (PrincipalDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Long userNo = principal.getUserVO().getUserNo();
         logger.info("[meetingLikeInsert] SecurityContextHolder 추출 userNo={}", userNo);
 
         Map<String, Object> restData = new HashMap<>();
 
-            int cnt = meetingService.deleteMeetingLike(String.valueOf(userNo), String.valueOf(meetingNo));
-            logger.info("MEETING LIKE 삭제 결과 cnt={}", cnt);
+        int cnt = meetingService.deleteMeetingLike(String.valueOf(userNo), String.valueOf(meetingNo));
+        logger.info("MEETING LIKE 삭제 결과 cnt={}", cnt);
 
-            if(cnt > 0) {
-                restData.put("SUCCESS", true);
-            }else {
-                throw new RuntimeException();
-            }
+        if (cnt > 0) {
+            restData.put("SUCCESS", true);
+        } else {
+            throw new RuntimeException();
+        }
 
 
         return restData;
     }
 
 
+    // 가입신청
+    // 가입신청
+    // 가입신청
+    @PostMapping("/subscribe")
+    public Map<String, Object> meetingSubscribe(@RequestBody Long meetingNo) {
+        logger.info("[meetingSubscribe] 핸들러 meetingNo={}", meetingNo);
+
+        PrincipalDetails principal =
+                (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Long userNo = principal.getUserVO().getUserNo();
+        logger.info("[meetingSubscribe] SecurityContextHolder 추출 userNo={}", userNo);
+
+        return meetingService.meetingSubscribe(String.valueOf(userNo), String.valueOf(meetingNo));
+    }
 
 
+    // 가입신청 리스트
+    // 가입신청 리스트
+    // 가입신청 리스트
+    @GetMapping("/subscribe/list")
+    public Map<String, Object> meetingSubscribeList() {
+        logger.info("[meetingSubscribeList] 핸들러");
 
+        PrincipalDetails principal =
+                (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        Long userNo = principal.getUserVO().getUserNo();
+        logger.info("[meetingSubscribeList] SecurityContextHolder 추출 userNo={}", userNo);
 
-
-
-
+        return meetingService.moimSubscribeList(String.valueOf(userNo));
+    }
 
 
 
@@ -331,9 +341,21 @@ public class MeetingController {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     @GetMapping("/signing")
-    public Map<String, Object> selectUserSigning(@RequestParam (required = false, defaultValue = "1") int page,
-                                                 @RequestParam (required = false, defaultValue = "8") int length,
+    public Map<String, Object> selectUserSigning(@RequestParam(required = false, defaultValue = "1") int page,
+                                                 @RequestParam(required = false, defaultValue = "8") int length,
                                                  HttpSession httpSession) {
         String userNo = String.valueOf(httpSession.getAttribute("userNo"));
 
@@ -385,11 +407,11 @@ public class MeetingController {
     //해당 유저가 모임 글을 몇개 작성했는지
     //해당 유저가 모임 글을 몇개 작성했는지
     @GetMapping(value = {"/user/count/{userNo}", "/user/count"})
-    public int selectByUserCount(@PathVariable (required = false) String userNo,
+    public int selectByUserCount(@PathVariable(required = false) String userNo,
                                  HttpSession httpSession) {
         logger.info("MEETING USER 생성 정보 조회 userNo={}", userNo);
 
-        if(userNo == null) userNo = String.valueOf(httpSession.getAttribute("userNo"));
+        if (userNo == null) userNo = String.valueOf(httpSession.getAttribute("userNo"));
 
         int cnt = meetingService.selectByUserCount(userNo);
         logger.info("MEETING USER 생성 정보 조회 결과 cnt={}", cnt);
@@ -399,52 +421,8 @@ public class MeetingController {
     }
 
 
-
-    @PostMapping("/subscribe")
-    public Map<String, Object> meetingSubscribe(@RequestBody String meetingNo, HttpSession httpSession) {
-        logger.info("MEETING 가입 신청 meetingNo={}", meetingNo);
-        String userNo = String.valueOf(httpSession.getAttribute("userNo"));
-
-        Map<String, Object> resultData = new HashMap<>();
-        if(userNo != null && !userNo.isEmpty()) {
-            resultData = meetingService.meetingSubscribe(userNo, meetingNo);
-        }else {
-            resultData.put("SUCCESS", false);
-            resultData.put("SUCCESS_TEXT", "로그인 후 시도해주세요.");
-        }
-
-        return resultData;
-    }
-
-
-
-
-    @GetMapping("/subscribe/list")
-    public Map<String, Object> meetingSubscribeList(HttpSession httpSession) {
-        String userNo = String.valueOf(httpSession.getAttribute("userNo"));
-
-        logger.info("MEETING 가입 신청 리스트 조회 userNo={}", userNo);
-        Map<String, Object> resultData = new HashMap<>();
-
-        if(userNo != null && !userNo.isEmpty()) {
-            List<Map<String, Object>> dbData = meetingService.moimSubscribeList(userNo);
-            logger.info("MEETING 가입 신청 리스트 조회 결과 dbData.size={}", dbData.size());
-
-            resultData.put("SUCCESS", true);
-            resultData.put("DATA", dbData);
-        }else {
-            resultData.put("SUCCESS", false);
-            resultData.put("SUCCESS_TEXT", "로그인 후 시도해주세요.");
-        }
-
-        return resultData;
-    }
-
-
-
-
     @PutMapping("/subscribe/result")
-    public Map<String, Object> subscribeResult (@RequestBody Map<String, Object> rest) {
+    public Map<String, Object> subscribeResult(@RequestBody Map<String, Object> rest) {
         logger.info("MEETING 가입 신청 수락 rest={}", rest);
 
         Map<String, Object> resultData = meetingService.moimSubscribeResult(rest);
@@ -455,7 +433,7 @@ public class MeetingController {
 
 
     @PutMapping("/subscribe/refusal")
-    public Map<String, Object> subscribeRefusal (@RequestBody Map<String, Object> rest) {
+    public Map<String, Object> subscribeRefusal(@RequestBody Map<String, Object> rest) {
         logger.info("MEETING 가입 신청 거절 rest={}", rest);
 
         Map<String, Object> resultData = meetingService.moimSubscribeRefusal(rest);

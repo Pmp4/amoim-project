@@ -229,8 +229,6 @@ const MoimSubscribe = () => {
                 }else {
                     alert(SUCCESS_TEXT);
                 }
-            }else {
-                alert("Server Error");
             }
         });
     };
@@ -247,8 +245,6 @@ const MoimSubscribe = () => {
                 }else {
                     alert(SUCCESS_TEXT);
                 }
-            }else {
-                alert("Server Error");
             }
         });
     };

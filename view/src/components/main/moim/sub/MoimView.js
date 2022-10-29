@@ -71,8 +71,8 @@ const MoimView = () => {
     });
 
 
-    const selectViewApi = () => {
-        MeetingService.moimByNoView(meetingNo).then((response) => {
+    const selectViewApi = async () => {
+        await MeetingService.moimByNoView(meetingNo).then((response) => {
             const { status, data } = response;
 
             if (status === 200) {
@@ -117,8 +117,6 @@ const MoimView = () => {
 
             if (status === 200) {
                 setContents({ ...contents, LIKE_COUNT: data });
-            } else {
-                alert("Server Error");
             }
         });
     };
@@ -126,7 +124,7 @@ const MoimView = () => {
     //좋아요 상태 확인 API
     //좋아요 상태 확인 API
     //좋아요 상태 확인 API
-    const userLikeStateAPI = async() => {
+    const userLikeStateAPI = async () => {
         await MeetingService.meetingLikeState(meetingNo).then((response) => {
             const { status, data } = response;
             if (status === 200) {
@@ -134,12 +132,7 @@ const MoimView = () => {
                     setLikeState(false);
                 } else if (data === 0) {
                     setLikeState(true);
-                } else {
-                    alert("로그인 후 다시 시도해주세요.");
-                    navigate(-1);
                 }
-            } else {
-                alert("Server Error");
             }
         });
     };
@@ -160,8 +153,6 @@ const MoimView = () => {
                     } else {
                         alert(data.SUCCESS_MSG);
                     }
-                } else {
-                    alert("Server Error");
                 }
             });
         } else {
@@ -212,9 +203,7 @@ const MoimView = () => {
             if (status === 200) {
                 const { SUCCESS, SUCCESS_TEXT } = data;
                 alert(SUCCESS_TEXT);
-            } else {
-                alert("Server Error");
-            }
+            } 
         });
     };
 

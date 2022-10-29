@@ -33,7 +33,7 @@ public class JwtTokenProvider {
     //application.properties
     @Value("${springboot.jwt.secret}")
     private String secretKey = "secretKey";
-    private final long tokenValidMillisecond = 1000L * 60 * 60;     //1시간
+    private final long tokenValidMillisecond = 1000L * 10;     //1시간
 
 
     //PostConstruct : 해당 객체(클래스)가 빈 객체로 주입된 이후 수행된다는 걸 명시
