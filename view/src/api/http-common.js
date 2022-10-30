@@ -30,9 +30,10 @@ instance.interceptors.response.use(response => {
         localStorage.clear();
         window.location.replace("/");
     } else if(error.response.status === 400) {
+        console.log(error.response);
         alert("Server DB Error");
         window.location.reload();
-    } else if(error.response.status === 500 && error.response.status === 404) {
+    } else if(error.response.status === 500) {
         alert("Server Error");
         window.location.replace("/");
     }

@@ -427,6 +427,59 @@ const MoimView = () => {
         return <div className='clearfix'>{currentSlide}</div>;
     };
 
+
+
+
+    const navTab = () => {
+        for(let i = 0; i < members.length; i++) {
+            if(members[i].USER_NO === parseInt(user.userInfo.no)){
+                return (
+                    <ul>
+                            <li
+                                ref={(element) => (tabRef.current.moim = element)}
+                                className={pageState === 1 ? "on" : ""}
+                                onClick={() => tabButtonAction(1)}
+                            >
+                                <div className="line"></div>
+                                모임
+                            </li>
+                            <li
+                                ref={(element) => (tabRef.current.community = element)}
+                                className={pageState === 2 ? "on" : ""}
+                                onClick={() => tabButtonAction(2)}
+                            >
+                                <div className="line"></div>
+                                커뮤니티
+                            </li>
+                            <li
+                                ref={(element) => (tabRef.current.chat = element)}
+                                className={pageState === 3 ? "on" : ""}
+                                onClick={() => tabButtonAction(3)}
+                            >
+                                <div className="line"></div>
+                                대화하기
+                            </li>
+                        </ul>
+                )
+            }
+        }
+
+
+        return (
+            <ul>
+                            <li
+                                ref={(element) => (tabRef.current.moim = element)}
+                                className={pageState === 1 ? "on" : ""}
+                                onClick={() => tabButtonAction(1)}
+                            >
+                                <div className="line"></div>
+                                모임
+                            </li>
+                        </ul>
+        )
+    }
+
+
     return (
         <div id="view-page">
             <div className="tab-page" 
@@ -439,32 +492,7 @@ const MoimView = () => {
             </div>
 
             <div className="nav-tab">
-                <ul>
-                    <li
-                        ref={(element) => (tabRef.current.moim = element)}
-                        className={pageState === 1 ? "on" : ""}
-                        onClick={() => tabButtonAction(1)}
-                    >
-                        <div className="line"></div>
-                        모임
-                    </li>
-                    <li
-                        ref={(element) => (tabRef.current.community = element)}
-                        className={pageState === 2 ? "on" : ""}
-                        onClick={() => tabButtonAction(2)}
-                    >
-                        <div className="line"></div>
-                        커뮤니티
-                    </li>
-                    <li
-                        ref={(element) => (tabRef.current.chat = element)}
-                        className={pageState === 3 ? "on" : ""}
-                        onClick={() => tabButtonAction(3)}
-                    >
-                        <div className="line"></div>
-                        대화하기
-                    </li>
-                </ul>
+                {navTab()}
             </div>
         </div>
     );
