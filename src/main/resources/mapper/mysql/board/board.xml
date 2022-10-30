@@ -30,4 +30,36 @@
         where MEETING_NO = #{meetingNo}
     </select>
 
+
+
+
+
+
+    <resultMap id="boardView" type="meetingBoardFileVo">
+        <association property="meetingBoardVO" javaType="meetingBoardVo" column="no">
+            <result column="NO" jdbcType="BIGINT" property="no"/>
+            <result column="TITLE" jdbcType="VARCHAR" property="title"/>
+            <result column="CONTENT" jdbcType="VARCHAR" property="content"/>
+            <result column="USER_NO" jdbcType="BIGINT" property="userNo"/>
+            <result column="MEETING_NO" jdbcType="BIGINT" property="meetingNo"/>
+            <result column="VIEW_COUNT" jdbcType="BIGINT" property="viewCount"/>
+            <result column="REGDATE" jdbcType="TIMESTAMP" property="regdate"/>
+            <result column="DEL_FLG" jdbcType="VARCHAR" property="delFlg"/>
+            <result column="NAME" jdbcType="VARCHAR" property="name"/>
+            <result column="USER_ID" jdbcType="VARCHAR" property="userId"/>
+        </association>
+        <collection property="fileList" column="no" javaType="ArrayList" ofType="hashMap" select="boardFileList"/>
+    </resultMap>
+
+    <select id="selectByBoardNo" parameterType="Long" resultMap="boardView">
+        select MB.*, U.USER_ID, U.NAME
+        from MEETING_BOARD MB
+            join USERS U on MB.USER_NO = U.USER_NO
+        where NO = #{no};
+    </select>
+
+    <select id="boardFileList" parameterType="Long" resultType="hashMap">
+        select * from BOARD_UPLOAD_FILE
+        where BOARD_NO = #{no}
+    </select>
 </mapper>

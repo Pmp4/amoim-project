@@ -46,6 +46,13 @@ const BoardList = ({meetingNo}) => {
 
 
 
+    const boardView = (no) => {
+        dispatch({type: MODAL_OPEN, data: "board-view", param: no})
+    }
+
+
+
+
     // 실제적으로 list가 되는 div 요소 셋팅
     // console.log("boardList : " +  boardList);
     const conList = boardList.map((item,idx) => {
@@ -58,7 +65,7 @@ const BoardList = ({meetingNo}) => {
             <div key={item.NO} className="list-line">
                 <div className="list-col-1">{item.NO}</div>
                 <div className="list-col-2">
-                    <button type='button'>{item.TITLE}</button>
+                    <button type='button' onClick={() => boardView(item.NO)}>{item.TITLE}</button>
                 </div>
                 <div className="list-col-3">{item.NAME}</div>
                 <div className="list-col-4">{item.VIEW_COUNT}</div>
@@ -70,7 +77,7 @@ const BoardList = ({meetingNo}) => {
 
 
     const addModal = () => {
-        dispatch({type:MODAL_OPEN, data:"boardAdd", param: meetingNo});
+        dispatch({type:MODAL_OPEN, data:"board-add", param: meetingNo});
         setModalState(true);
     }
 

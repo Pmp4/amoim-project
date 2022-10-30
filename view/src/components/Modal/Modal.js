@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux';
 import MoimSubscribe from './MoimSubscribe';
 import BoardAdd from './BoardAdd';
 import { useParams } from 'react-router';
+import BoardView from './BoardView';
+import { useEffect } from 'react';
 
 const Modal = ({loginPopup}) => {
     const [modalState, setModalState] = useState(true);
@@ -14,14 +16,20 @@ const Modal = ({loginPopup}) => {
     const modal = useSelector(state => state.modal);
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        toggleScrolling();
+    }) ;
+
     const modalType = () => {
         switch(modal.modalType) {
             case "login" : 
                 return (<Login modalClose={modalClose}/>);
             case "moim-subscribe-list" :
                 return (<MoimSubscribe modalClose={modalClose}/>);
-            case "boardAdd" : 
+            case "board-add" : 
                 return (<BoardAdd modalClose={modalClose}/>);
+            case "board-view" :
+                return (<BoardView modalClose={modalClose}/>)
             
             default : return(<Error/>);
         }
@@ -32,6 +40,15 @@ const Modal = ({loginPopup}) => {
         setTimeout(() => {
             dispatch({type: MODAL_CLOSE});
         }, 300);
+    }
+
+    const toggleScrolling = () => {
+        const body = document.querySelector("body");
+        if(modalState) {
+            body.style.overflow = "hidden";
+        }else {
+            body.style.overflow = "";
+        }
     }
 
     return (

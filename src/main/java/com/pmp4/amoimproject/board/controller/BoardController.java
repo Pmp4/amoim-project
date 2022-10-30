@@ -1,6 +1,7 @@
 package com.pmp4.amoimproject.board.controller;
 
 
+import com.pmp4.amoimproject.board.model.MeetingBoardFileVO;
 import com.pmp4.amoimproject.board.model.MeetingBoardService;
 import com.pmp4.amoimproject.board.model.MeetingBoardVO;
 import com.pmp4.amoimproject.sign.model.PrincipalDetails;
@@ -56,6 +57,14 @@ public class BoardController {
                 meetingNo, page, length);
 
         return meetingBoardService.selectBoard(meetingNo, page, length);
+    }
+
+
+    @GetMapping("/view/{no}")
+    public MeetingBoardFileVO moimBoardView(@PathVariable Long no) {
+        logger.info("[moimBoardView] 핸들러 no : {}", no);
+
+        return meetingBoardService.boardView(no);
     }
 
 

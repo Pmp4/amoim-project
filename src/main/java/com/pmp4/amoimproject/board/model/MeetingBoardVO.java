@@ -13,6 +13,10 @@ public class MeetingBoardVO {
     private Long meetingNo;
     private Long viewCount;
     private Timestamp regdate;
-    private char delFlag;
+    private char delFlg;
     private Long categoryNo;
+
+
+    private String name;
+    private String userId;
 }

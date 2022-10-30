@@ -91,6 +91,16 @@ public class MeetingBoardServiceImpl implements MeetingBoardService{
         return responseData;
     }
 
+    @Override
+    public MeetingBoardFileVO boardView(Long no) {
+        logger.info("[boardView] 서비스 로직");
+
+        MeetingBoardFileVO meetingBoardFileVO = meetingBoardDAO.selectByBoardNo(no);
+        logger.info("[boardView] 결과 meetingBoardFileVO : {}", meetingBoardFileVO);
+
+        return meetingBoardFileVO;
+    }
+
 //    @Override
 //    public List<Map<String, Object>> selectByMeetingNo(Map<String, Object> map) {
 //
