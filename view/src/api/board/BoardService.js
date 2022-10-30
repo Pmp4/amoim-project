@@ -10,4 +10,9 @@ const moimBoardSelect = (meetingNo, page = 1, length = 8) => {
 }
 
 
-export default {insertBoard, moimBoardSelect};
+const boardView = (no) => {
+    return httpCommon.get(`/board/view/${no}`);
+}
+
+
+export default {insertBoard, moimBoardSelect, boardView};

@@ -342,3 +342,174 @@
         }
     }
 }
+
+
+.board-view{
+    width: 800px;
+    max-height: 90vh;
+    font-size: 16px;
+    color: rgb(41, 41, 41);
+    overflow: auto;
+
+
+    .board-title-wrap {
+        .board-title {
+            font-size: 1.4em;
+        }
+        .sub-title {
+            display: flex;
+            margin-top: 6px;
+            .board-date {
+                color: #717171;
+            }
+
+            .board-info {
+                background-color: rgb(234, 234, 234);
+                margin-left: 10px;
+                line-height: 120%;
+                padding: 0 5px;
+                border-radius: 4px;
+                font-weight: 500;
+                span {
+                    font-size: .9em;
+                    font-weight: 400;
+                    color: rgb(86, 86, 86);
+                }
+            }
+        }
+
+    }
+
+
+    .board-content {
+        display: block;
+        font-size: 1em;
+        color: rgb(56, 56, 56);
+        margin-top: 15px;
+        white-space: pre-wrap;
+
+        span {
+            font-size: 1.8em;
+            display: block;
+            font-weight: 500;
+            margin-top: 5px;
+        }
+    }
+
+
+    .line {
+        width: 100%;
+        height: 2px;
+        background: rgb(144, 144, 144);
+        margin-top: 40px;
+    }
+
+    .comment-wrap {
+        margin-top: 15px;
+
+        .comment-list {
+            width: 100%;
+            height: auto;
+            padding: 0 8px 8px 8px;
+            box-sizing: border-box;
+            overflow: hidden;
+
+            .item {
+                margin-top: 6px;
+                border-top: 1px rgb(241, 241, 241) solid;
+                border-bottom: 1px rgb(241, 241, 241) solid;
+                padding: 6px 0;
+
+                .comment-main, .comment-reply {
+                    display: flex;
+                    justify-content: space-between;
+                }
+
+                .comment-exp {
+                    width: 20%;
+                    font-size: .7em;
+                    color: #717171;
+                }
+
+                .comment-content {
+                    width: 78%;
+                    display: flex;
+                    justify-content: space-between;
+                    
+                    .comment {
+                        width: 80%;
+                        font-size: .9em;
+                    }
+                    .comment-regdate {
+                        width: 18%;
+                        font-size: .7em;
+                        text-align: right;
+                        color: #717171;
+                        
+                    }
+                }
+
+
+                .comment-reply {
+                    width: 97%;
+                    margin-left: 3%;
+                    margin-top: 4px;
+                    .comment-name {
+                        svg {
+                            margin-right: 5px;
+                            font-size: .6em;
+                            &.svg-inline--fa {
+                                vertical-align: 0.125em;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+
+
+
+
+        .comment-input-box {
+            background: rgb(240, 240, 240);
+            border-radius: 16px;
+            padding: 15px;
+            box-sizing: border-box;
+            margin-top: 20px;
+            > p {
+                font-size: .7em;
+                color: rgb(86, 86, 86);
+            }
+
+            .comment-input {
+                margin-top: 10px;
+                textarea {
+                    width: 100%;
+                    height: 100px;
+                    border-radius: 8px;
+                    padding: 5px;
+                    border: none;
+                    box-sizing: border-box;
+                    display: block;
+                    resize: none;
+
+                    &:focus {
+                        outline: 2px solid #51CD9A;
+                    }
+                }
+                button {
+                    margin-top: 6px;
+                    width: 100%;
+                    border-radius: 8px;
+                    color: #ffffff;
+                    background: #51CD9A;
+                    line-height: 130%;
+                    padding: 6px 0;
+                }
+            }
+        }
+    }
+}
