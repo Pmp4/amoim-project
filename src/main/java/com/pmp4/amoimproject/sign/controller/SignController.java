@@ -62,6 +62,7 @@ public class SignController {
         throw new RuntimeException("접근이 금지되었습니다.");
     }
 
+
     @ExceptionHandler(value = RuntimeException.class)
     public ResponseEntity<Map<String, Object>> ExceptionHandler(RuntimeException e) {
         HttpHeaders responseHeaders = new HttpHeaders();
@@ -72,16 +73,8 @@ public class SignController {
 
         map.put("error type", httpStatus.getReasonPhrase());
         map.put("code", "400");
-        map.put("message", "에러 발생");
+        map.put("message", "나중에 다시 시도해주세요.");
 
         return new ResponseEntity<>(map, responseHeaders, httpStatus);
-    }
-
-
-    @GetMapping("/test")
-    public void test (HttpServletResponse httpServletResponse) throws IOException {
-        LOGGER.info("[test] test");
-
-        httpServletResponse.sendRedirect("http://google.com");
     }
 }
