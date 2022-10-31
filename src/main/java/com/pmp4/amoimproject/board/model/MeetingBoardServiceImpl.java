@@ -7,15 +7,12 @@ import com.pmp4.amoimproject.meeting.model.MeetingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -99,6 +96,67 @@ public class MeetingBoardServiceImpl implements MeetingBoardService{
         logger.info("[boardView] 결과 meetingBoardFileVO : {}", meetingBoardFileVO);
 
         return meetingBoardFileVO;
+    }
+
+
+
+
+
+    @Override
+    public int insertComment(BoardCommentsVO boardCommentsVO) {
+        logger.info("[boardCommentsVO] 서비스 로직");
+
+        int cnt = meetingBoardDAO.insertComment(boardCommentsVO);
+        logger.info("[boardCommentsVO] 등록 결과 cnt : {}", cnt);
+
+        if(!(cnt > 0)) throw new RuntimeException();
+
+        return cnt;
+    }
+
+    @Override
+    public Map<String, Object> selectCommentList(Long boardNo, int page, int blockSize) {
+        logger.info("[selectCommentList] 서비스 로직");
+
+        PaginationInfo paginationInfo = new PaginationInfo(blockSize, page);
+
+        Map<String, Object> dbParam = new HashMap<>();
+        dbParam.put("boardNo", boardNo);
+        dbParam.put("start", paginationInfo.getStartRecord());
+        dbParam.put("length", blockSize);
+        logger.info("[selectCommentList] dbParam : {}", dbParam);
+
+        List<BoardCommentsVO> list = meetingBoardDAO.selectCommentList(dbParam);
+        int count = meetingBoardDAO.commentCount(boardNo);
+        logger.info("[selectCommentList] 조회 결과 list.size : {}, count : {}", list.size(), count);
+
+        paginationInfo.setTotalRecord(count);
+
+        dbParam.clear();
+
+        List<BoardCommentsReplyVO> resultDate = new ArrayList<>();
+        for(BoardCommentsVO boardCommentsVO : list) {
+            BoardCommentsReplyVO boardCommentsReplyVO = new BoardCommentsReplyVO();
+            boardCommentsReplyVO.setBoardCommentsVO(boardCommentsVO);
+
+            dbParam.put("no", boardCommentsVO.getNo());
+            List<BoardCommentsVO> replyList = meetingBoardDAO.selectReplyList(dbParam);
+
+            if(replyList.size() > 0) {
+                logger.info("[selectCommentList] 답글 조회 replyList.size : {}", replyList.size());
+                boardCommentsReplyVO.setReplyList(replyList);
+            }
+
+            resultDate.add(boardCommentsReplyVO);
+        }
+
+        logger.info("[selectCommentList] 최종 결과 resultDate.size : {}", resultDate.size());
+
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("list", resultDate);
+        responseData.put("pageInfo", paginationInfo);
+
+        return responseData;
     }
 
 //    @Override

@@ -17,4 +17,17 @@ public interface MeetingBoardDAO {
 
 
     MeetingBoardFileVO selectByBoardNo(Long no);
+
+
+
+
+
+
+    int insertComment(BoardCommentsVO boardCommentsVO);
+
+    List<BoardCommentsVO> selectCommentList(Map<String, Object> dbParam);
+
+    List<BoardCommentsVO> selectReplyList(Map<String, Object> dbParam);
+
+    int commentCount(Long boardNo);
 }

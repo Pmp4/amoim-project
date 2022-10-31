@@ -1,9 +1,7 @@
 package com.pmp4.amoimproject.board.controller;
 
 
-import com.pmp4.amoimproject.board.model.MeetingBoardFileVO;
-import com.pmp4.amoimproject.board.model.MeetingBoardService;
-import com.pmp4.amoimproject.board.model.MeetingBoardVO;
+import com.pmp4.amoimproject.board.model.*;
 import com.pmp4.amoimproject.sign.model.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -65,6 +64,33 @@ public class BoardController {
         logger.info("[moimBoardView] 핸들러 no : {}", no);
 
         return meetingBoardService.boardView(no);
+    }
+
+
+
+
+
+
+
+
+
+    @PostMapping("/comment/insert")
+    public int moimBoardCommentInsert(@RequestBody BoardCommentsVO boardCommentsVO) {
+        logger.info("[moimBoardCommentInsert] 핸들러 boardCommentsVO : {}", boardCommentsVO);
+
+        return meetingBoardService.insertComment(boardCommentsVO);
+    }
+
+
+
+
+    @GetMapping("/comment/list")
+    public Map<String, Object> moimBoardCommentsList(@RequestParam Long boardNo,
+                                                            @RequestParam int page,
+                                                            @RequestParam int length) {
+        logger.info("[moimBoardCommentsList] 핸들러 boardNo : {}, page : {}, length : {}", boardNo, page, length);
+
+        return meetingBoardService.selectCommentList(boardNo, page, length);
     }
 
 

@@ -12,7 +12,6 @@ const instance = axios.create({
 instance.interceptors.request.use(
     config => {
         config.headers["X-AUTH-TOKEN"] = localStorage.getItem('X-AUTH-TOKEN');
-        
         return config;
     },
     error => {
@@ -22,7 +21,6 @@ instance.interceptors.request.use(
 )
 
 instance.interceptors.response.use(response => {
-    // console.log(response);
     return response;
 }, error => {
     if(error.response.status === 401) {     //토큰 유효시간 지날 때
@@ -31,7 +29,7 @@ instance.interceptors.response.use(response => {
         window.location.replace("/");
     } else if(error.response.status === 400) {
         console.log(error.response);
-        alert("Server DB Error");
+        alert("에러");
         window.location.reload();
     } else if(error.response.status === 500) {
         alert("Server Error");

@@ -15,4 +15,14 @@ const boardView = (no) => {
 }
 
 
-export default {insertBoard, moimBoardSelect, boardView};
+
+const commentList = (boardNo, page, length = 10) => {
+    return httpCommon.get(`/board/comment/list?boardNo=${boardNo}&page=${page}&length=${length}`);
+}
+
+const commentInsert = (rest) => {
+    return httpCommon.post("/board/comment/insert", rest);
+}
+
+
+export default {insertBoard, moimBoardSelect, boardView, commentInsert, commentList};

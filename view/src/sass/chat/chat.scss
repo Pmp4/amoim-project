@@ -1,0 +1,87 @@
+#chatt-page {
+    font-size: 1em;
+    .title{
+        font-size: 2em;
+    }
+
+    .main-part {
+        display: flex;
+        justify-content: space-between;
+        height: 100px;
+        margin-top: 40px;
+
+
+        .member-list {
+            width: 38%;
+
+            .item {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 5px;
+                &:hover{
+
+                }
+
+                .profile-img {
+                    width: 12%;
+                    display: flex;
+                    align-items: center;
+
+                    img {
+                        width: 100%;
+                        overflow: hidden;
+                        border-radius: 100%;
+                        padding: 5px;
+
+                        &:before {
+                            content: "";
+                            display: block;
+                            padding-top: 100%;
+
+                            /* 1:1 비율 */
+                        }
+                    }
+                }
+
+                .profile-exp {
+                    width: 84%;
+                    // background-color: #08B46C;
+                    display: flex;
+
+                    justify-content: center;
+                    align-items: center;
+                    flex-wrap: wrap;
+
+                    p {
+                        width: 100%;
+                        font-size: 1.1em;
+                        font-weight: 500;
+
+                        span {
+                            font-size: .7em;
+
+                        }
+                    }
+
+                    >span {
+                        font-size: .9em;
+                        display: block;
+                        width: 100%;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                }
+
+                .state {
+                    width: 4px;
+                    background-color: #FBD30A;
+                }
+            }
+        }
+
+        .chatt-list {
+            width: 58%;
+            background-color: antiquewhite;
+        }
+    }
+}
