@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { staticMapSet } from "components/api/KakaoMapScript";
 import BoardList from 'components/main/board/sub/BoardList';
+import Chat from 'components/main/chat/Chat';
 
 const MoimView = () => {
     const [contents, setContents] = useState({});
@@ -392,7 +393,7 @@ const MoimView = () => {
     const chatComp = () => {
         return (
             <div className="slide next" ref={element => slideRef.current[3] = element}>
-                <div className="page-wrap chatt">채팅</div>
+                <Chat/>
             </div>
         );
     };

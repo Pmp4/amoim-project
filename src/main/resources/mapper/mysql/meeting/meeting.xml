@@ -267,9 +267,7 @@
             <result column="PERSON_NUMBER" jdbcType="BIGINT" property="PERSON_NUMBER"/>
             <result column="PERSON_COUNT" jdbcType="BIGINT" property="PERSON_COUNT"/>
         </association>
-        <collection property="MEMBERS" column="NO" javaType="ArrayList" ofType="hashMap" select="selectUserMeeting">
-
-        </collection>
+        <collection property="MEMBERS" column="NO" javaType="ArrayList" ofType="hashMap" select="selectUserMeeting"/>
     </resultMap>
 
     <select id="selectUserMeeting" parameterType="String" resultType="hashMap">

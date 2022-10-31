@@ -11,4 +11,13 @@ public interface MeetingBoardService {
 
 
     MeetingBoardFileVO boardView(Long no);
+
+
+
+
+
+
+
+    int insertComment(BoardCommentsVO boardCommentsVO);
+    Map<String, Object> selectCommentList(Long boardNo, int page, int blockSize);
 }

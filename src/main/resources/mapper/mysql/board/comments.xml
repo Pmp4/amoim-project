@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pmp4.amoimproject.board.model.MeetingBoardDAO">
+    <insert id="insertComment" parameterType="boardCommentsVo">
+        insert into BOARD_COMMENTS(BOARD_NO, USER_NO, COMMENT_TEXT, PARENT_NO, PARENT_USER_NO)
+        values (#{boardNo}, #{userNo}, #{commentText}, #{parentNo}, #{parentUserNo})
+    </insert>
+    
+    
+    
+<!--    <resultMap id="commentReply" type="boardCommentsReplyVO">-->
+<!--        <association property="boardCommentsVO" column="NO" javaType="boardCommentsVO" >-->
+<!--            <id column="NO" jdbcType="BIGINT" property="no"/>-->
+<!--            <result column="BOARD_NO" jdbcType="BIGINT" property="boardNo"/>-->
+<!--            <result column="USER_NO" jdbcType="BIGINT" property="userNo"/>-->
+<!--            <result column="NAME" jdbcType="VARCHAR" property="username"/>-->
+<!--            <result column="COMMENT_TEXT" jdbcType="VARCHAR" property="commentText"/>-->
+<!--            <result column="REGDATE" jdbcType="TIMESTAMP" property="regdate"/>-->
+<!--            <result column="DEL_FLG" jdbcType="CHAR" property="delFlg"/>-->
+<!--            <result column="PARENT_NO" jdbcType="BIGINT" property="parentNo"/>-->
+<!--            <result column="PARENT_USER_NO" jdbcType="BIGINT" property="parentUserNo"/>-->
+<!--        </association>-->
+<!--        <collection property="replyList"-->
+<!--                    column="{no=NO}"-->
+<!--                    javaType="ArrayList"-->
+<!--                    ofType="boardCommentsVO"-->
+<!--                    select="selectReplyList"/>-->
+<!--    </resultMap>-->
+
+
+<!--    <select id="selectCommentList" parameterType="hashMap" resultMap="commentReply">-->
+    <select id="selectCommentList" parameterType="hashMap" resultType="boardCommentsVO">
+        select BC.*, U.NAME "username"
+        from BOARD_COMMENTS BC
+                 join USERS U on U.USER_NO = BC.USER_NO
+        where BC.PARENT_NO is null
+            and BC.PARENT_USER_NO is null
+            and BC.BOARD_NO = #{boardNo}
+        order by REGDATE desc
+        LIMIT #{length} offset #{start}
+
+    </select>
+
+    <select id="commentCount" parameterType="Long" resultType="int">
+        select count(*)
+        from BOARD_COMMENTS BC
+                 join USERS U on U.USER_NO = BC.USER_NO
+        where BC.PARENT_NO is null
+          and BC.PARENT_USER_NO is null
+          and BC.BOARD_NO = #{boardNo}
+        order by REGDATE desc
+    </select>
+
+    <select id="selectReplyList" parameterType="hashMap" resultType="boardCommentsVo">
+        select
+            BC.*,
+            U.NAME "username",
+            (
+                select UU.NAME from USERS UU
+                    where UU.USER_NO = BC.PARENT_USER_NO
+                ) "parentUsername"
+        from BOARD_COMMENTS BC
+                 join USERS U on U.USER_NO = BC.USER_NO
+        where BC.PARENT_NO = #{no}
+        order by REGDATE
+    </select>
+</mapper>
