@@ -411,6 +411,9 @@
         where UM.USER_NO = #{userNo} and RIGHT_NO = 1
     </select>
 
+
+
+
     <resultMap id="moimSubscribeListMap" type="hashMap">
         <association property="MEETING" javaType="hashMap" column="meeting_no">
             <result column="NO" jdbcType="BIGINT" property="NO"/>
@@ -429,6 +432,20 @@
         select U.*, UM.NO "USER_MEETING_NO"
         from USER_MEETING UM join USERS U on U.USER_NO = UM.USER_NO
         where MEETING_NO = #{meetingNo} and REG_LEVEL = 2
+    </select>
+
+
+
+    <select id="meetingUserList" parameterType="Long" resultType="hashMap">
+        select
+            UM.USER_NO,
+            U.BIRTH_DAY,
+            U.EMAIL,
+            U.NAME,
+            U.INTRO,
+            U.PROFILE_IMAGE
+        from USER_MEETING UM join USERS U on U.USER_NO = UM.USER_NO
+        where MEETING_NO = #{meetingNo} and REG_LEVEL = 1
     </select>
 
 

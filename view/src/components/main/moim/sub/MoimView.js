@@ -393,7 +393,7 @@ const MoimView = () => {
     const chatComp = () => {
         return (
             <div className="slide next" ref={element => slideRef.current[3] = element}>
-                <Chat/>
+                {pageState === 3 && <Chat meetingNo={meetingNo}/>}
             </div>
         );
     };

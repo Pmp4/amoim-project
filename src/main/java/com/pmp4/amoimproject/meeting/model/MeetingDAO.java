@@ -29,6 +29,8 @@ public interface MeetingDAO {
 
     Map<String, Object> selectByNoView(Long no);
 
+    List<Map<String, Object>> meetingUserList(Long meetingNo);
+
 
 
 

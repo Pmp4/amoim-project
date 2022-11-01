@@ -54,6 +54,8 @@ public interface MeetingService {
 
     Map<String, Object> selectByNoView(Long no);
 
+    List<Map<String, Object>> selectUserMeetingList(Long meetingNo);
+
 
 
 
