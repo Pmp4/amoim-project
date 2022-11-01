@@ -39,8 +39,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
         LOGGER.info("[doFilterInternal] token 값 유효성 체크 시작");
-        if(!token.equals("null")) {
+        boolean tokenCheck = false;
+        if(token != null && !token.equals("null")) {
             if(jwtTokenProvider.validateToken(token)) {
+                tokenCheck = true;
                 Authentication authentication = jwtTokenProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -48,22 +50,37 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 filterChain.doFilter(httpServletRequest, httpServletResponse);
             } else {
-                LOGGER.info("[doFilterInternal] 토큰 유효 체크 실패");
-
-                ObjectMapper objectMapper = new ObjectMapper();
-                EntryPointErrorResponse entryPointErrorResponse = new EntryPointErrorResponse();
-                entryPointErrorResponse.setMsg("인증이 실패하였습니다.");
-
-                httpServletResponse.setStatus(401);
-                httpServletResponse.setContentType("application/json");
-                httpServletResponse.setCharacterEncoding("UTF-8");
-                httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
-                httpServletResponse.getWriter().write(objectMapper.writeValueAsString(entryPointErrorResponse));
-                httpServletResponse.getWriter().flush();
+//                LOGGER.info("[doFilterInternal] 토큰 유효 체크 실패");
+//
+//                ObjectMapper objectMapper = new ObjectMapper();
+//                EntryPointErrorResponse entryPointErrorResponse = new EntryPointErrorResponse();
+//                entryPointErrorResponse.setMsg("인증이 실패하였습니다.");
+//
+//                httpServletResponse.setStatus(401);
+//                httpServletResponse.setContentType("application/json");
+//                httpServletResponse.setCharacterEncoding("UTF-8");
+//                httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+//                httpServletResponse.getWriter().write(objectMapper.writeValueAsString(entryPointErrorResponse));
+//                httpServletResponse.getWriter().flush();
             }
         } else {
-            LOGGER.info("[doFilterInternal] 토큰 없음");
-            filterChain.doFilter(httpServletRequest, httpServletResponse);
+//            LOGGER.info("[doFilterInternal] 토큰 없음");
+//            filterChain.doFilter(httpServletRequest, httpServletResponse);
+        }
+
+        if(!tokenCheck) {
+            LOGGER.info("[doFilterInternal] 토큰 유효 체크 실패");
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            EntryPointErrorResponse entryPointErrorResponse = new EntryPointErrorResponse();
+            entryPointErrorResponse.setMsg("인증이 실패하였습니다.");
+
+            httpServletResponse.setStatus(401);
+            httpServletResponse.setContentType("application/json");
+            httpServletResponse.setCharacterEncoding("UTF-8");
+            httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+            httpServletResponse.getWriter().write(objectMapper.writeValueAsString(entryPointErrorResponse));
+            httpServletResponse.getWriter().flush();
         }
     }
 }

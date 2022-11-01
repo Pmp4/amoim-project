@@ -315,8 +315,6 @@ public class MeetingController {
     }
 
 
-
-
     //해당 유저가 모임 글을 몇개 작성했는지
     //해당 유저가 모임 글을 몇개 작성했는지
     //해당 유저가 모임 글을 몇개 작성했는지
@@ -337,7 +335,15 @@ public class MeetingController {
     }
 
 
+    //모임에 가입된 유저 리스트
+    //모임에 가입된 유저 리스트
+    //모임에 가입된 유저 리스트
+    @GetMapping("/member/{meetingNo}")
+    public List<Map<String, Object>> moimMemberList(@PathVariable Long meetingNo) {
+        logger.info("[selectByUserCount] 핸들러 meetingNo : {}", meetingNo);
 
+        return meetingService.selectUserMeetingList(meetingNo);
+    }
 
 
     @ExceptionHandler(value = RuntimeException.class)
@@ -354,25 +360,6 @@ public class MeetingController {
 
         return new ResponseEntity<>(map, responseHeaders, httpStatus);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     @GetMapping("/signing")
@@ -423,7 +410,6 @@ public class MeetingController {
 //
 //        return restData;
 //    }
-
 
 
     @PutMapping("/subscribe/result")

@@ -237,9 +237,15 @@ public class MeetingServiceImpl implements MeetingService {
         return responseData;
     }
 
+    @Override
+    public List<Map<String, Object>> selectUserMeetingList(Long meetingNo) {
+        logger.info("[selectUserMeetingList] 서비스 로직");
 
+        List<Map<String, Object>> list = meetingDAO.meetingUserList(meetingNo);
+        logger.info("[selectUserMeetingList] 조회 결과 list.size : {}", list.size());
 
-
+        return list;
+    }
 
 
     @Override

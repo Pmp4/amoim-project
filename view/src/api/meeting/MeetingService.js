@@ -37,6 +37,13 @@ const moimByNoView = (no) => {
 }
 
 
+//멤버 조회 api
+const moimMemberSelect = (meetingNo) => {
+    return httpCommon.get(`/meeting/member/${meetingNo}`);
+}
+
+
+
 
 
 
@@ -113,5 +120,6 @@ export default {
     mainSelectCategoryList,
     moimOwnList,
     moimSubscript,
-    moimByNoView
+    moimByNoView,
+    moimMemberSelect
 };
