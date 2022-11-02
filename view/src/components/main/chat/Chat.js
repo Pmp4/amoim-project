@@ -5,8 +5,6 @@ import { useSelector } from "react-redux";
 const Chat = ({ webSocket, meetingNo }) => {
     const [members, setMembers] = useState([]);
     const [inputMsg, setInputMsg] = useState("");
-    const [chatt, setChatt] = useState([]);
-    const [chkLog, setChkLog] = useState(false);
     const [socketData, setSocketData] = useState([]);
 
     const profileImgPath = useSelector((state) => state.path.profileImagePath);
@@ -68,8 +66,7 @@ const Chat = ({ webSocket, meetingNo }) => {
         );
 
         webSocket.current.onmessage = (message) => {
-            const dataSet = JSON.parse(message.data);
-            setSocketData(socketData.concat(dataSet));
+            setSocketData(socketData.concat({...JSON.parse(message.data)}));
         };
     });
 
@@ -79,7 +76,6 @@ const Chat = ({ webSocket, meetingNo }) => {
                 date: new Date().toLocaleString(),
                 msg: inputMsg,
                 userno: user.userInfo.no,
-                socket: true
             }; //전송 데이터(JSON)
 
             const temp = JSON.stringify(data);
@@ -95,12 +91,7 @@ const Chat = ({ webSocket, meetingNo }) => {
             }
 
 
-            setSocketData(socketData.concat({
-                date: new Date().toLocaleString(),
-                msg: inputMsg,
-                userno: user.userInfo.no,
-                socket: false
-            }));
+            setSocketData(socketData.concat(data));
         } else {
             alert("메세지를 입력하세요.");
             inputRef.current.msg.focus();
@@ -139,6 +130,16 @@ const Chat = ({ webSocket, meetingNo }) => {
             );
         });
 
+
+
+
+
+    const onKeyDown = (event) => {
+        if(event.keyCode === 13) {
+            send();
+        }
+    }
+
     return (
         <div id="chatt-page" className="page-wrap">
             <div className="main-part">
@@ -170,6 +171,7 @@ const Chat = ({ webSocket, meetingNo }) => {
                             value={inputMsg}
                             ref={(element) => (inputRef.current.msg = element)}
                             onChange={(event) => onInputActionEvent(event)}
+                            onKeyDown={onKeyDown}
                         />
                         <button onClick={() => send()}>+</button>
                     </div>
