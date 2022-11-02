@@ -48,11 +48,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable()           //CSRF 비활성화, REST API 에서는 CSRF 보안이 필요 없음
                 .cors().and()
 
-                .sessionManagement()
-                .sessionCreationPolicy(
-                        SessionCreationPolicy.STATELESS
-                ).and()                     //REST API 기반 애플리케이션의 동작 방식 설정
-                                            //세션을 사용 여부
+                .sessionManagement()        // 세션 관련 설정
+                .sessionCreationPolicy(     // 세션을 사용 여부
+                        SessionCreationPolicy.STATELESS       // REST API 에선 필요없음
+//                        SessionCreationPolicy.IF_REQUIRED       // WebSocket 때문에
+                ).and()
+
 
 
                 .authorizeRequests()    //애플리케이션에 들어오는 요청에 대한 사용 권한
@@ -86,7 +87,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/profile/**")
                 .antMatchers("/meeting/select/main/**")
                 .antMatchers("/interest/category/**")
-                .antMatchers("/socket/chatt/**");
+                .antMatchers("/socket/chatt/**")
+                .antMatchers("/sign-api/sign-in");
     }
 
 

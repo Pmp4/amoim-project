@@ -442,6 +442,7 @@
             U.BIRTH_DAY,
             U.EMAIL,
             U.NAME,
+            U.USER_ID,
             U.INTRO,
             U.PROFILE_IMAGE
         from USER_MEETING UM join USERS U on U.USER_NO = UM.USER_NO

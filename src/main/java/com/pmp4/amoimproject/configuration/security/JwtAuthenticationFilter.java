@@ -14,6 +14,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 
@@ -49,23 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 LOGGER.info("[doFilterInternal] token 값 유효성 체크 완료");
 
                 filterChain.doFilter(httpServletRequest, httpServletResponse);
-            } else {
-//                LOGGER.info("[doFilterInternal] 토큰 유효 체크 실패");
-//
-//                ObjectMapper objectMapper = new ObjectMapper();
-//                EntryPointErrorResponse entryPointErrorResponse = new EntryPointErrorResponse();
-//                entryPointErrorResponse.setMsg("인증이 실패하였습니다.");
-//
-//                httpServletResponse.setStatus(401);
-//                httpServletResponse.setContentType("application/json");
-//                httpServletResponse.setCharacterEncoding("UTF-8");
-//                httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
-//                httpServletResponse.getWriter().write(objectMapper.writeValueAsString(entryPointErrorResponse));
-//                httpServletResponse.getWriter().flush();
             }
-        } else {
-//            LOGGER.info("[doFilterInternal] 토큰 없음");
-//            filterChain.doFilter(httpServletRequest, httpServletResponse);
         }
 
         if(!tokenCheck) {
@@ -78,7 +63,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             httpServletResponse.setStatus(401);
             httpServletResponse.setContentType("application/json");
             httpServletResponse.setCharacterEncoding("UTF-8");
-            httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "*");
+//            httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "http://localhost:3000");
+            // cors 에러에 대비 : 클라이언트의 'withCredentials: true' 일 경우 응답 헤더에는 이렇게 담겨야함
+
             httpServletResponse.getWriter().write(objectMapper.writeValueAsString(entryPointErrorResponse));
             httpServletResponse.getWriter().flush();
         }
