@@ -18,45 +18,51 @@ import java.util.*;
 @Service
 @ServerEndpoint(value = "/socket/chatt/{moim}")
 public class ChatSocket {
-    private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
+//    private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
 //    private static Set<Map<Long, Session>> clients = Collections.synchronizedSet(new HashSet<>());
-//    private static Map<Long, Session> clients = new HashMap<>();
+    private static Map<Long, Set<Session>> rooms = new HashMap<>();
     private static Logger LOGGER = LoggerFactory.getLogger(ChatSocket.class);
 
 
     @OnOpen
     public void onOpen(@PathParam("moim") Long meetingNo,  Session session) {
         LOGGER.info("=====================================================================");
-        LOGGER.info("[onOpen] open session : {}, clients={}", session.toString(), clients);
+        LOGGER.info("[onOpen] open session : {}, clients={}", session.toString(), rooms.get(meetingNo));
         LOGGER.info("=====================================================================");
 
-//        Map<String, List<String>> res = session.getRequestParameterMap();
-//        LOGGER.info("res={}", res);
+        Set<Session> clients = rooms.get(meetingNo);
 
-//        for(Map<Long, Session> client : clients) {
-//            if(client.get(userno) != null) {
-//                LOGGER.info("[onOpen] 접속된 사용자");
-//            }else {
-//                LOGGER.info("[onOpen] 새로운 사용자");
-//            }
-//        }
-
-
-//        clients.put(userno, session);
-
-        if(!clients.contains(session)) {
-            clients.add(session);
+        if(clients != null) {
+            if(!clients.contains(session)) {
+                clients.add(session);
+                LOGGER.info("session open : {}", session);
+            }else{
+                LOGGER.info("이미 연결된 session");
+            }
+        } else {
+            Set<Session> clientSet = Collections.synchronizedSet(new HashSet<>());
+            clientSet.add(session);
             LOGGER.info("session open : {}", session);
-        }else{
-            LOGGER.info("이미 연결된 session");
+
+            rooms.put(meetingNo, clientSet);
         }
     }
 
     @OnMessage
-    public void onMessage(String message) throws IOException {
+    public void onMessage(String message, @PathParam("moim") Long meetingNo) throws IOException {
         LOGGER.info("=====================================================================");
-        LOGGER.info("[onMessage] receive message : {}", message);
+        LOGGER.info("[onMessage] receive message : {}, meetingNo : {}", message, meetingNo);
         LOGGER.info("=====================================================================");
+
+
+
+        Set<Session> clients = rooms.get(meetingNo);
+
+        for(Session session : clients) {
+            LOGGER.info("send data : {}", message);
+            session.getBasicRemote().sendText(message);
+        }
+
 
 //        Map<Long, Session> copyClients = new HashMap<>(clients);
 //        copyClients.remove(userno);
@@ -73,17 +79,20 @@ public class ChatSocket {
 
 //        Collection<Session> session = clients.values();
 
-        for (Session s : clients) {
-            LOGGER.info("send data : {}", message);
-            s.getBasicRemote().sendText(message);
-        }
+//        for (Session s : clients) {
+//            LOGGER.info("send data : {}", message);
+//            s.getBasicRemote().sendText(message);
+//        }
     }
 
     @OnClose
-    public void onClose(Session session) {
+    public void onClose(Session session, @PathParam("moim") Long meetingNo) {
         LOGGER.info("=====================================================================");
         LOGGER.info("session close : {}", session);
         LOGGER.info("=====================================================================");
+
+        Set<Session> clients = rooms.get(meetingNo);
+
 //        clients.remove(userno);
         clients.remove(session);
     }
