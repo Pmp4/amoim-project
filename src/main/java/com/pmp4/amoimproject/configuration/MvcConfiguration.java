@@ -1,24 +1,13 @@
 package com.pmp4.amoimproject.configuration;
 
-import com.pmp4.amoimproject.interceptor.MoimInterceptor;
-import com.pmp4.amoimproject.jwt.JwtTokenProvider;
-import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableScheduling
@@ -30,6 +19,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
 //                .addPathPatterns("/meeting/**")
 //                .excludePathPatterns("/meeting/select/main/**");
 //    }
+
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -47,7 +37,8 @@ public class MvcConfiguration implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000")
                 .allowedMethods("*")
-                .allowCredentials(false);
+//                .allowCredentials(true);    //쿠키 열람 권한, 프론트에 맞춰 대응해줘야함
+                .allowCredentials(false);    //쿠키 열람 권한, 프론트에 맞춰 대응해줘야함
     }
 
 

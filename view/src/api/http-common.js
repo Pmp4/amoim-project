@@ -7,6 +7,7 @@ const instance = axios.create({
         "Content-type":"application/json",
         // 'X-AUTH-TOKEN': `${localStorage.getItem('X-AUTH-TOKEN')}`
     },
+    // withCredentials: true   //쿠키 조회 권한
 });
 
 instance.interceptors.request.use(

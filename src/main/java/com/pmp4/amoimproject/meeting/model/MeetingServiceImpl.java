@@ -122,8 +122,8 @@ public class MeetingServiceImpl implements MeetingService {
     public Map<String, Object> mainLocList(HttpServletRequest request) {
         logger.info("[mainLocList] 서비스 로직");
 
-        String token = jwtTokenProvider.resolveToken(request);
-        logger.info("[mainLocList] 토큰 추출 token : {}", token);
+//        String token = jwtTokenProvider.resolveToken(request);
+//        logger.info("[mainLocList] 토큰 추출 token : {}", token);
 
 
 //        if(!token.isEmpty() && jwtTokenProvider.validateToken(token)) {

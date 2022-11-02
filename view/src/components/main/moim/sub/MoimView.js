@@ -21,6 +21,7 @@ const MoimView = () => {
 
     const tabRef = useRef({});
     const slideRef = useRef([]);
+    const ws = useRef(null);
 
 
     const imgPath = useSelector((state) => state.path.imagePath);
@@ -393,7 +394,7 @@ const MoimView = () => {
     const chatComp = () => {
         return (
             <div className="slide next" ref={element => slideRef.current[3] = element}>
-                {pageState === 3 && <Chat meetingNo={meetingNo}/>}
+                {pageState === 3 && <Chat webSocket={ws} meetingNo={meetingNo}/>}
             </div>
         );
     };
