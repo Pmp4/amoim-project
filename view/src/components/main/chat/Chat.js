@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowUpLong } from '@fortawesome/free-solid-svg-icons';
 import ChatService from "api/chat/ChatService";
 import MeetingService from "api/meeting/MeetingService";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -5,9 +7,11 @@ import { useSelector } from "react-redux";
 
 const Chat = ({ webSocket, meetingNo }) => {
     const [members, setMembers] = useState([]);
-    const [inputMsg, setInputMsg] = useState("");
-    const [socketData, setSocketData] = useState(null);
-    const [chatt, setChatt] = useState([]);
+    const [inputMsg, setInputMsg] = useState("");           
+    const [socketData, setSocketData] = useState(null);     //소켓 데이터를 바로 채팅 데이터로 못쓰기 때문에 따로 보관
+    const [chatt, setChatt] = useState([]);                 //채팅 데이터 저장
+    const [msgState, setMsgState] = useState(true);
+    const [topNo, setTopNo] = useState(0);
 
     const profileImgPath = useSelector((state) => state.path.profileImagePath);
     const user = useSelector((state) => state.user);
@@ -15,6 +19,7 @@ const Chat = ({ webSocket, meetingNo }) => {
     // const ws = useRef(null);
     const inputRef = useRef({});
     const listRef = useRef(null);
+    const chatRef = useRef({});
 
     // 새로고침 시, webSocket의 session을 초기화해줘야함
     // 새로고침 시, webSocket의 session을 초기화해줘야함
@@ -38,7 +43,15 @@ const Chat = ({ webSocket, meetingNo }) => {
 
 
     useEffect(() => {
-        listRef.current.scrollTop += listRef.current.childNodes[0].offsetHeight;
+        if(chatt.length > 0) {
+            if(msgState) {
+                listRef.current.scrollTop += listRef.current.childNodes[0].offsetHeight;
+                setMsgState(false);
+            }else {
+                listRef.current.scrollTop += 
+                    chatRef.current[topNo].offsetTop - document.querySelector(".pulling").offsetHeight;
+            }
+        }
     }, [chatt]) 
 
 
@@ -49,8 +62,6 @@ const Chat = ({ webSocket, meetingNo }) => {
     const msgBoxComp = chatt.map((item, idx) => {
         if (chatt === null) return "";
         const dbDate = new Date(item.regdate);
-        console.log(item.regdate);
-        console.log(dbDate);
         const date = dbDate.toLocaleString().substr(dbDate.toLocaleString().lastIndexOf(".") + 2);
 
         let profileImg;
@@ -67,7 +78,10 @@ const Chat = ({ webSocket, meetingNo }) => {
 
         if (parseInt(item.userNo) !== parseInt(user.userInfo.no)) {
             return (
-                <div className="other" key={idx}>
+                <div className="other" 
+                    key={idx} 
+                    ref={element => chatRef.current[item.no] = element}
+                >
                     <div className="profile-img">
                         <img
                             src={profileImgPath + profileImg}
@@ -87,7 +101,10 @@ const Chat = ({ webSocket, meetingNo }) => {
             );
         } else {
             return (
-                <div className="one" key={idx}>
+                <div className="one" 
+                    key={idx}
+                    ref={element => chatRef.current[item.no] = element}
+                >
                     <div className="text-box">
                         <div className="date">{date}</div>
                         {item.message}
@@ -112,7 +129,7 @@ const Chat = ({ webSocket, meetingNo }) => {
         webSocket.current.onmessage = (message) => {
             console.log("수신!");
             const data = JSON.parse(message.data);
-            console.log(data);
+            setMsgState(true);
             setSocketData(data);
         };
     };
@@ -204,13 +221,23 @@ const Chat = ({ webSocket, meetingNo }) => {
         const response = await ChatService.chatHistory(meetingNo, no);
         const tempChat = [...response.data];
         tempChat.push(...chatt);
-        console.log(tempChat);
+        // console.log(response.data);
+        // console.log(tempChat);
 
         setChatt([...tempChat]);
     }
 
 
 
+
+    // 이전 내용 불러오기 버튼
+    // 이전 내용 불러오기 버튼
+    // 이전 내용 불러오기 버튼
+    const pullingActionEvent = () => {
+        // console.log(chatt[0].no);
+        setTopNo(chatt[0].no);
+        chatHistory(chatt[0].no);
+    }
 
 
 
@@ -250,6 +277,9 @@ const Chat = ({ webSocket, meetingNo }) => {
                             <div className="text-box">테스트 대화입니다.</div>
                         </div> */}
                         <div className='list'>
+                            <button className='pulling' onClick={pullingActionEvent}>
+                                <FontAwesomeIcon icon={faArrowUpLong}/>
+                            </button>
                             {msgBoxComp}
                         </div>
                     </div>
