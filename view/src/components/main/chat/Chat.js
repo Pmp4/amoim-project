@@ -26,6 +26,7 @@ const Chat = ({ webSocket, meetingNo }) => {
     useEffect(() => {
         memberSelectApi();
         webSocketLogin();
+        chatHistory();
         // console.log(chatt);
     }, []);
 
@@ -47,13 +48,14 @@ const Chat = ({ webSocket, meetingNo }) => {
 
     const msgBoxComp = chatt.map((item, idx) => {
         if (chatt === null) return "";
-        const date = item.date.substr(item.date.lastIndexOf(".") + 2);
+        const dbDate = new Date(item.regdate);
+        const date = dbDate.toLocaleString().substr(dbDate.toLocaleString().lastIndexOf(".") + 2);
 
         let profileImg;
         let username;
         let userid;
         for (let i = 0; i < members.length; i++) {
-            if (members[i].USER_NO === parseInt(item.userno)) {
+            if (members[i].USER_NO === parseInt(item.userNo)) {
                 profileImg = members[i].PROFILE_IMAGE;
                 username = members[i].NAME;
                 userid = members[i].USER_ID;
@@ -61,7 +63,7 @@ const Chat = ({ webSocket, meetingNo }) => {
             }
         }
 
-        if (parseInt(item.userno) !== parseInt(user.userInfo.no)) {
+        if (parseInt(item.userNo) !== parseInt(user.userInfo.no)) {
             return (
                 <div className="other" key={idx}>
                     <div className="profile-img">
@@ -75,7 +77,7 @@ const Chat = ({ webSocket, meetingNo }) => {
                             {username} <span>{userid}</span>
                         </div>
                         <div className="text-box">
-                            {item.msg}
+                            {item.message}
                             <div className="date">{date}</div>
                         </div>
                     </div>
@@ -86,7 +88,7 @@ const Chat = ({ webSocket, meetingNo }) => {
                 <div className="one" key={idx}>
                     <div className="text-box">
                         <div className="date">{date}</div>
-                        {item.msg}
+                        {item.message}
                     </div>
                 </div>
             );
@@ -115,9 +117,8 @@ const Chat = ({ webSocket, meetingNo }) => {
     const send = () => {
         if (inputMsg !== "") {
             const data = {
-                date: new Date().toLocaleString(),
-                msg: inputMsg,
-                userno: user.userInfo.no,
+                message: inputMsg,
+                userNo: user.userInfo.no,
             }; //전송 데이터(JSON)
 
             const temp = JSON.stringify(data);
@@ -190,6 +191,28 @@ const Chat = ({ webSocket, meetingNo }) => {
             return false;
         }
     };
+
+
+    // 채팅 기록 조회 api
+    // 채팅 기록 조회 api
+    // 채팅 기록 조회 api
+    const chatHistory = async(no = null) => {
+        const response = await ChatService.chatHistory(meetingNo, no);
+        const tempChat = [...response.data];
+        tempChat.push(...chatt);
+        console.log(tempChat);
+
+        setChatt([...tempChat]);
+    }
+
+
+
+
+
+
+
+
+
 
     const onKeyDown = (event) => {
         if (event.keyCode === 13) {
