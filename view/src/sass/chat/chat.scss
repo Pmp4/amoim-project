@@ -126,7 +126,7 @@
                             position: absolute;
                             left: -10px;
                             bottom: 0;
-                            min-width: 56px;
+                            width: max-content;
                             transform: translateX(-100%);
                         }
                     }

@@ -5,5 +5,16 @@
         insert into CHAT(message, user_no, meeting_no)
         VALUES (#{message}, #{userNo}, #{meetingNo})
     </insert>
+    
+    
+    <select id="chatList" parameterType="hashMap" resultType="chatVo">
+        select * from CHAT
+        where MEETING_NO = #{meetingNo}
+            <if test="no == null or no.equals('')">
+                and NO Less Than #{no}
+            </if>
+        order by REGDATE desc
+        LIMIT 15
+    </select>
 
 </mapper>
