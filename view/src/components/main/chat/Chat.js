@@ -1,3 +1,4 @@
+import ChatService from "api/chat/ChatService";
 import MeetingService from "api/meeting/MeetingService";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -13,16 +14,14 @@ const Chat = ({ webSocket, meetingNo }) => {
 
     // const ws = useRef(null);
     const inputRef = useRef({});
+    const listRef = useRef(null);
 
-
     // 새로고침 시, webSocket의 session을 초기화해줘야함
     // 새로고침 시, webSocket의 session을 초기화해줘야함
     // 새로고침 시, webSocket의 session을 초기화해줘야함
-    window.addEventListener('beforeunload', (event) => {
+    window.addEventListener("beforeunload", (event) => {
         webSocket.current.close();
     });
-
-
 
     useEffect(() => {
         memberSelectApi();
@@ -31,23 +30,30 @@ const Chat = ({ webSocket, meetingNo }) => {
     }, []);
 
     useEffect(() => {
-        if(socketData !== null) {
+        if (socketData !== null) {
             setChatt(chatt.concat(socketData));
         }
     }, [socketData]);
 
 
+    useEffect(() => {
+        listRef.current.scrollTop += listRef.current.childNodes[0].offsetHeight;
+    }, [chatt]) 
+
+
+
+
 
 
     const msgBoxComp = chatt.map((item, idx) => {
-        if(chatt === null) return "";
+        if (chatt === null) return "";
         const date = item.date.substr(item.date.lastIndexOf(".") + 2);
 
         let profileImg;
         let username;
         let userid;
-        for(let i = 0; i < members.length; i++) {
-            if(members[i].USER_NO === parseInt(item.userno)) {
+        for (let i = 0; i < members.length; i++) {
+            if (members[i].USER_NO === parseInt(item.userno)) {
                 profileImg = members[i].PROFILE_IMAGE;
                 username = members[i].NAME;
                 userid = members[i].USER_ID;
@@ -55,7 +61,7 @@ const Chat = ({ webSocket, meetingNo }) => {
             }
         }
 
-        if(parseInt(item.userno) !== parseInt(user.userInfo.no)) {
+        if (parseInt(item.userno) !== parseInt(user.userInfo.no)) {
             return (
                 <div className="other" key={idx}>
                     <div className="profile-img">
@@ -64,26 +70,27 @@ const Chat = ({ webSocket, meetingNo }) => {
                             alt={username + "의 프로필 이미지"}
                         />
                     </div>
-                    <div className='right'>
-                        <div className="info">{username} <span>{userid}</span></div>
+                    <div className="right">
+                        <div className="info">
+                            {username} <span>{userid}</span>
+                        </div>
                         <div className="text-box">
                             {item.msg}
-                            <div className='date'>{date}</div>
+                            <div className="date">{date}</div>
                         </div>
                     </div>
                 </div>
-            )
-        }else {
+            );
+        } else {
             return (
                 <div className="one" key={idx}>
                     <div className="text-box">
-                        <div className='date'>{date}</div>
+                        <div className="date">{date}</div>
                         {item.msg}
                     </div>
                 </div>
-            )
+            );
         }
-        
     });
 
     const onInputActionEvent = (event) => {
@@ -92,7 +99,7 @@ const Chat = ({ webSocket, meetingNo }) => {
 
     const webSocketLogin = () => {
         // console.log(webSocket.current);
-        if(webSocket.current === null) {
+        if (webSocket.current === null) {
             webSocket.current = new WebSocket(
                 `ws://localhost:8080/rest/v1/socket/chatt/${meetingNo}`
             );
@@ -105,7 +112,6 @@ const Chat = ({ webSocket, meetingNo }) => {
         };
     };
 
-
     const send = () => {
         if (inputMsg !== "") {
             const data = {
@@ -116,17 +122,25 @@ const Chat = ({ webSocket, meetingNo }) => {
 
             const temp = JSON.stringify(data);
 
-            console.log("전송!");
-            if (webSocket.current.readyState === 0) {
-                //readyState는 웹 소켓 연결 상태를 나타냄
-                webSocket.current.onopen = () => {
-                    //webSocket이 맺어지고 난 후, 실행
-                    webSocket.current.send(temp);
-                };
-            } else {
-                webSocket.current.send(temp);
-            }
-            // setSocketData(socketData.concat(data));
+            const promise = chatRegistrationApi({
+                meetingNo,
+                userNo: user.userInfo.no,
+                message: inputMsg,
+            });
+
+            promise.then((res) => {
+                if (res) {
+                    if (webSocket.current.readyState === 0) {
+                        //readyState는 웹 소켓 연결 상태를 나타냄
+                        webSocket.current.onopen = () => {
+                            //webSocket이 맺어지고 난 후, 실행
+                            webSocket.current.send(temp);
+                        };
+                    } else {
+                        webSocket.current.send(temp);
+                    }
+                }
+            });
         } else {
             alert("메세지를 입력하세요.");
             inputRef.current.msg.focus();
@@ -135,8 +149,6 @@ const Chat = ({ webSocket, meetingNo }) => {
         setInputMsg("");
     };
 
-
-    
     //멤버 조회 api
     //멤버 조회 api
     //멤버 조회 api
@@ -161,20 +173,29 @@ const Chat = ({ webSocket, meetingNo }) => {
                         <p>{item.NAME}</p>
                         <span>{item.INTRO}</span>
                     </div>
-                    <div className="state"></div>
+                    {/* <div className="state"></div> */}
                 </div>
             );
         });
 
-
-
-
+    // 채팅 서버에 등록 api
+    // 채팅 서버에 등록 api
+    // 채팅 서버에 등록 api
+    const chatRegistrationApi = async (rest) => {
+        const response = await ChatService.registractionChat(rest);
+        if (response.data > 0) {
+            return true;
+        } else {
+            alert("채팅 오류");
+            return false;
+        }
+    };
 
     const onKeyDown = (event) => {
-        if(event.keyCode === 13) {
+        if (event.keyCode === 13) {
             send();
         }
-    }
+    };
 
     return (
         <div id="chatt-page" className="page-wrap">
@@ -184,7 +205,9 @@ const Chat = ({ webSocket, meetingNo }) => {
                     <div className="member">{memberList()}</div>
                 </div>
                 <div className="chatt-box">
-                    <div className="chatt-list-box">
+                    <div className="chatt-list-wrap" 
+                        ref={element => listRef.current = element}
+                    >
                         {/* <div className="other">
                             <div className="profile-img">
                                 <img
@@ -199,7 +222,9 @@ const Chat = ({ webSocket, meetingNo }) => {
                         <div className="one">
                             <div className="text-box">테스트 대화입니다.</div>
                         </div> */}
-                        {msgBoxComp}
+                        <div className='list'>
+                            {msgBoxComp}
+                        </div>
                     </div>
                     <div className="input-box">
                         <input

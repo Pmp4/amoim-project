@@ -1,6 +1,9 @@
 package com.pmp4.amoimproject.socket;
 
 
+import com.pmp4.amoimproject.meeting.model.MeetingService;
+import com.pmp4.amoimproject.meeting.model.MeetingServiceImpl;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +20,7 @@ import java.util.*;
 
 @Service
 @ServerEndpoint(value = "/socket/chatt/{moim}")
+@RequiredArgsConstructor
 public class ChatSocket {
 //    private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
 //    private static Set<Map<Long, Session>> clients = Collections.synchronizedSet(new HashSet<>());
