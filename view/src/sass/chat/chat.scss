@@ -95,107 +95,107 @@
                 -5px -5px 44px #ffffff;
             overflow: hidden;
 
-            .chatt-list-box {
+            .chatt-list-wrap {
                 width: 100%;
                 height: 90%;
                 padding: 2%;
                 box-sizing: border-box;
                 overflow-y: auto;
 
-                >div {
-                    width: 45%;
-                    margin-top: 20px;
-
-                    &:nth-child(1) {
-                        margin-top: 0;
-                    }
-                }
-
-                .text-box {
-                    width: auto;
-                    border-radius: 6px;
-                    padding: 3px 5px;
-                    box-sizing: border-box;
-                    box-shadow: 2px 2px 10px #f2f2f2,
-                        -2px -2px 10px #f2f2f2;
-                    position: relative;
-
-                    .date {
-                        font-size: .6em;
-                        position: absolute;
-                        left: -10px;
-                        bottom: 0;
-                        min-width: 56px;
-                        transform: translateX(-100%);
-                    }
-                }
-
-                .one {
-                    margin-left: 55%;
-                    display: flex;
-                    flex-direction: row-reverse;
-
-                    .text-box {
-                        background: #f3fcf98e;
-                    }
-                }
-
-                .other {
-                    display: flex;
-                    flex-wrap: wrap;
-                    // justify-content: space-between;
-                    align-items: flex-start;
-
-                    .profile-img {
-                        width: 10%;
-                        border-radius: 20%;
-                        overflow: hidden;
-
-                        img {
-                            width: 100%;
-                            display: block;
-
-                            &:before {
-                                content: "";
-                                display: block;
-                                padding-top: 100%;
-                            }
+                .list {
+                    >div {
+                        width: 45%;
+                        margin-top: 20px;
+    
+                        &:nth-child(1) {
+                            margin-top: 0;
                         }
                     }
-
-                    .right {
-                        margin-left: 5%;
-                        max-width: 85%;
+    
+                    .text-box {
+                        width: auto;
+                        border-radius: 6px;
+                        padding: 3px 5px;
+                        box-sizing: border-box;
+                        box-shadow: 2px 2px 10px #f2f2f2,
+                            -2px -2px 10px #f2f2f2;
+                        position: relative;
+    
+                        .date {
+                            font-size: .6em;
+                            position: absolute;
+                            left: -10px;
+                            bottom: 0;
+                            min-width: 56px;
+                            transform: translateX(-100%);
+                        }
+                    }
+    
+                    .one {
+                        margin-left: 55%;
+                        display: flex;
+                        flex-direction: row-reverse;
+    
+                        .text-box {
+                            background: #f3fcf98e;
+                        }
+                    }
+    
+                    .other {
                         display: flex;
                         flex-wrap: wrap;
-
-                        .text-box {
-                            width: auto;
-                            // display: inline-block;
-                            line-height: 110%;
-                            background-color: #fff;
-                            margin-top: 7px;
-
-                            .date {
-                                right: -10px;
-                                transform: translateX(100%);
+                        // justify-content: space-between;
+                        align-items: flex-start;
+    
+                        .profile-img {
+                            width: 10%;
+                            border-radius: 20%;
+                            overflow: hidden;
+    
+                            img {
+                                width: 100%;
+                                display: block;
+    
+                                &:before {
+                                    content: "";
+                                    display: block;
+                                    padding-top: 100%;
+                                }
                             }
                         }
-
-                        .info {
-                            width: 100%;
-                            font-size: .8em;
-                            font-weight: 500;
-
-                            span {
+    
+                        .right {
+                            margin-left: 5%;
+                            max-width: 85%;
+                            display: flex;
+                            flex-wrap: wrap;
+    
+                            .text-box {
+                                width: auto;
+                                // display: inline-block;
+                                line-height: 110%;
+                                background-color: #fff;
+                                margin-top: 7px;
+    
+                                .date {
+                                    right: -10px;
+                                    transform: translateX(100%);
+                                }
+                            }
+    
+                            .info {
+                                width: 100%;
                                 font-size: .8em;
-                                font-weight: 400;
+                                font-weight: 500;
+    
+                                span {
+                                    font-size: .8em;
+                                    font-weight: 400;
+                                }
                             }
                         }
                     }
                 }
-
-
             }
 
             .input-box {
