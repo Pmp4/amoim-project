@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,8 @@ public class ChatServiceImpl implements ChatService{
 
         List<ChatVO> list = chatDAO.chatList(dbParam);
         LOGGER.info("[chatList] 조회 결과 list.size : {}", list.size());
+        LOGGER.info("[chatList] 조회 결과 list.size : {}", list.get(0));
+        LOGGER.info("[chatList] 조회 결과 list.size : {}", new Date());
 
         return list;
     }

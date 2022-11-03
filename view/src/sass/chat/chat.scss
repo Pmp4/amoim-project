@@ -124,7 +124,6 @@
                         .date {
                             font-size: .6em;
                             position: absolute;
-                            left: -10px;
                             bottom: 0;
                             width: max-content;
                             transform: translateX(-100%);
@@ -138,6 +137,16 @@
     
                         .text-box {
                             background: #f3fcf98e;
+
+
+                            .date {
+                                font-size: .6em;
+                                position: absolute;
+                                bottom: 0;
+                                left: -10px;
+                                width: max-content;
+                                transform: translateX(-100%);
+                            }
                         }
                     }
     
