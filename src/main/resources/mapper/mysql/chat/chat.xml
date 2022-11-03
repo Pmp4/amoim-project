@@ -13,10 +13,12 @@
                 select no, message, user_no, meeting_no, DATE_SUB(regdate, INTERVAL 9 HOUR) "regdate"
                 from CHAT
                 where MEETING_NO = 15
-                order by REGDATE desc
-                    <if test="no == null or no.equals('')">
-                        and NO Less Than #{no}
+                    <if test="no != null and !no.equals('')">
+                        <![CDATA[
+                            and NO < cast(#{no} as unsigned)
+                        ]]>
                     </if>
+                order by REGDATE desc
                 LIMIT 15
             ) a
         order by regdate

@@ -30,14 +30,16 @@ public class ChatServiceImpl implements ChatService{
     @Override
     public List<ChatVO> chatList(Long meetingNo, String no) {
         LOGGER.info("[chatList] 서비스 로직");
+
+
+        if(no.equals("null")) no = null;
+
         Map<String, Object> dbParam = new HashMap<>();
         dbParam.put("meetingNo", meetingNo);
         dbParam.put("no", no);
 
         List<ChatVO> list = chatDAO.chatList(dbParam);
         LOGGER.info("[chatList] 조회 결과 list.size : {}", list.size());
-        LOGGER.info("[chatList] 조회 결과 list.size : {}", list.get(0));
-        LOGGER.info("[chatList] 조회 결과 list.size : {}", new Date());
 
         return list;
     }
