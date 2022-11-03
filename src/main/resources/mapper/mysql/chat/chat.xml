@@ -10,7 +10,7 @@
     <select id="chatList" parameterType="hashMap" resultType="chatVo">
         select *
             from (
-                select no, message, user_no, meeting_no, DATE_FORMAT(regdate, '%Y-%m-%d %T') "regdate"
+                select no, message, user_no, meeting_no, DATE_SUB(regdate, INTERVAL 9 HOUR) "regdate"
                 from CHAT
                 where MEETING_NO = 15
                 order by REGDATE desc
