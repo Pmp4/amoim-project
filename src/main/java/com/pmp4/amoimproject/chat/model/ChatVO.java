@@ -2,6 +2,7 @@ package com.pmp4.amoimproject.chat.model;
 
 import lombok.Data;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Data

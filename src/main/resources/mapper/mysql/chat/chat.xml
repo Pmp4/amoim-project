@@ -8,13 +8,18 @@
     
     
     <select id="chatList" parameterType="hashMap" resultType="chatVo">
-        select * from CHAT
-        where MEETING_NO = #{meetingNo}
-            <if test="no == null or no.equals('')">
-                and NO Less Than #{no}
-            </if>
-        order by REGDATE desc
-        LIMIT 15
+        select *
+            from (
+                select no, message, user_no, meeting_no, DATE_FORMAT(regdate, '%Y-%m-%d %T') "regdate"
+                from CHAT
+                where MEETING_NO = 15
+                order by REGDATE desc
+                    <if test="no == null or no.equals('')">
+                        and NO Less Than #{no}
+                    </if>
+                LIMIT 15
+            ) a
+        order by regdate
     </select>
 
 </mapper>

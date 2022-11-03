@@ -49,6 +49,8 @@ const Chat = ({ webSocket, meetingNo }) => {
     const msgBoxComp = chatt.map((item, idx) => {
         if (chatt === null) return "";
         const dbDate = new Date(item.regdate);
+        console.log(item.regdate);
+        console.log(dbDate);
         const date = dbDate.toLocaleString().substr(dbDate.toLocaleString().lastIndexOf(".") + 2);
 
         let profileImg;
@@ -110,6 +112,7 @@ const Chat = ({ webSocket, meetingNo }) => {
         webSocket.current.onmessage = (message) => {
             console.log("수신!");
             const data = JSON.parse(message.data);
+            console.log(data);
             setSocketData(data);
         };
     };
@@ -117,6 +120,7 @@ const Chat = ({ webSocket, meetingNo }) => {
     const send = () => {
         if (inputMsg !== "") {
             const data = {
+                regdate: new Date().toString().replace(" (한국 표준시)", ""),
                 message: inputMsg,
                 userNo: user.userInfo.no,
             }; //전송 데이터(JSON)
