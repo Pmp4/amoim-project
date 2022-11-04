@@ -7,6 +7,11 @@ const insertMeeting = (data) => {
 }
 
 
+const deleteMeeting = (meetingNo) => {
+    return httpMultipartCommon.delete(`/meeting/delete/${meetingNo}`);
+}
+
+
 //모임 정보 수정
 const editMeeting = (rest, meetingNo) => {
     return httpMultipartCommon.post(`/meeting/edit/${meetingNo}`, rest);
@@ -128,5 +133,6 @@ export default {
     moimSubscript,
     moimByNoView,
     moimMemberSelect,
-    editMeeting
+    editMeeting,
+    deleteMeeting
 };

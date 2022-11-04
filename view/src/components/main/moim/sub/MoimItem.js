@@ -2,6 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useLocation, useNavigate } from "react-router-dom";
+import MeetingService from 'api/meeting/MeetingService';
 
 const MoimItem = (props) => {
     // console.log(props);
@@ -11,17 +12,38 @@ const MoimItem = (props) => {
     const location = useLocation();
     const navigate = useNavigate();
 
+
+    const removeButtonAction = (no) => {
+        if(window.confirm("삭제하시겠습니까?")) {
+
+        }
+    }
+
+    const removeApi = async(no) => {
+        const response = await MeetingService.deleteMeeting(no);
+
+    }
+
+
     return (
         <div className="item" 
             key={item.NO} 
-            onClick={
-                () => {
-                    editState ? navigate(`/moim/edit/${item.NO}`) : 
-                        navigate(`/moim/view/${item.NO}`)
-                }
-            }
         >
-            <div className="image">
+            {editState && 
+                <div className='delete-button' 
+                    onClick={() => removeButtonAction(item.NO)}
+                >
+                    <span></span>
+                </div>
+            }
+            <div className="image"
+                onClick={
+                    () => {
+                        editState ? navigate(`/moim/edit/${item.NO}`) : 
+                            navigate(`/moim/view/${item.NO}`)
+                    }
+                }
+            >
                 <img
                     src={`http://localhost:8080/rest/v1/images/${item.IMAGE_NAME}`}
                     alt="이미지"
