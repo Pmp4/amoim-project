@@ -37,9 +37,9 @@ public class MeetingController {
                                              @RequestPart(value = "contentsData") MeetingVO meetingVO,
                                              @RequestPart(value = "addressData") MeetingAddressVO meetingAddressVO,
                                              @RequestPart(value = "tagData") List<String> tagData) {
-        logger.info("MEETING 등록 meetingVO={}", meetingVO);
-        logger.info("MEETING 등록 meetingAddressVO={}", meetingAddressVO);
-        logger.info("MEETING 등록 tagData={}", tagData);
+        logger.info("[insertMeeting] 핸들러 meetingVO={}", meetingVO);
+        logger.info("[insertMeeting] 핸들러 meetingAddressVO={}", meetingAddressVO);
+        logger.info("[insertMeeting] 핸들러 tagData={}", tagData);
 
         int result = meetingService.meetingRegister(meetingVO, meetingAddressVO, tagData, httpServletRequest);
         Map<String, Object> resData = new HashMap<>();
@@ -54,6 +54,27 @@ public class MeetingController {
 
         return resData;
     }
+
+
+    @PostMapping("/edit/{meetingNo}")
+    public void editMoim(HttpServletRequest httpServletRequest,
+                         @PathVariable Long meetingNo,
+                         @RequestPart(value = "contents") MeetingVO meetingVO,
+                         @RequestPart(value = "address") MeetingAddressVO meetingAddressVO,
+                         @RequestPart(value = "tags") List<String> tags,
+                         @RequestPart(value = "user") Long userNo,
+                         @RequestPart(value = "state") Map<String, Object> editState) {
+        logger.info("[editMoim] 핸들러 meetingNo : {}", meetingNo);
+        logger.info("[editMoim] 핸들러 meetingVO : {}", meetingVO);
+        logger.info("[editMoim] 핸들러 meetingAddressVO : {}", meetingAddressVO);
+        logger.info("[editMoim] 핸들러 tags : {}", tags);
+        logger.info("[editMoim] 핸들러 userNo : {}", userNo);
+        logger.info("[editMoim] 핸들러 editState : {}", editState);
+    }
+
+
+
+
 
 
 //    @GetMapping("/select")

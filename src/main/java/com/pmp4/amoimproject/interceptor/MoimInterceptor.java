@@ -1,44 +1,62 @@
 package com.pmp4.amoimproject.interceptor;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pmp4.amoimproject.common.AuthErrorResponse;
+import com.pmp4.amoimproject.jwt.JwtTokenProvider;
+import com.pmp4.amoimproject.meeting.model.MeetingService;
+import com.pmp4.amoimproject.sign.model.EntryPointErrorResponse;
 import com.pmp4.amoimproject.sign.model.PrincipalDetails;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
+import java.util.Objects;
 
-@Component
+
 public class MoimInterceptor implements HandlerInterceptor {
     private static final Logger LOGGER = LoggerFactory.getLogger(MoimInterceptor.class);
 
-    private String path;
+    @Autowired
+    private MeetingService meetingService;
 
 
     @Override
-    public boolean preHandle(HttpServletRequest request,
-                             HttpServletResponse response,
+    public boolean preHandle(HttpServletRequest httpServletRequest,
+                             HttpServletResponse httpServletResponse,
                              Object handler)
             throws Exception {
-        LOGGER.info("[preHandle] interceptor");
+        Map<?, ?> pathVariables =
+                (Map<?, ?>) httpServletRequest.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 
-        // Filter 에서 토큰 유효 시, 저장한 인증객체를 찾아옴
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        LOGGER.info("[preHandle - interceptor] Path : {}", httpServletRequest.getServletPath());
+        LOGGER.info("[preHandle - interceptor] Path Variable : {}", pathVariables);
 
-        Long userNo;
-        if(principal instanceof PrincipalDetails) {
-            userNo = ((PrincipalDetails)principal).getUserVO().getUserNo();
-        }else {
-            LOGGER.info("[preHandle] 접근 금지");
-//            response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "http://localhost:8080");
-            response.sendRedirect("http://localhost:8080/rest/v1/sign-api/exception");
+        PrincipalDetails principal = (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long tokenUserNo = principal.getUserVO().getUserNo();
+        LOGGER.info("[preHandle - interceptor] tokenUserNo : {}", tokenUserNo);
+
+        String no = (String) pathVariables.get("meetingNo");
+        Long dbUserNo = meetingService.selectMoimUserNo(Long.valueOf(no));
+
+        LOGGER.info("[preHandle - interceptor] dbUserNo : {}", dbUserNo);
+
+
+        if(!dbUserNo.equals(tokenUserNo)) {
+            AuthErrorResponse authErrorResponse = new AuthErrorResponse("수정할 수 있는 권한이 없습니다.");
+            authErrorResponse.errorResponse(httpServletResponse);
+
             return false;
-//            userNo = null;
         }
 
-        LOGGER.info("[preHandle] SecurityContextHolder 인증 userNo : {}", userNo);
 
         return true;
     }

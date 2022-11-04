@@ -116,6 +116,10 @@ public class MeetingServiceImpl implements MeetingService {
         return result;
     }
 
+    @Override
+    public Long selectMoimUserNo(Long meetingNo) {
+        return meetingDAO.selectMoimUserNo(meetingNo);
+    }
 
 
     @Override

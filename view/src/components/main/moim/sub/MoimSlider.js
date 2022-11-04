@@ -13,6 +13,7 @@ const MoimSlider = ({meeting}) => {
         speed: 500,
         slidesToShow: 4,
         slidesToScroll: 4,
+        draggable: false
     };
 
     return (

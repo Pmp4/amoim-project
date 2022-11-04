@@ -23,6 +23,8 @@ const MoimMain = () => {
         totalPage: 0,
         totalRecord: 0,
     });
+    const [editState, setEditState] = useState(false);
+    const [fixedOn, setFixedOn] = useState(false);
 
     const location = useLocation();
 
@@ -88,6 +90,16 @@ const MoimMain = () => {
     }
 
 
+
+    const editButtonAction = () => {
+        setEditState(!editState);
+        setFixedOn(true);
+    }
+
+
+
+
+
     return (
         <div id="moim-page">
             {/* <div className="page-wrap">
@@ -102,14 +114,29 @@ const MoimMain = () => {
                 </div>
             </div> */}
             <div className="page-wrap main-part">
+                {fixedOn && 
+                    <div className={editState ? "fixed-on on" : "fixed-on off"}></div>
+                }
                 <div className="add-moim-part">
                     <div className="moim-sub">
                         <div id="moim-item" className="draggable">
                             {meetingContents.map((item, idx) => {
                                 if (meetingContents.length === 0) return "";
 
-                                return <MoimItem item={item} key={idx} />;
+                                return <MoimItem item={item} key={idx} editState={editState}/>;
                             })}
+                            {!editState &&
+                                meetingContents.length < 4 ? (
+                                    <div className="add-btn">
+                                        <Link to={`${location.pathname}/add`}>
+                                            +
+                                        </Link>
+                                    </div>
+                                ) : (
+                                    ""
+                                )
+                            }
+{/* 
                             {meetingContents.length < 4 ? (
                                 <div className="add-btn">
                                     <Link to={`${location.pathname}/add`}>
@@ -118,18 +145,26 @@ const MoimMain = () => {
                                 </div>
                             ) : (
                                 ""
-                            )}
+                            )} */}
                         </div>
                     </div>
                     {meetingContents.length > 0 && (
                         <div className="btn-wrap">
-                            <button className="moim-edit-btn">수정</button>
-                            <button
-                                className="moim-confirm-btn"
-                                onClick={() => subscribeListBtnAction()}
+                            <button 
+                                className={editState ? "moim-edit-btn on" : "moim-edit-btn"}
+                                onClick={editButtonAction}
                             >
-                                가입 신청 확인
+                                {editState ? "취소" : "수정"}
                             </button>
+                            {!editState && 
+                                <button
+                                    className="moim-confirm-btn"
+                                    onClick={() => subscribeListBtnAction()}
+                                >
+                                    가입 신청 확인
+                                </button>
+                            }
+                            
                         </div>
                     )}
                 </div>

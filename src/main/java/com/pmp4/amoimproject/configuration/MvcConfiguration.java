@@ -1,11 +1,13 @@
 package com.pmp4.amoimproject.configuration;
 
+import com.pmp4.amoimproject.interceptor.MoimInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -13,21 +15,25 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableScheduling
 @EnableTransactionManagement
 public class MvcConfiguration implements WebMvcConfigurer {
-//    @Override
-//    public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(new MoimInterceptor())
-//                .addPathPatterns("/meeting/**")
-//                .excludePathPatterns("/meeting/select/main/**");
-//    }
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(moimInterceptor())
+                .addPathPatterns("/meeting/edit/**");
+    }
+
+    @Bean
+    public MoimInterceptor moimInterceptor() {
+        return new MoimInterceptor();
+    }
 
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/images/**")
+        registry.addResourceHandler("/images/**")                   //유저 업로드 이미지
                 .addResourceLocations("classpath:/static/upload/img_upload/");
-        registry.addResourceHandler("/default/images/**")
+        registry.addResourceHandler("/default/images/**")           //기본 이미지
                 .addResourceLocations("classpath:/static/upload/images");
-        registry.addResourceHandler("/profile/images/**")
+        registry.addResourceHandler("/profile/images/**")           //프로필 이미지
                 .addResourceLocations("classpath:/static/upload/profile/");
     }
 

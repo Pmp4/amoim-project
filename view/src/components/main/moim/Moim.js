@@ -11,8 +11,9 @@ const Moim = () => {
         <div>
             <Routes>
                 <Route path='/' element={<MoimMain/>}/>
-                <Route path='/add' element={<MoimAdd/>}/>
+                <Route path='/add' element={<MoimAdd mode={"add"}/>}/>
                 <Route path='/view/:meetingNo' element={<MoimView/>}/>
+                <Route path='/edit/:meetingNo' element={<MoimAdd mode={"edit"}/>}/>
                 <Route path='/*' element={"404"}/>
             </Routes>
         </div>
