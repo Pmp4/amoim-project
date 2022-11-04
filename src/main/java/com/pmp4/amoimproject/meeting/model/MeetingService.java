@@ -12,6 +12,12 @@ public interface MeetingService {
                         List<String> tagArr,
                         HttpServletRequest request);
 
+    int moimEditTransaction(HttpServletRequest httpServletRequest,
+                                            MeetingVO meetingVO,
+                                            MeetingAddressVO meetingAddressVO,
+                                            List<String> tags,
+                                            Map<String, Object> editState);
+
 
     Long selectMoimUserNo(Long meetingNo);
 

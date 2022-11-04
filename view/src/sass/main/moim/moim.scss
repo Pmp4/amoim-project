@@ -422,7 +422,7 @@
 
                         input {
                             background: #f6f6f6;
-                            line-height: 30px;
+                            // line-height: 30px;
                             font-size: 1em;
                             box-sizing: border-box;
                             padding: 0 5px
@@ -435,16 +435,21 @@
                             >div {
                                 background: #f6f6f6;
                                 display: flex;
-                                line-height: 30px;
-                                padding-left: 5px;
+                                // line-height: 30px;
+                                padding: 0 5px 5px 5px;
                                 box-sizing: border-box;
 
                                 .left {
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                    align-items: flex-start;
+
                                     .tag {
+                                        margin-top: 5px;
                                         background: #D77432;
                                         color: #fff;
-                                        border-radius: 9px;
-                                        padding: 1px 6px;
+                                        border-radius: 6px;
+                                        padding: 3px 6px;
                                         margin-right: 4px;
                                         font-size: .9em;
                                         box-sizing: border-box;
@@ -463,6 +468,7 @@
                                     // width: 100%;
                                     box-sizing: border-box;
                                     flex-grow: 1;
+                                    margin-top: 5px;
 
                                     .tag-list-part {
                                         position: absolute;

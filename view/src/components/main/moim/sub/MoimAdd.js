@@ -617,6 +617,8 @@ const MoimAdd = ({ mode }) => {
                 resBool = false;
             }
         }else {
+            const tags = contents.TAGS.replace(/\[|\]|"| /g, "").split(",");
+
             if(
                 (title === "" ||
                 content === "" ||
@@ -629,7 +631,8 @@ const MoimAdd = ({ mode }) => {
                     dues === contents.DUES &&
                     !fileStatus && 
                     // (inputMsg === contents.ADDRESS || inputMsg === contents.PLACE_NAME) &&
-                    !addressEditState
+                    !addressEditState && 
+                    tags.toString() === tagAdd.toString()
                 )) {
                     resBool = false;
             }
@@ -697,13 +700,15 @@ const MoimAdd = ({ mode }) => {
         const formData = new FormData();
         const fileData = inputRef.current.file.files;
         const contentsData = {
-            userNo: user.userInfo.no,
+            no: param.meetingNo,
             title,
             content,
             categoryCode,
             dues,
             personNumber,
         };
+        
+        console.log(contentsData)
 
         if(fileStatus) {
             for (let i = 0; i < fileData.length; i++) {
@@ -744,6 +749,10 @@ const MoimAdd = ({ mode }) => {
 
         const response = await MeetingService.editMeeting(formData, param.meetingNo);
         console.log(response);
+        if(response.data === 1) {
+            alert("수정되었습니다.");
+            navigate(`/moim/view/${param.meetingNo}`);
+        }
     }
 
 

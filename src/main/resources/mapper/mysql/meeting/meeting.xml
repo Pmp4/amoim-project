@@ -17,6 +17,25 @@
     </insert>
 
 
+
+    
+    <update id="editMoim" parameterType="meetingVo">
+        update MEETING
+        set TITLE = #{title},
+            CONTENT = #{content},
+            PERSON_NUMBER = #{personNumber},
+            DUES = #{dues},
+            CATEGORY_CODE = #{categoryCode},
+            REVISED_DATE = CURRENT_TIMESTAMP
+        where NO = #{no}
+    </update>
+
+    <delete id="deleteMoimTag" parameterType="Long">
+        delete from MEETING_TAG
+        where MEETING_NO = #{meetingNo}
+    </delete>
+
+
     
     <sql id="moimCardColum">
         M.NO,

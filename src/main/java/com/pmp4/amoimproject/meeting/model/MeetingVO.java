@@ -15,4 +15,5 @@ public class MeetingVO {
     private String dues;
     private String delTag;
     private Timestamp regdate;
+    private Timestamp revisedDate;
 }

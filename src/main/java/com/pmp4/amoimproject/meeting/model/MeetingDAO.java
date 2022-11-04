@@ -10,13 +10,14 @@ import java.util.Map;
 public interface MeetingDAO {
     Long selectMoimUserNo(Long meetingNo);
 
+    int editMoim(MeetingVO meetingVO);
+
+    int deleteMoimTag(Long meetingNo);
+
+
     int insertMeeting(MeetingVO meetingVO);
 
-    int meetingTagAdd(@Param("meetingNo") Long meetingNo, @Param("tagNo") Long tagNo);
 
-    int insertMeetingImage(Map<String, Object> map);
-
-    int insertMeetingAddress(MeetingAddressVO meetingAddressVO);
 
 
     List<Map<String, Object>> locSelectCard(String bcode);

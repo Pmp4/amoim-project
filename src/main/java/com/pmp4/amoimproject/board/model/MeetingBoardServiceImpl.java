@@ -19,12 +19,13 @@ import java.util.*;
 public class MeetingBoardServiceImpl implements MeetingBoardService{
     private static final Logger logger = LoggerFactory.getLogger(MeetingServiceImpl.class);
     private final MeetingBoardDAO meetingBoardDAO;
-    private final FileUploadUtil fileUploadUtil;
 
     @Override
     @Transactional
     public int boardRegister(HttpServletRequest request, MeetingBoardVO meetingBoardVO) {
         logger.info("[boardRegister] 게시판 등록 로직, meetingBoardVo={}", meetingBoardVO);
+        FileUploadUtil fileUploadUtil = new FileUploadUtil();
+
         int cnt = 0;
         List<Map<String, Object>> fileList = null;
 

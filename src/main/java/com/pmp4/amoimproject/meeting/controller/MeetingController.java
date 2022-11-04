@@ -1,6 +1,5 @@
 package com.pmp4.amoimproject.meeting.controller;
 
-import com.pmp4.amoimproject.common.FileUploadUtil;
 import com.pmp4.amoimproject.common.PaginationInfo;
 import com.pmp4.amoimproject.meeting.model.MeetingAddressVO;
 import com.pmp4.amoimproject.meeting.model.MeetingService;
@@ -57,19 +56,20 @@ public class MeetingController {
 
 
     @PostMapping("/edit/{meetingNo}")
-    public void editMoim(HttpServletRequest httpServletRequest,
+    public int editMoim(HttpServletRequest httpServletRequest,
                          @PathVariable Long meetingNo,
                          @RequestPart(value = "contents") MeetingVO meetingVO,
                          @RequestPart(value = "address") MeetingAddressVO meetingAddressVO,
                          @RequestPart(value = "tags") List<String> tags,
-                         @RequestPart(value = "user") Long userNo,
                          @RequestPart(value = "state") Map<String, Object> editState) {
         logger.info("[editMoim] 핸들러 meetingNo : {}", meetingNo);
         logger.info("[editMoim] 핸들러 meetingVO : {}", meetingVO);
         logger.info("[editMoim] 핸들러 meetingAddressVO : {}", meetingAddressVO);
         logger.info("[editMoim] 핸들러 tags : {}", tags);
-        logger.info("[editMoim] 핸들러 userNo : {}", userNo);
         logger.info("[editMoim] 핸들러 editState : {}", editState);
+
+
+        return meetingService.moimEditTransaction(httpServletRequest, meetingVO, meetingAddressVO, tags, editState);
     }
 
 

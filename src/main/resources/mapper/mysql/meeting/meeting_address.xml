@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.pmp4.amoimproject.meeting.model.MeetingDAO">
+<mapper namespace="com.pmp4.amoimproject.meeting.model.MeetingAddressDAO">
     <insert id="insertMeetingAddress" parameterType="meetingAddressVo">
         insert into MEETING_ADDRESS(
                                     meeting_no,
@@ -29,4 +29,21 @@
                 #{lonX},
                 #{latY})
     </insert>
+    
+    
+    <update id="updateMoimAddress" parameterType="meetingAddressVo">
+        update MEETING_ADDRESS
+        set zonecode = #{zonecode},
+            address = #{address},
+            road_address = #{roadAddress},
+            jibun_address = #{jibunAddress},
+            sido = #{sido},
+            sigungu = #{sigungu},
+            bcode = #{bcode},
+            bname = #{bname},
+            place_name = #{placeName},
+            LON_X = #{lonX},
+            LAT_Y = #{latY}
+        where MEETING_NO = #{meetingNo};
+    </update>
 </mapper>
