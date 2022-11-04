@@ -13,7 +13,7 @@ public class MeetingVO {
     private String categoryCode;
     private String personNumber;
     private String dues;
-    private String delTag;
+    private String delFlg;
     private Timestamp regdate;
     private Timestamp revisedDate;
 }

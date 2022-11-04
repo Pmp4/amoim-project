@@ -14,6 +14,8 @@ public interface MeetingDAO {
 
     int deleteMoimTag(Long meetingNo);
 
+    int deleteMoim(Long meetingNo);
+
 
     int insertMeeting(MeetingVO meetingVO);
 

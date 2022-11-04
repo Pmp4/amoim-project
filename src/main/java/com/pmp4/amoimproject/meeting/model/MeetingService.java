@@ -19,6 +19,9 @@ public interface MeetingService {
                                             Map<String, Object> editState);
 
 
+    int deleteMoim(Long meetingNo);
+
+
     Long selectMoimUserNo(Long meetingNo);
 
 

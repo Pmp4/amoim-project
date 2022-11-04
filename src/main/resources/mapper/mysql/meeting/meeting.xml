@@ -15,6 +15,15 @@
             select LAST_INSERT_ID()
         </selectKey>
     </insert>
+    
+    
+    <update id="deleteMoim" parameterType="Long" statementType="CALLABLE">
+        <![CDATA[
+        {
+            call DELETE_MOIM(#{no})
+        }
+        ]]>
+    </update>
 
 
 
@@ -76,7 +85,7 @@
             MEETING M join INTERESTS I on I.CATEGORY_CODE = m.CATEGORY_CODE
         join MEETING_ADDRESS MA on m.NO = MA.MEETING_NO
                       join MEETING_IMAGES MI on m.NO = MI.MEETING_NO
-        where DEL_TAG = 'N' and MI.SEQ = 1
+        where M.DEL_FLG = 'N' and MI.SEQ = 1
     </sql>
 
 
@@ -150,16 +159,17 @@
     <select id="moimSubscriptList" parameterType="hashMap" resultType="hashMap">
         select
         <include refid="moimCardColum"/>
-        from USER_MEETING UM join USERS U on U.USER_NO = UM.USER_NO
-        join MEETING M on M.NO = UM.MEETING_NO
-        join INTERESTS I on M.CATEGORY_CODE = I.CATEGORY_CODE
-        join MEETING_IMAGES MI on M.NO = MI.MEETING_NO
-        join MEETING_ADDRESS MA on M.NO = MA.MEETING_NO
+            from USER_MEETING UM join USERS U on U.USER_NO = UM.USER_NO
+            join MEETING M on M.NO = UM.MEETING_NO
+            join INTERESTS I on M.CATEGORY_CODE = I.CATEGORY_CODE
+            join MEETING_IMAGES MI on M.NO = MI.MEETING_NO
+            join MEETING_ADDRESS MA on M.NO = MA.MEETING_NO
         where UM.USER_NO = #{key}
-        and RIGHT_NO = 2
-        and REG_LEVEL = 1
-        and UM.OUT_DATE is null
-        and U.OUT_DATE is null
+            and RIGHT_NO = 2
+            and REG_LEVEL = 1
+            and UM.OUT_DATE is null
+            and U.OUT_DATE is null
+            and UM.DEL_FLG = 'N'
         LIMIT #{blockSize} OFFSET #{start}
     </select>
 
@@ -175,6 +185,7 @@
           and REG_LEVEL = 1
           and UM.OUT_DATE is null
           and U.OUT_DATE is null
+          and UM.DEL_FLG = 'N'
     </select>
 
 
@@ -352,11 +363,13 @@
         from MEETING M join INTERESTS I on I.CATEGORY_CODE = M.CATEGORY_CODE
                        join MEETING_IMAGES MI on M.NO = MI.MEETING_NO
                        join MEETING_ADDRESS MA on M.NO = MA.MEETING_NO
-        where M.NO = #{no} and DEL_TAG = 'N'
+        where M.NO = #{no} and M.DEL_FLG = 'N'
     </select>
 
     <select id="selectByUserCount" parameterType="String" resultType="int">
-        select count(*) from MEETING where USER_NO = #{userNo}
+        select count(*)
+        from MEETING
+        where USER_NO = #{userNo} and DEL_FLG = 'N'
     </select>
 
 
