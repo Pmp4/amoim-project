@@ -9,13 +9,13 @@ import com.pmp4.amoimproject.tag.model.TagVO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,10 +25,10 @@ import java.util.Map;
 public class MeetingServiceImpl implements MeetingService {
     private static final Logger logger = LoggerFactory.getLogger(MeetingServiceImpl.class);
     private final MeetingDAO meetingDAO;
+    private final MeetingAddressDAO meetingAddressDAO;
+    private final MeetingImageDAO meetingImageDAO;
+    private final MeetingTagDAO meetingTagDAO;
     private final TagDAO tagDAO;
-    private final FileUploadUtil fileUploadUtil;
-
-    private final JwtTokenProvider jwtTokenProvider;
 
 
     /*
@@ -38,7 +38,7 @@ public class MeetingServiceImpl implements MeetingService {
             - 태그 DB에 있는 지 확인
       [3] 이미지 파일 등록
       [4] 주소 등록
-     */
+    */
     @Override
     @Transactional
     public int meetingRegister(MeetingVO meetingVO,
@@ -47,6 +47,7 @@ public class MeetingServiceImpl implements MeetingService {
                                HttpServletRequest request) {
         int result = 0;
         List<Map<String, Object>> fileList = null;
+        FileUploadUtil fileUploadUtil = new FileUploadUtil();
 
         try {
             result = meetingDAO.insertMeeting(meetingVO);
@@ -59,7 +60,7 @@ public class MeetingServiceImpl implements MeetingService {
                     logger.info("MEETING: 기존 태그 검색 tagVO={}", tagVO);
 
                     if(tagVO != null) {    //기존 태그가 있는 경우
-                        result = meetingDAO.meetingTagAdd(meetingVO.getNo(), tagVO.getTagNo());
+                        result = meetingTagDAO.meetingTagAdd(meetingVO.getNo(), tagVO.getTagNo());
                         logger.info("MEETING: 기존 태그 등록 결과 result={}", result);
 
                     }else {     //기존 태그가 없는 경우
@@ -69,7 +70,7 @@ public class MeetingServiceImpl implements MeetingService {
                         cnt = tagDAO.insertTag(tempTagVO);
                         logger.info("MEETING: 태그 DB 등록 결과 cnt={}", cnt);
                         if(cnt > 0) {
-                            result = meetingDAO.meetingTagAdd(meetingVO.getNo(), tempTagVO.getTagNo());
+                            result = meetingTagDAO.meetingTagAdd(meetingVO.getNo(), tempTagVO.getTagNo());
                             logger.info("MEETING: 태그 연결 결과 cnt={}", result);
                         }
                     }
@@ -80,13 +81,13 @@ public class MeetingServiceImpl implements MeetingService {
 
                     for(Map<String, Object> file : fileList) {
                         file.put("meetingNo", meetingVO.getNo());
-                        result = meetingDAO.insertMeetingImage(file);
+                        result = meetingImageDAO.insertMeetingImage(file);
                         logger.info("MEETING: 이미지 등록 결과 cnt={}", result);
                     }
 
                     if(result > 0) {
                         meetingAddressVO.setMeetingNo(meetingVO.getNo());
-                        result = meetingDAO.insertMeetingAddress(meetingAddressVO);
+                        result = meetingAddressDAO.insertMeetingAddress(meetingAddressVO);
                         logger.info("MEETING: 주소 등록 결과 cnt={}", result);
                     }
                 }
@@ -109,6 +110,149 @@ public class MeetingServiceImpl implements MeetingService {
                         logger.info("MEETING: 파일 삭제 여부: {}", fileBool);
                     }
                 }
+            }
+        }
+
+
+        return result;
+    }
+
+    /*
+     * 모임 정보 수정
+     * 태그 수정
+     *  - 기존 꺼 삭제 후, 등록
+     * 주소 수정
+     * 파일 수정
+     */
+    /*
+     * [editMoim] 핸들러 meetingAddressVO : MeetingAddressVO(addressNo=null, meetingNo=null, zonecode=null, address=null, roadAddress=null, jibunAddress=null, sido=null, sigungu=null, bcode=null, bname=null, placeName=null, latY=0.0, lonX=0.0, regdate=null, delFlag=null)
+     * [editMoim] 핸들러 tags : [퓨쳐리스틱스웨버, 래퍼]
+     * [editMoim] 핸들러 userNo : 21
+     * [editMoim] 핸들러 editState : {fileState=false, addressEditState=false}
+     */
+    @Override
+    @Transactional
+    public int moimEditTransaction(HttpServletRequest httpServletRequest,
+                                                   MeetingVO meetingVO,
+                                                   MeetingAddressVO meetingAddressVO,
+                                                   List<String> tags,
+                                                   Map<String, Object> editState) {
+        logger.info("[moimEditTransaction] 서비스 로직");
+
+        FileUploadUtil fileUploadUtil = new FileUploadUtil();
+        List<Map<String, Object>> fileList = null;
+        List<Map<String, Object>> originalFileList = null;
+        boolean addressState = (boolean) editState.get("addressEditState");
+        boolean fileState = (boolean) editState.get("fileState");
+
+        int result = -1;
+        try {
+            int cnt = meetingDAO.editMoim(meetingVO);
+            logger.info("[moimEditTransaction] 모임 정보 수정 결과 cnt : {}", cnt);
+
+            if(cnt > 0) {
+                cnt = meetingDAO.deleteMoimTag((meetingVO.getNo()));
+                logger.info("[moimEditTransaction] 태그 삭제 결과 cnt : {}", cnt);
+
+                if(cnt > 0) {
+                    for(String tagName : tags) {
+                        TagVO tagVO = tagDAO.selectByTag(tagName);
+                        logger.info("[moimEditTransaction] 기존 태그 검색 tagVO={}", tagVO);
+
+                        if(tagVO != null) {    //기존 태그가 있는 경우
+                            logger.info("[moimEditTransaction] 기존 태그 있음");
+
+                            cnt = meetingTagDAO.meetingTagAdd(meetingVO.getNo(), tagVO.getTagNo());
+                            logger.info("[moimEditTransaction] 기존 태그 등록 결과 result={}", result);
+
+                            if(!(cnt > 0)) throw new Exception();
+                        }else {     //기존 태그가 없는 경우
+                            logger.info("[moimEditTransaction] 기존 태그 없음");
+
+                            TagVO tempTagVO = new TagVO();
+                            tempTagVO.setTagName(tagName);
+
+                            cnt = tagDAO.insertTag(tempTagVO);
+                            logger.info("[moimEditTransaction] 태그 DB 등록 결과 cnt={}", cnt);
+                            if(cnt > 0) {
+                                cnt = meetingTagDAO.meetingTagAdd(meetingVO.getNo(), tempTagVO.getTagNo());
+                                logger.info("[moimEditTransaction] 태그 연결 결과 cnt={}", cnt);
+
+                                if(!(cnt > 0)) throw new Exception();
+                            }else {
+                                throw new Exception();
+                            }
+                        }
+                    }
+
+
+
+                    meetingAddressVO.setMeetingNo(meetingVO.getNo());
+
+                    if(addressState) {
+                        logger.info("[moimEditTransaction] 주소 수정");
+                        cnt = meetingAddressDAO.updateMoimAddress(meetingAddressVO);
+
+                        logger.info("[moimEditTransaction] 주소 수정 결과 cnt : {}", cnt);
+
+                        if(!(cnt > 0)) throw new Exception();
+                    }
+
+
+                    if(fileState) {
+                        logger.info("[moimEditTransaction] 이미지 수정");
+
+                        originalFileList = meetingImageDAO.selectMoimFileList(meetingVO.getNo());
+                        logger.info("[moimEditTransaction] 이전 이미지 파일 정보 originalFileList : {}", originalFileList);
+
+                        cnt = meetingImageDAO.deleteMoimImage(meetingVO.getNo());
+
+                        logger.info("[moimEditTransaction] 이미지 삭제 결과 cnt : {}", cnt);
+
+                        if(cnt > 0) {
+                            fileList = fileUploadUtil.mulitiFileUpload(httpServletRequest,
+                                    ConstUtil.UPLOAD_IMAGE_FLAG);
+
+                            for(Map<String, Object> file : fileList) {
+                                file.put("meetingNo", meetingVO.getNo());
+                                cnt = meetingImageDAO.insertMeetingImage(file);
+                                logger.info("[moimEditTransaction] 이미지 등록 결과 cnt : {}", cnt);
+
+                                if(!(cnt > 0)) throw new Exception();
+                            }
+                        }else {
+                            throw new Exception();
+                        }
+                    }
+
+                    logger.info("[moimEditTransaction] 로직 완료");
+                    result = 1;
+                }
+            }
+        } catch (Exception e) {
+            result = -1;
+            e.printStackTrace();
+            logger.info("[moimEditTransaction] 데이터 베이스 오류로 롤백");
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
+
+        if(result == -1) throw new RuntimeException();
+        else {
+            if(fileState) {
+                logger.info("[moimEditTransaction] 이전 파일 삭제");
+
+                List<Map<String, Object>> oldFileList = new ArrayList<>();
+                for(Map<String, Object> oldFile : originalFileList) {
+                    Map<String, Object> deleteFile = new HashMap<>();
+                    deleteFile.put("fileName", oldFile.get("IMAGE_NAME"));
+
+                    oldFileList.add(deleteFile);
+                }
+
+                String filePath = fileUploadUtil.getUploadPath(httpServletRequest, ConstUtil.UPLOAD_IMAGE_FLAG);
+                boolean deleteCheck = fileUploadUtil.deleteFileList(oldFileList, filePath);
+
+                logger.info("[moimEditTransaction] 이전 파일 삭제 결과 deleteCheck : {}", deleteCheck);
             }
         }
 

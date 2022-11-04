@@ -213,6 +213,8 @@ public class FileUploadUtil {
 		if(!files.isEmpty()) {
 			for(Map<String, Object> file : files) {
 				File delFile = new File(filePath, (String) file.get("fileName"));
+				logger.info("[deleteFileList] 파일 삭제 delFile : {}", delFile);
+
 				if(delFile.exists()) {
 					fileBool = delFile.delete();
 				}

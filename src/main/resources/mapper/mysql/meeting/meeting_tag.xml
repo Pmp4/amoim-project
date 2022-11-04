@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.pmp4.amoimproject.meeting.model.MeetingDAO">
+<mapper namespace="com.pmp4.amoimproject.meeting.model.MeetingTagDAO">
     <insert id="meetingTagAdd" parameterType="Long">
         insert into MEETING_TAG(meeting_no, tag_no)
         values (#{meetingNo}, #{tagNo})
