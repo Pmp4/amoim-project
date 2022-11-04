@@ -12,7 +12,7 @@
             from (
                 select no, message, user_no, meeting_no, DATE_SUB(regdate, INTERVAL 9 HOUR) "regdate"
                 from CHAT
-                where MEETING_NO = 15
+                where MEETING_NO = #{meetingNo}
                     <if test="no != null and !no.equals('')">
                         <![CDATA[
                             and NO < cast(#{no} as unsigned)
