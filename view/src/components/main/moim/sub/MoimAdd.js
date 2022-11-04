@@ -28,7 +28,7 @@ const initialInput = {
     tag: "",
     categoryCode: "",
     dues: "",
-    personNumber: 1,
+    personNumber: 2,
 };
 
 const initialCategory = {
@@ -250,8 +250,15 @@ const MoimAdd = ({ mode }) => {
             const cutMax = 6;
             if (value > 50) {
                 value = 50;
-            } else if (1 > value) {
-                value = 1;
+            } else if (2 > value) {
+                value = 2;
+            }
+
+            if(mode === "edit") {
+                if(value < memberCount) {
+                    value = memberCount;
+                    alert("현재 가입되어 있는 멤버 수보다 작을 수는 없습니다.");
+                }
             }
         }
 
