@@ -261,6 +261,16 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
+    public int deleteMoim(Long meetingNo) {
+        logger.info("[deleteMoim] 서비스 로직");
+
+        int cnt = meetingDAO.deleteMoim(meetingNo);
+        logger.info("[deleteMoim] 결과 cnt : {}", cnt);
+
+        return cnt;
+    }
+
+    @Override
     public Long selectMoimUserNo(Long meetingNo) {
         return meetingDAO.selectMoimUserNo(meetingNo);
     }
@@ -380,7 +390,12 @@ public class MeetingServiceImpl implements MeetingService {
 
         Map<String, Object> responseData = new HashMap<>();
         responseData.put("rest", dbData);
-        responseData.put("SUCCESS", true);
+
+        if(dbData == null) {
+            responseData.put("SUCCESS", false);
+        }else {
+            responseData.put("SUCCESS", true);
+        }
 
         return responseData;
     }

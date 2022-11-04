@@ -58,7 +58,7 @@ public class MeetingController {
     public int deleteMoim(@PathVariable Long meetingNo) {
         logger.info("[insertMeeting] 핸들러 meetingNo={}", meetingNo);
 
-        return 1;
+        return meetingService.deleteMoim(meetingNo);
     }
 
 
