@@ -8,6 +8,8 @@ import java.util.Map;
 
 @Mapper
 public interface MeetingDAO {
+    Long selectMoimUserNo(Long meetingNo);
+
     int insertMeeting(MeetingVO meetingVO);
 
     int meetingTagAdd(@Param("meetingNo") Long meetingNo, @Param("tagNo") Long tagNo);

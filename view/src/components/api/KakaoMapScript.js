@@ -58,6 +58,8 @@ const searchAddress = (address) => {
     });
 };
 
+
+
 const KakaoMapSet = (setAddress, setInputMsg) => {
     const container = document.getElementById("myMap");
     const options = {
@@ -124,32 +126,53 @@ const KakaoMapSet = (setAddress, setInputMsg) => {
     });
 };
 
-let setSearchText, setSearchList, mapMarkerClickScrollEvent, searchPagination;
+
+
+
+
+
+
+
+
+
+let setSearchText, setSearchList, mapMarkerClickScrollEvent, searchPagination, addressEditState;
 
 const KakaoMapSet2 = (
     setAddress,
     setInputMsg,
     search,
     mapMarkerClickScroll,
-    setSearchPagination
+    setSearchPagination,
+    mode,
+    lngX = 126.570667, 
+    latY = 33.450701,
+    setAddressEditState = null,
 ) => {
     setSearchText = search.setSearchText;
     setSearchList = search.setSearchList;
+    addressEditState = setAddressEditState;
     mapMarkerClickScrollEvent = mapMarkerClickScroll;
     searchPagination = setSearchPagination;
 
     const container = document.getElementById("myMap");
     const options = {
-        center: new kakao.maps.LatLng(33.450701, 126.570667),
+        center: new kakao.maps.LatLng(latY, lngX),
         level: 3,
     };
+    const markerPosition  = new kakao.maps.LatLng(latY, lngX); 
+
     map = new kakao.maps.Map(container, options);
     marker = new kakao.maps.Marker({
         map: map,
-        position: null,
+        position: mode === "add" ? null : markerPosition,
     });
 
+
+
+
     kakao.maps.event.addListener(map, "click", (mouseEvent) => {
+        if(mode === "edit") addressEditState(true);
+
         setSearchText("");
         setSearchList([]);
         searchPagination({});
@@ -215,6 +238,95 @@ const KakaoMapSet2 = (
         });
     });
 };
+
+
+
+const markerSet = (
+    lng, 
+    lat, 
+    setAddress, 
+    setInputMsg, 
+    setAddressEditState
+    ) => {
+    // 마커가 표시될 위치입니다 
+    const container = document.getElementById("myMap");
+    const markerPosition  = new kakao.maps.LatLng(lat, lng); 
+    const options = {
+        center: new kakao.maps.LatLng(lat, lng),
+        level: 3,
+    };
+
+
+    map = new kakao.maps.Map(container, options);
+
+    // 마커를 생성합니다
+    marker = new kakao.maps.Marker({
+        position: markerPosition
+    });
+
+    // 마커가 지도 위에 표시되도록 설정합니다
+    marker.setMap(map);
+
+
+
+
+    kakao.maps.event.addListener(map, "click", (mouseEvent) => {
+        setAddressEditState(true);
+
+        // 클릭한 위도, 경도 정보를 가져옵니다
+        const latlng = mouseEvent.latLng;
+        // 마커 위치를 클릭한 위치로 옮깁니다
+        marker.setPosition(latlng);
+
+        const latLng = {
+            lng: latlng.getLng(),
+            lat: latlng.getLat(),
+        };
+
+        searchDetailAddrFromCoords(latLng, (result, status) => {
+            if (status === kakao.maps.services.Status.OK) {
+                const addressDetail = result[0];
+                console.log(addressDetail);
+                if (addressDetail.road_address !== null) {
+                    searchAddrFromCoords(latLng, (result, status) => {
+                        const addressSub = result[0];
+                        console.log(addressSub.code);
+                        const restAddress = {
+                            zonecode: addressDetail.road_address.zone_no,
+                            address: addressDetail.address.address_name,
+                            roadAddress:
+                                addressDetail.road_address.address_name,
+                            jibunAddress: addressDetail.address.address_name,
+                            sido: addressSub.region_1depth_name,
+                            sigungu: addressSub.region_2depth_name,
+                            bname: addressSub.region_3depth_name,
+                            bcode: addressSub.code,
+                        };
+                        setInputMsg(addressDetail.address.address_name);
+                        setAddress(restAddress);
+                    });
+                } else {
+                    setAddress({});
+                    setInputMsg("정확한 위치를 클릭해주세요.");
+                }
+            }
+        });
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // 지도 위에 표시되고 있는 마커를 모두 제거합니다
 function removeMarker() {
@@ -406,4 +518,5 @@ export {
     map,
     marker,
     geocoder,
+    markerSet
 };

@@ -13,6 +13,9 @@ public interface MeetingService {
                         HttpServletRequest request);
 
 
+    Long selectMoimUserNo(Long meetingNo);
+
+
 
     // 메인화면에서의 지역 좋아요 리스트 8개
     Map<String, Object> mainLocList(HttpServletRequest request);

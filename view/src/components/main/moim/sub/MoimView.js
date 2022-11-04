@@ -16,7 +16,6 @@ const MoimView = () => {
     const [members, setMembers] = useState([]);
     const [likeState, setLikeState] = useState(false);
 
-    // const [slide, setSlide] = useState();
     const [pageState, setPageState] = useState(1); //1: 모임, 2:게시판, 3:채팅
 
     const tabRef = useRef({});

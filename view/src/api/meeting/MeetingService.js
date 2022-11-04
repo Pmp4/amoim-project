@@ -1,9 +1,15 @@
-import httpMultipartCommon from 'api/httpMultipartCommon';
+import httpMultipartCommon from 'api/http-multipart-common';
 import httpCommon from 'api/http-common';
 import { user } from 'reducer/module/user';
 
 const insertMeeting = (data) => {
     return httpMultipartCommon.post(`/meeting/insert`, data);
+}
+
+
+//모임 정보 수정
+const editMeeting = (rest, meetingNo) => {
+    return httpMultipartCommon.post(`/meeting/edit/${meetingNo}`, rest);
 }
 
 
@@ -121,5 +127,6 @@ export default {
     moimOwnList,
     moimSubscript,
     moimByNoView,
-    moimMemberSelect
+    moimMemberSelect,
+    editMeeting
 };

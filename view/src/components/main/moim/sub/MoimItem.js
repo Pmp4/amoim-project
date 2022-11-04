@@ -5,13 +5,22 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const MoimItem = (props) => {
     // console.log(props);
-    const { item, idx } = props;
+    const { item, idx, editState } = props;
+
     const tagArr = item.TAGS.replace(/\[|\]|"| /g, "").split(",");
     const location = useLocation();
     const navigate = useNavigate();
 
     return (
-        <div className="item" key={item.NO} onClick={() => navigate(`/moim/view/${item.NO}`)}>
+        <div className="item" 
+            key={item.NO} 
+            onClick={
+                () => {
+                    editState ? navigate(`/moim/edit/${item.NO}`) : 
+                        navigate(`/moim/view/${item.NO}`)
+                }
+            }
+        >
             <div className="image">
                 <img
                     src={`http://localhost:8080/rest/v1/images/${item.IMAGE_NAME}`}

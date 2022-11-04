@@ -58,7 +58,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             ObjectMapper objectMapper = new ObjectMapper();
             EntryPointErrorResponse entryPointErrorResponse = new EntryPointErrorResponse();
-            entryPointErrorResponse.setMsg("인증이 실패하였습니다.");
+            entryPointErrorResponse.setMsg("로그인 후, 시도 해주세요.");
 
             httpServletResponse.setStatus(401);
             httpServletResponse.setContentType("application/json");

@@ -20,7 +20,7 @@ import { useRef } from "react";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const initialInput = {
     title: "",
@@ -36,7 +36,30 @@ const initialCategory = {
     code: [],
 };
 
-const MoimAdd = () => {
+const initialContents = {
+    NO: "",
+    CATEGORY_CODE: "",
+    IMAGE_NAME: "",
+    PERSON_NUMBER: "",
+    LIKE_COUNT: "",
+    LON_X: "",
+    USER_NO: "",
+    LAT_Y: "",
+    CATEGORY_PARENT_NAME: "",
+    ADDRESS_NO: "",
+    ROAD_ADDRESS: "",
+    ADDRESS: "",
+    PERSON_COUNT: "",
+    TITLE: "",
+    CONTENT: "",
+    CATEGORY_NAME: "",
+    JIBUN_ADDRESS: "",
+    CATEGORY_PARENT: "",
+    TAGS: "",
+    DUES: "",
+};
+
+const MoimAdd = ({ mode }) => {
     const [inputData, setInputData] = useState(initialInput);
     const [fileStatus, setFileStatus] = useState(false);
 
@@ -58,28 +81,36 @@ const MoimAdd = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
+    const param = useParams();
+
     const { title, content, tag, categoryCode, dues, personNumber } = inputData;
 
     useEffect(() => {
-        KakaoMapSet2(
-            setAddress,
-            setInputMsg,
-            { setSearchText, setSearchList },
-            mapMarkerClickScroll,
-            setSearchPagination
-        );
         // console.log(user.userInfo.no);
         categoryApi("");
 
-        MeetingService.countMeeting("").then((response) => {
-            const { status, data } = response;
-            if (status === 200) {
-                if (data >= 4) {
-                    alert("모임 개설 횟수가 없습니다.");
-                    navigate("/moim");
+        if (mode === "add") {
+            KakaoMapSet2(
+                setAddress,
+                setInputMsg,
+                { setSearchText, setSearchList },
+                mapMarkerClickScroll,
+                setSearchPagination,
+                mode
+            );
+
+            MeetingService.countMeeting("").then((response) => {
+                const { status, data } = response;
+                if (status === 200) {
+                    if (data >= 4) {
+                        alert("모임은 최대 4개까지 생성 가능합니다.");
+                        navigate("/moim");
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            selectViewApi();
+        }
     }, []);
 
     //태그 등록/검색 api
@@ -244,7 +275,7 @@ const MoimAdd = () => {
         if (fileArr.length > 1) {
             alert("하나의 이미지를 선택해주세요.");
             return;
-        }else if(fileArr.length === 0) {
+        } else if (fileArr.length === 0) {
             return;
         }
 
@@ -267,8 +298,12 @@ const MoimAdd = () => {
     //이미지 업로드 초기화 함수
     //이미지 업로드 초기화 함수
     const initialFileInput = (event) => {
+        let tempImgName = "";
+        if (mode === "edit") {
+            tempImgName = imagePath + contents.IMAGE_NAME;
+        }
         inputRef.current.file.value = "";
-        inputRef.current.fileBox.style.backgroundImage = "url()";
+        inputRef.current.fileBox.style.backgroundImage = `url(${tempImgName})`;
         inputRef.current.fileRemove.className += " fade-out";
 
         setTimeout(() => {
@@ -411,6 +446,10 @@ const MoimAdd = () => {
         target.className += " on";
     });
 
+
+
+
+
     //지도 검색 리스트 요소설정
     //지도 검색 리스트 요소설정
     //지도 검색 리스트 요소설정
@@ -419,14 +458,14 @@ const MoimAdd = () => {
         if (searchList.length === 0) return "";
 
         // console.log(searchRef);
-        searchRef.current = [];
+        // searchRef.current = [];
         // console.log(searchRef);
 
         //지도 리스트 클릭 시
         //지도 리스트 클릭 시
         //지도 리스트 클릭 시
         const searchListClickAction = (data, idx) => {
-            console.log(data);
+            // console.log(data);
             geocoder.addressSearch(
                 data.address_name,
                 function (result, status) {
@@ -485,6 +524,9 @@ const MoimAdd = () => {
                     }
 
                     setInputMsg(data.place_name);
+                    if(mode === "edit") {
+                        setAddressEditState(true);
+                    }
                     searchRef.current[idx].classList += " click";
                 }
             );
@@ -559,19 +601,38 @@ const MoimAdd = () => {
     const inputCheck = () => {
         let resBool = true;
 
-        if (
-            title === "" ||
-            content === "" ||
-            personNumber === "" ||
-            categoryCode === ""
-        ) {
-            resBool = false;
-        } else if (!fileStatus) {
-            resBool = false;
-        } else if (Object.keys(address).length === 0) {
-            resBool = false;
-        } else if (tagAdd.length === 0) {
-            resBool = false;
+        if(mode === "add") {
+            if (
+                title === "" ||
+                content === "" ||
+                personNumber === "" ||
+                categoryCode === ""
+            ) {
+                resBool = false;
+            } else if (!fileStatus) {
+                resBool = false;
+            } else if (Object.keys(address).length === 0) {
+                resBool = false;
+            } else if (tagAdd.length === 0) {
+                resBool = false;
+            }
+        }else {
+            if(
+                (title === "" ||
+                content === "" ||
+                personNumber === "" ||
+                categoryCode === "") || (
+                    title === contents.TITLE &&
+                    content === contents.CONTENT &&
+                    personNumber === contents.PERSON_NUMBER &&
+                    parseInt(categoryCode) === parseInt(contents.CATEGORY_CODE) &&
+                    dues === contents.DUES &&
+                    !fileStatus && 
+                    // (inputMsg === contents.ADDRESS || inputMsg === contents.PLACE_NAME) &&
+                    !addressEditState
+                )) {
+                    resBool = false;
+            }
         }
 
         return resBool;
@@ -630,227 +691,639 @@ const MoimAdd = () => {
         });
     };
 
-    return (
-        <div id="moim-add-page" className="page-wrap">
-            <div className="title-wrap">
-                <h3>모임 개설하기</h3>
-            </div>
-            <form
-                name="moim-form"
-                onSubmit={() => {
-                    return false;
-                }}
-            >
-                <div className="left">
-                    <div className="image-upload">
-                        <div className="main-image">
-                            <span
-                                className={fileStatus ? "on" : ""}
-                                ref={(element) =>
-                                    (inputRef.current.fileBox = element)
-                                }
-                            >
-                                +
-                            </span>
-                            <input
-                                ref={(element) =>
-                                    (inputRef.current.file = element)
-                                }
-                                type="file"
-                                onChange={(event) => uploadImageAction(event)}
-                                multiple
-                                accept=".gif, .jpg, .png"
-                            />
+
+
+    const editResultFunc = async() => {
+        const formData = new FormData();
+        const fileData = inputRef.current.file.files;
+        const contentsData = {
+            userNo: user.userInfo.no,
+            title,
+            content,
+            categoryCode,
+            dues,
+            personNumber,
+        };
+
+        if(fileStatus) {
+            for (let i = 0; i < fileData.length; i++) {
+                formData.append("file", fileData[i]);
+            }
+        }
+
+
+        formData.append(
+            "contents",
+            new Blob([JSON.stringify(contentsData)], {
+                type: "application/json",
+            })
+        );
+
+        formData.append(
+            "address",
+            new Blob([JSON.stringify(address)], { type: "application/json" })
+        );
+
+        formData.append(
+            "tags",
+            new Blob([JSON.stringify(tagAdd)], { type: "application/json" })
+        );
+
+        formData.append(
+            "user",
+            new Blob([user.userInfo.no], {type: "application/json"})
+        )
+
+        formData.append(
+            "state",
+            new Blob([JSON.stringify({
+                fileState: fileStatus,
+                addressEditState
+            })], {type: "application/json"})
+        )
+
+        const response = await MeetingService.editMeeting(formData, param.meetingNo);
+        console.log(response);
+    }
+
+
+
+
+
+
+    const [contents, setContents] = useState(initialContents);
+    const [memberCount, setMemberCount] = useState(0);
+    const [categoryCodeCheck, setCategoryCodeCheck] = useState("");
+    const [addressEditState, setAddressEditState] = useState(false);
+
+    const imagePath = useSelector((state) => state.path.imagePath);
+
+    useEffect(() => {
+        if (mode === "edit") {
+            if (contents.LON_X !== "" && contents.LAT_Y !== "") {
+                // markerSet(contents.LON_X, contents.LAT_Y, setAddress, setInputMsg, setAddressEditState);
+                KakaoMapSet2(
+                    setAddress,
+                    setInputMsg,
+                    { setSearchText, setSearchList },
+                    mapMarkerClickScroll,
+                    setSearchPagination,
+                    mode,
+                    contents.LON_X,
+                    contents.LAT_Y,
+                    setAddressEditState
+                );
+            }
+            if (category.parent.length > 0) {
+                const dbCategoryCode = contents.CATEGORY_CODE.substring(0, 3);
+
+                for (let i = 0; i < category.parent.length; i++) {
+                    if (
+                        category.parent[i].categoryCode.substring(0, 3) ===
+                        dbCategoryCode
+                    ) {
+                        const tempCatParent = [...category.parent];
+                        tempCatParent[i].check = true;
+
+                        setCategory({
+                            ...category,
+                            parent: tempCatParent,
+                        });
+
+                        categoryApi(category.parent[i].categoryCode);
+                        setCategoryCodeCheck(contents.CATEGORY_CODE);
+                    }
+                }
+            }
+        }
+    }, [contents]);
+
+    useEffect(() => {
+        if (
+            mode === "edit" &&
+            category.code.length > 0 &&
+            categoryCodeCheck !== ""
+        ) {
+            for (let i = 0; i < category.code.length; i++) {
+                if (category.code[i].categoryCode === contents.CATEGORY_CODE) {
+                    const tempCatCode = [...category.code];
+                    tempCatCode[i].check = true;
+
+                    setCategory({
+                        ...category,
+                        code: tempCatCode,
+                    });
+                    setCategoryCodeCheck("");
+                }
+            }
+        }
+    }, [category]);
+
+    const selectViewApi = async () => {
+        const response = await MeetingService.moimByNoView(param.meetingNo);
+        const { SUCCESS, rest } = response.data;
+
+        if (SUCCESS) {
+            const tag = rest.CONTENTS.TAGS.replace(/\[|\]|"| /g, "").split(",");
+
+            const tempContents = rest.CONTENTS;
+            tempContents.IMAGE_NAME = tempContents.IMAGE_NAME.replace(
+                / /g,
+                "%20"
+            );
+
+            setContents(tempContents);
+            setInputData({
+                ...inputData,
+                title: rest.CONTENTS.TITLE,
+                content: rest.CONTENTS.CONTENT,
+                dues: rest.CONTENTS.DUES,
+                personNumber: rest.CONTENTS.PERSON_NUMBER,
+                categoryCode: rest.CONTENTS.CATEGORY_CODE
+            });
+            setTagAdd(tag);
+            setMemberCount(rest.MEMBERS.length);
+            setInputMsg(
+                rest.CONTENTS.PLACE_NAME === undefined || rest.CONTENTS.PLACE_NAME === ""
+                    ? rest.CONTENTS.ADDRESS
+                    : rest.CONTENTS.PLACE_NAME
+            );
+        } else {
+            alert("잘못된 모임 정보입니다.");
+            navigate(-1);
+        }
+    };
+
+    if (mode === "add") {
+        return (
+            <div>
+                {mode === "add" && (
+                    <div id="moim-add-page" className="page-wrap">
+                        <div className="title-wrap">
+                            <h3>모임 생성하기</h3>
                         </div>
-                        {fileStatus && (
-                            <button
-                                ref={(element) =>
-                                    (inputRef.current.fileRemove = element)
-                                }
-                                type="button"
-                                className="del-btn"
-                                onClick={(event) => initialFileInput(event)}
-                            >
-                                이미지 삭제
-                            </button>
-                        )}
-                        <div className="loc-part">
-                            <p>위치</p>
-                            <label htmlFor="loc">
-                                <input value={inputMsg} disabled />
-                                <button type="button">
-                                    <FontAwesomeIcon
-                                        icon={faLocationCrosshairs}
-                                    />
-                                </button>
-                            </label>
-                            <div id="myMap"></div>
-                            <div className="map-search-part">
-                                <label>
-                                    <input
-                                        placeholder="검색할 지역을 입력해주세요."
-                                        onChange={(event) =>
-                                            setSearchText(event.target.value)
-                                        }
-                                        onKeyDown={(event) => {
-                                            if (event.keyCode === 13) {
-                                                searchPlaces(
-                                                    searchText,
-                                                    setSearchList
-                                                );
+                        <form
+                            name="moim-form"
+                            onSubmit={() => {
+                                return false;
+                            }}
+                        >
+                            <div className="left">
+                                <div className="image-upload">
+                                    <div className="main-image">
+                                        <span
+                                            className={fileStatus ? "on" : ""}
+                                            ref={(element) =>
+                                                (inputRef.current.fileBox =
+                                                    element)
                                             }
-                                        }}
-                                        value={searchText}
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            searchPlaces(
-                                                searchText,
-                                                setSearchList
-                                            );
-                                        }}
-                                    >
-                                        <FontAwesomeIcon
-                                            icon={faMagnifyingGlass}
+                                        >
+                                            +
+                                        </span>
+                                        <input
+                                            ref={(element) =>
+                                                (inputRef.current.file =
+                                                    element)
+                                            }
+                                            type="file"
+                                            onChange={(event) =>
+                                                uploadImageAction(event)
+                                            }
+                                            multiple
+                                            accept=".gif, .jpg, .png"
                                         />
-                                    </button>
-                                </label>
-                                {searchList.length > 0 && (
-                                    <div className="map-search-list">
-                                        {/* <div className='item'>
-                                            <div className='left'>asdf</div>
-                                            <div className='right'>
-                                                <h4 className='search-title'>지역입니다.</h4>
-                                                <h5 className='search-road-address'>도로명 주소입니다.</h5>
-                                                <span className='search-jibun-address'>지번 주소입니다.</span>
-                                            </div>
-                                        </div> */}
-                                        {searchListComponent}
-                                        <div className="pagination-part draggable">
-                                            {/* <span className='on'>1</span>
-                                            <span>2</span>
-                                            <span>1</span> */}
-                                            {searchPaginationElement()}
+                                    </div>
+                                    {fileStatus && (
+                                        <button
+                                            ref={(element) =>
+                                                (inputRef.current.fileRemove =
+                                                    element)
+                                            }
+                                            type="button"
+                                            className="del-btn"
+                                            onClick={(event) =>
+                                                initialFileInput(event)
+                                            }
+                                        >
+                                            이미지 삭제
+                                        </button>
+                                    )}
+                                    <div className="loc-part">
+                                        <p>위치</p>
+                                        <label htmlFor="loc">
+                                            <input value={inputMsg} disabled />
+                                            <button type="button">
+                                                <FontAwesomeIcon
+                                                    icon={faLocationCrosshairs}
+                                                />
+                                            </button>
+                                        </label>
+                                        <div id="myMap"></div>
+                                        <div className="map-search-part">
+                                            <label>
+                                                <input
+                                                    placeholder="검색할 지역을 입력해주세요."
+                                                    onChange={(event) =>
+                                                        setSearchText(
+                                                            event.target.value
+                                                        )
+                                                    }
+                                                    onKeyDown={(event) => {
+                                                        if (
+                                                            event.keyCode === 13
+                                                        ) {
+                                                            searchPlaces(
+                                                                searchText,
+                                                                setSearchList
+                                                            );
+                                                        }
+                                                    }}
+                                                    value={searchText}
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        searchPlaces(
+                                                            searchText,
+                                                            setSearchList
+                                                        );
+                                                    }}
+                                                >
+                                                    <FontAwesomeIcon
+                                                        icon={faMagnifyingGlass}
+                                                    />
+                                                </button>
+                                            </label>
+                                            {searchList.length > 0 && (
+                                                <div className="map-search-list">
+                                                    {searchListComponent}
+                                                    <div className="pagination-part draggable">
+                                                        {searchPaginationElement()}
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="right">
-                    <label htmlFor="title">
-                        <input
-                            name="title"
-                            placeholder="제목을 입력하세요."
-                            value={title}
-                            onChange={(event) => inputEventAction(event)}
-                        />
-                    </label>
-                    <div className="line one">
-                        <label htmlFor="content">
-                            <p>내용</p>
-                            <textarea
-                                name="content"
-                                rows="15"
-                                value={content}
-                                onChange={(event) => inputEventAction(event)}
-                            ></textarea>
-                        </label>
-                    </div>
-
-                    <div className="line two">
-                        <label htmlFor="tag">
-                            <p>태그</p>
-                            <div>
-                                <div className="left">
-                                    {tagItemComponent}
-                                    {/* <span className='tag'>태그1</span>
-                                    <span className='tag'>태그2</span>
-                                    <span className='tag'>태그3</span>
-                                    <span className='tag'>태그4</span> */}
                                 </div>
-                                <div className="right">
+                            </div>
+                            <div className="right">
+                                <label htmlFor="title">
                                     <input
-                                        name="tag"
-                                        value={tag}
+                                        name="title"
+                                        placeholder="제목을 입력하세요."
+                                        value={title}
                                         onChange={(event) =>
                                             inputEventAction(event)
                                         }
-                                        onKeyDown={(event) =>
-                                            tagInputEnter(event)
+                                    />
+                                </label>
+                                <div className="line one">
+                                    <label htmlFor="content">
+                                        <p>내용</p>
+                                        <textarea
+                                            name="content"
+                                            rows="15"
+                                            value={content}
+                                            onChange={(event) =>
+                                                inputEventAction(event)
+                                            }
+                                        ></textarea>
+                                    </label>
+                                </div>
+
+                                <div className="line two">
+                                    <label htmlFor="tag">
+                                        <p>태그</p>
+                                        <div>
+                                            <div className="left">
+                                                {tagItemComponent}
+                                            </div>
+                                            <div className="right">
+                                                <input
+                                                    name="tag"
+                                                    value={tag}
+                                                    onChange={(event) =>
+                                                        inputEventAction(event)
+                                                    }
+                                                    onKeyDown={(event) =>
+                                                        tagInputEnter(event)
+                                                    }
+                                                />
+
+                                                {tag !== "" && (
+                                                    <div className="tag-list-part">
+                                                        {tagListComponent}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </label>
+                                    <label htmlFor="dues">
+                                        <p>회비</p>
+                                        <div>
+                                            <input
+                                                name="dues"
+                                                placeholder="없음"
+                                                value={dues}
+                                                onChange={(event) =>
+                                                    inputEventAction(event)
+                                                }
+                                            />
+                                            <span>원</span>
+                                        </div>
+                                    </label>
+                                    <label htmlFor="personNumber">
+                                        <p>인원</p>
+                                        <div>
+                                            <input
+                                                name="personNumber"
+                                                type="number"
+                                                value={personNumber}
+                                                onChange={(event) =>
+                                                    inputEventAction(event)
+                                                }
+                                            />
+                                            <span>명</span>
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div className="line three">
+                                    <label
+                                        htmlFor="interests"
+                                        className="draggable"
+                                    >
+                                        <p>카테고리</p>
+                                        <div className="category-parent-items">
+                                            {categoryParentComponent}
+                                        </div>
+                                        {category["code"].length === 0 ? (
+                                            ""
+                                        ) : (
+                                            <div className="category-code-items">
+                                                {categoryCodeComponent}
+                                            </div>
+                                        )}
+                                    </label>
+                                </div>
+                                <button
+                                    type="button"
+                                    className={
+                                        inputCheck()
+                                            ? "result-btn on"
+                                            : "result-btn"
+                                    }
+                                    onClick={() => {
+                                        if (inputCheck()) resultFunc();
+                                    }}
+                                >
+                                    등록하기
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                )}
+            </div>
+        );
+    } else {
+        return (
+            <div>
+                {mode === "edit" && (
+                    <div id="moim-add-page" className="page-wrap">
+                        <div className="title-wrap">
+                            <h3>모임 수정하기</h3>
+                        </div>
+                        <form
+                            name="moim-form"
+                            onSubmit={() => {
+                                return false;
+                            }}
+                        >
+                            <div className="left">
+                                <div className="image-upload">
+                                    <div className="main-image">
+                                        <span
+                                            className="on"
+                                            ref={(element) =>
+                                                (inputRef.current.fileBox =
+                                                    element)
+                                            }
+                                            style={
+                                                contents.IMAGE_NAME !== ""
+                                                    ? {
+                                                            backgroundImage: `url(${imagePath}${contents.IMAGE_NAME})`,
+                                                    }
+                                                    : {}
+                                            }
+                                        >
+                                            +
+                                        </span>
+                                        <input
+                                            ref={(element) =>
+                                                (inputRef.current.file =
+                                                    element)
+                                            }
+                                            type="file"
+                                            onChange={(event) =>
+                                                uploadImageAction(event)
+                                            }
+                                            multiple
+                                            accept=".gif, .jpg, .png"
+                                        />
+                                    </div>
+                                    {fileStatus && (
+                                        <button
+                                            ref={(element) =>
+                                                (inputRef.current.fileRemove =
+                                                    element)
+                                            }
+                                            type="button"
+                                            className="del-btn"
+                                            onClick={(event) =>
+                                                initialFileInput(event)
+                                            }
+                                        >
+                                            이미지 삭제
+                                        </button>
+                                    )}
+                                    <div className="loc-part">
+                                        <p>위치</p>
+                                        <label htmlFor="loc">
+                                            <input value={inputMsg} disabled />
+                                            <button type="button">
+                                                <FontAwesomeIcon
+                                                    icon={faLocationCrosshairs}
+                                                />
+                                            </button>
+                                        </label>
+                                        <div id="myMap"></div>
+                                        <div className="map-search-part">
+                                            <label>
+                                                <input
+                                                    placeholder="검색할 지역을 입력해주세요."
+                                                    onChange={(event) =>
+                                                        setSearchText(
+                                                            event.target.value
+                                                        )
+                                                    }
+                                                    onKeyDown={(event) => {
+                                                        if (
+                                                            event.keyCode === 13
+                                                        ) {
+                                                            searchPlaces(
+                                                                searchText,
+                                                                setSearchList
+                                                            );
+                                                        }
+                                                    }}
+                                                    value={searchText}
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        searchPlaces(
+                                                            searchText,
+                                                            setSearchList
+                                                        );
+                                                    }}
+                                                >
+                                                    <FontAwesomeIcon
+                                                        icon={faMagnifyingGlass}
+                                                    />
+                                                </button>
+                                            </label>
+                                            {searchList.length > 0 && (
+                                                <div className="map-search-list">
+                                                    {searchListComponent}
+                                                    <div className="pagination-part draggable">
+                                                        {searchPaginationElement()}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="right">
+                                <label htmlFor="title">
+                                    <input
+                                        name="title"
+                                        placeholder="제목을 입력하세요."
+                                        value={title}
+                                        onChange={(event) =>
+                                            inputEventAction(event)
                                         }
                                     />
+                                </label>
+                                <div className="line one">
+                                    <label htmlFor="content">
+                                        <p>내용</p>
+                                        <textarea
+                                            name="content"
+                                            rows="15"
+                                            value={content}
+                                            onChange={(event) =>
+                                                inputEventAction(event)
+                                            }
+                                        ></textarea>
+                                    </label>
+                                </div>
 
-                                    {tag !== "" && (
-                                        <div className="tag-list-part">
-                                            {tagListComponent}
+                                <div className="line two">
+                                    <label htmlFor="tag">
+                                        <p>태그</p>
+                                        <div>
+                                            <div className="left">
+                                                {tagItemComponent}
+                                            </div>
+                                            <div className="right">
+                                                <input
+                                                    name="tag"
+                                                    value={tag}
+                                                    onChange={(event) =>
+                                                        inputEventAction(event)
+                                                    }
+                                                    onKeyDown={(event) =>
+                                                        tagInputEnter(event)
+                                                    }
+                                                />
+
+                                                {tag !== "" && (
+                                                    <div className="tag-list-part">
+                                                        {tagListComponent}
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
-                                    )}
+                                    </label>
+                                    <label htmlFor="dues">
+                                        <p>회비</p>
+                                        <div>
+                                            <input
+                                                name="dues"
+                                                placeholder="없음"
+                                                value={dues}
+                                                onChange={(event) =>
+                                                    inputEventAction(event)
+                                                }
+                                            />
+                                            <span>원</span>
+                                        </div>
+                                    </label>
+                                    <label htmlFor="personNumber">
+                                        <p>인원</p>
+                                        <div>
+                                            <input
+                                                name="personNumber"
+                                                type="number"
+                                                value={personNumber}
+                                                onChange={(event) =>
+                                                    inputEventAction(event)
+                                                }
+                                            />
+                                            <span>명</span>
+                                        </div>
+                                    </label>
                                 </div>
-                            </div>
-                        </label>
-                        <label htmlFor="dues">
-                            <p>회비</p>
-                            <div>
-                                <input
-                                    name="dues"
-                                    placeholder="없음"
-                                    value={dues}
-                                    onChange={(event) =>
-                                        inputEventAction(event)
-                                    }
-                                />
-                                <span>원</span>
-                            </div>
-                        </label>
-                        <label htmlFor="personNumber">
-                            <p>인원</p>
-                            <div>
-                                <input
-                                    name="personNumber"
-                                    type="number"
-                                    value={personNumber}
-                                    onChange={(event) =>
-                                        inputEventAction(event)
-                                    }
-                                />
-                                <span>명</span>
-                            </div>
-                        </label>
-                    </div>
 
-                    <div className="line three">
-                        <label htmlFor="interests" className="draggable">
-                            <p>카테고리</p>
-                            <div className="category-parent-items">
-                                {categoryParentComponent}
-                            </div>
-                            {category["code"].length === 0 ? (
-                                ""
-                            ) : (
-                                <div className="category-code-items">
-                                    {categoryCodeComponent}
+                                <div className="line three">
+                                    <label
+                                        htmlFor="interests"
+                                        className="draggable"
+                                    >
+                                        <p>카테고리</p>
+                                        <div className="category-parent-items">
+                                            {categoryParentComponent}
+                                        </div>
+                                        {category["code"].length === 0 ? (
+                                            ""
+                                        ) : (
+                                            <div className="category-code-items">
+                                                {categoryCodeComponent}
+                                            </div>
+                                        )}
+                                    </label>
                                 </div>
-                            )}
-                        </label>
+                                <button
+                                    type="button"
+                                    className={
+                                        inputCheck()
+                                            ? "result-btn on"
+                                            : "result-btn"
+                                    }
+                                    onClick={() => {
+                                        if (inputCheck()) editResultFunc();
+                                    }}
+                                >
+                                    수정하기
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                    <button
-                        type="button"
-                        className={
-                            inputCheck() ? "result-btn on" : "result-btn"
-                        }
-                        onClick={() => {
-                            if (inputCheck()) resultFunc();
-                        }}
-                    >
-                        등록하기
-                    </button>
-                </div>
-            </form>
-        </div>
-    );
+                )}
+            </div>
+        );
+    }
 };
 
 export default MoimAdd;
