@@ -43,6 +43,13 @@ public interface MeetingDAO {
 
     List<Map<String, Object>> meetingUserList(Long meetingNo);
 
+    List<Map<String, Object>> moimUserTodayView(Map<String, Object> dbParam);
+    int moimUserLikeCount(Long userNo);
+
+
+    List<Map<String, Object>> moimUserLikeCard(Map<String, Object> dbParam);
+    int moimUserTodayViewCount(Map<String, Object> dbParam);
+
 
 
 

@@ -208,6 +208,9 @@ public class MeetingController {
     }
 
 
+    // 유저의 좋아요 리스트
+    // 유저의 좋아요 리스트
+    // 유저의 좋아요 리스트
     @GetMapping("/select/user/like")
     public Map<String, Object> moimUserLike(@RequestParam int page,
                                             @RequestParam int length) {
@@ -217,8 +220,25 @@ public class MeetingController {
 
         Long userNo = principal.getUserVO().getUserNo();
         logger.info("[moimOwnList] SecurityContextHolder 추출 userNo : {}", userNo);
-        return meetingService.pageItemList("user", String.valueOf(userNo), page, length);
+
+        return meetingService.moimUserLikeCard(userNo, page, length);
     }
+
+
+    //유저의 최근 본 목록 (오늘날짜 기준)
+    @GetMapping("/user/view")
+    public Map<String, Object> moimUserView(@RequestParam int page,
+                                            @RequestParam int length) {
+        logger.info("[moimUserView] 핸들러");
+        PrincipalDetails principal =
+                (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Long userNo = principal.getUserVO().getUserNo();
+        logger.info("[moimUserView] SecurityContextHolder 추출 userNo : {}", userNo);
+
+        return meetingService.moimUserTodayView(userNo, page, length);
+    }
+
 
 
     // 자신이 생성한 모임 개수

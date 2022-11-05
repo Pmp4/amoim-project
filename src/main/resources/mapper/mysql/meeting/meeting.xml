@@ -227,6 +227,51 @@
 
 
 
+    <!-- 좋아요한 목록 -->
+    <!-- 좋아요한 목록 -->
+    <!-- 좋아요한 목록 -->
+    <select id="moimUserLikeCard" parameterType="hashMap" resultType="hashMap">
+        select MCI.*
+        from MOIM_CARD_INFO MCI
+            join MEETING_LIKE ML on MCI.NO = ML.MEETING_NO
+        where ML.USER_NO = #{userNo}
+        LIMIT #{length} OFFSET #{start}
+    </select>
+
+    <select id="moimUserLikeCount" parameterType="Long" resultType="int">
+        select count(*)
+        from MOIM_CARD_INFO MCI
+                 join MEETING_LIKE ML on MCI.NO = ML.MEETING_NO
+        where ML.USER_NO = #{userNo}
+    </select>
+    
+    
+    
+    <!-- 최근 본 항목 -->
+    <!-- 최근 본 항목 -->
+    <!-- 최근 본 항목 -->
+    <select id="moimUserTodayView" parameterType="hashMap" resultType="hashMap">
+        select MCI.*
+        from MEETING_VIEW MV
+            join MOIM_CARD_INFO MCI on MV.MEETING_NO = MCI.NO
+        where MV.USER_NO = #{userNo}
+            and DATE_FORMAT(MV.REGDATE, '%Y-%m-%d') = #{today}
+        group by MCI.NO, MCI.IMAGE_NAME, MCI.SIGUNGU
+        LIMIT #{length} OFFSET #{start}
+    </select>
+
+    <select id="moimUserTodayViewCount" parameterType="hashMap" resultType="int">
+        select count(*)
+        from (
+            select MCI.*
+            from MEETING_VIEW MV
+                join MOIM_CARD_INFO MCI on MV.MEETING_NO = MCI.NO
+            where MV.USER_NO = #{userNo}
+                and DATE_FORMAT(MV.REGDATE, '%Y-%m-%d') = #{today}
+            group by MCI.NO, MCI.IMAGE_NAME, MCI.SIGUNGU
+        ) a
+    </select>
+
 
 
 

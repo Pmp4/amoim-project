@@ -15,10 +15,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -443,6 +440,62 @@ public class MeetingServiceImpl implements MeetingService {
     public int selectByUserNoCardPageCount(Map<String, Object> map) {
         return meetingDAO.selectByUserNoCardPageCount(map);
     }
+
+    @Override
+    public Map<String, Object> moimUserLikeCard(Long userNo, int page, int blockSize) {
+        logger.info("[moimUserLikeCard] 서비스 로직");
+
+        PaginationInfo paginationInfo = new PaginationInfo(blockSize, page);
+
+        Map<String, Object> dbParam = new HashMap<>();
+        dbParam.put("userNo", userNo);
+        dbParam.put("length", blockSize);
+        dbParam.put("start", paginationInfo.getStartRecord());
+
+        List<Map<String, Object>> list = meetingDAO.moimUserLikeCard(dbParam);
+        int totalRecord = meetingDAO.moimUserLikeCount(userNo);
+        logger.info("[moimUserLikeCard] 조회 결과 list.size : {}, totalRecord : {}", list.size(), totalRecord);
+
+        paginationInfo.setTotalRecord(totalRecord);
+
+        Map<String, Object> responseDate = new HashMap<>();
+        responseDate.put("list", list);
+        responseDate.put("pageInfo", paginationInfo);
+
+        return responseDate;
+    }
+
+    @Override
+    public Map<String, Object> moimUserTodayView(Long userNo, int page, int blockSize) {
+        logger.info("[moimUserTodayView] 서비스 로직");
+
+        PaginationInfo paginationInfo = new PaginationInfo(blockSize, page);
+        Calendar now = Calendar.getInstance();
+        String today =
+                now.get(Calendar.YEAR) + "-" +
+                        (now.get(Calendar.MONTH)+1) + "-" +
+                        (now.get(Calendar.DATE) < 10 ? "0" + now.get(Calendar.DATE) : now.get(Calendar.DATE));
+        logger.info("[moimUserTodayView] today : {}", today);
+
+        Map<String, Object> dbParam = new HashMap<>();
+        dbParam.put("userNo", userNo);
+        dbParam.put("length", blockSize);
+        dbParam.put("start", paginationInfo.getStartRecord());
+        dbParam.put("today", today);
+
+        List<Map<String, Object>> list = meetingDAO.moimUserTodayView(dbParam);
+        int totalRecord = meetingDAO.moimUserTodayViewCount(dbParam);
+        logger.info("[moimUserTodayView] 조회 결과 list.size : {}, totalRecord : {}", list, totalRecord);
+
+        paginationInfo.setTotalRecord(totalRecord);
+
+        Map<String, Object> responseDate = new HashMap<>();
+        responseDate.put("list", list);
+        responseDate.put("pageInfo", paginationInfo);
+
+        return responseDate;
+    }
+
 
 //    @Override
 //    public Map<String, Object> selectByNo(String no) {
