@@ -6,6 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { rootReducer } from "./reducer/rootReducer";
 import { createStore } from "redux";
+import { CookiesProvider } from 'react-cookie';
 
 const store = createStore(
         rootReducer,
@@ -15,9 +16,11 @@ const store = createStore(
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <BrowserRouter>
-        <Provider store={store}>
-            <App />
-        </Provider>
+        <CookiesProvider>
+            <Provider store={store}>
+                <App />
+            </Provider>
+        </CookiesProvider>
     </BrowserRouter>
 );
 

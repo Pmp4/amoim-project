@@ -275,6 +275,16 @@ public class MeetingServiceImpl implements MeetingService {
         return meetingDAO.selectMoimUserNo(meetingNo);
     }
 
+    @Override
+    public int hitsMoim(Long meetingNo, Long userNo) {
+        logger.info("[hitsMoim] 서비스 로직");
+
+        int cnt = meetingDAO.insertViewCountMoim(String.valueOf(userNo), String.valueOf(meetingNo));
+        logger.info("[hitsMoim] 결과 cnt : {}", cnt);
+
+        return cnt;
+    }
+
 
     @Override
     public Map<String, Object> mainLocList(HttpServletRequest request) {

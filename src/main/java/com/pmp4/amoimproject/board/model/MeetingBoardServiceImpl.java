@@ -3,7 +3,6 @@ package com.pmp4.amoimproject.board.model;
 import com.pmp4.amoimproject.common.ConstUtil;
 import com.pmp4.amoimproject.common.FileUploadUtil;
 import com.pmp4.amoimproject.common.PaginationInfo;
-import com.pmp4.amoimproject.meeting.model.MeetingServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +16,9 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class MeetingBoardServiceImpl implements MeetingBoardService{
-    private static final Logger logger = LoggerFactory.getLogger(MeetingServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(MeetingBoardServiceImpl.class);
     private final MeetingBoardDAO meetingBoardDAO;
+    private final CommentsDAO commentsDAO;
 
     @Override
     @Transactional
@@ -107,7 +107,7 @@ public class MeetingBoardServiceImpl implements MeetingBoardService{
     public int insertComment(BoardCommentsVO boardCommentsVO) {
         logger.info("[boardCommentsVO] 서비스 로직");
 
-        int cnt = meetingBoardDAO.insertComment(boardCommentsVO);
+        int cnt = commentsDAO.insertComment(boardCommentsVO);
         logger.info("[boardCommentsVO] 등록 결과 cnt : {}", cnt);
 
         if(!(cnt > 0)) throw new RuntimeException();
@@ -127,8 +127,8 @@ public class MeetingBoardServiceImpl implements MeetingBoardService{
         dbParam.put("length", blockSize);
         logger.info("[selectCommentList] dbParam : {}", dbParam);
 
-        List<BoardCommentsVO> list = meetingBoardDAO.selectCommentList(dbParam);
-        int count = meetingBoardDAO.commentCount(boardNo);
+        List<BoardCommentsVO> list = commentsDAO.selectCommentList(dbParam);
+        int count = commentsDAO.commentCount(boardNo);
         logger.info("[selectCommentList] 조회 결과 list.size : {}, count : {}", list.size(), count);
 
         paginationInfo.setTotalRecord(count);
@@ -141,7 +141,7 @@ public class MeetingBoardServiceImpl implements MeetingBoardService{
             boardCommentsReplyVO.setBoardCommentsVO(boardCommentsVO);
 
             dbParam.put("no", boardCommentsVO.getNo());
-            List<BoardCommentsVO> replyList = meetingBoardDAO.selectReplyList(dbParam);
+            List<BoardCommentsVO> replyList = commentsDAO.selectReplyList(dbParam);
 
             if(replyList.size() > 0) {
                 logger.info("[selectCommentList] 답글 조회 replyList.size : {}", replyList.size());

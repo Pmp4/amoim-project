@@ -2,6 +2,7 @@ package com.pmp4.amoimproject.meeting.model;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,8 @@ public interface MeetingDAO {
     int deleteMoimTag(Long meetingNo);
 
     int deleteMoim(Long meetingNo);
+
+    int insertViewCountMoim(@Param("userNo") String userNo, @Param("meetingNo") String meetingNo);
 
 
     int insertMeeting(MeetingVO meetingVO);

@@ -81,6 +81,21 @@ public class MeetingController {
 
 
 
+    @PostMapping("/hits/{meetingNo}")
+    public int viewCountMoim (@PathVariable Long meetingNo) {
+        logger.info("[viewCountMoim] 핸들러 meetingNo : {}", meetingNo);
+
+        PrincipalDetails principal =
+                (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Long userNo = principal.getUserVO().getUserNo();
+        logger.info("[viewCountMoim] SecurityContextHolder 추출 userNo : {}", userNo);
+
+        return meetingService.hitsMoim(meetingNo, userNo);
+    }
+
+
+
 
 
 

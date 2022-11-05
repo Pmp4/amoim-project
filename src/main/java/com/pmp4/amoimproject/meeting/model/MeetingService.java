@@ -24,6 +24,8 @@ public interface MeetingService {
 
     Long selectMoimUserNo(Long meetingNo);
 
+    int hitsMoim(Long meetingNo, Long userNo);
+
 
 
     // 메인화면에서의 지역 좋아요 리스트 8개
