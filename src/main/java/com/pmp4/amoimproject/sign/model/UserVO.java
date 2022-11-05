@@ -16,6 +16,7 @@ public class UserVO {
     private String socialLoginKey;
     private char gender;    //'남자 M, 여자 F',
     private Timestamp startDate;
+    private Timestamp revisedDate;
     private Timestamp outDate;
     private String email;
     private String salt;

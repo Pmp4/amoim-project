@@ -60,7 +60,8 @@ a {
 	-webkit-user-select:none;
 	-moz-user-select:none;
 	-ms-user-select:none;
-	user-select:none
+	user-select:none;
+	
 }
 
 
@@ -160,4 +161,10 @@ header {
 
 #chatt-page {
 	@import url("./chat/chat.scss");
+}
+
+
+
+#my-page {
+	@import url("./my/mypage.scss");
 }
