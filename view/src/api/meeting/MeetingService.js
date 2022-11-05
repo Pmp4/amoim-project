@@ -63,6 +63,10 @@ const moimMemberSelect = (meetingNo) => {
 }
 
 
+//유저가 좋아요한 모임
+const moimUserLike = (page=1, length = 8) => {
+    return httpCommon.get(`/meeting/select/user/like?page=${page}&length=${length}`);
+}
 
 
 
@@ -145,5 +149,6 @@ export default {
     editMeeting,
     deleteMeeting,
     viewMoim,
-    userInterestMoim
+    userInterestMoim,
+    moimUserLike
 };

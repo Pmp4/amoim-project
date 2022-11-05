@@ -208,6 +208,19 @@ public class MeetingController {
     }
 
 
+    @GetMapping("/select/user/like")
+    public Map<String, Object> moimUserLike(@RequestParam int page,
+                                            @RequestParam int length) {
+        logger.info("[moimUserLike] 핸들러");
+        PrincipalDetails principal =
+                (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Long userNo = principal.getUserVO().getUserNo();
+        logger.info("[moimOwnList] SecurityContextHolder 추출 userNo : {}", userNo);
+        return meetingService.pageItemList("user", String.valueOf(userNo), page, length);
+    }
+
+
     // 자신이 생성한 모임 개수
     // 자신이 생성한 모임 개수
     // 자신이 생성한 모임 개수

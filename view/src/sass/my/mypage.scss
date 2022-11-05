@@ -3,6 +3,7 @@
 #my-page {
     margin-top: 20px;
     font-size: 16px;
+    color: rgb(40, 40, 40);
 
     .info-part {
         display: flex;
@@ -76,10 +77,53 @@
             padding-top: 20px;
             .b1 {
                 font-size: 1.7em;
+                font-weight: 500;
+            }
+            .mt {
+                margin-top: 30px;
             }
             .line {
-                margin-top: 10px;
+                margin-top: 15px;
             }
+
+
+            p.sub {
+                font-size: 1.2em;
+                color: #515151;
+            }
+            .null {
+                color: #9e9e9e;
+            }
+            .userid {
+                font-size: .8em;
+                color: #515151;
+            }
+            .con {
+                display: block;
+                margin-top: 7px;
+            }
+
+            .edit-password {
+
+                button {
+                    padding: 10px 30px;
+                    font-size: 1.2em;
+                    display: block;
+                    width: max-content;
+                    border-radius: 12px;
+                    box-shadow:  5px 5px 16px #e3e3e3,
+                        -5px -5px 16px #ffffff;
+                    line-height: 110%;
+                }
+            }
+        }
+    }
+
+
+    .part {
+        margin-top: 100px;
+        h2 {
+            font-size: 2em;
         }
     }
 }
