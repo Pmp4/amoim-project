@@ -41,6 +41,18 @@ const MyPage = ({ Test }) => {
         totalRecord: 0,
     });
 
+    const [todayViewMoim, setTodayViewMoim] = useState([]);
+    const [todayViewMoimPageInfo, setTodayViewMoimPageInfo] = useState({
+        blockSize: 8,
+        currentPage: 1,
+        lastPage: 0,
+        pageSize: 0,
+        startPage: 0,
+        startRecord: 0,
+        totalPage: 0,
+        totalRecord: 0,
+    });
+
     const {
         userNo,
         userId,
@@ -61,6 +73,7 @@ const MyPage = ({ Test }) => {
         async function a () {
             await userInfoApi();
             await userLikeApi(1);
+            await todayMoimViewApi(1);
         }
 
         a();
@@ -94,6 +107,17 @@ const MyPage = ({ Test }) => {
 
     const likeMoimButtonAction = (page) => {
         userLikeApi(page);
+    };
+
+
+    const todayMoimViewApi = async(page) => {
+        const response = await MeetingService.moimUserView(page);
+        setTodayViewMoim(response.data.list);
+        setTodayViewMoimPageInfo(response.data.pageInfo);
+    }
+
+    const todayMoimButtonAction = (page) => {
+        todayMoimViewApi(page);
     };
 
 
@@ -138,6 +162,11 @@ const MyPage = ({ Test }) => {
             </div>
             <div className='like-moim part'>
                 <h2>최근 본 모임</h2>
+                <MoimList 
+                    items={todayViewMoim}
+                    pageInfo={todayViewMoimPageInfo}
+                    pageBtn={todayMoimButtonAction}
+                />
             </div>
         </div>
     );

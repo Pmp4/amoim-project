@@ -24,7 +24,10 @@ const ViewCount = ({children}) => {
                 setCookies(
                     "moimview", 
                     cookies.moimview.concat(moimNo), 
-                    {expires: new Date(nextDate)}
+                    {
+                        path: "/",
+                        expires: new Date(nextDate)
+                    }
                 );
 
                 viewApi(moimNo);
@@ -33,7 +36,10 @@ const ViewCount = ({children}) => {
             setCookies(
                 "moimview", 
                 [moimNo], 
-                {expires: new Date(nextDate)}
+                {
+                    path: "/",
+                    expires: new Date(nextDate)
+                }
             );
 
             viewApi(moimNo);

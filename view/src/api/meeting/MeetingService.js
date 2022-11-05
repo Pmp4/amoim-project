@@ -68,6 +68,11 @@ const moimUserLike = (page=1, length = 8) => {
     return httpCommon.get(`/meeting/select/user/like?page=${page}&length=${length}`);
 }
 
+//유저가 최근 본 목록
+const moimUserView = (page=1, length = 8) => {
+    return httpCommon.get(`/meeting/user/view?page=${page}&length=${length}`);
+}
+
 
 
 
@@ -150,5 +155,6 @@ export default {
     deleteMeeting,
     viewMoim,
     userInterestMoim,
-    moimUserLike
+    moimUserLike,
+    moimUserView
 };

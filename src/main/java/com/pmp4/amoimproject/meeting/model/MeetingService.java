@@ -93,6 +93,24 @@ public interface MeetingService {
     int selectByUserNoCardPageCount(Map<String, Object> map);
 
 
+
+
+
+
+    // 유저의 좋아요 모임
+    // 유저의 좋아요 모임
+    // 유저의 좋아요 모임
+    Map<String, Object> moimUserLikeCard(Long userNo, int page, int blockSize);
+
+
+
+
+    Map<String, Object> moimUserTodayView(Long userNo, int page, int blockSize);
+
+
+
+
+
 //    Map<String, Object> selectByNo(String no);
 
     int selectByUserCount(String userNo);
