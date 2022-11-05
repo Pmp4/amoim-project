@@ -59,10 +59,18 @@
                     background: #ee8b6a;
                     color: #7b422f;
                 }
+                
                 padding: 2px 8px;
                 line-height: 120%;
                 border-radius: 16px;
                 margin-right: 10px;
+            }
+
+            .svg-inline--fa {
+                display: var(--fa-display, inline-block);
+                height: 1em;
+                overflow: visible;
+                vertical-align: -0.025em;
             }
         }
 

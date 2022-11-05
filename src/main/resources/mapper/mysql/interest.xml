@@ -16,4 +16,15 @@
         insert into USER_INTEREST(user_no, category_code, category_parent)
         values (#{userNo}, #{categoryCode}, #{categoryParent});
     </insert>
+
+
+    <select id="selectUserCategory" parameterType="String" resultType="hashMap">
+        select
+            UI.NO,
+            UI.CATEGORY_CODE,
+            I.NAME
+        from USER_INTEREST UI
+                 join INTERESTS I on UI.CATEGORY_CODE = I.CATEGORY_CODE
+        where USER_NO = #{userNo}
+    </select>
 </mapper>

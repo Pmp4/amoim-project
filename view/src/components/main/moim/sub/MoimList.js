@@ -50,6 +50,7 @@ const MoimList = ({ items, pageInfo, pageBtn }) => {
                 </div>
                 <div className="right">
                     <FontAwesomeIcon icon={faHeart} />
+                    <span>{item.LIKE_COUNT}</span>
                 </div>
             </div>
         );

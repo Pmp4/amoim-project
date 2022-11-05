@@ -8,9 +8,14 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { MODAL_OPEN } from "reducer/module/modal";
 import MoimList from './MoimList';
+import InterestService from 'api/interest/InterestService';
+import MoimSlider from './MoimSlider';
 
 const MoimMain = () => {
     const [meetingContents, setMeetingContents] = useState([]);
+    const [userInterests, setUserInterests] = useState([]);
+    const [currentInterest, setCurrentInterest] = useState("");
+    const [interestContents, setInterestContents] = useState([]);
 
     const [signingList, setSigningList] = useState([]);
     const [pageInfo, setPageInfo] = useState({
@@ -36,7 +41,9 @@ const MoimMain = () => {
     useEffect(() => {
         async function initialFunc() {
             await myAddMeetingData();
-            signingUpList(1);
+            await signingUpList(1);
+            await userInterestApi();
+            locAPI();
         }
 
         initialFunc();
@@ -97,6 +104,62 @@ const MoimMain = () => {
     }
 
 
+
+
+
+
+
+    // 해당 유저의 관심사 목록
+    // 해당 유저의 관심사 목록
+    // 해당 유저의 관심사 목록
+    const userInterestApi = async() => {
+        const response = await InterestService.selectUserInterest();
+        setUserInterests(response.data);
+        setCurrentInterest(response.data[0].CATEGORY_CODE);
+    }
+
+
+    const interestComp = userInterests.map((item, idx) => (
+        <div className={
+                currentInterest === item.CATEGORY_CODE ? 
+                    "item on" : 'item'
+            } 
+            key={item.NO}
+            onClick={() => interestButtonAction(item.CATEGORY_CODE)}
+        >
+            {item.NAME}
+        </div>
+    ))
+
+    const interestButtonAction = (code) => {
+        setCurrentInterest(code);
+    }
+
+
+    const locAPI = (code = "11") => {
+        // MeetingService.selectByCard("BCODE", code).then((response) => {
+        //     const { status, data } = response;
+
+        //     if (status === 200) {
+        //         setLocMoim(data.list);
+        //     } else {
+        //         alert("서버 ERROR");
+        //     }
+        // });
+
+        MeetingService.mainSelectLoc().then((response) => {
+            const { status, data } = response;
+            if (status === 200) {
+                if (data.SUCCESS) {
+                    setInterestContents(data.list.slice(0, 3));
+                } else {
+                    alert(data.SUCCESS_TEXT);
+                }
+            } else {
+                alert("Server Error");
+            }
+        });
+    };
 
 
 
@@ -171,6 +234,19 @@ const MoimMain = () => {
                 <div className="sub-title">
                     <h4>함께하는 모임</h4>
                     <MoimList items={signingList} pageInfo={pageInfo} pageBtn={signingUpList}/>
+                </div>
+
+                <div className="sub-title">
+                    <h4>관심 카테고리의 추천</h4>
+                    {/* <MoimList items={signingList} pageInfo={pageInfo} pageBtn={signingUpList}/> */}
+                    <div className='interest-part'>
+                        <div className='interest-moim-part'>
+                            <MoimSlider meeting={interestContents}/>
+                        </div>
+                        <div className='interest-list'>
+                            {interestComp}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

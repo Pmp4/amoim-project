@@ -83,14 +83,19 @@
                 ) LIKE_COUNT,
                 MI.IMAGE_NAME,
                 MA.SIGUNGU,
-                M.REGDATE
+                M.REGDATE,
+                (
+                    select COUNT(*)
+                    from MEETING_VIEW MV
+                    where MV.MEETING_NO = m.NO
+                )   VIEW_COUNT
     </sql>
 
     <sql id="moimCardFromJoin">
         from
             MEETING M join INTERESTS I on I.CATEGORY_CODE = m.CATEGORY_CODE
-        join MEETING_ADDRESS MA on m.NO = MA.MEETING_NO
-                      join MEETING_IMAGES MI on m.NO = MI.MEETING_NO
+                join MEETING_ADDRESS MA on m.NO = MA.MEETING_NO
+                join MEETING_IMAGES MI on m.NO = MI.MEETING_NO
         where M.DEL_FLG = 'N' and MI.SEQ = 1
     </sql>
 
@@ -139,7 +144,7 @@
                 order by M.REGDATE desc
             </when>
             <when test='type != null and (type eq "category".toString())'>
-                and I.CATEGORY_CODE like CONCAT(#{key}, '%') order by LIKE_COUNT desc
+                and I.CATEGORY_CODE like CONCAT(#{key}, '%') order by LIKE_COUNT desc, VIEW_COUNT desc
             </when>
         </choose>
         LIMIT #{blockSize} OFFSET #{start}
@@ -220,10 +225,10 @@
                 order by m.REGDATE desc
             </when>
             <when test='type != null and (type eq "BCODE".toString())'>
-                and ${type} like CONCAT(#{key}, '%') order by LIKE_COUNT desc
+                and ${type} like CONCAT(#{key}, '%') order by LIKE_COUNT desc, VIEW_COUNT desc
             </when>
             <when test='type != null and (type eq "i.CATEGORY_CODE".toString())'>
-                and ${type} like CONCAT(#{key}, '%') order by LIKE_COUNT desc
+                and ${type} like CONCAT(#{key}, '%') order by LIKE_COUNT desc, VIEW_COUNT desc
             </when>
         </choose>
         LIMIT #{length} OFFSET #{start}

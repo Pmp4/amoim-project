@@ -18,6 +18,7 @@ const ViewCount = ({children}) => {
         const nextDate = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()+1}`;
 
         const moimNo = parseInt(param.meetingNo);
+        console.log(cookies);
         if(cookies.moimview !== undefined) {
             if(!(cookies.moimview.includes(moimNo))) {     //이미 조회된 글
                 setCookies(
@@ -28,6 +29,14 @@ const ViewCount = ({children}) => {
 
                 viewApi(moimNo);
             }
+        }else {
+            setCookies(
+                "moimview", 
+                [moimNo], 
+                {expires: new Date(nextDate)}
+            );
+
+            viewApi(moimNo);
         }
     }
 
