@@ -21,7 +21,7 @@ const MoimItem = (props) => {
 
     const removeApi = async(no) => {
         const response = await MeetingService.deleteMeeting(no);
-
+        navigate("/moim");
     }
 
 
