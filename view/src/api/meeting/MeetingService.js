@@ -16,6 +16,10 @@ const viewMoim = (meetingNo) => {
     return httpCommon.post(`/meeting/hits/${meetingNo}`);
 }
 
+const userInterestMoim = (code) => {
+    return httpCommon.get(`/meeting/user/interest/${code}`);
+}
+
 
 //모임 정보 수정
 const editMeeting = (rest, meetingNo) => {
@@ -140,5 +144,6 @@ export default {
     moimMemberSelect,
     editMeeting,
     deleteMeeting,
-    viewMoim
+    viewMoim,
+    userInterestMoim
 };

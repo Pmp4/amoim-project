@@ -420,6 +420,19 @@ public class MeetingServiceImpl implements MeetingService {
         return list;
     }
 
+    @Override
+    public List<Map<String, Object>> moimUserInterest(Long userNo, String code) {
+        logger.info("[moimUserInterest] 서비스 로직");
+
+        String parentCode = code.substring(0, 3);
+        logger.info("[moimUserInterest] parentCode : {}", parentCode);
+
+        List<Map<String, Object>> list = meetingDAO.moimUserInterest(String.valueOf(userNo), code, parentCode);
+        logger.info("[moimUserInterest] 결과 list.size : {}", list.size());
+
+        return list;
+    }
+
 
     @Override
     public List<Map<String, Object>> selectByUserNoCard(Map<String, Object> map) {

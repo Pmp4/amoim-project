@@ -43,7 +43,6 @@ const MoimMain = () => {
             await myAddMeetingData();
             await signingUpList(1);
             await userInterestApi();
-            locAPI();
         }
 
         initialFunc();
@@ -116,6 +115,7 @@ const MoimMain = () => {
         const response = await InterestService.selectUserInterest();
         setUserInterests(response.data);
         setCurrentInterest(response.data[0].CATEGORY_CODE);
+        interestUserSelectApi(response.data[0].CATEGORY_CODE);
     }
 
 
@@ -133,10 +133,11 @@ const MoimMain = () => {
 
     const interestButtonAction = (code) => {
         setCurrentInterest(code);
+        interestUserSelectApi(code);
     }
 
 
-    const locAPI = (code = "11") => {
+    const interestUserSelectApi = async(code) => {
         // MeetingService.selectByCard("BCODE", code).then((response) => {
         //     const { status, data } = response;
 
@@ -147,18 +148,8 @@ const MoimMain = () => {
         //     }
         // });
 
-        MeetingService.mainSelectLoc().then((response) => {
-            const { status, data } = response;
-            if (status === 200) {
-                if (data.SUCCESS) {
-                    setInterestContents(data.list.slice(0, 3));
-                } else {
-                    alert(data.SUCCESS_TEXT);
-                }
-            } else {
-                alert("Server Error");
-            }
-        });
+        const response = await MeetingService.userInterestMoim(code);
+        setInterestContents(response.data);
     };
 
 
