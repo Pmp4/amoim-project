@@ -22,6 +22,7 @@ const MoimList = ({ items, pageInfo, pageBtn }) => {
                 <div className="left">
                     <div className="thumbnail">
                         <img
+                            loading='lazy'
                             src={imgPath + item.IMAGE_NAME}
                             alt={item.TITLE + " 이미지"}
                         />

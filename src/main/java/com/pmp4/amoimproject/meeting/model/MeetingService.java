@@ -72,6 +72,11 @@ public interface MeetingService {
 
 
 
+    // 해당 유저의 관심사 항목 가져오기
+    // 해당 유저의 관심사 항목 가져오기
+    // 해당 유저의 관심사 항목 가져오기
+    List<Map<String, Object>> moimUserInterest(Long userNo, String code);
+
 
 
 

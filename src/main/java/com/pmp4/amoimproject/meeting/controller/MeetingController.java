@@ -96,6 +96,21 @@ public class MeetingController {
 
 
 
+    @GetMapping("/user/interest/{code}")
+    public List<Map<String, Object>> moimUserInterest(@PathVariable String code) {
+        logger.info("[moimUserInterest] 핸들러 code : {}", code);
+
+        PrincipalDetails principal =
+                (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Long userNo = principal.getUserVO().getUserNo();
+        logger.info("[moimUserInterest] SecurityContextHolder 추출 userNo : {}", userNo);
+
+        return meetingService.moimUserInterest(userNo, code);
+    }
+
+
+
 
 
 

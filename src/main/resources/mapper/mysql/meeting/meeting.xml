@@ -202,6 +202,30 @@
 
 
 
+    <!-- 유저의 관심사 항목 -->
+    <!-- 유저의 관심사 항목 -->
+    <!-- 유저의 관심사 항목 -->
+    <select id="moimUserInterest" parameterType="String" resultType="hashMap">
+        (
+            select *
+            from MOIM_CARD_INFO
+            where USER_NO != #{userNo}
+              and CATEGORY_CODE = #{code}
+            order by LIKE_COUNT desc, VIEW_COUNT desc, REGDATE desc
+            LIMIT 4
+        ) UNION(
+            select *
+            from MOIM_CARD_INFO
+            where USER_NO != #{userNo}
+              and CATEGORY_PARENT_CODE like concat(#{parentCode}, '%')
+            order by rand()
+            LIMIT 8
+        )
+    </select>
+
+
+
+
 
 
 

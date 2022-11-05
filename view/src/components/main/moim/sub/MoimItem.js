@@ -47,6 +47,7 @@ const MoimItem = (props) => {
                 <img
                     src={`http://localhost:8080/rest/v1/images/${item.IMAGE_NAME}`}
                     alt="이미지"
+                    loading='lazy'
                 />
             </div>
             <div className="exp-part">

@@ -22,6 +22,10 @@ public interface MeetingDAO {
 
     int insertMeeting(MeetingVO meetingVO);
 
+    List<Map<String, Object>> moimUserInterest(@Param("userNo") String userNo,
+                                               @Param("code") String code,
+                                               @Param("parentCode") String parentCode);
+
 
 
 
