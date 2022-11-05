@@ -6,4 +6,6 @@ import java.util.Map;
 public interface InterestService {
     List<InterestVO> categorySelect(String type);
     int insertUserInterest(Map<String, Object> map);
+
+    List<Map<String, Object>> selectUserCategory(String userNo);
 }

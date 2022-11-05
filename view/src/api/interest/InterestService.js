@@ -11,4 +11,9 @@ const selectCategory = (type) => {
     return httpCommon.get(`/interest/category?type=${type}`);
 }
 
-export default {selectCategory}
+
+const selectUserInterest = () => {
+    return httpCommon.get(`/interest/user`);
+}
+
+export default {selectCategory, selectUserInterest}

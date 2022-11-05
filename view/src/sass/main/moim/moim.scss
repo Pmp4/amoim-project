@@ -3,6 +3,7 @@
 
 
 #moim-page {
+    padding-bottom : 500px;
     .title-part {
         margin: 60px auto 70px auto;
         display: flex;
@@ -791,6 +792,71 @@
     .sub-title {
         font-size: $big-title;
         margin-top: 100px;
+        // font-size: 16px;
+
+        .interest-part {
+            display: flex;
+            margin-top: 20px;
+            
+            .interest-list {
+                width: 20%;
+                font-size: 16px;
+                padding-top: 20px;
+                .item {
+                    box-sizing: border-box;
+                    width: 100%;
+                    font-size: 1.2em;
+                    padding: 10px 20px; 
+                    margin-bottom: 16px;
+                    text-align: right;
+                    cursor: pointer;
+                    &.on {
+                        background-color: #F2F2F2;
+                        border-radius: 10px;
+                    }
+                }
+            }
+
+            .interest-moim-part {
+                width: 80%;
+                background-color: #fff;
+                border-radius: 16px;
+                box-shadow:  9px 9px 35px #ebebeb,
+                    -9px -9px 35px #ffffff;
+                font-size: 14px;
+                padding: 20px 0;
+                overflow: hidden;
+                
+                #moim-item {
+                    .gradient {display: none;}
+                    .slick-slider {
+                        .slick-list {
+                            width: 100%;
+                            padding: 20px 0 40px 0;
+                            overflow: visible;
+                            .slick-slide {
+                                padding: 0 15px;
+                                box-sizing: border-box;
+                                .item {
+                                    .image {
+                                        height: 270px;
+                                    }
+                                }
+                                .none-item {
+                                    
+                                }
+                            }
+                        }
+
+                        .slick-dots {
+                            position: relative;
+                            top: 0;
+                            bottom: 0;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -1403,7 +1469,7 @@
     flex-wrap: wrap;
     display: flex;
     background-color: #f2f2f2;
-    padding: 0 16px 16px 16px;
+    padding: 16px;
     box-sizing: border-box;
     border-radius: 16px;
     font-size: 16px;
@@ -1411,16 +1477,21 @@
     margin-top: 14px;
 
     .none {
-        font-size: 18px;
+        height: 120px;
+        color: #8d8d8d;
+        width: 100%;
+        display: flex;
+        font-size: 1.4em;
+        align-items: center;
+        justify-content: center;
         text-align: center;
-        margin: 20px auto;
     }
 
     .item {
         width: 49%;
         cursor: pointer;
         padding: 10px;
-        margin-top: 16px;
+        margin-bottom: 16px;
         box-sizing: border-box;
         background: #fff;
         border-radius: 12px;
@@ -1503,19 +1574,31 @@
         .right {
             width: 7%;
             border-radius: 12px;
-
-            &::before {
-                content: "";
-                display: block;
-                padding-top: 100%;
-            }
-
-            background-color: #F4BEC1;
-            color: #A4686B;
-            font-size: 1.5em;
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-wrap: wrap;
+            background-color: #F4BEC1;
+            padding: 5px 0;
+
+            // &::before {
+            //     content: "";
+            //     display: block;
+            //     padding-top: 100%;
+            // }
+
+            svg {
+                display: block;
+                color: #A4686B;
+                font-size: 1.5em;
+                width: 100%;
+            }
+            span {
+                display: block;
+                font-size: .8em;
+                margin-top: 3px;
+                color: #A4686B;
+            }
         }
     }
 

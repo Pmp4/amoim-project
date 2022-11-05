@@ -2,13 +2,12 @@ package com.pmp4.amoimproject.interest.api;
 
 import com.pmp4.amoimproject.interest.model.InterestService;
 import com.pmp4.amoimproject.interest.model.InterestVO;
+import com.pmp4.amoimproject.sign.model.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,5 +40,19 @@ public class InterestController {
         }
 
         return res;
+    }
+
+
+    @GetMapping("/user")
+    public List<Map<String, Object>> interestUser() {
+        logger.info("[interestUser] 핸들러");
+
+        PrincipalDetails principal =
+                (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Long userNo = principal.getUserVO().getUserNo();
+        logger.info("[interestUser] SecurityContextHolder 추출 userNo : {}", userNo);
+
+        return interestService.selectUserCategory(String.valueOf(userNo));
     }
 }
