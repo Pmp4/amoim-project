@@ -20,6 +20,17 @@
     </insert>
 
 
+
+    <update id="userProfileEdit" parameterType="String">
+        update USERS
+        set PROFILE_IMAGE = #{profileImage}
+        where USER_NO = #{userNo}
+    </update>
+
+
+
+
+
     <select id="checkUserId" parameterType="String" resultType="userVo">
         select * from USERS where USER_ID = #{userId}
     </select>

@@ -3,7 +3,9 @@ package com.pmp4.amoimproject.user.model;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pmp4.amoimproject.address.model.UserAddressDAO;
 import com.pmp4.amoimproject.address.model.UserAddressVO;
+import com.pmp4.amoimproject.common.ConstUtil;
 import com.pmp4.amoimproject.common.Encrypt;
+import com.pmp4.amoimproject.common.FileUploadUtil;
 import com.pmp4.amoimproject.interest.model.InterestDAO;
 import com.pmp4.amoimproject.sign.model.UserVO;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Service
@@ -128,6 +131,40 @@ public class UserServiceImpl implements UserService {
         return resMap;
     }
 
+    @Override
+    @Transactional
+    public int userProfileImageEdit(HttpServletRequest httpServletRequest, Long userNo) {
+        logger.info("[userProfileImageEdit] 서비스 로직");
+
+        FileUploadUtil fileUploadUtil = new FileUploadUtil();
+
+        int result = -1;
+
+        try {
+            List<Map<String, Object>> file =
+                    fileUploadUtil.mulitiFileUpload(httpServletRequest, ConstUtil.UPLOAD_PROFILE);
+            logger.info("[userProfileImageEdit] 이미지 업로드 file.size : {}", file.size());
+
+            if(file.size() > 0) {
+                String profileImage = (String) file.get(0).get("fileName");
+                logger.info("[userProfileImageEdit] 이미지 명 profileImage : {}", profileImage);
+
+                int cnt = userDAO.userProfileEdit(String.valueOf(userNo), profileImage);
+                if(cnt > 0) {
+                    logger.info("[userProfileImageEdit] DB 수정 성공");
+                    result = 1;
+                }else {throw new RuntimeException();}
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            result = -1;
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
+
+        if(result == -1) throw new RuntimeException("DB 에러");
+
+        return result;
+    }
 
 
     //JWT 테스트

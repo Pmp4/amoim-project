@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +75,20 @@ public class UserController {
 
 
         return resJson;
+    }
+
+
+
+    @PostMapping("/profile/edit")
+    public int profileImageEdit(HttpServletRequest httpServletRequest) {
+        logger.info("[profileImageEdit] 핸들러");
+
+        PrincipalDetails principalDetails =
+                (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Long userNo = principalDetails.getUserVO().getUserNo();
+
+        return userService.userProfileImageEdit(httpServletRequest, userNo);
     }
 
 
