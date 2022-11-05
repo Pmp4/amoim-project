@@ -19,4 +19,14 @@ const memberSignup = (rest) => {
 }
 
 
-export default {memberAllSelect, selectTypeCount, memberSignup};
+
+
+//유저 정보
+//유저 정보
+//유저 정보
+const userInfo = () => {
+    return httpCommon.get(`/user/info`);
+}
+
+
+export default {memberAllSelect, selectTypeCount, memberSignup, userInfo};

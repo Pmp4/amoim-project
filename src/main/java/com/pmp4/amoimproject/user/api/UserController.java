@@ -1,11 +1,13 @@
 package com.pmp4.amoimproject.user.api;
 
 import com.pmp4.amoimproject.common.Encrypt;
+import com.pmp4.amoimproject.sign.model.PrincipalDetails;
 import com.pmp4.amoimproject.user.model.UserService;
 import com.pmp4.amoimproject.sign.model.UserVO;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -72,5 +74,19 @@ public class UserController {
 
 
         return resJson;
+    }
+
+
+
+
+
+    @GetMapping("/info")
+    public UserVO memberInfo () {
+        logger.info("[memberInfo] 핸들러");
+
+        PrincipalDetails principal =
+                (PrincipalDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return principal.getUserVO();
     }
 }

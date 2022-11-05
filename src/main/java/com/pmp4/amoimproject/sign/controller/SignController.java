@@ -56,6 +56,11 @@ public class SignController {
 //    }
 
 
+
+
+
+
+
     @GetMapping("/exception")
     public void exceptionTest() throws RuntimeException {
         LOGGER.info("[exceptionTest] 접근");
