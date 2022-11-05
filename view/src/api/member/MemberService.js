@@ -29,4 +29,11 @@ const userInfo = () => {
 }
 
 
-export default {memberAllSelect, selectTypeCount, memberSignup, userInfo};
+
+//유저 프로필 이미지 수정
+const userProfileEdit = (rest) => {
+    return httpCommon.post(`/user/profile/edit`, rest);
+}
+
+
+export default {memberAllSelect, selectTypeCount, memberSignup, userInfo, userProfileEdit};

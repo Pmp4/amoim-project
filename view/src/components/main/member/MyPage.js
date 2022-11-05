@@ -1,5 +1,5 @@
 import MemberService from "api/member/MemberService";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import MoimList from '../moim/sub/MoimList';
@@ -40,6 +40,8 @@ const MyPage = ({ Test }) => {
         totalPage: 0,
         totalRecord: 0,
     });
+
+    const imageRef = useRef(null);
 
     const [todayViewMoim, setTodayViewMoim] = useState([]);
     const [todayViewMoimPageInfo, setTodayViewMoimPageInfo] = useState({
@@ -121,20 +123,56 @@ const MyPage = ({ Test }) => {
     };
 
 
+
+    const profileImageEditButtonAction = (event) => {
+        if(window.confirm("이미지를 변경하시겠습니까?")) {
+            const reader = new FileReader();
+    
+            reader.onload = (e) => {
+                imageRef.current.src = `${e.target.result}`;
+            }
+    
+            reader.readAsDataURL(event.target.files[0]);
+
+
+            const formData = new FormData();
+            formData.append("file", event.target.files[0]);
+
+            profileImageEditApi(formData);
+        } else {
+            return;
+        }
+    }
+
+
+
+
+    const profileImageEditApi = async(rest) => {
+        const response = await MemberService.userProfileEdit(rest);
+        if(response.data > 0) {
+            alert("변경되었습니다.");
+        }
+    }
+
+
     return (
         <div id="my-page" className="page-wrap">
             <div className="info-part draggable">
                 <div className="profile-img-info">
                     <div className="profile-img">
                         <img
-                            src={path.profileImagePath + "default_profile.png"}
+                            ref={element => imageRef.current = element}
+                            src={path.profileImagePath + profileImage}
                             alt={"프로필 이미지"}
                         />
+                    </div>
                         <div className="edit-button">
                             Edit
-                            <input type="file" />
+                            <input type="file" 
+                                accept='image/jpeg,image/gif,image/png'
+                                onChange={(event) => profileImageEditButtonAction(event)}
+                            />
                         </div>
-                    </div>
                 </div>
                 <div className="exp-info">
                     <div className="name b1">
