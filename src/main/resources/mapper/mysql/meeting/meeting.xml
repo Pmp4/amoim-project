@@ -277,6 +277,25 @@
 
 
 
+    <select id="moimSearchList" parameterType="hashMap" resultType="hashMap">
+        select
+            MCI.*,
+            M.CONTENT
+        from MOIM_CARD_INFO MCI join MEETING M on MCI.NO = M.NO
+                                join MEETING_TAG MT on M.NO = MT.MEETING_NO
+        where (
+                    MCI.TITLE like CONCAT('%', #{text} , '%')
+                or M.CONTENT like CONCAT('%', #{text} , '%')
+            ) and
+            (
+                        MCI.CATEGORY_CODE = #{code}
+                    or MCI.CATEGORY_PARENT_CODE like CONCAT(#{parentCode}, '%')
+                ) and LOCATE('', MCI.TAGS) > 0
+        group by MCI.NO, MCI.IMAGE_NAME, MCI.SIGUNGU
+        LIMIT #{length} OFFSET #{start}
+    </select>
+
+
 
 
 

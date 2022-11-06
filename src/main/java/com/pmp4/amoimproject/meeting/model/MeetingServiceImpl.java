@@ -496,6 +496,12 @@ public class MeetingServiceImpl implements MeetingService {
         return responseDate;
     }
 
+    @Override
+    public Map<String, Object> moimSearchList(Map<String, Object> searchData, int page, int blockSize) {
+
+        return null;
+    }
+
 
 //    @Override
 //    public Map<String, Object> selectByNo(String no) {

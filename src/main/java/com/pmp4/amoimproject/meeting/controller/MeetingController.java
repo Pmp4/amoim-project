@@ -226,6 +226,8 @@ public class MeetingController {
 
 
     //유저의 최근 본 목록 (오늘날짜 기준)
+    //유저의 최근 본 목록 (오늘날짜 기준)
+    //유저의 최근 본 목록 (오늘날짜 기준)
     @GetMapping("/user/view")
     public Map<String, Object> moimUserView(@RequestParam int page,
                                             @RequestParam int length) {
