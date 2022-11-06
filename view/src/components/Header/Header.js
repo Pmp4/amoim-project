@@ -12,9 +12,12 @@ import { MODAL_OPEN } from "reducer/module/modal";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import TagService from "api/tag/TagService";
 import InterestService from 'api/interest/InterestService';
+import MeetingService from 'api/meeting/MeetingService';
+import MoimList from '../main/moim/sub/MoimList';
 
 const Header = ({ loginPopup }) => {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const user = useSelector((state) => state.user);
     const dispatch = useDispatch();
@@ -26,11 +29,34 @@ const Header = ({ loginPopup }) => {
     const [category, setCategory] = useState([]);
     const [currentCategory, setCurrentCategory] = useState("");
 
+    const [searchResultState, setSearchResultState] = useState(false);
+
+
+    const [searchMoim, setSearchMoim] = useState([]);
+    const [pageInfo, setPageInfo] = useState({
+        blockSize: 16,
+        currentPage: 1,
+        lastPage: 0,
+        pageSize: 0,
+        startPage: 0,
+        startRecord: 0,
+        totalPage: 0,
+        totalRecord: 0,
+    });
+
+    
+
     const logged = Boolean(localStorage.getItem("logged"));
 
     useEffect(() => {
         toggleScrolling();
     });
+
+    useEffect(() => {
+        console.log(location);
+        initialSearch();
+    }, [location]);
+    
 
     useEffect(() => {
         if (inputValue !== "") {
@@ -39,6 +65,17 @@ const Header = ({ loginPopup }) => {
             setTagList([]);
         }
     }, [inputValue]);
+
+
+
+    const initialSearch = () => {
+        setSearchState(false);
+        setInputValue("");
+        setSearchTag([]);
+        setCurrentCategory("");
+        setSearchResultState(false);
+        setTagList([]);
+    }
 
 
 
@@ -221,14 +258,50 @@ const Header = ({ loginPopup }) => {
             return;
         }
 
+        let dbTags = "";
+        if(searchTag.length > 0) {
+            let tempTags = [];
+            for(let i = 0; i < searchTag.length; i++) {
+                tempTags.push(searchTag[i].name);
+            }
 
-        
+            dbTags = tempTags.join(",");
+        }
+
+        searchApi(inputValue, currentCategory, dbTags);
     }
+
+
+    const searchApi = async(text, code, tags, page = 1, length = 16) => {
+        const response = await MeetingService.moimSearch(text, code, tags, page, length);
+        setSearchMoim(response.data.list);
+        setPageInfo(response.data.pageInfo);
+        setSearchResultState(true);
+    }
+
+
+
+    
+    const searchMoimPageSet = (page) => {
+        let dbTags = "";
+        if(searchTag.length > 0) {
+            let tempTags = [];
+            for(let i = 0; i < searchTag.length; i++) {
+                tempTags.push(searchTag[i].name);
+            }
+
+            dbTags = tempTags.join(",");
+        }
+
+        searchApi(inputValue, currentCategory, dbTags, page);
+    };
+
+
 
 
     return (
         <header>
-            <div className={searchState ? "fixed-wrap on" : "fixed-wrap"}>
+            <div className={!searchState ? "fixed-wrap" : searchResultState ? "fixed-wrap on result" : "fixed-wrap on"}>
                 <div className="search-wrap page-wrap">
                     <div className="search-part">
                         {searchTag.length > 0 && (
@@ -258,6 +331,15 @@ const Header = ({ loginPopup }) => {
                     <div className='category-list draggable'>
                         <div className='select'>{setCategoryComp}</div>
                     </div>
+                    {
+                        searchResultState &&
+                        
+                        <MoimList
+                            items={searchMoim}
+                            pageInfo={pageInfo}
+                            pageBtn={searchMoimPageSet}
+                    />
+                    }
                 </div>
             </div>
             <div id="header-wrap">

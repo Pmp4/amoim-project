@@ -276,6 +276,21 @@
 
 
 
+<!--    select-->
+<!--    MCI.*,-->
+<!--    M.CONTENT-->
+<!--    from MOIM_CARD_INFO MCI join MEETING M on MCI.NO = M.NO-->
+<!--    join MEETING_TAG MT on M.NO = MT.MEETING_NO-->
+<!--    where (-->
+<!--    MCI.TITLE like CONCAT('%', #{text} , '%')-->
+<!--    or M.CONTENT like CONCAT('%', #{text} , '%')-->
+<!--    ) and-->
+<!--    (-->
+<!--    MCI.CATEGORY_CODE = #{code}-->
+<!--    or MCI.CATEGORY_PARENT_CODE like CONCAT(#{parentCode}, '%')-->
+<!--    ) and LOCATE(#{tag}, MCI.TAGS) > 0-->
+<!--    group by MCI.NO, MCI.IMAGE_NAME, MCI.SIGUNGU-->
+<!--    LIMIT #{length} OFFSET #{start}-->
 
     <select id="moimSearchList" parameterType="hashMap" resultType="hashMap">
         select
@@ -283,16 +298,56 @@
             M.CONTENT
         from MOIM_CARD_INFO MCI join MEETING M on MCI.NO = M.NO
                                 join MEETING_TAG MT on M.NO = MT.MEETING_NO
-        where (
-                    MCI.TITLE like CONCAT('%', #{text} , '%')
-                or M.CONTENT like CONCAT('%', #{text} , '%')
-            ) and
-            (
-                        MCI.CATEGORY_CODE = #{code}
-                    or MCI.CATEGORY_PARENT_CODE like CONCAT(#{parentCode}, '%')
-                ) and LOCATE('', MCI.TAGS) > 0
+        <trim prefix="where" prefixOverrides="AND || OR">
+                <if test="text != null and !text.equals('')">
+                    (
+                        MCI.TITLE like CONCAT('%', #{text} , '%')
+                            or M.CONTENT like CONCAT('%', #{text} , '%')
+                    )
+                </if>
+                <if test="parentCode != null and !parentCode.equals('')">
+                    and MCI.CATEGORY_PARENT_CODE like CONCAT(#{parentCode}, '%')
+                </if>
+                <if test="tags != null">
+                    and (
+                    <foreach item="tag" index="index" collection="tags"
+                             open="" separator="or" close="">
+                        (LOCATE(#{tag}, MCI.TAGS) > 0)
+                    </foreach>
+                    )
+                </if>
+        </trim>
         group by MCI.NO, MCI.IMAGE_NAME, MCI.SIGUNGU
         LIMIT #{length} OFFSET #{start}
+    </select>
+
+    <select id="moimSearchCount" parameterType="hashMap" resultType="int">
+        select COUNT(*) from
+        (
+            select count(*)
+            from MOIM_CARD_INFO MCI join MEETING M on MCI.NO = M.NO
+            join MEETING_TAG MT on M.NO = MT.MEETING_NO
+            <trim prefix="where" prefixOverrides="AND || OR">
+                    <if test="text != null and !text.equals('')">
+                        (
+                            MCI.TITLE like CONCAT('%', #{text} , '%')
+                                or M.CONTENT like CONCAT('%', #{text} , '%')
+                        )
+                    </if>
+                    <if test="parentCode != null and !parentCode.equals('')">
+                        and MCI.CATEGORY_PARENT_CODE like CONCAT(#{parentCode}, '%')
+                    </if>
+                    <if test="tags != null">
+                        and (
+                        <foreach item="tag" index="index" collection="tags"
+                                 open="" separator=" and " close="">
+                            (LOCATE(#{tag}, MCI.TAGS) > 0)
+                        </foreach>
+                        )
+                    </if>
+            </trim>
+            group by MCI.NO, MCI.IMAGE_NAME, MCI.SIGUNGU
+        ) a
     </select>
 
 

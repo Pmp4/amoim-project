@@ -1,6 +1,7 @@
 package com.pmp4.amoimproject.meeting.model;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -108,7 +109,11 @@ public interface MeetingService {
     Map<String, Object> moimUserTodayView(Long userNo, int page, int blockSize);
 
 
-    Map<String, Object> moimSearchList(Map<String, Object> searchData, int page, int blockSize);
+    Map<String, Object> moimSearchList(String text,
+                                       String cat,
+                                       String tags,
+                                       int page,
+                                       int length);
 
 
 

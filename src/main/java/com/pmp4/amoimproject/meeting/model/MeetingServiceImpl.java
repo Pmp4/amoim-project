@@ -497,9 +497,44 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public Map<String, Object> moimSearchList(Map<String, Object> searchData, int page, int blockSize) {
+    public Map<String, Object> moimSearchList(String text, String cat, String tags, int page, int length) {
+        logger.info("[moimSearchList] 서비스 로직");
 
-        return null;
+        String dbCat = null;
+        if(cat != null && !cat.isEmpty()) {
+//            10900000
+            dbCat = cat.substring(0, 3);
+            logger.info("[moimSearchList] 부모 카테고리 dbCat : {}", dbCat);
+        }
+
+        List<String> dbTags = null;
+        if(tags != null && !tags.isEmpty()) {
+            dbTags = Arrays.asList(tags.split(","));
+            logger.info("[moimSearchList] 태그 배열 dbTags : {}", dbTags);
+        }
+
+        PaginationInfo paginationInfo = new PaginationInfo(length, page);
+
+        Map<String, Object> dbParam = new HashMap<>();
+        dbParam.put("text", text);
+        dbParam.put("parentCode", dbCat);
+        dbParam.put("tags", dbTags);
+        dbParam.put("length", length);
+        dbParam.put("start", paginationInfo.getStartRecord());
+
+
+        List<Map<String, Object>> list = meetingDAO.moimSearchList(dbParam);
+        int count = meetingDAO.moimSearchCount(dbParam);
+
+        logger.info("[moimSearchList] 조회 결과 list.size : {}, count : {}", list.size(), count);
+
+        paginationInfo.setTotalRecord(count);
+
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("list", list);
+        responseData.put("pageInfo", paginationInfo);
+
+        return responseData;
     }
 
 
