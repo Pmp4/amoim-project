@@ -51,6 +51,8 @@ public interface MeetingDAO {
     int moimUserTodayViewCount(Map<String, Object> dbParam);
 
 
+    List<Map<String, Object>> moimSearchList(Map<String, Object> dbParam);
+
 
 
 

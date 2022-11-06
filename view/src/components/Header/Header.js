@@ -11,6 +11,7 @@ import UserInfoService from "api/member/UserInfoService";
 import { MODAL_OPEN } from "reducer/module/modal";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import TagService from "api/tag/TagService";
+import InterestService from 'api/interest/InterestService';
 
 const Header = ({ loginPopup }) => {
     const navigate = useNavigate();
@@ -22,6 +23,8 @@ const Header = ({ loginPopup }) => {
     const [tagList, setTagList] = useState([]);
     const [inputValue, setInputValue] = useState("");
     const [searchTag, setSearchTag] = useState([]);
+    const [category, setCategory] = useState([]);
+    const [currentCategory, setCurrentCategory] = useState("");
 
     const logged = Boolean(localStorage.getItem("logged"));
 
@@ -36,6 +39,8 @@ const Header = ({ loginPopup }) => {
             setTagList([]);
         }
     }, [inputValue]);
+
+
 
     const toggleScrolling = () => {
         const body = document.querySelector("body");
@@ -71,7 +76,13 @@ const Header = ({ loginPopup }) => {
 
     const searchButtonAction = () => {
         setSearchState(!searchState);
+        categoryAPI("");
     };
+
+    
+
+
+
 
     //검색
     //검색
@@ -98,20 +109,26 @@ const Header = ({ loginPopup }) => {
         );
     });
 
+
     const tagAddAction = (no, name) => {
         if (searchTag.length > 0) {
+            let check = false;
             for (let i = 0; i < searchTag.length; i++) {
+                console.log(searchTag[i].no);
                 if (searchTag[i].no === no) {
                     alert("이미 등록된 태그입니다.");
-                    return;
-                } else {
-                    const tempTags = [...searchTag];
-                    tempTags.push({ no, name });
-
-                    setSearchTag(tempTags);
-                    setInputValue("");
-                    setTagList([]);
+                    check = true;
+                    break;
                 }
+            }
+
+            if(!check) {
+                const tempTags = [...searchTag];
+                tempTags.push({ no, name });
+
+                setSearchTag(tempTags);
+                setInputValue("");
+                setTagList([]);
             }
         } else {
             const tempTags = [...searchTag];
@@ -123,9 +140,91 @@ const Header = ({ loginPopup }) => {
         }
     };
 
+
+    const setCategoryComp = category.map((item, idx) => {
+        if (category.length === 0) return "";
+
+        return (
+            <div
+                className={
+                    currentCategory === item.categoryCode
+                        ? "item on"
+                        : "item"
+                }
+                onClick={() => categoryClickAction(item.categoryCode)}
+                key={item.categoryCode}
+            >
+                {item.name}
+            </div>
+        );
+    });
+
+
+
+    const categoryClickAction = (code) => {
+        if(currentCategory !== "" && currentCategory === code) {
+            setCurrentCategory("");
+        }else {
+            setCurrentCategory(code);
+        }
+    }
+
+
+
+
     const tagSetComp = searchTag.map((item, idx) => (
-        <p key={idx}>{item.name}</p>
+        <p key={idx}
+            onClick={() => removeTagAction(item.no)}>
+            {item.name}
+        </p>
     ));
+
+
+    const removeTagAction = (no) => {
+        for (let i = 0; i < searchTag.length; i++) {
+            if (searchTag[i].no === no) {
+                const tempTag = [...searchTag];
+                tempTag.splice(i, 1);
+                console.log(tempTag);
+
+                setSearchTag(tempTag);
+                break;
+            }
+        }
+    }
+
+
+
+
+
+
+
+    //카테고리 목록 출력 API
+    //카테고리 목록 출력 API
+    //카테고리 목록 출력 API
+    //카테고리 목록 출력 API
+    const categoryAPI = async() => {
+        const response = await InterestService.selectCategory("")
+        setCategory(response.data.list);
+    };
+
+
+
+
+
+    const searchResultButtonAction = () => {
+        if(currentCategory === ""
+            && inputValue === ""
+            && searchTag.length === 0
+        ) {
+            alert("검색할 조건을 입력해주세요.");
+            return;
+        }
+
+
+        
+    }
+
 
     return (
         <header>
@@ -150,11 +249,14 @@ const Header = ({ loginPopup }) => {
                                     setInputValue(event.target.value)
                                 }
                             />
-                            <button>
+                            <button onClick={searchResultButtonAction}>
                                 <FontAwesomeIcon icon={faMagnifyingGlass} />
                             </button>
                         </div>
                         <div className="search-tag">{tagListComponent}</div>
+                    </div>
+                    <div className='category-list draggable'>
+                        <div className='select'>{setCategoryComp}</div>
                     </div>
                 </div>
             </div>

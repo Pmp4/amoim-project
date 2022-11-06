@@ -108,6 +108,9 @@ public interface MeetingService {
     Map<String, Object> moimUserTodayView(Long userNo, int page, int blockSize);
 
 
+    Map<String, Object> moimSearchList(Map<String, Object> searchData, int page, int blockSize);
+
+
 
 
 
