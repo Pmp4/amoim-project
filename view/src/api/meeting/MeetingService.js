@@ -73,6 +73,11 @@ const moimUserView = (page=1, length = 8) => {
     return httpCommon.get(`/meeting/user/view?page=${page}&length=${length}`);
 }
 
+//검색
+const moimSearch = (text, code, tags, page = 1, length = 16) => {
+    return httpCommon.get(`/meeting/search?text=${text}&cat=${code}&tags=${tags}&page=${page}&length=${length}`);
+}
+
 
 
 
@@ -156,5 +161,6 @@ export default {
     viewMoim,
     userInterestMoim,
     moimUserLike,
-    moimUserView
+    moimUserView,
+    moimSearch
 };

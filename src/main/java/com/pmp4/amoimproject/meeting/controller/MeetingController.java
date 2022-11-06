@@ -459,6 +459,20 @@ public class MeetingController {
 
 
 
+    @GetMapping("/search")
+    public Map<String, Object> moimSearch(@RequestParam String text,
+                                          @RequestParam String cat,
+                                          @RequestParam String tags,
+                                          @RequestParam int page,
+                                          @RequestParam int length) {
+        logger.info("[moimSearch] 핸들러 text : {}", text);
+        logger.info("[moimSearch] 핸들러 cat : {}", cat);
+        logger.info("[moimSearch] 핸들러 tags : {}", tags);
+        logger.info("[moimSearch] 핸들러 page : {}", page);
+        logger.info("[moimSearch] 핸들러 length : {}", length);
+
+        return meetingService.moimSearchList(text, cat, tags, page, length);
+    }
 
 
 

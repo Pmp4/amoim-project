@@ -1,4 +1,4 @@
-import httpCommon from 'api/httpCommon';
+import httpCommon from 'api/http-common';
 
 const selectByKeyword = (keyword) => {
     return httpCommon.get(`/tag/select/${keyword}`);
