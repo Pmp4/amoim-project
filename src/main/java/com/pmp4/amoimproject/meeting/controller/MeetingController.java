@@ -180,7 +180,7 @@ public class MeetingController {
         logger.info("[moimHomeLocList] 로그인 여부 token: {}", token);
 
         String username = "";
-        if(token != null && !token.isEmpty() && !token.equals("null")) {
+        if(token != null && !token.isEmpty() && !token.equals("null") && jwtTokenProvider.validateToken(token)) {
             username = jwtTokenProvider.getUsername(token);
             logger.info("[moimHomeLocList] 유저 아이디 username : {}", username);
         }

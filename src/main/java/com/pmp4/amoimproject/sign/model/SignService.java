@@ -9,4 +9,6 @@ public interface SignService {
     SignInResultVO signIn(String id, String password);
 
     int signUp(HttpServletRequest httpServletRequest, Map<String, Object> restData);
+
+    SignInResultVO refreshTokenVerification(String accessToken);
 }

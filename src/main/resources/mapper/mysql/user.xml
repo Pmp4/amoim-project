@@ -30,7 +30,6 @@
 
 
 
-
     <select id="checkUserId" parameterType="String" resultType="userVo">
         select * from USERS where USER_ID = #{userId}
     </select>
@@ -39,4 +38,32 @@
     <select id="getUserInfo" parameterType="String" resultType="userVo">
         select * from USERS where USER_ID = #{userId}
     </select>
+
+
+
+    <delete id="removeRefreshToken" parameterType="String">
+        delete from REFRESH_TOKEN
+        where ACCESS_TOKEN = #{accessToken} and REFRESH_TOKEN = #{refreshToken}
+    </delete>
+
+    <select id="refreshTokenSelect" parameterType="String" resultType="String">
+        select REFRESH_TOKEN
+        from REFRESH_TOKEN
+        where ACCESS_TOKEN = #{token}
+    </select>
+
+    <select id="tokenByUserid" parameterType="String" resultType="refreshTokenVo">
+        select * from REFRESH_TOKEN where USER_ID = #{userId}
+    </select>
+
+    <insert id="refreshTokenInsert" parameterType="String">
+        insert into REFRESH_TOKEN(ACCESS_TOKEN, REFRESH_TOKEN, USER_ID)
+        values (#{accessToken}, #{refreshToken}, #{userId});
+    </insert>
+
+    <update id="refreshTokenUpdate" parameterType="String">
+        update REFRESH_TOKEN
+        set ACCESS_TOKEN = #{accessToken}
+        where REFRESH_TOKEN = #{refreshToken}
+    </update>
 </mapper>

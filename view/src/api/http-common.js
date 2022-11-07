@@ -23,21 +23,46 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(response => {
     return response;
-}, error => {
-    if(error.response.status === 401) {     //토큰 유효시간 지날 때
-        alert("로그인 후, 시도하세요.");
-        localStorage.clear();
-        window.location.replace("/");
-    } else if(error.response.status === 400) {
+}, async(error) => {
+    const {
+        config,
+        response: { status },
+    } = error;
+
+
+    if(status === 401) {     //토큰 유효시간 지날 때
+        // alert("로그인 후, 시도하세요.");
+        console.log(error.response);
+        return refresh(config);
+    } else if(status === 400) {
         console.log(error.response);
         alert("에러");
         window.location.reload();
-    } else if(error.response.status === 500) {
+    } else if(status === 500) {
         alert("Server Error");
         window.location.replace("/");
     }
 
     return error.response;
 });
+
+
+
+const refresh = async(config) => {
+    const response = await instance.post(`/sign-api/refresh`);
+    if(response.data.success) {
+        localStorage.setItem("X-AUTH-TOKEN", response.data.token);
+        config.headers = {
+            'Content-Type': 'application/json',
+            'X-AUTH-TOKEN': localStorage.getItem('X-AUTH-TOKEN'),
+        };
+
+        return await axios(config);
+    } else {
+        alert("로그인 후, 시도해주세요.");
+        localStorage.clear();
+        window.location.replace("/");
+    }
+}
 
 export default instance;
