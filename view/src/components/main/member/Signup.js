@@ -6,12 +6,15 @@ import Join from './sub/Join';
 import Interest from './sub/Interest';
 import { useEffect } from 'react';
 import LocationInfo from './sub/LocationInfo';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faImage } from '@fortawesome/free-solid-svg-icons';
 
 
 const initialInputValue = {
     name: "",
     gender: "M",
     birthDay: "",
+    intro: "",
     userId: "",
     password: "",
     passwordChk: "",
@@ -19,6 +22,7 @@ const initialInputValue = {
     phoneNumber2: "",
     phoneNumber3: "",
     email: "",
+    intro: ""
 };
 const initialStatusValue = {
     userIdCheckStatus: {
@@ -89,6 +93,8 @@ const Signup = () => {
         submitText: "다음",
         submitStep: 1
     });
+
+    const [profileState, setProfileState] = useState(false);
     
     
 
@@ -113,6 +119,7 @@ const Signup = () => {
         phoneNumber2,
         phoneNumber3,
         email,
+        intro,
     } = inputValue;
 
     const {
@@ -318,6 +325,13 @@ const Signup = () => {
             }
         }
 
+        const formData = new FormData();
+
+        if(profileState) {
+            const file = profileInputRef.current.files[0];
+            formData.append("file", file);
+        }
+
 
         //POST로 전송할 data set
         const apiData = {
@@ -328,18 +342,28 @@ const Signup = () => {
             interests: {
                 ...checkStatus
             },
-            address
+            address,
+            profileState
         }
 
-        MemberService.memberSignup(apiData)
+        console.log(apiData);
+        delete apiData.userInfo.passwordChk;
+        delete apiData.userInfo.phoneNumber1;
+        delete apiData.userInfo.phoneNumber2;
+        delete apiData.userInfo.phoneNumber3;
+
+        formData.append("restJson", 
+            new Blob([JSON.stringify(apiData)], {
+                type: "application/json",
+            })
+        );
+        
+
+        MemberService.memberSignup(formData)
             .then(response => {
-                const {SUCCESS, MESSAGE} = response.data
-                if(SUCCESS) {
-                    alert(MESSAGE);
+                if(response.data === 1) {
+                    alert("회원가입이 완료되었습니다.");
                     navigator("/");
-                }else {
-                    alert(MESSAGE);
-                    navigator("/member/signup");
                 }
             })
     }
@@ -426,12 +450,58 @@ const Signup = () => {
     //         }
     //     });
     // };
+
+
+
+
+    const profileRef = useRef(null);
+    const profileInputRef = useRef(null);
+    //이미지 업로드 미리보기 로직
+    //이미지 업로드 미리보기 로직
+    //이미지 업로드 미리보기 로직
+    //이미지 업로드 미리보기 로직
+    const profileImageAction = (event) => {
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+            profileRef.current.style.backgroundImage = `url(${e.target.result})`;
+            setProfileState(true);
+        };
+
+        reader.readAsDataURL(event.target.files[0]);
+    };
+
+    //이미지 업로드 초기화 함수
+    //이미지 업로드 초기화 함수
+    //이미지 업로드 초기화 함수
+    //이미지 업로드 초기화 함수
+    const initialFileInput = (event) => {
+        inputRef.current.file.value = "";
+        inputRef.current.fileBox.style.backgroundImage = `url('')`;
+        inputRef.current.fileRemove.className += " fade-out";
+
+        return false;
+    };
     
 
     return (
         <div className='signup-page'>
             <div className='page-wrap' id='signup-main'>
-                <div className='title-box'></div>
+                <div className='title-box'>
+                    <div className='profile-image'>
+                        <div className='image'
+                            ref={element => profileRef.current = element}
+                        >
+                            {!profileState && <FontAwesomeIcon icon={faImage}/>}
+                            <input 
+                                ref={element => profileInputRef.current = element}
+                                type="file" 
+                                name="profile"
+                                onChange={(event) => profileImageAction(event)}
+                            />
+                        </div>
+                    </div>
+                </div>
                 <div className='signup-box'>
                     <h2 className='title'>
                         {submitStep === 1 ? '회원정보' : 

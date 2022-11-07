@@ -840,6 +840,13 @@ const MoimAdd = ({ mode }) => {
         const { SUCCESS, rest } = response.data;
 
         if (SUCCESS) {
+            console.log(user.userInfo.no)
+            console.log(rest.CONTENTS.USER_NO)
+            if(parseInt(user.userInfo.no) !== rest.CONTENTS.USER_NO) {
+                alert("수정 권한이 없습니다.");
+                navigate(-1);
+            }
+
             const tag = rest.CONTENTS.TAGS.replace(/\[|\]|"| /g, "").split(",");
 
             const tempContents = rest.CONTENTS;

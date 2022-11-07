@@ -89,8 +89,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/interest/category/**")
                 .antMatchers("/tag/select/**")
                 .antMatchers("/meeting/search/**")
+                .antMatchers("/user/check/**")
                 .antMatchers("/socket/chatt/**")
-                .antMatchers("/sign-api/sign-in");
+                .antMatchers("/sign-api/sign-in")
+                .antMatchers("/sign-api/sign-up");
     }
 
 

@@ -40,6 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
         LOGGER.info("[doFilterInternal] token 값 유효성 체크 시작");
+
         boolean tokenCheck = false;
         if(token != null && !token.equals("null")) {
             if(jwtTokenProvider.validateToken(token)) {

@@ -12,6 +12,7 @@ const Join = ({inputValue, inputChange, inputRef, checkInputStatus, duplicationC
         phoneNumber2,
         phoneNumber3,
         email,
+        intro
     } = inputValue;
 
     const {
@@ -222,6 +223,21 @@ const Join = ({inputValue, inputChange, inputRef, checkInputStatus, duplicationC
                                 name="phoneNumber3"
                                 onChange={(event) => inputChange(event)}
                                 defaultValue={phoneNumber3}
+                            />
+                        </div>
+                    </label>
+
+                    <label htmlFor="intro">
+                        <p>한 줄 소개</p>
+                        <div id="intro">
+                            <input
+                                ref={(element) =>
+                                    (inputRef.intro = element)
+                                }
+                                type="intro"
+                                name="intro"
+                                onChange={(event) => inputChange(event)}
+                                value={intro}
                             />
                         </div>
                     </label>

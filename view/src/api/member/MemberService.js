@@ -1,4 +1,5 @@
 import httpCommon from '../http-common';
+import httpMultipartCommon from 'api/http-multipart-common';
 
 const memberAllSelect = () => {
     return httpCommon.get(`/user/select`);
@@ -14,8 +15,11 @@ const selectTypeCount = (text, type) => {
 //회원가입
 //회원가입
 //회원가입
+// const memberSignup = (rest) => {
+//     return httpCommon.post(`/user/signup`, rest);
+//}
 const memberSignup = (rest) => {
-    return httpCommon.post(`/user/signup`, rest);
+    return httpMultipartCommon.post(`/sign-api/sign-up`, rest);
 }
 
 
