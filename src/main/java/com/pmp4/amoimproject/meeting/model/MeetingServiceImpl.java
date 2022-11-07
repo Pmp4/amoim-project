@@ -1,11 +1,15 @@
 package com.pmp4.amoimproject.meeting.model;
 
+import com.pmp4.amoimproject.address.model.UserAddressDAO;
 import com.pmp4.amoimproject.common.ConstUtil;
 import com.pmp4.amoimproject.common.FileUploadUtil;
 import com.pmp4.amoimproject.common.PaginationInfo;
 import com.pmp4.amoimproject.jwt.JwtTokenProvider;
+import com.pmp4.amoimproject.sign.model.UserVO;
 import com.pmp4.amoimproject.tag.model.TagDAO;
 import com.pmp4.amoimproject.tag.model.TagVO;
+import com.pmp4.amoimproject.user.model.UserDAO;
+import com.pmp4.amoimproject.user.model.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +30,10 @@ public class MeetingServiceImpl implements MeetingService {
     private final MeetingImageDAO meetingImageDAO;
     private final MeetingTagDAO meetingTagDAO;
     private final TagDAO tagDAO;
+    private final UserAddressDAO userAddressDAO;
+    private final UserDAO userDAO;
+    private final JwtTokenProvider jwtTokenProvider;
+
 
 
     /*
@@ -284,7 +292,7 @@ public class MeetingServiceImpl implements MeetingService {
 
 
     @Override
-    public Map<String, Object> mainLocList(HttpServletRequest request) {
+    public Map<String, Object> mainLocList(HttpServletRequest request, String username) {
         logger.info("[mainLocList] 서비스 로직");
 
 //        String token = jwtTokenProvider.resolveToken(request);
@@ -296,19 +304,34 @@ public class MeetingServiceImpl implements MeetingService {
 //            logger.info("[mainLocList] 토큰에서 값 추출 username : {}", username);
 //        }
 
-        List<Map<String, Object>> list = meetingDAO.locSelectCard("11");
+        Map<String, Object> responseData = new HashMap<>();
+        Map<String, Object> userAddressData = null;
+
+        String sido = "서울";
+        if(username != null && !username.isEmpty()) {
+            UserVO userVO = userDAO.getUserInfo(username);
+            userAddressData = userAddressDAO.selectUserSido(userVO.getUserNo());
+            logger.info("[mainLocList] 유저 주소 추출 userAddressData : {}", userAddressData);
+
+            sido = (String) userAddressData.get("SIDO");
+        }
+
+        responseData.put("sido", sido);
+
+
+        String bcode = "11";
+        if(userAddressData != null) {
+            bcode = (String) userAddressData.get("BCODE");
+            logger.info("[mainLocList] 유저 법정동 코드 추출 bcode : {}", bcode);
+
+            bcode = bcode.substring(0, 2);
+        }
+        List<Map<String, Object>> list = meetingDAO.locSelectCard(bcode);
         logger.info("[mainLocList] 리스트 조회 결과 list.size : {}", list.size());
 
-        Map<String, Object> responseData = new HashMap<>();
 
+        responseData.put("list", list);
 
-        if (!list.isEmpty()) {
-            responseData.put("SUCCESS", true);
-            responseData.put("list", list);
-        }else {
-            responseData.put("SUCCESS", false);
-            responseData.put("SUCCESS_TEXT", "Server DB Error");
-        }
 
 
         return responseData;

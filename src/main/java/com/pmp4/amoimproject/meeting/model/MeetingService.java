@@ -30,7 +30,7 @@ public interface MeetingService {
 
 
     // 메인화면에서의 지역 좋아요 리스트 8개
-    Map<String, Object> mainLocList(HttpServletRequest request);
+    Map<String, Object> mainLocList(HttpServletRequest request, String username);
 
 
     /**

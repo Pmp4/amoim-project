@@ -19,4 +19,11 @@
             select LAST_INSERT_ID()
         </selectKey>
     </insert>
+
+
+    <select id="selectUserSido" parameterType="Long" resultType="hashMap">
+        select *
+        from USER_ADDRESS
+        where USER_NO = #{userNo};
+    </select>
 </mapper>

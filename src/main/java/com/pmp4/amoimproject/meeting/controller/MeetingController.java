@@ -1,6 +1,7 @@
 package com.pmp4.amoimproject.meeting.controller;
 
 import com.pmp4.amoimproject.common.PaginationInfo;
+import com.pmp4.amoimproject.jwt.JwtTokenProvider;
 import com.pmp4.amoimproject.meeting.model.MeetingAddressVO;
 import com.pmp4.amoimproject.meeting.model.MeetingService;
 import com.pmp4.amoimproject.meeting.model.MeetingVO;
@@ -27,6 +28,7 @@ public class MeetingController {
     private static final Logger logger = LoggerFactory.getLogger(MeetingController.class);
 
     private final MeetingService meetingService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     //    @PostMapping("/insert")
 //    public Map<String, Object> insertMeeting(@RequestPart(value = "key") Map<String, Object> key,
@@ -174,7 +176,16 @@ public class MeetingController {
     public Map<String, Object> moimHomeLocList(HttpServletRequest httpServletRequest) {
         logger.info("[moimHomeLocList] 핸들러");
 
-        return meetingService.mainLocList(httpServletRequest);
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        logger.info("[moimHomeLocList] 로그인 여부 token: {}", token);
+
+        String username = "";
+        if(token != null && !token.isEmpty() && !token.equals("null")) {
+            username = jwtTokenProvider.getUsername(token);
+            logger.info("[moimHomeLocList] 유저 아이디 username : {}", username);
+        }
+
+        return meetingService.mainLocList(httpServletRequest, username);
     }
 
     // 메인화면 카테고리별 모임 아이템 리스트

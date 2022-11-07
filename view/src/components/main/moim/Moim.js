@@ -20,7 +20,11 @@ const Moim = () => {
                         </ViewCount>
                     }
                 />
-                <Route path='/edit/:meetingNo' element={<MoimAdd mode={"edit"}/>}/>
+                <Route path='/edit/:meetingNo' 
+                    element={
+                        <MoimAdd mode={"edit"}/>
+                    }
+                />
                 <Route path='/*' element={"404"}/>
             </Routes>
         </div>

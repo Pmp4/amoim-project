@@ -14,6 +14,7 @@ const Home = () => {
     const [locMoim, setLocMoim] = useState([]);
     const [category, setCategory] = useState([]);
     const [categoryState, setCategoryState] = useState(0);
+    const [sidoState, setSidoState] = useState("");
 
     const [categoryMoim, setCategoryMoim] = useState([]);
     const [pageInfo, setPageInfo] = useState({
@@ -38,7 +39,7 @@ const Home = () => {
     //로그인 된 유저의 지역 리스트 API
     //로그인 된 유저의 지역 리스트 API
     //로그인 된 유저의 지역 리스트 API
-    const locAPI = (code = "11") => {
+    const locAPI = async() => {
         // MeetingService.selectByCard("BCODE", code).then((response) => {
         //     const { status, data } = response;
 
@@ -49,18 +50,9 @@ const Home = () => {
         //     }
         // });
 
-        MeetingService.mainSelectLoc().then((response) => {
-            const { status, data } = response;
-            if (status === 200) {
-                if (data.SUCCESS) {
-                    setLocMoim(data.list);
-                } else {
-                    alert(data.SUCCESS_TEXT);
-                }
-            } else {
-                alert("Server Error");
-            }
-        });
+        const response = await MeetingService.mainSelectLoc();
+        setLocMoim(response.data.list);
+        setSidoState(response.data.sido);
     };
 
     //카테고리 목록 출력 API
@@ -172,7 +164,7 @@ const Home = () => {
                     <div className="title">
                         <h3>
                             <span className="loc">
-                                <FontAwesomeIcon icon={faLocationDot} /> 서울
+                                <FontAwesomeIcon icon={faLocationDot} /> {sidoState}
                             </span>{" "}
                             근처 인기항목
                         </h3>
