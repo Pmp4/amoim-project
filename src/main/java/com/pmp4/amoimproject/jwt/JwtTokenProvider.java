@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
+import java.util.Objects;
 
 //JWT Token 관련 객체
 //JWT Token 관련 객체
@@ -33,7 +34,8 @@ public class JwtTokenProvider {
     //application.properties
     @Value("${springboot.jwt.secret}")
     private String secretKey = "secretKey";
-    private final long tokenValidMillisecond = 1000L * 60 * 60;     //1시간
+    private final long tokenValidMillisecond = 1000L * 10;     //1시간
+    private final long tokenValidRefresh = 1000L * 60 * 60 * 24;     //24시간
 
 
     //PostConstruct : 해당 객체(클래스)가 빈 객체로 주입된 이후 수행된다는 걸 명시
@@ -44,24 +46,17 @@ public class JwtTokenProvider {
         LOGGER.info("[init] JwtTokenProvider 내 secretKey 초기화 완료");
     }
 
+    public String createAccessToken(String userUid, String userNo, String name) {
+        LOGGER.info("[createAccessToken] 토큰 생성 시작 name : {}", name);
 
-    public String createToken(String userUid, String userNo, String name) {
-        LOGGER.info("[createToken] 토큰 생성 시작 name : {}", name);
-        Claims claims = Jwts.claims().setSubject(userUid);  //JWT의 제목
-        claims.put("no", userNo);       //공개 클레임
-        claims.put("username", name);
+        return createToken(userUid, userNo, name, "access");
+    }
 
-        Date now = new Date();
+    public String createRefreshToken(String userUid, String userNo, String name) {
+        LOGGER.info("[createRefreshToken] 토큰 생성 시작 name : {}", name);
 
-        String token = Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + tokenValidMillisecond))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
 
-        LOGGER.info("[createToken] 토큰 생성 완료");
-        return token;
+        return createToken(userUid, userNo, name, "refresh");
     }
 
 
@@ -97,6 +92,7 @@ public class JwtTokenProvider {
     //클라이언트의 요청 헤더에 있는 'X-AUTH-TOKEN' 을 가져옴
     //클라이언트의 요청 헤더에 있는 'X-AUTH-TOKEN' 을 가져옴
     public String resolveToken(HttpServletRequest httpServletRequest) {
+        LOGGER.info("=========================================================================================");
         LOGGER.info("[resolveToken] HTTP 헤더에서 Token 값 추출 getServletPath : {}", httpServletRequest.getServletPath());
         return httpServletRequest.getHeader("X-AUTH-TOKEN");
     }
@@ -116,5 +112,32 @@ public class JwtTokenProvider {
             LOGGER.info("[validateToken] 토큰 유효 체크 예외 발생");
             return false;
         }
+    }
+
+
+
+    public String createToken(String userUid, String userNo, String name, String type) {
+        LOGGER.info("[createToken] 토큰 생성 시작 name : {}, type : {}", name, type);
+        Claims claims = Jwts.claims().setSubject(userUid);  //JWT의 제목
+        claims.put("no", userNo);       //공개 클레임
+        claims.put("username", name);
+
+        Date now = new Date();
+        Date expirationDate;
+        if(type.equals("access")) {
+            expirationDate = new Date(now.getTime() + tokenValidMillisecond);
+        } else {
+            expirationDate = new Date(now.getTime() + tokenValidRefresh);
+        }
+
+        String token = Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(expirationDate)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+
+        LOGGER.info("[createToken] 토큰 생성 완료");
+        return token;
     }
 }

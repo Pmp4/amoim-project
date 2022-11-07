@@ -10,6 +10,7 @@ import { MODAL_OPEN } from "reducer/module/modal";
 import MoimList from './MoimList';
 import InterestService from 'api/interest/InterestService';
 import MoimSlider from './MoimSlider';
+import axios from '../../../../api/httpCommon';
 
 const MoimMain = () => {
     const [meetingContents, setMeetingContents] = useState([]);
@@ -40,12 +41,22 @@ const MoimMain = () => {
 
     useEffect(() => {
         async function initialFunc() {
-            await myAddMeetingData();
-            await signingUpList(1);
-            await userInterestApi();
+            const a = await MeetingService.moimOwnList();
+            const b = await MeetingService.moimSubscript(1);
+            const c = await InterestService.selectUserInterest();
+
+            setMeetingContents(a.data.list);
+
+            setSigningList(b.data.list);
+            setPageInfo(b.data.pageInfo);
+
+            setUserInterests(c.data);
+            setCurrentInterest(c.data[0].CATEGORY_CODE);
+            interestUserSelectApi(c.data[0].CATEGORY_CODE);
         }
 
         initialFunc();
+
     }, []);
 
 

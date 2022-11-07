@@ -30,6 +30,15 @@ public class SignServiceImpl implements SignService{
     private final InterestDAO interestDAO;
     private final UserAddressDAO userAddressDAO;
 
+
+
+    /*
+        [1] 로그인
+        [2] accessToken, refreshToken 생성
+        [3] refreshToken DB 에 기존 토큰이 있는지 확인
+        [3-1] 있으면 지우기
+        [4] 새로 생성된 토큰 DB Insert
+     */
     @Override
     public SignInResultVO signIn(String id, String password) {
         logger.info("[getSignInResult] signDataHandler 로 회원 정보 요청");
@@ -45,17 +54,55 @@ public class SignServiceImpl implements SignService{
         logger.info("[getSignInResult] 패스워드 일치");
 
         logger.info("[getSignInResult] SignInResultDto 객체 생성");
+
+        // [2] accessToken, refreshToken 생성
+        // [2] accessToken, refreshToken 생성
+        // [2] accessToken, refreshToken 생성
         SignInResultVO signInResultVO = SignInResultVO.builder()
-                .token(jwtTokenProvider.createToken(
+                .token(jwtTokenProvider.createAccessToken(
                             String.valueOf(principalDetails.getUserVO().getUserId()),
                             String.valueOf(principalDetails.getUserVO().getUserNo()),
                             principalDetails.getUserVO().getName()
                         )
                 )
                 .build();
+        String refreshToken = jwtTokenProvider
+                .createRefreshToken(
+                    String.valueOf(principalDetails.getUserVO().getUserId()),
+                    String.valueOf(principalDetails.getUserVO().getUserNo()),
+                    principalDetails.getUserVO().getName()
+                );
 
         logger.info("[getSignInResult] SignInResultVO 객체에 값 주입");
         setSuccessResult(signInResultVO);
+
+
+        logger.info("[getSignInResult] SignInResultVO : {}", signInResultVO);
+        logger.info("[getSignInResult] refreshToken : {}", refreshToken);
+
+
+        // [3] refreshToken DB 에 기존 토큰이 있는지 확인
+        // [3] refreshToken DB 에 기존 토큰이 있는지 확인
+        // [3] refreshToken DB 에 기존 토큰이 있는지 확인
+        RefreshTokenVO refreshTokenVO = userDAO.tokenByUserid(principalDetails.getUserVO().getUserId());
+        logger.info("[getSignInResult] 기존 토큰 검사 refreshTokenVO : {}", refreshTokenVO);
+        if(refreshTokenVO != null) {
+            // [3-1] 있으면 지우기
+            // [3-1] 있으면 지우기
+            // [3-1] 있으면 지우기
+            int count = userDAO.removeRefreshToken(refreshTokenVO.getAccessToken(), refreshTokenVO.getRefreshToken());
+            logger.info("[getSignInResult] 기존 토큰 삭제 count : {}", count);
+        }
+
+
+
+        int cnt = userDAO.refreshTokenInsert(signInResultVO.getToken(),
+                refreshToken,
+                String.valueOf(principalDetails.getUserVO().getUserId()));
+
+        logger.info("[getSignInResult] token DB INSERT 결과 cnt : {}", cnt);
+
+        if (!(cnt > 0)) throw new RuntimeException();
 
         return signInResultVO;
     }
@@ -143,9 +190,67 @@ public class SignServiceImpl implements SignService{
         return result;
     }
 
+    @Override
+    public SignInResultVO refreshTokenVerification(String accessToken) {
+        logger.info("[refreshTokenVerification] 리프레시 토큰 확인 핸들러");
+
+        String refreshToken = userDAO.refreshTokenSelect(accessToken);
+        logger.info("[refreshTokenVerification] 리프레시 토큰 refreshToken : {}", refreshToken);
+
+
+        // 리프레시 토큰 만료 시
+        // 리프레시 토큰 만료 시
+        // 리프레시 토큰 만료 시
+        SignInResultVO signInResultVO = null;
+        if(!jwtTokenProvider.validateToken(refreshToken)) {
+            logger.info("[refreshTokenVarification] 리프레시 토큰 유효기간 만료");
+
+            int cnt = removeRefreshToken(accessToken, refreshToken);
+            logger.info("[refreshTokenVerification] 리프레시 토큰 삭제 cnt : {}", cnt);
+
+            signInResultVO = SignInResultVO.builder().build();
+            setFailResult(signInResultVO);
+        } else {
+            String userId = jwtTokenProvider.getUsername(refreshToken);
+            logger.info("[refreshTokenVerification] 리프레시 토큰 userId : {}", userId);
+
+            PrincipalDetails principalDetails = new PrincipalDetails(userDAO.getUserInfo(userId));
+
+            logger.info("[refreshTokenVarification] SignInResultDto 객체 생성");
+            signInResultVO = SignInResultVO.builder()
+                    .token(jwtTokenProvider.createAccessToken(
+                                    String.valueOf(principalDetails.getUserVO().getUserId()),
+                                    String.valueOf(principalDetails.getUserVO().getUserNo()),
+                                    principalDetails.getUserVO().getName()
+                            )
+                    )
+                    .build();
+
+            logger.info("[refreshTokenVarification] SignInResultVO 객체에 값 주입");
+            setSuccessResult(signInResultVO);
+
+            logger.info("[refreshTokenVarification] SignInResultDto 객체 생성 signInResultVO : {}",
+                    signInResultVO);
+
+            int cnt = userDAO.refreshTokenUpdate(signInResultVO.getToken(), refreshToken);
+            logger.info("[refreshTokenVarification] accessToken DB 업데이트 cnt : {}", cnt);
+        }
+
+
+        return signInResultVO;
+    }
+
     private void setSuccessResult(SignInResultVO result) {
         result.setSuccess(true);
         result.setCode(CommonResponse.SUCCESS.getCode());
         result.setMsg(CommonResponse.SUCCESS.getMsg());
+    }
+    private void setFailResult(SignInResultVO result) {
+        result.setSuccess(false);
+    }
+
+
+    private int removeRefreshToken (String accessToken, String refreshToken) {
+        return userDAO.removeRefreshToken(accessToken, refreshToken);
     }
 }

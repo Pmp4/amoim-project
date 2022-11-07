@@ -1,5 +1,6 @@
 package com.pmp4.amoimproject.sign.controller;
 
+import com.pmp4.amoimproject.jwt.JwtTokenProvider;
 import com.pmp4.amoimproject.sign.model.PrincipalDetails;
 import com.pmp4.amoimproject.sign.model.SignInResultVO;
 import com.pmp4.amoimproject.sign.model.SignService;
@@ -31,6 +32,9 @@ public class SignController {
 
     private final SignService signService;
 
+    private final JwtTokenProvider jwtTokenProvider;
+
+
     //로그인
     //로그인
     //로그인
@@ -46,6 +50,17 @@ public class SignController {
         }
 
         return signInResultVO;
+    }
+
+
+    @PostMapping("/refresh")
+    public SignInResultVO refreshVerification(HttpServletRequest httpServletRequest) {
+        LOGGER.info("[refreshVerification] RefreshToken 확인");
+
+        String token = jwtTokenProvider.resolveToken(httpServletRequest);
+        LOGGER.info("[refreshVerification] token 확인 : {}", token);
+
+        return signService.refreshTokenVerification(token);
     }
 
 
