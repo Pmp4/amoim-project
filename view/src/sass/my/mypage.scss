@@ -1,9 +1,12 @@
 @import '../variable.scss';
 
-#my-page {
+& {
     margin-top: 20px;
     font-size: 16px;
     color: rgb(40, 40, 40);
+    button {
+        @include initial-btn;
+    }
 
     .info-part {
         display: flex;

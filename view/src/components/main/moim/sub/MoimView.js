@@ -382,7 +382,7 @@ const MoimView = () => {
         return (
             <div className="slide next" ref={element => slideRef.current[2] = element}>
                 <div className="page-wrap community">
-                    <div className='board-box'>
+                    <div className='board-box' id='board-part'>
                         {pageState === 2 && <BoardList meetingNo={meetingNo}/>}
                     </div>
                 </div>

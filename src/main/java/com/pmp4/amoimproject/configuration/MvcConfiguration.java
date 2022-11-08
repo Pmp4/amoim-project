@@ -43,8 +43,8 @@ public class MvcConfiguration implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://p-mp4.iptime.org:3000")
-//                .allowedOrigins("http://localhost:3000")
+//                .allowedOrigins("http://p-mp4.iptime.org:3000")
+                .allowedOrigins("http://localhost:3000")
                 .allowedMethods("*")
 //                .allowCredentials(true);    //쿠키 열람 권한, 프론트에 맞춰 대응해줘야함
                 .allowCredentials(false);    //쿠키 열람 권한, 프론트에 맞춰 대응해줘야함

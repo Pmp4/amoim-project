@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
-@import url('slick-carousel/slick/slick.css');
-@import url('slick-carousel/slick/slick-theme.css');
+@import 'slick-carousel/slick/slick.css';
+@import 'slick-carousel/slick/slick-theme.css';
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -120,7 +120,7 @@ header {
     @include small-pc {
         width: $device-lg-width;
     }
-    @import url(./header/header.scss);
+    @import './header/header.scss';
 }
 
 .modal-wrap {
@@ -140,32 +140,75 @@ header {
         animation: fadeOut .3s forwards;
     }
 
-	@import url(./modal/modal.scss);
+	@import './modal/modal.scss';
 }
 
 
 #signup-page {
-	@import url("./main/member/signup.scss");
+	@import './main/member/signup.scss';
 }
 
 
 #home-page{
-	@import url("./main/home.scss");
+	@import './main/home.scss';
 }
 
 
 #moim-page{
-	@import url("./main/moim/moim.scss");
+	@import './main/moim/moim.scss';
 }
 
 
 
 #chatt-page {
-	@import url("./chat/chat.scss");
+	@import './chat/chat.scss';
 }
 
 
 
 #my-page {
-	@import url("./my/mypage.scss");
+	@import './my/mypage.scss';
+}
+
+
+
+
+#moim-item {
+	@import './main/moim/moim-item.scss';
+}
+
+
+#moim-search-list {
+    @import './main/moim/moim-search-list.scss';
+}
+
+
+#view-page {
+    color: rgb(36, 36, 36);
+    position: relative;
+    width: 100%;
+    overflow-x: hidden;
+
+    @import './main/moim/view-page.scss';
+
+}
+
+
+
+#board-part {
+	@import './board/board.scss';
+}
+
+
+
+
+
+
+
+
+
+
+
+#moim-add-page {
+	@import './main/moim/moim-add-page.scss';
 }

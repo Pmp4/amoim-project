@@ -537,6 +537,18 @@
             }
 
             .comment-input {
+                button {
+                    @include initial-btn;
+                    background: inherit;
+                    border: none;
+                    box-shadow: none;
+                    border-radius: 0;
+                    padding: 0;
+                    overflow: visible;
+                    cursor: pointer;
+                    outline: none;
+
+                }
                 margin-top: 10px;
                 textarea {
                     width: 100%;

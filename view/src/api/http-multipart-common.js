@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const instance = axios.create({
-    baseURL: "http://p-mp4.iptime.org:8080/rest/v1",
-    // baseURL: "http://localhost:8080/rest/v1",
+    // baseURL: "http://p-mp4.iptime.org:8080/rest/v1",
+    baseURL: "http://localhost:8080/rest/v1",
     headers: {
         "Content-type": "multipart/form-data",
         // 'X-AUTH-TOKEN': `${localStorage.getItem('X-AUTH-TOKEN')}`

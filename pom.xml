@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.pmp4</groupId>
-    <artifactId>amoim-project</artifactId>
+    <artifactId>amoimproject</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>amoim-project</name>
-    <description>amoim-project</description>
+    <name>amoimproject</name>
+    <description>amoimproject</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>

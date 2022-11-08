@@ -25,10 +25,22 @@
 
 
     .search-wrap {
+        input {
+            @include initial-input;
+            border: none;
+            &:focus {
+                outline: none
+            }
+        }
+        button {
+            @include initial-btn;
+        }
+
         padding-bottom: 120px;
         > .search-part {
             margin: 0 auto;
             margin-top: 200px;
+            height: auto;
             width: 50%;
             position: relative;
 
@@ -142,7 +154,7 @@
     }
 }
 
-header > .search-part{
+.search-part{
     width: 100%;
     height: 0;
     transition: height .6s;
