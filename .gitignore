@@ -35,3 +35,4 @@ build/
 /view/public/upload/
 /src/main/resources/static/upload/
 *.properties
+src/main/resources/application.properties
