@@ -61,7 +61,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/sign-api/exception").permitAll()  //해당 URI는 모두 허용
                 .antMatchers("/user/**").permitAll()
                 .antMatchers("**exception**").permitAll()   //'exception' 단어는 모두 허용
-                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()     //CORS 관련
+//                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()     //CORS 관련
 
                 .and()
                 .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())   //권한이 안맞을 때 exception

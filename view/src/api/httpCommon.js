@@ -1,6 +1,6 @@
 import axios from 'axios';
 export default axios.create({
-    baseURL: "http://localhost:8080/rest/v1",
+    baseURL: "http://p-mp4.iptime.org:8080/rest/v1",
     headers: {
         "Content-type":"application/json",
         // 'Access-Control-Allow-Origin': 'http://localhost:8080', // 서버 domain

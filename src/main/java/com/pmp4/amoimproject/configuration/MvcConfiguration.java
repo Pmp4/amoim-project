@@ -28,20 +28,22 @@ public class MvcConfiguration implements WebMvcConfigurer {
     }
 
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/images/**")                   //유저 업로드 이미지
-                .addResourceLocations("classpath:/static/upload/img_upload/");
-        registry.addResourceHandler("/default/images/**")           //기본 이미지
-                .addResourceLocations("classpath:/static/upload/images");
-        registry.addResourceHandler("/profile/images/**")           //프로필 이미지
-                .addResourceLocations("classpath:/static/upload/profile/");
-    }
+    // 배포시 사용안함
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+//        registry.addResourceHandler("/images/**")                   //유저 업로드 이미지
+//                .addResourceLocations("classpath:/static/upload/img_upload/");
+//        registry.addResourceHandler("/default/images/**")           //기본 이미지
+//                .addResourceLocations("classpath:/static/upload/images");
+//        registry.addResourceHandler("/profile/images/**")           //프로필 이미지
+//                .addResourceLocations("classpath:/static/upload/profile/");
+//    }
 
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
+//                .allowedOrigins("http://p-mp4.iptime.org:3000")
                 .allowedOrigins("http://localhost:3000")
                 .allowedMethods("*")
 //                .allowCredentials(true);    //쿠키 열람 권한, 프론트에 맞춰 대응해줘야함
@@ -56,6 +58,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
                 = new CommonsMultipartResolver();
         multipartResolver.setDefaultEncoding("UTF-8"); // 파일 인코딩 설정
         multipartResolver.setMaxUploadSizePerFile(100 * 1024 * 1024); // 파일당 업로드 크기 제한 (2MB)
+        multipartResolver.setMaxInMemorySize(100 * 1024 * 1024);
         return multipartResolver;
     }
 }

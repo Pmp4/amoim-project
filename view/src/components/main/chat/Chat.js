@@ -122,7 +122,7 @@ const Chat = ({ webSocket, meetingNo }) => {
         // console.log(webSocket.current);
         if (webSocket.current === null) {
             webSocket.current = new WebSocket(
-                `ws://localhost:8080/rest/v1/socket/chatt/${meetingNo}`
+                `ws://p-mp4.iptime.org:8080/rest/v1/socket/chatt/${meetingNo}`
             );
         }
 

@@ -10,13 +10,14 @@ public interface ConstUtil {
 	//파일 업로드 관련 상수
 	String FILE_UPLOAD_TYPE = "test";		// 테스트시
 
-	//String FILE_UPLOAD_TYPE = "deploy";	// 배포시
+//	String FILE_UPLOAD_TYPE = "deploy";	// 배포시
 
 //	String FILE_UPLOAD_TYPE = "deploy";	// 배포시
 
 	
 	//자료실 - 파일 저장 경로
-	String TEST_FILE_PATH = "/Library/DevelopProject/Project/amoim-project/src/main/resources/static/upload/";	//for Mac
+//	String TEST_FILE_PATH = "/Library/DevelopProject/Project/amoim-project/src/main/resources/static/upload/";	//for Mac
+	String TEST_FILE_PATH = "C:\\files_server\\amoim\\";	//이미지 서버
 	String FILE_UPLOAD_PATH = "pd_upload";
 	String FILE_UPLOAD_PATH_TEST = TEST_FILE_PATH + FILE_UPLOAD_PATH;
 
