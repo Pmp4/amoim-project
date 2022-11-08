@@ -74,16 +74,20 @@ const Login = ({ modalClose }) => {
         //     });
 
         const response = await UserInfoService.loginUser(userId, password);
-        const { status, data } = response;
-        if (status === 200) {
-            localStorage.setItem("logged", true);
-            localStorage.setItem("X-AUTH-TOKEN", data.token);
+        console.log(response);
 
-            const result = parseJwt(data.token); 
+        if(response.data.success) {
+            localStorage.setItem("logged", true);
+            localStorage.setItem("X-AUTH-TOKEN", response.data.token);
+
+            const result = parseJwt(response.data.token); 
+
+            console.log(`${result.useranme} 님, 로그인 되었습니다.`);
 
             dispatch({ type: SUCCESS_LOGGED, data: result});
             modalClose();
-            window.location.replace("/");
+        } else {
+            alert(response.data.msg);
         }
     });
 
