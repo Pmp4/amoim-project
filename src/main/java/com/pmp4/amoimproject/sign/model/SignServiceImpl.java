@@ -42,16 +42,35 @@ public class SignServiceImpl implements SignService{
     @Override
     public SignInResultVO signIn(String id, String password) {
         logger.info("[getSignInResult] signDataHandler 로 회원 정보 요청");
-
-        PrincipalDetails principalDetails = new PrincipalDetails(userDAO.getUserInfo(id));
         logger.info("[getSignInResult] ID : {}", id);
 
+        UserVO userVO = userDAO.getUserInfo(id);
+        logger.info("[getSignInResult] userVO : {}", userVO);
+
+        if(userVO == null) {
+            logger.info("[getSignInResult] 존재하지 않는 아이디");
+
+            return SignInResultVO.builder()
+                    .msg("존재하지 않는 아이디입니다.")
+                    .success(false)
+                    .build();
+        }
+
+        PrincipalDetails principalDetails = new PrincipalDetails(userDAO.getUserInfo(id));
         logger.info("[getSignInResult] 패스워드 비교 수행");
         String checkPwd = encrypt.getEncrypt(password, principalDetails.getUserVO().getSalt());
         if(!(principalDetails.getPassword().equals(checkPwd))) {
-            throw new RuntimeException();
+
+            logger.info("[getSignInResult] 패스워드 불일치");
+
+            return SignInResultVO.builder()
+                    .msg("비밀번호가 일치하지 않습니다.")
+                    .success(false)
+                    .build();
         }
         logger.info("[getSignInResult] 패스워드 일치");
+
+
 
         logger.info("[getSignInResult] SignInResultDto 객체 생성");
 
