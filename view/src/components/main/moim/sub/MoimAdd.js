@@ -245,7 +245,7 @@ const MoimAdd = ({ mode }) => {
 
             value = value
                 .replace(/[^0-9]/g, "")
-                .replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
         } else if ((name = "personNumber")) {
             const cutMax = 6;
             if (value > 50) {

@@ -3,10 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLocationDot, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import MeetingService from 'api/meeting/MeetingService';
+import { useSelector } from 'react-redux';
 
 const MoimItem = (props) => {
     // console.log(props);
     const { item, idx, editState } = props;
+    const path = useSelector(state => state.path);
 
     const tagArr = item.TAGS.replace(/\[|\]|"| /g, "").split(",");
     const location = useLocation();
@@ -45,7 +47,7 @@ const MoimItem = (props) => {
                 }
             >
                 <img
-                    src={`http://localhost:8080/rest/v1/images/${item.IMAGE_NAME}`}
+                    src={`${path.imagePath}${item.IMAGE_NAME}`}
                     alt="이미지"
                     loading='lazy'
                 />
