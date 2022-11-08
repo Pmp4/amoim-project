@@ -35,3 +35,5 @@ build/
 /view/public/upload/
 /src/main/resources/static/upload/
 /view/package-lock.json
+/src/main/resources/application-db.properties
+/src/main/resources/application-jwt.properties
