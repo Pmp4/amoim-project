@@ -664,8 +664,8 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public Map<String, Object> moimSubscribeResult(Map<String, Object> rest) {
-        logger.info("MEETING: 수락 로직 rest={}", rest);
+    public int moimSubscribeResult(Map<String, Object> rest) {
+        logger.info("[moimSubscribeResult] 서비스 로직");
 
         String meetingNo = String.valueOf(rest.get("meetingNo"));
         List<Integer> noList= (List<Integer>) rest.get("list");
@@ -676,34 +676,29 @@ public class MeetingServiceImpl implements MeetingService {
         Map<String, int[]> dbMap = new HashMap<>();
         dbMap.put("Array", noArr);
 
-        logger.info("MEETING: 수락 로직 - 분리 결과 meetingNo={}, noArr={}", meetingNo, noArr);
+        logger.info("[moimSubscribeResult] 수락 로직 - 분리 결과 meetingNo={}, noArr={}", meetingNo, noArr);
 
         Map<String, Object> map = meetingDAO.meetingMemberCount(meetingNo);
         Long cut = (Long) map.get("PERSON_NUMBER");
         Long currentCount = (Long) map.get("COUNT");
 
-        logger.info("MEETING: 수락 로직 - 현재 멤버 수 확인 map={}", map);
+        logger.info("[moimSubscribeResult] 수락 로직 - 현재 멤버 수 확인 map={}", map);
 
-        boolean success = false;
+        int result;
         if(currentCount < cut) {
             long minusCut = cut - currentCount;
 
             if(minusCut > noArr.length) {
-                int cnt = meetingDAO.updateUserMeetingSubResult(dbMap);
-                logger.info("MEETING: 수락 로직 - 완료 확인 cnt={}", cnt);
-
-                if(cnt > 0) success = true;
+                result = meetingDAO.updateUserMeetingSubResult(dbMap);
+                logger.info("[moimSubscribeResult] 수락 로직 - 완료 확인 cnt={}", result);
+            } else {
+                throw new RuntimeException("인원 수가 초과됩니다.");
             }
+        } else {
+            throw new RuntimeException("유효하지 않은 인원 수");
         }
 
-        Map<String, Object> resultData = new HashMap<>();
-        String successText = "Server DB Error";
-        if(success) successText = "success!";
-
-        resultData.put("SUCCESS", success);
-        resultData.put("SUCCESS_TEXT", successText);
-
-        return resultData;
+        return result;
     }
 
     @Override

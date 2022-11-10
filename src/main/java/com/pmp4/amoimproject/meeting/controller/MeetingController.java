@@ -451,24 +451,6 @@ public class MeetingController {
     }
 
 
-    @ExceptionHandler(value = RuntimeException.class)
-    public ResponseEntity<Map<String, Object>> ExceptionHandler(RuntimeException e) {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-
-        logger.error("ExceptionHandler 호출, {}, {}", e.getCause(), e.getMessage());
-        Map<String, Object> map = new HashMap<>();
-
-        map.put("error type", httpStatus.getReasonPhrase());
-        map.put("code", "400");
-        map.put("message", "에러 발생");
-
-        return new ResponseEntity<>(map, responseHeaders, httpStatus);
-    }
-
-
-
-
 
     @GetMapping("/search")
     public Map<String, Object> moimSearch(@RequestParam String text,
@@ -545,13 +527,10 @@ public class MeetingController {
 
 
     @PutMapping("/subscribe/result")
-    public Map<String, Object> subscribeResult(@RequestBody Map<String, Object> rest) {
-        logger.info("MEETING 가입 신청 수락 rest={}", rest);
+    public int subscribeResult(@RequestBody Map<String, Object> rest) {
+        logger.info("[subscribeResult] 핸들러 rest={}", rest);
 
-        Map<String, Object> resultData = meetingService.moimSubscribeResult(rest);
-        logger.info("MEETING 가입 신청 최종확인 resultData={}", resultData);
-
-        return resultData;
+        return meetingService.moimSubscribeResult(rest);
     }
 
 
@@ -563,5 +542,33 @@ public class MeetingController {
         logger.info("MEETING 가입 거절 최종확인 resultData={}", resultData);
 
         return resultData;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @ExceptionHandler(value = RuntimeException.class)
+    public ResponseEntity<Map<String, Object>> ExceptionHandler(RuntimeException e) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+
+        logger.error("ExceptionHandler 호출, {}, {}", e.getCause(), e.getMessage());
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("error type", httpStatus.getReasonPhrase());
+        map.put("code", "400");
+        map.put("message", e.getMessage());
+
+        return new ResponseEntity<>(map, responseHeaders, httpStatus);
     }
 }

@@ -31,15 +31,15 @@ instance.interceptors.response.use(response => {
     } = error;
 
 
-    if(status === 401) {     //토큰 유효시간 지날 때
+    if(status === 401) {     //토큰 유효시간 지날 때, 로그인 관련
         // alert("로그인 후, 시도하세요.");
         console.log(error.response);
         return refresh(config);
-    } else if(status === 400) {
-        console.log(error.response);
-        alert("에러");
-        window.location.reload();
-    } else if(status === 500) {
+    } else if(status === 400) {     //서비스 로직 트랙잭션 오류
+        const msg = error.response.data.message;
+        alert(msg === undefined || msg === "" ? "유효하지 않은 처리입니다." : msg);
+        // window.location.reload(); 
+    } else if(status === 500) {     //서버 문제
         alert("Server Error");
         window.location.replace("/");
     }

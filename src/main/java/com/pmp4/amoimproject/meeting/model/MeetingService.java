@@ -138,7 +138,7 @@ public interface MeetingService {
     Map<String, Object> moimSubscribeList(String userNo);
 
 
-    Map<String, Object> moimSubscribeResult(Map<String, Object> rest);
+    int moimSubscribeResult(Map<String, Object> rest);
 
     Map<String, Object> moimSubscribeRefusal(Map<String, Object> rest);
 

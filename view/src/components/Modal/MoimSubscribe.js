@@ -188,6 +188,8 @@ const MoimSubscribe = () => {
      */
     const buttonActionEvent = (type, meetingNo, cut, idx) => {
         let check = false;
+
+
         if (
             Object.keys(checkList).findIndex(
                 (item) => parseInt(item) === meetingNo
@@ -217,8 +219,8 @@ const MoimSubscribe = () => {
         }
     };
 
-    const resultAPI = (rest, idx) => {
-        MeetingService.subscribeResult(rest).then((response) => {
+    const resultAPI = async (rest, idx) => {
+        const response = await MeetingService.subscribeResult(rest).then((response) => {
             const {status, data} = response;
 
             if(status === 200) {
@@ -231,6 +233,12 @@ const MoimSubscribe = () => {
                 }
             }
         });
+
+
+
+        if(response.data.SUCCESS) {
+            
+        }
     };
 
     const refusalAPI = (rest, idx) => {
