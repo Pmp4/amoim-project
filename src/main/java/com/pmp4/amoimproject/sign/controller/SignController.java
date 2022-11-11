@@ -1,5 +1,7 @@
 package com.pmp4.amoimproject.sign.controller;
 
+import com.pmp4.amoimproject.error.data.code.ErrorCode;
+import com.pmp4.amoimproject.error.data.exception.CustomException;
 import com.pmp4.amoimproject.jwt.JwtTokenProvider;
 import com.pmp4.amoimproject.sign.model.SignInResultVO;
 import com.pmp4.amoimproject.sign.model.SignService;
@@ -88,22 +90,22 @@ public class SignController {
     @GetMapping("/exception")
     public void exceptionTest() throws RuntimeException {
         LOGGER.info("[exceptionTest] 접근");
-        throw new RuntimeException("접근이 금지되었습니다.");
+        throw new CustomException(ErrorCode.NO_ACCESS_AUTHORITY);
     }
 
 
-    @ExceptionHandler(value = RuntimeException.class)
-    public ResponseEntity<Map<String, Object>> ExceptionHandler(RuntimeException e) {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-
-        LOGGER.error("ExceptionHandler 호출, {}, {}", e.getCause(), e.getMessage());
-        Map<String, Object> map = new HashMap<>();
-
-        map.put("error type", httpStatus.getReasonPhrase());
-        map.put("code", "400");
-        map.put("message", "나중에 다시 시도해주세요.");
-
-        return new ResponseEntity<>(map, responseHeaders, httpStatus);
-    }
+//    @ExceptionHandler(value = RuntimeException.class)
+//    public ResponseEntity<Map<String, Object>> ExceptionHandler(RuntimeException e) {
+//        HttpHeaders responseHeaders = new HttpHeaders();
+//        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+//
+//        LOGGER.error("ExceptionHandler 호출, {}, {}", e.getCause(), e.getMessage());
+//        Map<String, Object> map = new HashMap<>();
+//
+//        map.put("error type", httpStatus.getReasonPhrase());
+//        map.put("code", "400");
+//        map.put("message", "나중에 다시 시도해주세요.");
+//
+//        return new ResponseEntity<>(map, responseHeaders, httpStatus);
+//    }
 }

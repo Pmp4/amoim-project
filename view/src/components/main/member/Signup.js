@@ -485,7 +485,7 @@ const Signup = () => {
     
 
     return (
-        <div className='signup-page'>
+        <div id='signup-page'>
             <div className='page-wrap' id='signup-main'>
                 <div className='title-box'>
                     <div className='profile-image'>

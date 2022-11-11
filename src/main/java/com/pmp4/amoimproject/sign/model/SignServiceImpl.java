@@ -7,6 +7,10 @@ import com.pmp4.amoimproject.common.CommonResponse;
 import com.pmp4.amoimproject.common.ConstUtil;
 import com.pmp4.amoimproject.common.Encrypt;
 import com.pmp4.amoimproject.common.FileUploadUtil;
+import com.pmp4.amoimproject.error.data.code.DataBaseErrorCode;
+import com.pmp4.amoimproject.error.data.code.ErrorCode;
+import com.pmp4.amoimproject.error.data.exception.CustomException;
+import com.pmp4.amoimproject.error.data.exception.TransactionException;
 import com.pmp4.amoimproject.interest.model.InterestDAO;
 import com.pmp4.amoimproject.jwt.JwtTokenProvider;
 import com.pmp4.amoimproject.user.model.UserDAO;
@@ -49,24 +53,16 @@ public class SignServiceImpl implements SignService{
 
         if(userVO == null) {
             logger.info("[getSignInResult] 존재하지 않는 아이디");
-
-            return SignInResultVO.builder()
-                    .msg("존재하지 않는 아이디입니다.")
-                    .success(false)
-                    .build();
+            throw new CustomException(ErrorCode.ACCOUNTS_NOT_EXIST);
         }
 
         PrincipalDetails principalDetails = new PrincipalDetails(userDAO.getUserInfo(id));
         logger.info("[getSignInResult] 패스워드 비교 수행");
         String checkPwd = encrypt.getEncrypt(password, principalDetails.getUserVO().getSalt());
         if(!(principalDetails.getPassword().equals(checkPwd))) {
-
             logger.info("[getSignInResult] 패스워드 불일치");
 
-            return SignInResultVO.builder()
-                    .msg("비밀번호가 일치하지 않습니다.")
-                    .success(false)
-                    .build();
+            throw new CustomException(ErrorCode.PASSWORD_DOES_NOT_MATCH);
         }
         logger.info("[getSignInResult] 패스워드 일치");
 
@@ -121,7 +117,7 @@ public class SignServiceImpl implements SignService{
 
         logger.info("[getSignInResult] token DB INSERT 결과 cnt : {}", cnt);
 
-        if (!(cnt > 0)) throw new RuntimeException();
+        if (!(cnt > 0)) throw new TransactionException(DataBaseErrorCode.INVALID_REQUEST);
 
         return signInResultVO;
     }
@@ -204,7 +200,7 @@ public class SignServiceImpl implements SignService{
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
 
-        if(result == -1) throw new RuntimeException();
+        if(result == -1) throw new TransactionException(DataBaseErrorCode.INVALID_REQUEST);
 
         return result;
     }

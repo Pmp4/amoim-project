@@ -6,6 +6,8 @@ import com.pmp4.amoimproject.address.model.UserAddressVO;
 import com.pmp4.amoimproject.common.ConstUtil;
 import com.pmp4.amoimproject.common.Encrypt;
 import com.pmp4.amoimproject.common.FileUploadUtil;
+import com.pmp4.amoimproject.error.data.code.DataBaseErrorCode;
+import com.pmp4.amoimproject.error.data.exception.TransactionException;
 import com.pmp4.amoimproject.interest.model.InterestDAO;
 import com.pmp4.amoimproject.sign.model.UserVO;
 import lombok.RequiredArgsConstructor;
@@ -153,7 +155,7 @@ public class UserServiceImpl implements UserService {
                 if(cnt > 0) {
                     logger.info("[userProfileImageEdit] DB 수정 성공");
                     result = 1;
-                }else {throw new RuntimeException();}
+                }else {throw new Exception();}
             }
         }catch (Exception e) {
             e.printStackTrace();
@@ -161,7 +163,7 @@ public class UserServiceImpl implements UserService {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
 
-        if(result == -1) throw new RuntimeException("DB 에러");
+        if(result == -1) throw new TransactionException(DataBaseErrorCode.INVALID_REQUEST);
 
         return result;
     }

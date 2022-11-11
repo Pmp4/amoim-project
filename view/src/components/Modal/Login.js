@@ -86,8 +86,6 @@ const Login = ({ modalClose }) => {
 
             dispatch({ type: SUCCESS_LOGGED, data: result});
             modalClose();
-        } else {
-            alert(response.data.msg);
         }
     });
 

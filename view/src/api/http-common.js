@@ -31,14 +31,18 @@ instance.interceptors.response.use(response => {
     } = error;
 
 
-    if(status === 401) {     //토큰 유효시간 지날 때, 로그인 관련
-        // alert("로그인 후, 시도하세요.");
-        console.log(error.response);
-        return refresh(config);
-    } else if(status === 400) {     //서비스 로직 트랙잭션 오류
+    if(status === 400) {            //서비스 로직 오류
         const msg = error.response.data.message;
-        alert(msg === undefined || msg === "" ? "유효하지 않은 처리입니다." : msg);
-        // window.location.reload(); 
+        alert(msg);
+
+    } else if(status === 401) {     //토큰 유효시간 지날 때
+        return refresh(config);
+
+    } else if(status === 403) {
+        alert("인증 실패");
+        localStorage.clear();
+        window.location.replace("/");
+        
     } else if(status === 500) {     //서버 문제
         alert("Server Error");
         window.location.replace("/");

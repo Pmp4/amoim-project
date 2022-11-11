@@ -3,6 +3,8 @@ package com.pmp4.amoimproject.board.model;
 import com.pmp4.amoimproject.common.ConstUtil;
 import com.pmp4.amoimproject.common.FileUploadUtil;
 import com.pmp4.amoimproject.common.PaginationInfo;
+import com.pmp4.amoimproject.error.data.code.DataBaseErrorCode;
+import com.pmp4.amoimproject.error.data.exception.TransactionException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -110,7 +112,7 @@ public class MeetingBoardServiceImpl implements MeetingBoardService{
         int cnt = commentsDAO.insertComment(boardCommentsVO);
         logger.info("[boardCommentsVO] 등록 결과 cnt : {}", cnt);
 
-        if(!(cnt > 0)) throw new RuntimeException();
+        if(!(cnt > 0)) throw new TransactionException(DataBaseErrorCode.INVALID_REQUEST);
 
         return cnt;
     }

@@ -1,6 +1,8 @@
 package com.pmp4.amoimproject.meeting.controller;
 
 import com.pmp4.amoimproject.common.PaginationInfo;
+import com.pmp4.amoimproject.error.data.code.DataBaseErrorCode;
+import com.pmp4.amoimproject.error.data.exception.TransactionException;
 import com.pmp4.amoimproject.jwt.JwtTokenProvider;
 import com.pmp4.amoimproject.meeting.model.MeetingAddressVO;
 import com.pmp4.amoimproject.meeting.model.MeetingService;
@@ -353,7 +355,7 @@ public class MeetingController {
         if (cnt > 0) {
             restData.put("SUCCESS", true);
         } else {
-            throw new RuntimeException();
+            throw new TransactionException(DataBaseErrorCode.INVALID_REQUEST);
         }
 
         return restData;
@@ -378,7 +380,7 @@ public class MeetingController {
         if (cnt > 0) {
             restData.put("SUCCESS", true);
         } else {
-            throw new RuntimeException();
+            throw new TransactionException(DataBaseErrorCode.INVALID_REQUEST);
         }
 
 
@@ -557,18 +559,18 @@ public class MeetingController {
 
 
 
-    @ExceptionHandler(value = RuntimeException.class)
-    public ResponseEntity<Map<String, Object>> ExceptionHandler(RuntimeException e) {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-
-        logger.error("ExceptionHandler 호출, {}, {}", e.getCause(), e.getMessage());
-        Map<String, Object> map = new HashMap<>();
-
-        map.put("error type", httpStatus.getReasonPhrase());
-        map.put("code", "400");
-        map.put("message", e.getMessage());
-
-        return new ResponseEntity<>(map, responseHeaders, httpStatus);
-    }
+//    @ExceptionHandler(value = RuntimeException.class)
+//    public ResponseEntity<Map<String, Object>> ExceptionHandler(RuntimeException e) {
+//        HttpHeaders responseHeaders = new HttpHeaders();
+//        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+//
+//        logger.error("ExceptionHandler 호출, {}, {}", e.getCause(), e.getMessage());
+//        Map<String, Object> map = new HashMap<>();
+//
+//        map.put("error type", httpStatus.getReasonPhrase());
+//        map.put("code", "400");
+//        map.put("message", e.getMessage());
+//
+//        return new ResponseEntity<>(map, responseHeaders, httpStatus);
+//    }
 }

@@ -4,12 +4,15 @@ import com.pmp4.amoimproject.address.model.UserAddressDAO;
 import com.pmp4.amoimproject.common.ConstUtil;
 import com.pmp4.amoimproject.common.FileUploadUtil;
 import com.pmp4.amoimproject.common.PaginationInfo;
+import com.pmp4.amoimproject.error.data.code.DataBaseErrorCode;
+import com.pmp4.amoimproject.error.data.exception.CustomException;
+import com.pmp4.amoimproject.error.data.code.ErrorCode;
+import com.pmp4.amoimproject.error.data.exception.TransactionException;
 import com.pmp4.amoimproject.jwt.JwtTokenProvider;
 import com.pmp4.amoimproject.sign.model.UserVO;
 import com.pmp4.amoimproject.tag.model.TagDAO;
 import com.pmp4.amoimproject.tag.model.TagVO;
 import com.pmp4.amoimproject.user.model.UserDAO;
-import com.pmp4.amoimproject.user.model.UserService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,6 +119,8 @@ public class MeetingServiceImpl implements MeetingService {
                     }
                 }
             }
+
+            throw new TransactionException(DataBaseErrorCode.INVALID_REQUEST);
         }
 
 
@@ -241,7 +246,7 @@ public class MeetingServiceImpl implements MeetingService {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
         }
 
-        if(result == -1) throw new RuntimeException();
+        if(result == -1) throw new TransactionException(DataBaseErrorCode.INVALID_REQUEST);
         else {
             if(fileState) {
                 logger.info("[moimEditTransaction] 이전 파일 삭제");
@@ -606,8 +611,6 @@ public class MeetingServiceImpl implements MeetingService {
         boolean success = false;
 
         try {
-            Exception e = new Exception("고의 발생");
-
             int cnt = meetingDAO.meetingUserCount(userNo, meetingNo);
             logger.info("[meetingSubscribe] 대기중 여부 확인 cnt : {}", cnt);
 
@@ -625,17 +628,17 @@ public class MeetingServiceImpl implements MeetingService {
                         success = true;
                         msg = "가입 신청 되었습니다.";
                     }else {
-                        throw new RuntimeException();
+                        throw new Exception();
                     }
                 }else {
                     logger.info("[meetingSubscribe] 인원 수 제한으로 취소");
                     msg = "인원 수가 꽉 찼습니다.";
-                    throw e;
+                    throw new Exception();
                 }
             }else {
                 logger.info("[meetingSubscribe] 신청 대기중인 모임으로 취소");
                 msg = "신청 대기중인 모임입니다.";
-                throw e;
+                throw new Exception();
             }
         }catch (Exception e) {
             e.printStackTrace();
@@ -692,10 +695,10 @@ public class MeetingServiceImpl implements MeetingService {
                 result = meetingDAO.updateUserMeetingSubResult(dbMap);
                 logger.info("[moimSubscribeResult] 수락 로직 - 완료 확인 cnt={}", result);
             } else {
-                throw new RuntimeException("인원 수가 초과됩니다.");
+                throw new CustomException(ErrorCode.OVER_STAFFED);
             }
         } else {
-            throw new RuntimeException("유효하지 않은 인원 수");
+            throw new TransactionException(DataBaseErrorCode.INVALID_REQUEST);
         }
 
         return result;
